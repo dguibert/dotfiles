@@ -1,0 +1,12 @@
+[DEFAULT]
+git_gc = git gc "$@"
+
+[$HOME/.config/vcsh/repo.d/dotfiles.git]
+checkout =
+  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
+#  vcsh dotfiles remote add remote_name remote_url
+
+push =
+  vcsh dotfiles push
+#  vcsh dotfiles push remote_name
+
