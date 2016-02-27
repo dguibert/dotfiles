@@ -1,5 +1,18 @@
 [DEFAULT]
 git_gc = git gc "$@"
+include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
+lib =
+  new_git_annexed_repo() {
+    git init $MR_REPO
+    cd $MR_REPO
+    git annex init
+    git_annex_sync
+  }
+
+include = cat $HOME/.config/mr/Videos
+include = cat $HOME/.config/mr/Pictures
+include = cat $HOME/.config/mr/Documents
+include = cat $HOME/.config/mr/archives
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
 checkout =
