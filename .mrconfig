@@ -9,10 +9,7 @@ lib =
     git_annex_sync
   }
 
-include = cat $HOME/.config/mr/Videos
-include = cat $HOME/.config/mr/Pictures
-include = cat $HOME/.config/mr/Documents
-include = cat $HOME/.config/mr/archives
+include = cat $HOME/.config/mr/config.d/*
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
 checkout =
