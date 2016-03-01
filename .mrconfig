@@ -2,21 +2,93 @@
 git_gc = git gc "$@"
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
 lib =
-  new_git_annexed_repo() {
-    git init $MR_REPO
-    cd $MR_REPO
-    git annex init
-    git_annex_sync
-  }
+   new_git_annexed_repo() {
+     git init $MR_REPO
+     cd $MR_REPO
+     git annex init
+     git_annex_sync
+   }
 
 include = cat $HOME/.config/mr/config.d/*
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
 checkout =
-  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
+   vcsh clone --recursive git@github.com:dguibert/dotfiles.git
 #  vcsh dotfiles remote add remote_name remote_url
 
 push =
-  vcsh dotfiles push
+   vcsh dotfiles push
 #  vcsh dotfiles push remote_name
 
+
+[admin/nix-easybuild]
+checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
+
+[code/bedrocklinux-userland]
+checkout = git clone 'https://github.com/paradigm/bedrocklinux-userland' 'bedrocklinux-userland'
+
+[code/de.intevation.roundup-fast]
+checkout = hg clone 'http://hg.intevation.org/roundup/fast-decomposed' 'de.intevation.roundup-fast'
+
+[code/blockit]
+checkout = git clone 'git://blockit.git.sourceforge.net/gitroot/blockit/blockit' 'blockit'
+
+[code/cctools]
+checkout = git clone 'git://github.com/cooperative-computing-lab/cctools.git' 'cctools'
+
+[code/chapel]
+checkout = git clone 'https://github.com/chapel-lang/chapel' 'chapel'
+
+[code/dmtcp]
+checkout = git clone 'https://github.com/dmtcp/dmtcp' 'dmtcp'
+
+[code/gc3pie]
+checkout = git clone 'https://github.com/uzh/gc3pie' 'gc3pie'
+
+[code/git]
+checkout = git clone 'git://github.com/gitster/git.git' 'git'
+
+[code/git-annex]
+checkout = git clone 'git://github.com/joeyh/git-annex.git' 'git-annex'
+
+[code/git-bpf]
+checkout = git clone 'https://github.com/affinitybridge/git-bpf' 'git-bpf'
+
+[code/git-integration]
+checkout = git clone 'https://github.com/johnkeeping/git-integration' 'git-integration'
+
+[code/git-stree]
+checkout = git clone 'https://github.com/tdd/git-stree' 'git-stree'
+
+[code/haskell-fortran/camfort]
+checkout = git clone 'https://github.com/dorchard/camfort' 'camfort'
+
+[code/haskell-fortran/language-fortran]
+checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortran'
+
+[code/hpx]
+checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
+
+[code/imp-demo]
+checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-demo' 'imp-demo'
+
+[code/kokkos]
+checkout = git clone 'https://github.com/kokkos/kokkos' 'kokkos'
+
+[code/mosh-cleaner]
+checkout = git clone 'git://git.zx2c4.com/mosh-cleaner' 'mosh-cleaner'
+
+[code/propellor]
+checkout = git clone 'git://git.kitenet.net/propellor.git' 'propellor'
+
+[code/shqq]
+checkout = git clone 'git://github.com/kmcallister/shqq' 'shqq'
+
+[code/spack]
+checkout = git clone 'https://github.com/scalability-llnl/spack' 'spack'
+
+[code/training-gerrit]
+checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training-gerrit'
+
+[code/nixpkgs]
+checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
