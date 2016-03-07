@@ -1,10 +1,5 @@
 *
-!/.config
 !/.config/mr
-!/.config/mr/archives
-!/.config/mr/Documents
-!/.config/mr/Pictures
-!/.config/mr/Videos
-!/.gitignore.d
+!/.config/mr/available.d
 !/.gitignore.d/dotfiles
 !/.mrconfig
