@@ -3,3 +3,5 @@
 !/.config/mr/available.d
 !/.gitignore.d/dotfiles
 !/.mrconfig
+!/templates
+!/templates/_git-envrc
