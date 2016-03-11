@@ -52,3 +52,5 @@
 	autocontinue = true
 [remote "github"]
 	fetch = +refs/pull/*/head:refs/remotes/github/pr/*
+[http]
+	sslVerify = false
