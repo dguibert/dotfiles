@@ -1,6 +1,6 @@
 [user]
 	name = David Guibert
-	email = david.guibert@nextflow-software.com
+	email = david.guibert@gmail.com
 [core]
 	pager = "less --quit-if-one-screen --raw-control-chars --no-init --hilite-search --SILENT"
 [diff]
@@ -20,15 +20,10 @@
 #	case = !sh -c 'exec $HOME/code/git-case/git-case-$0 ${0+"$@"}'
 [clean]
 	requireForce = true
-[branch]
-	autosetupmerge = true
-	autosetuprebase = remote
 [merge]
 	tool = vimdiff
 [diff]
 	tool = vimdiff
-;[gui]
-;	fontui = -family rotissansserif -size 10 -weight bold -slant roman -underline 0 -overstrike 0
 [color]
 	branch = auto
 	diff = auto
@@ -52,3 +47,5 @@
 	autocontinue = true
 [remote "github"]
 	fetch = +refs/pull/*/head:refs/remotes/github/pr/*
+[http]
+	sslVerify = false
