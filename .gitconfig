@@ -1,0 +1,51 @@
+[user]
+	name = David Guibert
+	email = david.guibert@gmail.com
+[core]
+	pager = "less --quit-if-one-screen --raw-control-chars --no-init --hilite-search --SILENT"
+[diff]
+	renames = copies
+[alias]
+	restore = checkout HEAD
+	dist = "!git archive --format=tar -v --prefix=$(git describe HEAD | sed -e 's,-,///,;s,-,+,g;s,///,-,')/ HEAD | gzip -9 > ../$(git describe HEAD | sed -e 's,-,///,;s,-,+,g;s,///,-,').tar.gz"
+	ddist = "!git dist && mv ../$(git describe HEAD | sed -e 's,-,///,;s,-,+,g;s,///,-,').tar.gz ../$(git describe HEAD | sed -e 's,-,_,;s,-,+,g').orig.tar.gz"
+	files = ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard
+	sum = log --pretty=format:\"%h %Cblue%ci%Creset %Cgreen%cn%Creset %s\"
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	svnup = !git config --get-regexp 'svn-remote.*url' | cut -d . -f 2 | xargs -n1 git svn fetch
+	edit-last-commit = !vim `git diff-tree -r --name-only HEAD HEAD~1`
+	fetch-pr = "!f() { git fetch $1 refs/pull/$2/head:refs/remotes/pr/$2; }; f"
+	rebase-pr = "!f() { git checkout -b pr_$1 pr/$1; git rebase @{-1}; git checkout @{-2}; git rebase @{-1}; }; f"
+    fetch-channels = !sh -c \"$(git rev-parse --show-cdup)nixpkgs/maintainers/scripts/update-channel-branches.sh\"
+#	case = !sh -c 'exec $HOME/code/git-case/git-case-$0 ${0+"$@"}'
+[clean]
+	requireForce = true
+[merge]
+	tool = vimdiff
+[diff]
+	tool = vimdiff
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+	ui = auto
+[rerere]
+	enabled = true
+	autoupdate = true
+[push]
+	default = matching
+[sendemail]
+	confirm = auto
+[help]
+	autocorrect = 5
+[svn]
+	rmdir = yes
+[rebase]
+	autosquash = true
+[integration]
+	autocontinue = true
+[remote "github"]
+	fetch = +refs/pull/*/head:refs/remotes/github/pr/*
+[http]
+	sslVerify = false
