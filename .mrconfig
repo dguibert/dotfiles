@@ -2,23 +2,24 @@
 git_gc = git gc "$@"
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
 lib =
-   git_annex_sync() { git annex -v sync --content; }
-   new_git_annexed_repo() {
-     git init $MR_REPO
-     cd $MR_REPO
-     git annex init
-     git_annex_sync
-   }
+      source $HOME/.config/mr/lib/git-remotes
+	  git_annex_sync() { git annex -v sync --content; }
+	  new_git_annexed_repo() {
+	    git init $MR_REPO
+	    cd $MR_REPO
+	    git annex init
+	    git_annex_sync
+	  }
 
 include = cat $HOME/.config/mr/config.d/*
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
 checkout =
-   vcsh clone --recursive git@github.com:dguibert/dotfiles.git
+	  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
 #  vcsh dotfiles remote add remote_name remote_url
 
 push =
-   vcsh dotfiles push
+	  vcsh dotfiles push
 #  vcsh dotfiles push remote_name
 
 
@@ -93,3 +94,9 @@ checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training
 
 [code/nixpkgs]
 checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
+fixups = git_add_remotes "
+    github https://github.com/NixOS/nixpkgs
+    "
+
+[code/dwm]
+checkout = git clone 'http://git.suckless.org/dwm' 'dwm'

@@ -1,5 +1,6 @@
 *
 !/.config/mr
 !/.config/mr/available.d
+!/.config/mr/lib
 !/.gitignore.d/dotfiles
 !/.mrconfig
