@@ -1,1 +1,2 @@
 export GIT_DIR=$PWD/_git
+export GIT_WORK_TREE=$PWD
