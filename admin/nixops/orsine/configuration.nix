@@ -12,6 +12,7 @@
 { config, pkgs, lib, ... }:
 
 rec {
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -103,6 +104,8 @@ rec {
     evince #calibre
     mplayer gst_all.gstreamer
     alsaPlugins pavucontrol
+
+    nixops
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
   ];
@@ -160,32 +163,7 @@ rec {
   security.sudo.wheelNeedsPassword = false;
 
   # Users
-  users.mutableUsers = false;
   nixup.enable = true;
-
-  krb5.enable = true;
-  krb5.defaultRealm = "HYDROCEAN.FR";
-  krb5.domainRealm = "hydrocean.fr";
-  krb5.kdc = "10.17.1.193"; # kdc1.hydrocean.fr
-  krb5.kerberosAdminServer = "10.17.1.193";
-
-  networking.extraHosts = ''
-    10.17.1.193 kdc1 kdc1.hydrocean.fr
-  '';
-
-  users.users.dguibert = {
-    isNormalUser = true;
-    uid = 1000;
-    description = "David Guibert";
-    home = "/home/dguibert";
-    hashedPassword = lib.mkForce "*K*"; # defined in kerberos
-    group = "dguibert";
-    extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
-      ] ++ lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
-      ] ++ lib.optionals (config.users.groups ? docker) [ "docker" ];
-  };
-
-  users.groups.dguibert.gid = 1000;
 
   fileSystems = [
   { mountPoint = "/tmp"; device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; }
