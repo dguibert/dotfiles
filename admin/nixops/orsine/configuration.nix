@@ -200,4 +200,9 @@ rec {
   /* FATA[0000] Error response from daemon: Cannot start container 237927be402d7427215cbabbfb12988d932d8c655e7ec39d0998e22664662685: fork/exec unshare: no such file or directory  */
   #systemd.network.networks."40-bond0".networkConfig.IPForward = true;
   #systemd.network.networks."40-docker0".networkConfig.IPForward = true;
+
+  # ChromeCast ports
+  # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT
+  networking.firewall.allowedUDPPortRanges = [ { from=32768; to=61000; } ];
+
 }
