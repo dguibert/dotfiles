@@ -2,7 +2,7 @@
 git_gc = git gc "$@"
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
 lib = 
-      source $HOME/.config/mr/lib/git-remotes
+	     source $HOME/.config/mr/lib/git-remotes
 	  git_annex_sync() { git annex -v sync --content; }
 	  new_git_annexed_repo() {
 	    git init $MR_REPO
