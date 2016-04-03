@@ -39,3 +39,4 @@ skype
 wayland
 weston
 xpra
+aria2
