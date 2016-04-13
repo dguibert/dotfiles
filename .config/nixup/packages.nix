@@ -1,7 +1,5 @@
 ansible
 asciidoc
-autoconf
-automake
 baobab
 bup
 cabal2nix
@@ -11,7 +9,6 @@ direnv
 doxygen
 dvtm
 ftop
-git
 gnumake
 gnuplot
 iotop
@@ -40,3 +37,4 @@ wayland
 weston
 xpra
 aria2
+nixops
