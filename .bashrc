@@ -41,12 +41,15 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 PS1=""
 PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
 PS1+='${GIT_DIR:+ \[\033[00;32m\]vcsh:$(basename $GIT_DIR)}'
-GIT_PS1=""
-#source $HOME/code/git/contrib/completion/git-prompt.sh
-command -v __git_ps1 && GIT_PS1='$(__git_ps1 "|%s|")'
 PS1+='${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
+PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
+if !  command -v __git_ps1 >/dev/null; then
+# source $HOME/code/git/contrib/completion/git-prompt.sh
+  source $HOME/code/git-prompt.sh
+fi
+PS1+='$(__git_ps1 "|%s|")'
+PS1+='$\[\033[00m\] '
 
-PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W $GIT_PS1$\[\033[00m\] '
 export PS1
 case $TERM in
 	rxvt|*term)
