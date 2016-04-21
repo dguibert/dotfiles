@@ -1,0 +1,15 @@
+{
+  pulseaudio = true;
+  firefox = {
+#    jre = true;
+    enableAdobeFlash = true;
+    enableGeckoMediaPlayer = false;
+  };
+  allowUnfree = true;
+#  chromium.enableGnash = true;
+  chromium = {
+     enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+     enablePepperPDF = true;
+     supportsJDK = true;
+  };
+}

@@ -1,10 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
 # User specific environment and startup programs
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/cmake-3.5.1-Linux-x86_64/bin:$PATH
@@ -44,13 +39,14 @@ PS1=""
 PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
 PS1+='${GIT_DIR:+ \[\033[00;32m\]vcsh:$(basename $GIT_DIR)}'
 PS1+='${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
-
 PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
-
-#source $HOME/code/git/contrib/completion/git-prompt.sh
-command -v __git_ps1 >/dev/null && PS1+='$(__git_ps1 "|%s|")'
-
+if !  command -v __git_ps1 >/dev/null; then
+# source $HOME/code/git/contrib/completion/git-prompt.sh
+  source $HOME/code/git-prompt.sh
+fi
+PS1+='$(__git_ps1 "|%s|")'
 PS1+='$\[\033[00m\] '
+
 export PS1
 case $TERM in
 	rxvt|*term)

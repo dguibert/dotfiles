@@ -96,10 +96,10 @@ rec {
     manpages gnupg tree
 # lsof - shows open files/sockets, including network
     lsof
-    vim ethtool xlockmore xautolock
+    vim ethtool
     myTexLive
     firefoxWrapper chromium
-    feh wirelesstools wpa_supplicant_gui
+    wirelesstools wpa_supplicant_gui
     dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
     evince #calibre
     mplayer gst_all.gstreamer
@@ -145,8 +145,6 @@ rec {
 #  networking.wireless.enable = mkForce false; # - You can not use networking.networkmanager with services.networking.wireless
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "dguibert";
-  programs.ssh.startAgent = false;
-  services.xserver.startGnuPGAgent = true;
 
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
