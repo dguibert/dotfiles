@@ -1,7 +1,7 @@
 [DEFAULT]
 git_gc = git gc "$@"
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
-lib =
+lib = 
 	     source $HOME/.config/mr/lib/git-remotes
 	  git_annex_sync() { git annex -v sync --content; }
 	  new_git_annexed_repo() {
@@ -14,11 +14,11 @@ lib =
 include = cat $HOME/.config/mr/config.d/*
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
-checkout =
+checkout = 
 	  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
 #  vcsh dotfiles remote add remote_name remote_url
 
-push =
+push = 
 	  vcsh dotfiles push
 #  vcsh dotfiles push remote_name
 
@@ -98,10 +98,10 @@ fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
 	   "
 update = git checkout master
-         git pull github master
-         git checkout pu
-         git reintegrate -r
-         git push origin master +pu
+	        git pull github master
+	        git checkout pu
+	        git reintegrate -r
+	        git push origin master +pu
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
@@ -111,3 +111,9 @@ checkout = git clone 'http://git.suckless.org/dwm' 'dwm'
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
+
+[code/singularity]
+checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
+
+[code/nix]
+checkout = git clone 'https://github.com/NixOS/nix' 'nix'
