@@ -1,9 +1,15 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
+#! nix-shell -i bash -p bashInteractive dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
 #! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/07a7805dde9cbdc7c74fe1f5e41096b359a6a186.tar.gz
 
 cd $HOME
 set -u
+#set -o verbose
+#set -o xtrace
+echo $SHELL
+which bash
+# workaround to get bash (with readline support (aka bashInteractive))
+export SHELL=$(which bash)
 unset IN_NIX_SHELL
 
 while :; do
