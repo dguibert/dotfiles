@@ -1,10 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
 # User specific environment and startup programs
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/cmake-3.5.1-Linux-x86_64/bin:$PATH

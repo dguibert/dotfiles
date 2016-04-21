@@ -1,0 +1,60 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
+#! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/07a7805dde9cbdc7c74fe1f5e41096b359a6a186.tar.gz
+
+cd $HOME
+set -u
+unset IN_NIX_SHELL
+
+while :; do
+  # i hate this bell!!!
+  xset b 0 &
+
+  # power saving mode of the screen
+  xset dpms 300 300 300 &
+
+  # typematic repeat rate
+  xset r rate 255 47 &
+
+  #xset to stop the AVRCP key press repeating at warp speed:
+  xset -r 171 -r 173 -r 209
+  ## To enable vertical scrolling
+  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation" 1
+  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Button" 2
+  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Timeout" 200
+  ## To enable horizontal scrolling in addition to vertical scrolling
+  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Axes" 6 7 4 5
+
+  xrdb -load ~/.Xdefaults
+  # launch rxvt daemon
+  urxvtd &
+
+  conky -c ~/code/dwm/conkyrc | while read line; do 
+      xsetroot -name "$line"
+  done &
+  # relaunch DWM if the binary changes, otherwise bail
+  csum=$(sha1sum $(which dwm))
+  new_csum=""
+  while true
+    do
+      if [ "$csum" != "$new_csum"  ]
+      then
+        csum=$new_csum
+        dwm
+        pid=$!
+      else
+        exit 0
+      fi
+      new_csum=$(sha1sum $(which dwm))
+      wait $pid
+      sleep 0.5
+  done
+
+  [ -e $HOME/.xsession-exit ] && break
+
+  echo "I: restarting xsession (touch $HOME/.xsession-exit to exit)..." >&2
+done
+
+rm -f $HOME/.xsession-exit
+
+exit 0
