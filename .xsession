@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bashInteractive dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode which
+#! nix-shell -v -i bash -p bashInteractive dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode which
 #! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/07a7805dde9cbdc7c74fe1f5e41096b359a6a186.tar.gz
 
 cd $HOME
