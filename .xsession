@@ -37,7 +37,7 @@ while :; do
   # launch rxvt daemon
   urxvtd &
 
-  conky -c ~/code/dwm/conkyrc | while read line; do 
+  conky -c ~/.conkyrc | while read line; do 
       xsetroot -name "$line"
   done &
   # relaunch DWM if the binary changes, otherwise bail
