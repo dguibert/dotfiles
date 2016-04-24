@@ -3,7 +3,8 @@
 #! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/07a7805dde9cbdc7c74fe1f5e41096b359a6a186.tar.gz
 
 cd $HOME
-set -u
+set -o nounset
+set -o monitor
 #set -o verbose
 #set -o xtrace
 echo $SHELL
@@ -11,6 +12,7 @@ which bash
 # workaround to get bash (with readline support (aka bashInteractive))
 export SHELL=$(which bash)
 unset IN_NIX_SHELL
+unset SSL_CERT_FILE
 
 while :; do
   # i hate this bell!!!
