@@ -17,6 +17,7 @@ with lib;
       gitFull
       (conky.override { x11Support = false; })
       fossil
+      gitAndTools.gitRemoteGcrypt
     ];
 
     user.pathsToLink = [
