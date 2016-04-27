@@ -98,10 +98,8 @@ fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
 	   "
 update = git checkout master
-	        git pull github master
-	        git checkout pu
-	        git reintegrate -r
-	        git push origin master +pu
+	 git pull github master
+	 git push origin master
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
