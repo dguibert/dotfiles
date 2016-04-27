@@ -15,6 +15,7 @@ TEXT
 ${loadavg 1} \
 ${cpu cpu0}% ${freq_g 0}GHz \
 ${if_existing /sys/class/power_supply/BAT0/present}Bat ${battery_percent BAT0}% (${battery_time BAT0})${else}AC${endif} \
-${upspeedf bond0}k ${downspeedf bond0}k \
+${if_up enp0s3}${upspeedf enp0s3}k ${downspeedf enp0s3}k${endif} \
+${if_up bond0}${upspeedf bond0}k ${downspeedf bond0}k${endif} \
 ${time %H:%M}
 
