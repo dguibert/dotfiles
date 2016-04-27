@@ -39,3 +39,4 @@ xpra
 aria2
 nixops
 chromium
+htop
