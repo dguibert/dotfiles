@@ -74,10 +74,10 @@
 !*font:                         -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1
 !*font:                         -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
 !URxvt*font:                          xft:terminus:pixelsize=14
-!*font:                         -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
+*font:                         -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
 !URxvt*faceName:           Terminus:style=Regular:size=14
 !*font: -xos4-terminus-medium-r-normal-*-14-*-*-*-*-*-iso10646-1
-Rxvt*font: xft:DejaVu Sans Mono:antialias=true:pixelsize=12
+!Rxvt*font: xft:DejaVu Sans Mono:antialias=true:pixelsize=12
 !*font: xft:Terminus:antialias=true:pixelsize=18
 *saveLines:                    50000
 
