@@ -1,9 +1,10 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p bashInteractive dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
-#! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/07a7805dde9cbdc7c74fe1f5e41096b359a6a186.tar.gz
+#! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/pu.tar.gz
 
 cd $HOME
-set -u
+set -o nounset
+set -o monitor
 #set -o verbose
 #set -o xtrace
 echo $SHELL
@@ -11,6 +12,7 @@ which bash
 # workaround to get bash (with readline support (aka bashInteractive))
 export SHELL=$(which bash)
 unset IN_NIX_SHELL
+unset SSL_CERT_FILE
 
 while :; do
   # i hate this bell!!!
@@ -35,7 +37,7 @@ while :; do
   # launch rxvt daemon
   urxvtd &
 
-  conky -c ~/code/dwm/conkyrc | while read line; do 
+  conky -c ~/.conkyrc | while read line; do 
       xsetroot -name "$line"
   done &
   # relaunch DWM if the binary changes, otherwise bail

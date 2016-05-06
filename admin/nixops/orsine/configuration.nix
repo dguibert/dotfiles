@@ -171,9 +171,7 @@ rec {
     "d /tmp 1777 root root 10d"
   ];
 
-# uncomment in release-14.10
   zramSwap.enable = true;
-  zramSwap.numDevices = 2; # number of cores
 
   nix.useChroot = true;
   nix.extraOptions = "auto-optimise-store = true";

@@ -28,4 +28,9 @@
     users.groups.dguibert.gid = 1000;
 
   };
+
+  vbox-57nvj72 = { pkgs, config, ...}: {
+    imports = [ ./vbox-57nvj72/configuration.nix ];
+    deployment.targetHost = "10.0.2.15";
+  };
 }
