@@ -10,7 +10,7 @@
   fileSystems."/a629925" = {
     fsType = "vboxsf";
     device = "a629925";
-    options = "rw";
+    options = [ "rw" ];
   };
   zramSwap.enable = true;
 
