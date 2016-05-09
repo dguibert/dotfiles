@@ -30,6 +30,7 @@ Plugin 'vim-airline/vim-airline' " Lean & mean status/tabline for vim that's lig
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular' " align everything
+Plugin 'LnL7/vim-nix'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
