@@ -19,6 +19,11 @@ if [ -d ~/code/spack ]; then
   export IFORTCFG=~/.spack/intel.cfg
 fi
 
+if [ -d ~/pkgs/stowed ]; then
+  export PATH=$HOME/pkgs/stowed/bin:$PATH
+  export MANPATH=$HOME/pkgs/stowed/share/man:$MANPATH
+fi
+
 # User specific aliases and functions
 
 # If not running interactively, don't do anything

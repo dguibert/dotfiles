@@ -11,7 +11,7 @@
 	ddist = "!git dist && mv ../$(git describe HEAD | sed -e 's,-,///,;s,-,+,g;s,///,-,').tar.gz ../$(git describe HEAD | sed -e 's,-,_,;s,-,+,g').orig.tar.gz"
 	files = ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard
 	sum = log --pretty=format:\"%h %Cblue%ci%Creset %Cgreen%cn%Creset %s\"
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	svnup = !git config --get-regexp 'svn-remote.*url' | cut -d . -f 2 | xargs -n1 git svn fetch
 	edit-last-commit = !vim `git diff-tree -r --name-only HEAD HEAD~1`
 	fetch-pr = "!f() { git fetch $1 refs/pull/$2/head:refs/remotes/pr/$2; }; f"
