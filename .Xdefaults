@@ -94,7 +94,7 @@ URxvt.utf8:                    true
 URxvt.transparent:             false
 URxvt.depth: 32
 URxvt.intensityStyles: false
-URxvt.termName:                xterm
+URxvt.termName:                xterm-256color
 
 !Emacs.FontBackend: xft
 !Emacs.Font: DejaVu Sans Mono-10
