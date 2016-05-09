@@ -11,6 +11,14 @@ if [ -e /opt/intel/parallel_studio_xe_2016.2.062/psxevars.sh ]; then
 fi
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
 
+if [ -d ~/code/spack ]; then
+  export PATH=~/code/spack/bin:$PATH
+  . ~/code/spack/share/spack/setup-env.sh
+  export ICCCFG=~/.spack/intel.cfg
+  export ICPCCFG=~/.spack/intel.cfg
+  export IFORTCFG=~/.spack/intel.cfg
+fi
+
 # User specific aliases and functions
 
 # If not running interactively, don't do anything
