@@ -1,8 +1,8 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+umask 0027 # group readable, none for others
 # User specific environment and startup programs
 export PATH=$HOME/bin:$PATH
-export PATH=$HOME/cmake-3.5.1-Linux-x86_64/bin:$PATH
 export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
 
