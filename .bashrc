@@ -6,9 +6,6 @@ export PATH=$HOME/bin:$PATH
 export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
 
-if [ -e /opt/intel/parallel_studio_xe_2016.2.062/psxevars.sh ]; then
-  source /opt/intel/parallel_studio_xe_2016.2.062/psxevars.sh >/dev/null
-fi
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
 export PATH=/home_nfs/isv/allinea/perfreport-6.0.2/bin:$PATH
 

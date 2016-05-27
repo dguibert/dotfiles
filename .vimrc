@@ -4,6 +4,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 syntax on
+set hidden
 
 " Vundle is short for Vim bundle and is a Vim plugin manager.
 "
@@ -43,13 +44,30 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-set background=dark
+"set background=dark
+set t_Co=16
 colorscheme solarized
 
 " status line
 set laststatus=2
 let g:airline_powerline_fonts=1
+" if !exists('g:airline_symbols')
+"     let g:airline_symbols = {}
+" 
+"     " unicode symbols
+"     let g:airline_left_sep = '»'
+"     let g:airline_left_sep = '▶'
+"     let g:airline_right_sep = '«'
+"     let g:airline_right_sep = '◀'
+"     let g:airline_symbols.linenr = '␊'
+"     let g:airline_symbols.linenr = '␤'
+"     let g:airline_symbols.linenr = '¶'
+"     let g:airline_symbols.branch = '⎇'
+"     let g:airline_symbols.paste = 'ρ'
+"     let g:airline_symbols.paste = 'Þ'
+"     let g:airline_symbols.paste = '∥'
+"     let g:airline_symbols.whitespace = 'Ξ'
+" endif
 
-"
 au BufWinLeave * mkview
 au BufWinEnter * silent loadview
