@@ -68,4 +68,14 @@
   services.zerotierone.enable = true;
   networking.firewall.allowedUDPPorts = [ 9993 ];
 
+  services.cntlm.enable = true;
+  services.cntlm.username = "a629925";
+  services.cntlm.domain = "ww930";
+  services.cntlm.netbios_hostname = "fr-57nvj72";
+  services.cntlm.proxy = [
+    "10.89.0.72:84"
+  ];
+  services.cntlm.extraConfig = ''
+NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+  '';
 }
