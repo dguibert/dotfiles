@@ -5,7 +5,7 @@
   i18n.consoleKeyMap="fr";
 
   nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [ vim vcsh gitFull ];
+  environment.systemPackages = with pkgs; [ vim vcsh gitFull pavucontrol ];
 
   fileSystems."/a629925" = {
     fsType = "vboxsf";
@@ -13,6 +13,16 @@
     options = [ "rw" ];
   };
   zramSwap.enable = true;
+
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioLight.override {
+      /*gconf = gnome3.gconf;*/
+      x11Support = true;
+      /*gconfSupport = true;*/
+      bluetoothSupport = true;
+    };
+  };
 
   # Users
   nixup.enable = true;
@@ -74,6 +84,9 @@
   services.cntlm.netbios_hostname = "fr-57nvj72";
   services.cntlm.proxy = [
     "10.89.0.72:84"
+    #"proxy-emea.my-it-solutions.net:84"
+    #"10.92.32.21:84"
+    #"proxy-americas.my-it-solutions.net:84"
   ];
   services.cntlm.extraConfig = ''
 NoProxy localhost, 127.0.0.*, 10.*, 192.168.*

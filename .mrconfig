@@ -115,3 +115,6 @@ checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
 
 [code/nix]
 checkout = git clone 'https://github.com/NixOS/nix' 'nix'
+
+[code/makefile2graph]
+checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph'

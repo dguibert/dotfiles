@@ -1,4 +1,4 @@
-#! /run/current-system/sw/bin/bash
+#!/run/current-system/sw/bin/bash
 ##! nix-shell -v -i bash -p bashInteractive dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
 ##! nix-shell -I nixpkgs=https://github.com/dguibert/nixpkgs/archive/pu.tar.gz
 
