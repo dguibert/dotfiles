@@ -11,7 +11,8 @@ with pkgs.lib;
   ];
   allowUnfree = true;
   pulseaudio = true;
-  chrommium.enablePepperFlash = true;
+  chromium.enablePepperFlash = true;
+  virtualbox.enableExtensionPack = true;
 
   packageOverrides = super: let self = super.pkgs; in {
     pkgsWithGcc6 = let

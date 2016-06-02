@@ -4,7 +4,7 @@
 
   i18n.consoleKeyMap="fr";
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = import ~/.nixpkgs/config.nix;
   environment.systemPackages = with pkgs; [ vim vcsh gitFull pavucontrol ];
 
   fileSystems."/a629925" = {
