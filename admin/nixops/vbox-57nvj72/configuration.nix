@@ -4,8 +4,12 @@
 
   i18n.consoleKeyMap="fr";
 
-  nixpkgs.config = import ~/.nixpkgs/config.nix;
+  nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
+    xorg.fglrxCompat = true;
+  };
   environment.systemPackages = with pkgs; [ vim vcsh gitFull pavucontrol ];
+
+  boot.kernelPackages = pkgs.linuxPackages_4_5;
 
   fileSystems."/a629925" = {
     fsType = "vboxsf";
@@ -57,6 +61,9 @@
   services.xserver.enable = true;
   services.xserver.layout = "fr,us";
   services.xserver.xkbOptions = "eurosign:e";
+
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.auto.user = "dguibert";
 
   # fonts
   fonts.enableFontDir = true;

@@ -41,3 +41,4 @@ nixops
 chromium
 htop
 tree
+wpsoffice

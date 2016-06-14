@@ -25,5 +25,6 @@ with pkgs.lib;
         openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
       };
     in fix' (extends gccOverrides self.__unfix__);
+
   };
 }
