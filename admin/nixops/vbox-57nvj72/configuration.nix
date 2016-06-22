@@ -4,10 +4,15 @@
 
   i18n.consoleKeyMap="fr";
 
+  #nixpkgs.config = import ~/.nixpkgs/config.nix;
   nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
     xorg.fglrxCompat = true;
   };
-  environment.systemPackages = with pkgs; [ vim vcsh gitFull pavucontrol ];
+  environment.systemPackages = with pkgs; [
+    vim vcsh gitFull pavucontrol
+    gnupg
+    gnupg1compat
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages_4_5;
 

@@ -41,4 +41,5 @@ nixops
 chromium
 htop
 tree
-wpsoffice
+gnupg
+x2goclient
