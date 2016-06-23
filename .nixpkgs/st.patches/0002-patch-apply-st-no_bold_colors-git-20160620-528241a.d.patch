@@ -1,0 +1,25 @@
+From 671eda8a1457d49843b9ec7f61b47441a27b97a5 Mon Sep 17 00:00:00 2001
+From: David Guibert <david.guibert@gmail.com>
+Date: Wed, 22 Jun 2016 10:24:54 +0200
+Subject: [PATCH 2/4] patch: apply st-no_bold_colors-git-20160620-528241a.diff
+
+---
+ st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/st.c b/st.c
+index c9bfc2a..902e8b9 100644
+--- a/st.c
++++ b/st.c
+@@ -3580,7 +3580,7 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
+ 
+ 	/* Change basic system colors [0-7] to bright system colors [8-15] */
+ 	if((base.mode & ATTR_BOLD_FAINT) == ATTR_BOLD && BETWEEN(base.fg, 0, 7))
+-		fg = &dc.col[base.fg + 8];
++		fg = &dc.col[base.fg];
+ 
+ 	if(IS_SET(MODE_REVERSE)) {
+ 		if(fg == &dc.col[defaultfg]) {
+-- 
+2.8.3
+

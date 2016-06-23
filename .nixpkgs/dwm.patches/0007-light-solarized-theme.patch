@@ -1,0 +1,40 @@
+From 18b8722c6448ac8286e07f52f862a3566c2c8a89 Mon Sep 17 00:00:00 2001
+From: David Guibert <david.guibert@gmail.com>
+Date: Wed, 22 Jun 2016 11:06:29 +0200
+Subject: [PATCH 7/7] light solarized theme
+
+---
+ config.def.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index dc72b81..66f3dc2 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -3,15 +3,15 @@
+ 
+ /* appearance */
+ static const char *fonts[] = {
+-	"monospace:size=10"
++	"Liberation Mono:pixelsize=14:antialias=false:autohint=false"
+ };
+-static const char dmenufont[]       = "monospace:size=10";
+-static const char normbordercolor[] = "#073642";
+-static const char normbgcolor[]     = "#002b36";
+-static const char normfgcolor[]     = "#fdf6e3";
+-static const char selbordercolor[]  = "#586e75";
+-static const char selbgcolor[]      = "#073642";
+-static const char selfgcolor[]      = "#fdf6e3";
++static const char dmenufont[]       = "Liberation Mono:pixelsize=14:antialias=false:autohint=false";
++static const char normbordercolor[] = "#93a1a1";
++static const char normbgcolor[]     = "#fdf6e3";
++static const char normfgcolor[]     = "#93a1a1";
++static const char selbordercolor[]  = "#af8700";
++static const char selbgcolor[]      = "#fdf6e3";
++static const char selfgcolor[]      = "#268bd2";
+ static const unsigned int borderpx  = 2;        /* border pixel of windows */
+ static const unsigned int snap      = 32;       /* snap pixel */
+ static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+-- 
+2.8.3
+

@@ -74,7 +74,7 @@
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
   fonts.enableCoreFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font ];
+  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
 
   #X11 and Gnome3
   #services.xserver.desktopManager.default = "gnome3";

@@ -8,6 +8,13 @@ with pkgs.lib;
     ./dwm.patches/0004-config.h-audio-controls.patch
     ./dwm.patches/0005-solarized-theme.patch
     ./dwm.patches/0006-config-support-shortcuts-for-vbox-inside-windows.patch
+    ./dwm.patches/0007-light-solarized-theme.patch
+  ];
+  st.patches = [
+    ./st.patches/0001-patch-apply-st-scrollback-git-20160620-528241a.diff.patch
+    ./st.patches/0002-patch-apply-st-no_bold_colors-git-20160620-528241a.d.patch
+    ./st.patches/0003-patch-apply-st-solarized-light-git-20160620-528241a..patch
+    ./st.patches/0004-custom-changes.patch
   ];
   allowUnfree = true;
   pulseaudio = true;

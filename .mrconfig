@@ -119,3 +119,6 @@ checkout = git clone 'https://github.com/NixOS/nix' 'nix'
 
 [code/makefile2graph]
 checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph'
+
+[code/st]
+checkout = git clone 'git://git.suckless.org/st' 'st'

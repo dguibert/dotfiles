@@ -1,7 +1,7 @@
-From 3f88746bec648556fbe298e4ec6aa61d4d182b20 Mon Sep 17 00:00:00 2001
+From 166251e19ad6e38330a550d191c59e2b275507cb Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@hydrocean.fr>
 Date: Thu, 12 Nov 2015 15:43:24 +0100
-Subject: [PATCH 1/4] pertag
+Subject: [PATCH 1/7] pertag
 
 Signed-off-by: David Guibert <david.guibert@hydrocean.fr>
 ---
@@ -208,5 +208,5 @@ index 0362114..9ba4ec5 100644
  	arrange(selmon);
  }
 -- 
-2.8.0
+2.8.3
 

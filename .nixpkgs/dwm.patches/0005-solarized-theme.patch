@@ -1,14 +1,14 @@
-From 6f3854746c0cc4f2c6295d3601a6d5ee7ba1da0e Mon Sep 17 00:00:00 2001
+From 6a8496ea2847225c719b5143fc11b5ca9a2bbcae Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Fri, 22 Apr 2016 08:33:43 +0200
-Subject: [PATCH 5/5] solarized theme
+Subject: [PATCH 5/7] solarized theme
 
 ---
  config.def.h | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index 26a8f79..b0fe3f5 100644
+index 454ae49..9549611 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -6,13 +6,13 @@ static const char *fonts[] = {
@@ -33,5 +33,5 @@ index 26a8f79..b0fe3f5 100644
  static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
  static const unsigned int systrayspacing = 2;   /* systray spacing */
 -- 
-2.8.0
+2.8.3
 
