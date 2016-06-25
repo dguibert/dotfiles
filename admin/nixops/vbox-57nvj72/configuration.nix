@@ -4,8 +4,17 @@
 
   i18n.consoleKeyMap="fr";
 
-  nixpkgs.config = import ~/.nixpkgs/config.nix;
-  environment.systemPackages = with pkgs; [ vim vcsh gitFull pavucontrol ];
+  #nixpkgs.config = import ~/.nixpkgs/config.nix;
+  nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
+    xorg.fglrxCompat = true;
+  };
+  environment.systemPackages = with pkgs; [
+    vim vcsh gitFull pavucontrol
+    gnupg
+    gnupg1compat
+  ];
+
+  boot.kernelPackages = pkgs.linuxPackages_4_5;
 
   fileSystems."/a629925" = {
     fsType = "vboxsf";
@@ -58,17 +67,20 @@
   services.xserver.layout = "fr,us";
   services.xserver.xkbOptions = "eurosign:e";
 
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.auto.user = "dguibert";
+
   # fonts
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
   fonts.enableCoreFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font ];
+  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
 
   #X11 and Gnome3
   #services.xserver.desktopManager.default = "gnome3";
   #services.xserver.desktopManager.gnome3.enable = true;
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="

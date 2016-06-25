@@ -18,7 +18,7 @@ with lib;
       (conky.override { x11Support = false; })
       fossil
       gitAndTools.gitRemoteGcrypt
-      dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode
+      dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
     ];
 
     user.pathsToLink = [

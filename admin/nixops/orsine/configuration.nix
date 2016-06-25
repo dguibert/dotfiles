@@ -149,7 +149,7 @@ rec {
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
   fonts.enableCoreFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font ];
+  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;

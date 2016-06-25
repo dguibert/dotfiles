@@ -40,4 +40,6 @@ aria2
 nixops
 chromium
 htop
-wpsoffice
+tree
+gnupg
+x2goclient
