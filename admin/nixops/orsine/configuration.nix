@@ -25,6 +25,7 @@ rec {
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "fuse" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
   nixpkgs.config.allowUnfree = true;
   boot.supportedFilesystems = [ "zfs" ];
@@ -106,6 +107,7 @@ rec {
     alsaPlugins pavucontrol
 
     nixops
+    config.boot.kernelPackages.perf 
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
   ];
