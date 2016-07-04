@@ -72,7 +72,7 @@ checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortr
 checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
 
 [code/imp-demo]
-checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-demo' 'imp-demo'
+checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-demo'
 
 [code/kokkos]
 checkout = git clone 'https://github.com/kokkos/kokkos' 'kokkos'
