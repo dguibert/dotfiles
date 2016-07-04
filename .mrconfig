@@ -122,3 +122,6 @@ checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph
 
 [code/st]
 checkout = git clone 'git://git.suckless.org/st' 'st'
+
+[code/myrepos]
+checkout = git clone 'https://github.com/joeyh/myrepos' 'myrepos'
