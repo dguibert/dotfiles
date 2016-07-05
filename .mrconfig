@@ -10,6 +10,7 @@ lib =
 	    git annex init
 	    git_annex_sync
 	  }
+push = echo "$MR_REPO has to be manually pushed"
 
 include = cat $HOME/.config/mr/config.d/*
 
@@ -97,10 +98,14 @@ checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
 fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
 	   "
-	        git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
-	        git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
+         git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
+         git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
+         git config --get-all remote.github.fetch "refs/int/pu" &>/dev/null || git config --add remote.github.fetch refs/int/pu:refs/int/pu
 
 update = git remote update
+push = git push -v origin +pu
+       git push -v origin
+       git push -v origin refs/int/pu:refs/int/pu
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
