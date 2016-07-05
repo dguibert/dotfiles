@@ -67,6 +67,7 @@ rec {
       bluetoothSupport = true;
     };
   };
+  services.tlp.enable = true;
 
   # Select internationalisation properties.
   i18n = {

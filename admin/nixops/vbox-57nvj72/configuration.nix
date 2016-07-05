@@ -35,6 +35,7 @@
       bluetoothSupport = true;
     };
   };
+  services.tlp.enable = true;
 
   # Users
   users.users.dguibert = {
