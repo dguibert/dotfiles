@@ -1,7 +1,7 @@
 From c4cf37c25876d3c130c84d61042d1c1e4bdaecb6 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Fri, 22 Apr 2016 18:22:25 +0200
-Subject: [PATCH 6/7] config: support shortcuts for vbox inside windows
+Subject: [PATCH 6/8] config: support shortcuts for vbox inside windows
 
 ---
  config.def.h | 9 +++++++++
@@ -34,5 +34,5 @@ index 9549611..dc72b81 100644
  	{ MODKEY,                       XK_Tab,    view,           {0} },
  	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 -- 
-2.8.3
+2.9.0
 

@@ -1,17 +1,17 @@
-From 686e8b436de0df69b6280db063d93b58237ebd7b Mon Sep 17 00:00:00 2001
+From 446faf1049a5ff946c827891decbc406583c83b2 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Wed, 22 Jun 2016 10:25:37 +0200
-Subject: [PATCH 3/4] patch: apply st-solarized-light-git-20160620-528241a.diff
+Subject: [PATCH 2/3] patch: apply st-solarized-light-git-20160620-528241a.diff
 
 ---
  config.def.h | 48 +++++++++++++++++++++---------------------------
  1 file changed, 21 insertions(+), 27 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index af1b2ea..feb059f 100644
+index 64e75b8..14fb9f4 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -71,30 +71,23 @@ static unsigned int tabspaces = 8;
+@@ -61,30 +61,23 @@ static unsigned int tabspaces = 8;
  
  /* Terminal colors (16 first used in escape sequence) */
  static const char *colorname[] = {
@@ -59,7 +59,7 @@ index af1b2ea..feb059f 100644
  };
  
  
-@@ -102,9 +95,10 @@ static const char *colorname[] = {
+@@ -92,9 +85,10 @@ static const char *colorname[] = {
   * Default colors (colorname index)
   * foreground, background, cursor
   */
@@ -74,5 +74,5 @@ index af1b2ea..feb059f 100644
  /*
   * Colors used, when the specific fg == defaultfg. So in reverse mode this
 -- 
-2.8.3
+2.9.0
 

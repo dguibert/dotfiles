@@ -37,8 +37,6 @@
   };
 
   # Users
-  nixup.enable = true;
-
   users.users.dguibert = {
     uid = 1000;
     isNormalUser = true;

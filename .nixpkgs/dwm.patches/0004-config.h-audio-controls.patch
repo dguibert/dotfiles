@@ -1,7 +1,7 @@
 From 072e904606a6096c36d34f71ed5934d0c48bbb28 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@hydrocean.fr>
 Date: Thu, 12 Nov 2015 16:59:24 +0100
-Subject: [PATCH 4/7] config.h: audio controls
+Subject: [PATCH 4/8] config.h: audio controls
 
 ---
  config.def.h | 9 +++++++++
@@ -40,5 +40,5 @@ index ab2dba1..454ae49 100644
  
  /* button definitions */
 -- 
-2.8.3
+2.9.0
 

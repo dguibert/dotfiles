@@ -162,9 +162,6 @@ rec {
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
-  # Users
-  nixup.enable = true;
-
   fileSystems = [
   { mountPoint = "/tmp"; device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; }
   ];
