@@ -3,13 +3,13 @@ with pkgs.lib;
 {
   dwm.patches = [
     ./dwm.patches/0001-pertag.patch
+    ./dwm.patches/0002-apply-dwm-6.1-systray.diff.patch
+    ./dwm.patches/0003-config.h-azerty.patch
+    ./dwm.patches/0004-config.h-audio-controls.patch
     ./dwm.patches/0005-solarized-theme.patch
     ./dwm.patches/0006-config-support-shortcuts-for-vbox-inside-windows.patch
-    ./dwm.patches/0003-config.h-azerty.patch
-    ./dwm.patches/0008-termcmd-st-e-dvtm.patch
-    ./dwm.patches/0004-config.h-audio-controls.patch
     ./dwm.patches/0007-light-solarized-theme.patch
-    ./dwm.patches/0002-apply-dwm-6.1-systray.diff.patch
+    ./dwm.patches/0008-termcmd-st-e-dvtm.patch
   ];
   st.patches = [
     ./st.patches/0001-patch-apply-st-no_bold_colors-git-20160620-528241a.d.patch

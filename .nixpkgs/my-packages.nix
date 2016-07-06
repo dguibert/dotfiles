@@ -27,7 +27,6 @@ mkpasswd
 mr
 nix-repl
 nox
-paraview
 pmount
 pstree
 python

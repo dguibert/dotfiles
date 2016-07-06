@@ -63,7 +63,7 @@ PS1+='$\[\033[00m\] '
 
 export PS1
 case $TERM in
-	rxvt|*term)
+	dvtm*|st*|rxvt|*term)
 		trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
 	;;
 esac
