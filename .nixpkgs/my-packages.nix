@@ -48,4 +48,5 @@ htop
 tree
 gnupg
 x2goclient
+wpsoffice
 ]

@@ -1,4 +1,4 @@
-From 6ab5ce98e1a87ea566a1eac8e7fba89937012981 Mon Sep 17 00:00:00 2001
+From 58ea1cd9e8e49bb4d1647313f3ba917f2d560080 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Tue, 5 Jul 2016 14:36:59 +0200
 Subject: [PATCH 8/8] termcmd: st -e dvtm
@@ -8,7 +8,7 @@ Subject: [PATCH 8/8] termcmd: st -e dvtm
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/config.def.h b/config.def.h
-index 66f3dc2..bf91df5 100644
+index 66f3dc2..e046f6c 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -60,7 +60,7 @@ static const Layout layouts[] = {
@@ -16,7 +16,7 @@ index 66f3dc2..bf91df5 100644
  static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
  static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 -static const char *termcmd[]  = { "st", NULL };
-+static const char *termcmd[]  = { "st", "-e", "dvtm", NULL };
++static const char *termcmd[]  = { "st", "-e", "dvtm", "-h", "20000", "-M", NULL };
  
  // for pulse compatible //
  static const char *pulseup[] = { "amixer", "-q", "sset", "Master", "1%+", NULL };

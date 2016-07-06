@@ -68,7 +68,8 @@ case $TERM in
 	;;
 esac
 
-eval `dircolors`
+#eval `dircolors`
+eval $(TERM=xterm-256color dircolors)
 alias ls='ls --color'
 
 #share history with all bash instances
