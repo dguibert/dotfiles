@@ -6,6 +6,7 @@ gitAndTools.git-annex
 mr
 vcsh
 gitFull
+mercurial
 (conky.override { x11Support = false; })
 fossil
 gitAndTools.gitRemoteGcrypt
@@ -48,4 +49,5 @@ tree
 gnupg
 x2goclient
 wpsoffice
+file
 ]
