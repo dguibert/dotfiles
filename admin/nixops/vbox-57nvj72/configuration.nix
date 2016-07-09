@@ -12,14 +12,17 @@
     vim vcsh gitFull pavucontrol
     gnupg
     gnupg1compat
+    config.boot.kernelPackages.perf 
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_5;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
 
+  #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
   fileSystems."/a629925" = {
     fsType = "vboxsf";
     device = "a629925";
-    options = [ "rw" ];
+    options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
   };
   zramSwap.enable = true;
 
@@ -32,10 +35,9 @@
       bluetoothSupport = true;
     };
   };
+  services.tlp.enable = true;
 
   # Users
-  nixup.enable = true;
-
   users.users.dguibert = {
     uid = 1000;
     isNormalUser = true;

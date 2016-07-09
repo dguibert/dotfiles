@@ -6,17 +6,14 @@ export PATH=$HOME/bin:$PATH
 export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
 
-if [ -e /opt/intel/parallel_studio_xe_2016.2.062/psxevars.sh ]; then
-  source /opt/intel/parallel_studio_xe_2016.2.062/psxevars.sh >/dev/null
-fi
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
 
 if [ -d ~/code/spack ]; then
   export PATH=~/code/spack/bin:$PATH
   . ~/code/spack/share/spack/setup-env.sh
-  export ICCCFG=~/.spack/intel.cfg
-  export ICPCCFG=~/.spack/intel.cfg
-  export IFORTCFG=~/.spack/intel.cfg
+#  export ICCCFG=~/.spack/intel.cfg
+#  export ICPCCFG=~/.spack/intel.cfg
+#  export IFORTCFG=~/.spack/intel.cfg
 fi
 
 if [ -d ~/pkgs/stowed ]; then
@@ -63,12 +60,13 @@ PS1+='$\[\033[00m\] '
 
 export PS1
 case $TERM in
-	rxvt|*term)
+	dvtm*|st*|rxvt|*term)
 		trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
 	;;
 esac
 
-eval `dircolors`
+#eval `dircolors`
+eval $(TERM=xterm-256color dircolors)
 alias ls='ls --color'
 
 #share history with all bash instances

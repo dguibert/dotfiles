@@ -25,6 +25,7 @@ rec {
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "fuse" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
   nixpkgs.config.allowUnfree = true;
   boot.supportedFilesystems = [ "zfs" ];
@@ -66,6 +67,7 @@ rec {
       bluetoothSupport = true;
     };
   };
+  services.tlp.enable = true;
 
   # Select internationalisation properties.
   i18n = {
@@ -106,6 +108,7 @@ rec {
     alsaPlugins pavucontrol
 
     nixops
+    config.boot.kernelPackages.perf 
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
   ];
@@ -159,9 +162,6 @@ rec {
   security.setuidPrograms = [ "su" "xlock" ];
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
-
-  # Users
-  nixup.enable = true;
 
   fileSystems = [
   { mountPoint = "/tmp"; device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; }
