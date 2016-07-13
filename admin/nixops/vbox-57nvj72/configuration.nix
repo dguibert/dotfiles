@@ -1,13 +1,14 @@
 { config, pkgs, lib, ... }:
 {
   imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
+  services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
   i18n.consoleKeyMap="fr";
 
-  #nixpkgs.config = import ~/.nixpkgs/config.nix;
-  nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
-    xorg.fglrxCompat = true;
-  };
+  nixpkgs.config = import ~/.nixpkgs/config.nix;
+  #nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
+  #  xorg.fglrxCompat = true;
+  #};
   environment.systemPackages = with pkgs; [
     vim vcsh gitFull pavucontrol
     gnupg
