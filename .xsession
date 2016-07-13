@@ -36,6 +36,7 @@ while :; do
   xrdb -load ~/.Xdefaults
   # launch rxvt daemon
   urxvtd &
+  qtpass &
 
   conky -c ~/.conkyrc | while read line; do 
       xsetroot -name "$line"

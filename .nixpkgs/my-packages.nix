@@ -53,4 +53,6 @@ gnupg
 x2goclient
 wpsoffice
 file
+pass
+qtpass
 ]
