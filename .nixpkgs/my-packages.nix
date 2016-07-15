@@ -1,8 +1,11 @@
 # nix-env -f ~/.nixpkgs/my-packages.nix -ir
 with import <nixpkgs> {};
+let
+ previousPkgs_pu = import (fetchTarball https://github.com/dguibert/nixpkgs/archive/221683611736b6ff91479ed0aadbf58e31312247.tar.gz) {};
+in
 [
 vim
-gitAndTools.git-annex
+previousPkgs_pu.gitAndTools.git-annex
 mr
 vcsh
 gitFull
@@ -50,4 +53,6 @@ gnupg
 x2goclient
 wpsoffice
 file
+pass
+qtpass
 ]
