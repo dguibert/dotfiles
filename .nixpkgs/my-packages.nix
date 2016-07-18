@@ -49,7 +49,7 @@ nixops
 chromium
 htop
 tree
-gnupg
+gnupg1compat
 x2goclient
 wpsoffice
 file
