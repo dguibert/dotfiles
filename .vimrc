@@ -44,8 +44,14 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-"set background=dark
-set t_Co=16
+set background=dark
+set t_Co=256
+if &term =~ '256color'
+    " disable Background Color Erase (BCE) so that color schemes
+    " render properly when inside 256-color tmux and GNU screen.
+    " see also http://sunaku.github.io/vim-256color-bce.html
+    set t_ut=
+endif
 colorscheme solarized
 
 " status line
@@ -70,4 +76,7 @@ let g:airline_powerline_fonts=1
 " endif
 
 au BufWinLeave * mkview
-au BufWinEnter * silent loadview
+au BufWinEnter * silent! loadview
+
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
