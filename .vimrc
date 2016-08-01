@@ -4,6 +4,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 syntax on
+set hidden
 
 " Vundle is short for Vim bundle and is a Vim plugin manager.
 "
@@ -50,7 +51,10 @@ colorscheme solarized
 set laststatus=2
 let g:airline_powerline_fonts=1
 
+
 au BufWinLeave * mkview
 au BufWinEnter * silent! loadview
 
 au BufWinEnter *.nix set ft=nix
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =

@@ -5,8 +5,10 @@ umask 0027 # group readable, none for others
 export PATH=$HOME/bin:$PATH
 export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
+export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
 
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
+export PATH=/home_nfs/isv/allinea/perfreport-6.0.2/bin:$PATH
 
 if [ -d ~/code/spack ]; then
   export PATH=~/code/spack/bin:$PATH
@@ -27,17 +29,6 @@ fi
 [ -z "$PS1" ] && return
 
 #eval `keychain --noask -q --eval id_dsa david.guibert`
-
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-export HISTCONTROL=ignoredups:ignorespace
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=10000
-export HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -69,25 +60,25 @@ esac
 eval $(TERM=xterm-256color dircolors)
 alias ls='ls --color'
 
-#share history with all bash instances
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
 export HISTIGNORE="ls:cd:clear:[bf]g"
-export HISTCONTROL=ignoreboth:erasedups     # no duplicate entries
-export HISTSIZE=100000           # big big history
-export HISTFILESIZE=100000       # big big history
+export HISTCONTROL=ignoredups:ignorespace
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+
 # http://ubuntuforums.org/showthread.php?t=1150822
 ## Save and reload the history after each command finishes
-PROMPT_COMMAND="                history -a"
-PROMPT_COMMAND="$PROMPT_COMMAND;history -c"
-PROMPT_COMMAND="$PROMPT_COMMAND;history -r"
-PROMPT_COMMAND="$PROMPT_COMMAND;history -w"
-PROMPT_COMMAND="$PROMPT_COMMAND;history -c"
-PROMPT_COMMAND="$PROMPT_COMMAND;history -r"
-export PROMPT_COMMAND
-shopt -s histreedit
-shopt -s histverify
+shopt -s histappend
+export PROMPT_COMMAND="history -a; history -c; history -r"
+#shopt -s histreedit
+#shopt -s histverify
 
 #export AWT_TOOLKIT=MToolkit
 
 if hash direnv 2> /dev/null; then
   eval "$(direnv hook bash)"
 fi
+test -e $HOME/.nix-profile/etc/profile.d/nix.sh && source $HOME/.nix-profile/etc/profile.d/nix.sh
