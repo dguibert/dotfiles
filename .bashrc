@@ -30,17 +30,6 @@ fi
 
 #eval `keychain --noask -q --eval id_dsa david.guibert`
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-export HISTCONTROL=ignoredups:ignorespace
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=10000
-export HISTFILESIZE=20000
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -70,11 +59,15 @@ esac
 eval `dircolors`
 alias ls='ls --color'
 
-#share history with all bash instances
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
 export HISTIGNORE="ls:cd:clear:[bf]g"
-export HISTCONTROL=ignoreboth:erasedups     # no duplicate entries
-export HISTSIZE=100000           # big big history
-export HISTFILESIZE=100000       # big big history
+export HISTCONTROL=ignoredups:ignorespace
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+
 # http://ubuntuforums.org/showthread.php?t=1150822
 ## Save and reload the history after each command finishes
 shopt -s histappend
@@ -87,3 +80,4 @@ export PROMPT_COMMAND="history -a; history -c; history -r"
 if hash direnv 2> /dev/null; then
   eval "$(direnv hook bash)"
 fi
+test -e $HOME/.nix-profile/etc/profile.d/nix.sh && source $HOME/.nix-profile/etc/profile.d/nix.sh
