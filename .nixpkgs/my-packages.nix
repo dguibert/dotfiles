@@ -5,7 +5,8 @@ let
 in
 [
 vim
-previousPkgs_pu.gitAndTools.git-annex
+#previousPkgs_pu.gitAndTools.git-annex
+gitAndTools.git-annex
 mr
 vcsh
 gitFull

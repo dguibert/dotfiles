@@ -50,7 +50,6 @@ colorscheme solarized
 set laststatus=2
 let g:airline_powerline_fonts=1
 
-"
 au BufWinLeave * mkview
 au BufWinEnter * silent! loadview
 
