@@ -137,10 +137,16 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 [.password-store]
 checkout = git init '.password-store'
 fixups = git_add_remotes "
-           a629925 /a629925/.password-store
+	          a629925 /a629925/.password-store
 	   robin gcrypt::ssh://robin/~/public_git/password-store
-           sid   gcrypt::ssh://sid/~/public_git/password-store
+	          sid   gcrypt::ssh://sid/~/public_git/password-store
 	   "
 update = git remote update
 push = git push robin
-       git push sid
+	      git push sid
+
+[code/slock]
+checkout = git clone 'git://git.suckless.org/slock' 'slock'
+
+[code/xssstate]
+checkout = git clone 'git://git.suckless.org/xssstate' 'xssstate'
