@@ -33,6 +33,11 @@ while :; do
   ## To enable horizontal scrolling in addition to vertical scrolling
   xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Axes" 6 7 4 5
 
+  # http://woozle.org/~neale/src/xss.html
+  # launch xlock after timeout
+  xset s 500
+  xss-lock -- xlock -mode blank &
+
   xrdb -load ~/.Xdefaults
   # launch rxvt daemon
   urxvtd &
