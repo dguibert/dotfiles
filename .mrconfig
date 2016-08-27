@@ -148,5 +148,5 @@ push = git push robin
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
 
-[code/xssstate]
-checkout = git clone 'git://git.suckless.org/xssstate' 'xssstate'
+#[code/xssstate]
+#checkout = git clone 'git://git.suckless.org/xssstate' 'xssstate'

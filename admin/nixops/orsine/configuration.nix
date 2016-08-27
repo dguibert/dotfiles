@@ -102,7 +102,7 @@ rec {
     myTexLive
     firefoxWrapper chromium
     wirelesstools wpa_supplicant_gui
-    dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
+    dmenu xlockmore xss-lock slock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
     evince #calibre
     mplayer gst_all.gstreamer
     alsaPlugins pavucontrol
