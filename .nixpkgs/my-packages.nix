@@ -7,6 +7,7 @@ in
 vim
 #previousPkgs_pu.gitAndTools.git-annex
 gitAndTools.git-annex
+rsync
 mr
 vcsh
 gitFull
@@ -37,7 +38,7 @@ pstree
 python
 ruby
 screen
-teamviewer
+#teamviewer
 tig
 vagrant
 valgrind
@@ -56,4 +57,11 @@ wpsoffice
 file
 pass
 qtpass
+bc
+parallel
+pandoc
+unzip
+
+rclone
+#git-annex-remote-rclone
 ]
