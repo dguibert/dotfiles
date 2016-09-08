@@ -1,17 +1,17 @@
-From 446faf1049a5ff946c827891decbc406583c83b2 Mon Sep 17 00:00:00 2001
+From 73c7ab7d7fef7c2f13c4ce8b9f8367805847785b Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Wed, 22 Jun 2016 10:25:37 +0200
 Subject: [PATCH 2/3] patch: apply st-solarized-light-git-20160620-528241a.diff
 
 ---
- config.def.h | 48 +++++++++++++++++++++---------------------------
- 1 file changed, 21 insertions(+), 27 deletions(-)
+ config.def.h | 45 ++++++++++++++++++++++-----------------------
+ 1 file changed, 22 insertions(+), 23 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index 64e75b8..14fb9f4 100644
+index b41747f..386375e 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -61,30 +61,23 @@ static unsigned int tabspaces = 8;
+@@ -84,31 +84,30 @@ static unsigned int tabspaces = 8;
  
  /* Terminal colors (16 first used in escape sequence) */
  static const char *colorname[] = {
@@ -34,11 +34,6 @@ index 64e75b8..14fb9f4 100644
 -	"magenta",
 -	"cyan",
 -	"white",
--
--	[255] = 0,
--
--	/* more colors can be added after 255 to use with DefaultXX */
--	"#cccccc",
 +	/* solarized light */
 +	"#eee8d5",  /*  0: black    */
 +	"#dc322f",  /*  1: red      */
@@ -56,23 +51,31 @@ index 64e75b8..14fb9f4 100644
 +	"#6c71c4",  /* 13: brmagenta*/
 +	"#586e75",  /* 14: brcyan   */
 +	"#002b36",  /* 15: brwhite  */
+ 
+ 	[255] = 0,
+ 
+ 	/* more colors can be added after 255 to use with DefaultXX */
+ 	"#cccccc",
+ 	"#555555",
++
  };
  
  
-@@ -92,9 +85,10 @@ static const char *colorname[] = {
+@@ -116,10 +115,10 @@ static const char *colorname[] = {
   * Default colors (colorname index)
-  * foreground, background, cursor
+  * foreground, background, cursor, reverse cursor
   */
 -static unsigned int defaultfg = 7;
 -static unsigned int defaultbg = 0;
 -static unsigned int defaultcs = 256;
+-static unsigned int defaultrcs = 257;
 +static unsigned int defaultfg = 12;
 +static unsigned int defaultbg = 8;
 +static unsigned int defaultcs = 14;
 +static unsigned int defaultrcs = 15;
  
  /*
-  * Colors used, when the specific fg == defaultfg. So in reverse mode this
+  * Default shape of cursor
 -- 
-2.9.0
+2.9.3
 
