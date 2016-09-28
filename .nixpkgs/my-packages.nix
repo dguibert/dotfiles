@@ -38,7 +38,7 @@ pstree
 python
 ruby
 screen
-teamviewer
+#teamviewer
 tig
 vagrant
 valgrind
@@ -57,4 +57,11 @@ wpsoffice
 file
 pass
 qtpass
+bc
+parallel
+pandoc
+unzip
+
+rclone
+#git-annex-remote-rclone
 ]

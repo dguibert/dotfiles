@@ -145,6 +145,12 @@ update = git remote update
 push = git push robin
 	      git push sid
 
+[code/git-subrepo]
+checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
+
+[$HOME/work]
+checkout = new_git_annexed_repo
+
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
 

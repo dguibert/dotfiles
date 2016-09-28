@@ -28,6 +28,10 @@ fi
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+#eval `dircolors`
+eval $(TERM=xterm-256color dircolors)
+alias ls='ls --color'
+
 #eval `keychain --noask -q --eval id_dsa david.guibert`
 
 # check the window size after each command and, if necessary,
@@ -56,10 +60,6 @@ case $TERM in
 	;;
 esac
 
-#eval `dircolors`
-eval $(TERM=xterm-256color dircolors)
-alias ls='ls --color'
-
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 export HISTIGNORE="ls:cd:clear:[bf]g"
@@ -81,4 +81,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r"
 if hash direnv 2> /dev/null; then
   eval "$(direnv hook bash)"
 fi
-test -e $HOME/.nix-profile/etc/profile.d/nix.sh && source $HOME/.nix-profile/etc/profile.d/nix.sh
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+	source $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
