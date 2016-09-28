@@ -32,5 +32,6 @@
   vbox-57nvj72 = { pkgs, config, ...}: {
     imports = [ ./vbox-57nvj72/configuration.nix ];
     deployment.targetHost = "10.0.2.15";
+    #deployment.targetHost = "localhost";
   };
 }
