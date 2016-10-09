@@ -141,7 +141,7 @@ rec {
 
   services.xserver.resolutions = [{x=1440; y=900;}];
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";
 #  services.xserver.desktopManager.gnome3.enable = true;
@@ -173,7 +173,7 @@ rec {
 
   zramSwap.enable = true;
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
