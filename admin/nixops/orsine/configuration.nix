@@ -23,7 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_6; #latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
@@ -141,7 +141,7 @@ rec {
 
   services.xserver.resolutions = [{x=1440; y=900;}];
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";
 #  services.xserver.desktopManager.gnome3.enable = true;
@@ -173,7 +173,7 @@ rec {
 
   zramSwap.enable = true;
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
