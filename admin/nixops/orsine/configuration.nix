@@ -102,7 +102,7 @@ rec {
     myTexLive
     firefoxWrapper chromium
     wirelesstools wpa_supplicant_gui
-    dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
+    dmenu xlockmore xss-lock slock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
     evince #calibre
     mplayer gst_all.gstreamer
     alsaPlugins pavucontrol
@@ -127,8 +127,8 @@ rec {
     # https://zeitstrom.wordpress.com/2013/02/16/opensuse-sshd-server-x11-forwarding-fails-with-failed-to-allocate-internet-domain-x11-display-socket/
     AddressFamily inet
   '';
-  programs.ssh.forwardX11 = true;
-  programs.ssh.setXAuthLocation = true;
+  #programs.ssh.forwardX11 = true;
+  #programs.ssh.setXAuthLocation = true;
   users.users.root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAfi56MxrJRRWjj1myan0glpbXiPykZiU3qEzPZc4ijUY0VtGt4HQ7FTNUUHc+xtMqhAVgv2t9UNxkzcjmZjJqNHJ4ppsfJ4Ikam4Q8ENIvJJt4rz/Y6Z5nrMRtHmzNN0weg9R9PiYW5Bsh9epeCQzKl2R+IMTAaeqXf9vPf5uExps7/6xj1j0+KJNGpMB+VLYKAkCo6zg7NdSgA7Nt5AyfdB01snTP0YNf0vZb9v6/ns4cdJt7324/IyC/HlUV/IsnRSkiZBYJSqUSxCCpHfomUBXcnrMnkzb2LAOZBMATkS8qWyk/BXEEX3ENmkr4o8PPBEhvYjOOy3QGeriR69d dguibert@orsine" ];
 
   # Enable CUPS to print documents.
@@ -141,7 +141,7 @@ rec {
 
   services.xserver.resolutions = [{x=1440; y=900;}];
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";
 #  services.xserver.desktopManager.gnome3.enable = true;
@@ -173,7 +173,7 @@ rec {
 
   zramSwap.enable = true;
 
-  nix.useChroot = true;
+  nix.useSandbox = true;
   nix.extraOptions = "auto-optimise-store = true";
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
