@@ -91,6 +91,8 @@
 
   # Enable ZeroTierOne
   services.zerotierone.enable = true;
+
+  networking.useNetworkd = true;
   networking.firewall.allowedUDPPorts = [ 9993 ];
 
   services.cntlm.enable = true;

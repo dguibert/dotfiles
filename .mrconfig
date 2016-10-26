@@ -62,6 +62,7 @@ checkout = git clone 'https://github.com/johnkeeping/git-integration' 'git-integ
 
 [code/git-stree]
 checkout = git clone 'https://github.com/tdd/git-stree' 'git-stree'
+deleted = true
 
 [code/haskell-fortran/camfort]
 checkout = git clone 'https://github.com/dorchard/camfort' 'camfort'
