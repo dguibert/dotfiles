@@ -151,6 +151,7 @@ checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
 
 [$HOME/work]
 checkout = new_git_annexed_repo
+push = git_annex_sync
 
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
