@@ -1,4 +1,5 @@
 *
+!/.gitattributes
 !/admin/nixops
 !/.aria2
 !/.asoundrc
