@@ -15,6 +15,7 @@ mercurial
 (conky.override { x11Support = false; })
 fossil
 gitAndTools.gitRemoteGcrypt
+gitAndTools.git-crypt
 dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
 asciidoc
 baobab
