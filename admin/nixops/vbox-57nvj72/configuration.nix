@@ -16,7 +16,7 @@
     config.boot.kernelPackages.perf 
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_8;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111

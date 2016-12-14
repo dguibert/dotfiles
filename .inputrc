@@ -18,4 +18,3 @@ set show-all-if-ambiguous on
 "\e[H": beginning-of-line
 "\e[F": end-of-line
 
-"\C-j": "\C-atime \C-m"
