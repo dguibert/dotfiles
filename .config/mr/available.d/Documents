@@ -1,4 +1,5 @@
 [$HOME/Documents]
 checkout = new_git_annexed_repo
+push = git_annex_sync
 
 

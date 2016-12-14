@@ -1,4 +1,5 @@
 [$HOME/archives]
 checkout = new_git_annexed_repo
+push = git_annex_sync
 order = 100
 
