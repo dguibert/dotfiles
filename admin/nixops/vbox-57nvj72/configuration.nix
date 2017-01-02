@@ -26,6 +26,7 @@
     options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
   };
   zramSwap.enable = true;
+  swapDevices = [ { device = "/swapfile"; } ];
 
   hardware.pulseaudio = {
     enable = true;
