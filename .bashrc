@@ -10,13 +10,13 @@ export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
 export PATH=/home_nfs/isv/allinea/perfreport-6.0.2/bin:$PATH
 
-if [ -d ~/code/spack ]; then
-  export PATH=~/code/spack/bin:$PATH
-  . ~/code/spack/share/spack/setup-env.sh
-#  export ICCCFG=~/.spack/intel.cfg
-#  export ICPCCFG=~/.spack/intel.cfg
-#  export IFORTCFG=~/.spack/intel.cfg
-fi
+#if [ -d ~/code/spack ]; then
+#  export PATH=~/code/spack/bin:$PATH
+#  . ~/code/spack/share/spack/setup-env.sh
+##  export ICCCFG=~/.spack/intel.cfg
+##  export ICPCCFG=~/.spack/intel.cfg
+##  export IFORTCFG=~/.spack/intel.cfg
+#fi
 
 if [ -d ~/pkgs/stowed ]; then
   export PATH=$HOME/pkgs/stowed/bin:$PATH

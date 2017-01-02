@@ -23,7 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_8;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
@@ -189,7 +189,6 @@ rec {
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "overlay";
-  virtualisation.docker.socketActivation = true;
   systemd.sockets.docker.socketConfig.ListenStream = pkgs.lib.mkForce [ "0.0.0.0:2375" "/var/run/docker.sock" ];
   /*networking.firewall.allowedTCPPorts = [ 2375 ];*/
   /*virtualisation.docker.extraOptions = "-e lxc";*/
@@ -200,5 +199,4 @@ rec {
   # ChromeCast ports
   # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT
   networking.firewall.allowedUDPPortRanges = [ { from=32768; to=61000; } ];
-
 }
