@@ -19,6 +19,7 @@ with pkgs.lib;
   allowUnfree = true;
   pulseaudio = true;
   virtualbox.enableExtensionPack = true;
+  chromium.enableWideVine = true;
 
   packageOverrides = super: let self = super.pkgs; in {
     pkgsWithGcc6 = let
