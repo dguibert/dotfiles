@@ -161,3 +161,9 @@ checkout = git clone 'git://git.suckless.org/slock' 'slock'
 
 [code/git-crypt]
 checkout = git clone 'https://github.com/AGWA/git-crypt' 'git-crypt'
+
+[code/git-ftp]
+checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
+
+[code/nextflow]
+checkout = git clone 'https://github.com/nextflow-io/nextflow' 'nextflow'
