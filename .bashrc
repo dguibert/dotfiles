@@ -10,6 +10,9 @@ export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
 export PATH=/home_nfs/isv/allinea/forge-6.0.2/bin:$PATH
 export PATH=/home_nfs/isv/allinea/perfreport-6.0.2/bin:$PATH
 
+# https://sites.google.com/site/ewalker544/research-2/myrt
+export PATH=$HOME/bin:$HOME/myrt/bin:$PATH
+
 #if [ -d ~/code/spack ]; then
 #  export PATH=~/code/spack/bin:$PATH
 #  . ~/code/spack/share/spack/setup-env.sh
