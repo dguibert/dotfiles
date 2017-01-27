@@ -1,0 +1,9 @@
+[$HOME/public_git]
+checkout = new_git_annexed_repo
+push = git_annex_sync
+#fixups = git_add_remotes "
+#	   robin ssh://robin/~/public_git/password-store
+#	   sid   ssh://sid/~/public_git/password-store
+#	   "
+
+
