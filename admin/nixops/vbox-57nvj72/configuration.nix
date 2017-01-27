@@ -27,6 +27,11 @@
   };
   zramSwap.enable = true;
   swapDevices = [ { device = "/swapfile"; } ];
+  systemd.tmpfiles.rules = [
+    "D! /tmp 1777 root root"
+    "d /tmp 1777 root root 10d"
+  ];
+
 
   hardware.pulseaudio = {
     enable = true;
@@ -108,5 +113,16 @@
   ];
   services.cntlm.extraConfig = ''
 NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+  '';
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.liveRestore = false;
+
+  services.udev.extraRules = with pkgs; ''
+	  # 80ee:0021
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]", MODE="0660", GROUP="users"
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[18d1]", MODE="0660", GROUP="users" # Bus 001 Device 016: ID 18d1:d00d Google Inc.
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_adb"
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
   '';
 }
