@@ -18,14 +18,20 @@ include = cat $HOME/.config/mr/config.d/*
 checkout = 
 	  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
 #  vcsh dotfiles remote add remote_name remote_url
+fixups = vcsh dotfiles remote add public_git ~/public_git/dotfiles.git
 
 push = 
 	  vcsh dotfiles push
+	  vcsh dotfiles push public_git
 #  vcsh dotfiles push remote_name
 
 
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
+fixups = git_add_remotes "
+	   public_git ~/public_git/multigit.git
+	   "
+push = git push -v public_git
 
 [code/bedrocklinux-userland]
 checkout = git clone 'https://github.com/paradigm/bedrocklinux-userland' 'bedrocklinux-userland'
@@ -143,10 +149,14 @@ fixups = git_add_remotes "
 	   "
 update = git remote update
 push = git push robin
-       git push sid
+	      git push sid
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
+push = git push -v public_git
+fixups = git_add_remotes "
+	   public_git ~/public_git/git-subrepo.git
+	   "
 
 [$HOME/work]
 checkout = new_git_annexed_repo
@@ -163,3 +173,16 @@ checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
 
 [code/nextflow]
 checkout = git clone 'https://github.com/nextflow-io/nextflow' 'nextflow'
+
+[code/myrt]
+checkout = git clone '/home/dguibert/public_git/myrt.git' 'myrt'
+push = git push -v
+
+[code/multigit]
+checkout = git clone 'https://github.com/capr/multigit' 'multigit'
+fixups = git_add_remotes "
+	   public_git ~/public_git/multigit.git
+	   "
+push = git push -v public_git
+
+
