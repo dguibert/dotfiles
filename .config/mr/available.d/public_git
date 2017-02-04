@@ -5,5 +5,8 @@ push = git_annex_sync
 #	   robin ssh://robin/~/public_git/password-store
 #	   sid   ssh://sid/~/public_git/password-store
 #	   "
+update = git annex add *
+         git_annex_sync
+order=1
 
 
