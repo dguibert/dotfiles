@@ -1,4 +1,5 @@
 # nix-env -f ~/.nixpkgs/my-packages.nix -ir
+# nix-env -f ~/.nixpkgs/my-packages.nix -ir -I nixpkgs=$HOME/code/nixpkgs/
 with import <nixpkgs> {};
 let
  previousPkgs_pu = import (fetchTarball https://github.com/dguibert/nixpkgs/archive/221683611736b6ff91479ed0aadbf58e31312247.tar.gz) {};
