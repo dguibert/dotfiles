@@ -46,10 +46,12 @@ valgrind
 vcsh
 virtualgl
 mosh
+lsof
 xpra
 aria2
 nixops
-chromium
+#chromium
+google-chrome
 htop
 tree
 gnupg1compat
