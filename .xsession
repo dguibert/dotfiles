@@ -8,6 +8,7 @@ set -o monitor
 #set -o verbose
 #set -o xtrace
 echo $SHELL
+export PATH=$PATH:/run/current-system/sw/bin
 which bash
 # workaround to get bash (with readline support (aka bashInteractive))
 export SHELL=$(which bash)

@@ -185,3 +185,8 @@ fixups = git_add_remotes "
 	   "
 push = git push -v public_git
 
+[code/git-appraise]
+checkout = git clone 'https://github.com/google/git-appraise' 'git-appraise'
+
+[code/git-appraise-web]
+checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-web'
