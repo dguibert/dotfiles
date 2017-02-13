@@ -149,7 +149,8 @@ fixups = git_add_remotes "
 	   "
 update = git remote update
 push = git push robin
-	      git push sid
+       git push sid
+       git push bare
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
