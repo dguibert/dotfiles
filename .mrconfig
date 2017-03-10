@@ -149,8 +149,8 @@ fixups = git_add_remotes "
 	   "
 update = git remote update
 push = git push robin
-       git push sid
-       git push bare
+	      git push sid
+	      git push bare
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
@@ -191,3 +191,15 @@ checkout = git clone 'https://github.com/google/git-appraise' 'git-appraise'
 
 [code/git-appraise-web]
 checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-web'
+
+[code/nt2]
+checkout = git clone 'https://github.com/jtlap/nt2' 'nt2'
+fixups = git_add_remotes "
+	   picanumber https://github.com/picanumber/nt2
+	   public_git ~/public_git/nt2.git
+	   "
+push = git push -v public_git
+
+
+[code/cppcon-2015]
+checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
