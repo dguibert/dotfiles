@@ -81,6 +81,15 @@ export PROMPT_COMMAND="history -a; history -c; history -r"
 
 #export AWT_TOOLKIT=MToolkit
 
+# man gpg-agent@EXAMPLES
+# https://www.unix-ag.uni-kl.de/~guenther/gpg-agent-for-ssh.html
+export GPG_TTY=$(tty)
+# If you enabled the Ssh Agent Support, you also need to tell ssh about it by adding this to your init script:
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
 if hash direnv 2> /dev/null; then
   eval "$(direnv hook bash)"
 fi
