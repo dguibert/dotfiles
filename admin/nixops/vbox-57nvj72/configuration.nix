@@ -125,4 +125,8 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_adb"
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
   '';
+  # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
+  # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
+  # ca.desrt.dconf was not provided by any .service files
+  services.dbus.packages = with pkgs; [ gnome3.dconf ];
 }
