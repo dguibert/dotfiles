@@ -21,17 +21,15 @@ with pkgs.lib;
   virtualbox.enableExtensionPack = true;
   chromium.enableWideVine = true;
 
-  packageOverrides = super: let self = super.pkgs; in {
-    pkgsWithGcc6 = let
-      gccOverrides = self: super: {
-        stdenvGcc6 = self.overrideCC self.stdenv self.gcc6;
-        gcc = self.gcc6;
-        gfortran = self.gfortran6;
+  #  packageOverrides = super: let
+  #      gcc6Overlay = self: super: {
+  #        stdenvGcc6 = self.overrideCC self.stdenv self.gcc6;
+  #        gcc = self.gcc6;
+  #        gfortran = self.gfortran6;
+  #
+  #        hdf5 = super.hdf5.override { stdenv = self.stdenvGcc6; };
+  #        openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
+  #      };
+  #    in fix' (extends gccOverrides self.__unfix__);
 
-        hdf5 = super.hdf5.override { stdenv = self.stdenvGcc6; };
-        openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
-      };
-    in fix' (extends gccOverrides self.__unfix__);
-
-  };
 }
