@@ -16,7 +16,7 @@ index 386375e..5de940c 100644
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
 -static char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-+static char font[] = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
++static char font[] = "Droid Sans Mono:pixelsize=14:antialias=true:autohint=true";
  static int borderpx = 2;
  
  /*

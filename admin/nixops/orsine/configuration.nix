@@ -23,7 +23,8 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_8;
+  boot.kernelPackages = pkgs.linuxPackages_4_9;
+  #boot.zfs.enableUnstable = true; # linux v4.9.3 is not yet supported by zfsonlinux v0.6.5.8 (stable)
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
@@ -200,4 +201,9 @@ rec {
   # ChromeCast ports
   # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT
   networking.firewall.allowedUDPPortRanges = [ { from=32768; to=61000; } ];
+
+  # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
+  # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
+  # ca.desrt.dconf was not provided by any .service files
+  services.dbus.packages = with pkgs; [ gnome3.dconf ];
 }
