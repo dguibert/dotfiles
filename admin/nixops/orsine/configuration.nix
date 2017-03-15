@@ -201,4 +201,9 @@ rec {
   # ChromeCast ports
   # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT
   networking.firewall.allowedUDPPortRanges = [ { from=32768; to=61000; } ];
+
+  # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
+  # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
+  # ca.desrt.dconf was not provided by any .service files
+  services.dbus.packages = with pkgs; [ gnome3.dconf ];
 }

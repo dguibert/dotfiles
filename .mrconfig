@@ -200,6 +200,21 @@ fixups = git_add_remotes "
 	   "
 push = git push -v public_git
 
-
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
+
+[code/parskel]
+checkout = git clone '/home/dguibert/public_git/parskel.git' 'parskel'
+
+[code/sumatra]
+checkout = git clone 'https://github.com/open-research/sumatra' 'sumatra'
+
+[code/cylc]
+checkout = git clone 'https://github.com/cylc/cylc' 'cylc'
+
+[code/gitolite]
+checkout = git clone 'git://github.com/sitaramc/gitolite' 'gitolite'
+fixups = git_add_remotes "
+	   public_git ~/public_git/gitolite.git
+	   "
+push = git push -v public_git
