@@ -9,7 +9,7 @@ with pkgs.lib;
     ./dwm.patches/0005-solarized-theme.patch
     ./dwm.patches/0006-config-support-shortcuts-for-vbox-inside-windows.patch
     ./dwm.patches/0007-light-solarized-theme.patch
-    ./dwm.patches/0008-termcmd-st-e-dvtm.patch
+    ./dwm.patches/0008-xpra-as-float.patch
   ];
   st.patches = [
     ./st.patches/0001-patch-apply-st-no_bold_colors-git-20160620-528241a.d.patch
@@ -21,15 +21,17 @@ with pkgs.lib;
   virtualbox.enableExtensionPack = true;
   chromium.enableWideVine = true;
 
-  #  packageOverrides = super: let
-  #      gcc6Overlay = self: super: {
-  #        stdenvGcc6 = self.overrideCC self.stdenv self.gcc6;
-  #        gcc = self.gcc6;
-  #        gfortran = self.gfortran6;
-  #
-  #        hdf5 = super.hdf5.override { stdenv = self.stdenvGcc6; };
-  #        openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
-  #      };
-  #    in fix' (extends gccOverrides self.__unfix__);
+  packageOverrides = super: let self = super.pkgs; in {
+	  #pkgsWithGcc6 = let
+    	  #  gccOverrides = self: super: {
+    	  #    stdenvGcc6 = self.overrideCC self.stdenv self.gcc6;
+    	  #    gcc = self.gcc6;
+    	  #    gfortran = self.gfortran6;
 
+    	  #    hdf5 = super.hdf5.override { stdenv = self.stdenvGcc6; };
+    	  #    openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
+    	  #  };
+    	  #in fix' (extends gccOverrides self.__unfix__);
+
+  };
 }

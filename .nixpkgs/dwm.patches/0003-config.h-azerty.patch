@@ -1,14 +1,14 @@
-From 65788c0d73f5691387d5e9b7d88a2ec16ac3807d Mon Sep 17 00:00:00 2001
+From 4e06e7c5fbf7b09d8fa5151ce0d9b8916e7e35f7 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@hydrocean.fr>
 Date: Thu, 12 Nov 2015 16:58:57 +0100
 Subject: [PATCH 3/8] config.h: azerty
 
 ---
- config.def.h | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ config.def.h | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index 8393a58..ab2dba1 100644
+index 8393a58..f0eb962 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -46,7 +46,7 @@ static const Layout layouts[] = {
@@ -20,7 +20,17 @@ index 8393a58..ab2dba1 100644
  #define TAGKEYS(KEY,TAG) \
  	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
  	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-@@ -80,21 +80,21 @@ static Key keys[] = {
+@@ -59,7 +59,8 @@ static const Layout layouts[] = {
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+-static const char *termcmd[]  = { "st", NULL };
++//static const char *termcmd[]  = { "st", NULL };
++static const char *termcmd[]  = { "urxvtc", NULL };
+ 
+ static Key keys[] = {
+ 	/* modifier                     key        function        argument */
+@@ -80,21 +81,21 @@ static Key keys[] = {
  	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
  	{ MODKEY,                       XK_space,  setlayout,      {0} },
  	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
@@ -55,11 +65,11 @@ index 8393a58..ab2dba1 100644
  	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
  };
  
-@@ -114,4 +114,3 @@ static Button buttons[] = {
+@@ -114,4 +115,3 @@ static Button buttons[] = {
  	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
  	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
  };
 -
 -- 
-2.9.0
+2.12.0
 
