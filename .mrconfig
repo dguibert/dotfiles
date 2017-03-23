@@ -137,6 +137,9 @@ checkout = git clone 'git://git.suckless.org/st' 'st'
 
 [code/myrepos]
 checkout = git clone 'https://github.com/joeyh/myrepos' 'myrepos'
+fixups = git_add_remotes "
+	origin https://git.joeyh.name/git/myrepos.git/
+	"
 
 [code/dvtm]
 checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
