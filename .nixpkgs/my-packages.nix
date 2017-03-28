@@ -21,6 +21,7 @@ dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap
 asciidoc
 baobab
 bup
+par2cmdline
 cabal2nix
 ctags
 direnv

@@ -160,8 +160,8 @@ rec {
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  security.setuidPrograms = [ "su" "xlock" ];
+  security.wrappers.xlock.source = "${pkgs.xlockmore}/bin/xlock";
+
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
 

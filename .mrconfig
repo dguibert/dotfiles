@@ -137,6 +137,9 @@ checkout = git clone 'git://git.suckless.org/st' 'st'
 
 [code/myrepos]
 checkout = git clone 'https://github.com/joeyh/myrepos' 'myrepos'
+fixups = git_add_remotes "
+	origin https://git.joeyh.name/git/myrepos.git/
+	"
 
 [code/dvtm]
 checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
@@ -168,6 +171,10 @@ checkout = git clone 'git://git.suckless.org/slock' 'slock'
 
 [code/git-crypt]
 checkout = git clone 'https://github.com/AGWA/git-crypt' 'git-crypt'
+fixups = git_add_remotes "
+	   public_git ~/public_git/git-crypt.git
+	   "
+push = git push -v public_git
 
 [code/git-ftp]
 checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
@@ -191,6 +198,17 @@ checkout = git clone 'https://github.com/google/git-appraise' 'git-appraise'
 
 [code/git-appraise-web]
 checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-web'
+
+[code/nt2]
+checkout = git clone 'https://github.com/jtlap/nt2' 'nt2'
+fixups = git_add_remotes "
+	   picanumber https://github.com/picanumber/nt2
+	   public_git ~/public_git/nt2.git
+	   "
+push = git push -v public_git
+
+[code/cppcon-2015]
+checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
 
 [code/parskel]
 checkout = git clone '/home/dguibert/public_git/parskel.git' 'parskel'

@@ -1,4 +1,4 @@
-From 18b8722c6448ac8286e07f52f862a3566c2c8a89 Mon Sep 17 00:00:00 2001
+From 2d40ffdee49a93ae3e3827fcfe4e67f87c64b9e7 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Wed, 22 Jun 2016 11:06:29 +0200
 Subject: [PATCH 7/8] light solarized theme
@@ -8,7 +8,7 @@ Subject: [PATCH 7/8] light solarized theme
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index dc72b81..66f3dc2 100644
+index ff07891..1d9097e 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -3,15 +3,15 @@
@@ -36,5 +36,5 @@ index dc72b81..66f3dc2 100644
  static const unsigned int snap      = 32;       /* snap pixel */
  static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 -- 
-2.9.0
+2.12.0
 

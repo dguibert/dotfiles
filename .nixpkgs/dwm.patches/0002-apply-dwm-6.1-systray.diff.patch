@@ -1,4 +1,4 @@
-From 8fc57c25f16ff3897564c80709ed32647c5b2b8c Mon Sep 17 00:00:00 2001
+From 2ca49a217ef6d763c3cd9cf7d3efef69a299d569 Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@hydrocean.fr>
 Date: Thu, 12 Nov 2015 15:48:07 +0100
 Subject: [PATCH 2/8] apply dwm-6.1-systray.diff
@@ -699,5 +699,5 @@ index 9ba4ec5..0331859 100644
   * ignored (especially on UnmapNotify's).  Other types of errors call Xlibs
   * default error handler, which may call exit.  */
 -- 
-2.9.0
+2.12.0
 

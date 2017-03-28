@@ -32,6 +32,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
+Plugin 'vim-scripts/DirDiff.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
