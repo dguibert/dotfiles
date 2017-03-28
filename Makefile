@@ -1,6 +1,6 @@
 .ONESHELL:
 .POSIX:
-.SHELLFLAGS=-x -c
+#.SHELLFLAGS=-x -c
 
 all:
 
