@@ -70,4 +70,5 @@ unzip
 
 rclone
 #git-annex-remote-rclone
+sshfsFuse
 ]
