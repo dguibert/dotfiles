@@ -92,7 +92,7 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 
-if hash direnv 2> /dev/null; then
+if command -v direnv &> /dev/null; then
   eval "$(direnv hook bash)"
 fi
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then

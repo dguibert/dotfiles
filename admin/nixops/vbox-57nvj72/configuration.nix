@@ -18,6 +18,8 @@
 
   boot.kernelPackages = pkgs.linuxPackages_4_9;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
+  boot.supportedFilesystems = [ "zfs" ];
+  networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
   fileSystems."/a629925" = {
