@@ -54,7 +54,7 @@ set laststatus=2
 let g:airline_powerline_fonts=1
 
 
-au BufWinLeave * mkview
+au BufWinLeave * silent! mkview
 au BufWinEnter * silent! loadview
 
 au BufWinEnter *.nix set ft=nix

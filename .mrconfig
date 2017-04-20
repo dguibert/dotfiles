@@ -228,3 +228,6 @@ push = git push -v public_git
 
 [code/nixos-weekly]
 checkout = git clone 'https://github.com/NixOS/nixos-weekly' 'nixos-weekly'
+
+[code/ceph-docker]
+checkout = git clone 'https://github.com/ceph/ceph-docker' 'ceph-docker'
