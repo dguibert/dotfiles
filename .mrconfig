@@ -96,6 +96,11 @@ checkout = git clone 'git://github.com/kmcallister/shqq' 'shqq'
 
 [code/spack]
 checkout = git clone 'https://github.com/scalability-llnl/spack' 'spack'
+fixups = git_add_remotes "
+	   public_git ~/public_git/spack.git
+	   "
+push = git push -v public_git
+
 
 [code/training-gerrit]
 checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training-gerrit'
@@ -231,3 +236,18 @@ checkout = git clone 'https://github.com/NixOS/nixos-weekly' 'nixos-weekly'
 
 [code/ceph-docker]
 checkout = git clone 'https://github.com/ceph/ceph-docker' 'ceph-docker'
+
+[code/boost.simd]
+checkout = git clone 'https://github.com/NumScale/boost.simd' 'boost.simd'
+
+[code/H5Z-ZFP]
+checkout = git clone 'https://github.com/LLNL/H5Z-ZFP' 'H5Z-ZFP'
+
+[code/zfp]
+checkout = git clone 'https://github.com/LLNL/zfp' 'zfp'
+
+[code/ravel]
+checkout = git clone 'https://github.com/LLNL/ravel' 'ravel'
+
+[code/muster]
+checkout = git clone 'https://github.com/LLNL/muster' 'muster'
