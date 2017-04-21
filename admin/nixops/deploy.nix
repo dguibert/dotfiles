@@ -4,15 +4,11 @@
   network.description = "NixOS Network";
   network.enableRollback = true;
 
-  defaults = { nodes, ...}: {
+  defaults = { nodes, pkgs, config, ...}: {
     deployment.alwaysActivate = false;
-  };
-
-  orsine = { pkgs, config, ...}: {
-    imports = [ ./orsine/configuration.nix ];
-    deployment.targetHost = "10.147.17.123";
 
     users.mutableUsers = false;
+
     users.users.dguibert = pkgs.lib.mkIf (dguibertHashedPassword != null) {
       isNormalUser = true;
       uid = 1000;
@@ -22,10 +18,24 @@
       group = "dguibert";
       extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
         ] ++ pkgs.lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
-        ] ++ pkgs.lib.optionals (config.users.groups ? docker) [ "docker" ];
+        ] ++ pkgs.lib.optionals (config.users.groups ? docker) [ "docker"
+        ] ++ pkgs.lib.optionals (config.users.groups ? libvirtd) [ "libvirtd"
+        ];
     };
 
     users.groups.dguibert.gid = 1000;
+
+    # Enable ZeroTierOne
+    services.zerotierone.enable = true;
+
+    networking.useNetworkd = true;
+    networking.firewall.allowedUDPPorts = [ 9993 ];
+
+  };
+
+  orsine = { pkgs, config, ...}: {
+    imports = [ ./orsine/configuration.nix ];
+    deployment.targetHost = "10.147.17.123";
 
   };
 

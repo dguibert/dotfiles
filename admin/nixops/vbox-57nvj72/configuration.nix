@@ -46,21 +46,6 @@
   };
   services.tlp.enable = true;
 
-  # Users
-  users.users.dguibert = {
-    uid = 1000;
-    isNormalUser = true;
-    description = "David Guibert";
-    group = "dguibert";
-    extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm" ]
-      ++ lib.optionals (config.users.groups ? vboxuser) [ "vboxuser" ]
-      ++ lib.optionals (config.users.groups ? vboxsf) [ "vboxsf" ]
-      ++ lib.optionals (config.users.groups ? docker) [ "docker" ]
-    ;
-  };
-
-  users.groups.dguibert.gid = 1000;
-
   programs.bash.enableCompletion = true;
   environment.shellInit = ''
     export NIX_PATH=nixpkgs=https://github.com/dguibert/nixpkgs/archive/pu.tar.gz:nixos-config=$HOME/admin/nixops/$(hostname)/configuration.nix
@@ -97,12 +82,6 @@
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
   ];
 
-  # Enable ZeroTierOne
-  services.zerotierone.enable = true;
-
-  networking.useNetworkd = true;
-  networking.firewall.allowedUDPPorts = [ 9993 ];
-
   services.cntlm.enable = true;
   services.cntlm.username = "a629925";
   services.cntlm.domain = "ww930";
@@ -127,6 +106,10 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_adb"
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
   '';
+
+  virtualisation.libvirtd.enable = true;
+  networking.firewall.checkReversePath = false;
+
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
