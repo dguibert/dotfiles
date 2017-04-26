@@ -249,3 +249,21 @@ checkout = git clone 'https://github.com/LLNL/ravel' 'ravel'
 
 [code/muster]
 checkout = git clone 'https://github.com/LLNL/muster' 'muster'
+
+[code/ceph-ansible]
+checkout = git clone 'https://github.com/ceph/ceph-ansible' 'ceph-ansible'
+
+[code/STAT]
+checkout = git clone 'https://github.com/LLNL/STAT' 'STAT'
+
+[code/mrnet]
+checkout = git clone 'https://github.com/dyninst/mrnet' 'mrnet'
+
+[code/LaunchMON]
+checkout = git clone 'https://github.com/LLNL/LaunchMON' 'LaunchMON'
+
+[code/graphlib]
+checkout = git clone 'https://github.com/LLNL/graphlib' 'graphlib'
+
+[code/dyninst]
+checkout = git clone 'https://github.com/dyninst/dyninst' 'dyninst'
