@@ -148,7 +148,6 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 checkout = git init '.password-store'
 fixups = git_add_remotes "
 	   robin gcrypt::ssh://robin/~/public_git/password-store
-	   sid   gcrypt::ssh://sid/~/public_git/password-store
 	   "
 update = git remote update
 push = git push robin
