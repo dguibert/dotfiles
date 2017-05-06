@@ -267,3 +267,7 @@ checkout = git clone 'https://github.com/LLNL/graphlib' 'graphlib'
 
 [code/dyninst]
 checkout = git clone 'https://github.com/dyninst/dyninst' 'dyninst'
+
+[code/moderngpu]
+checkout = git clone 'https://github.com/moderngpu/moderngpu' 'moderngpu'
+
