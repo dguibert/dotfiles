@@ -138,7 +138,7 @@ rec {
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.resolutions = [{x=1440; y=900;}];
-  services.xserver.videoDrivers = [ "intel" ];
+  services.xserver.videoDrivers = [ "intel" "displaylink" ];
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";
