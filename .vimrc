@@ -33,6 +33,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
+Plugin 'anekos/hledger-vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -53,7 +54,7 @@ set laststatus=2
 let g:airline_powerline_fonts=1
 
 
-au BufWinLeave * mkview
+au BufWinLeave * silent! mkview
 au BufWinEnter * silent! loadview
 
 au BufWinEnter *.nix set ft=nix

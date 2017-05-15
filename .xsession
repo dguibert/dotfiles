@@ -27,12 +27,13 @@ while :; do
 
   #xset to stop the AVRCP key press repeating at warp speed:
   xset -r 171 -r 173 -r 209
+  ## part of hardware.trackpoint inside NixOS
   ## To enable vertical scrolling
-  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation" 1
-  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Button" 2
-  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Timeout" 200
-  ## To enable horizontal scrolling in addition to vertical scrolling
-  xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Axes" 6 7 4 5
+  ##xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation" 1
+  ##xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Button" 2
+  ##xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Timeout" 200
+  #### To enable horizontal scrolling in addition to vertical scrolling
+  ##xinput set-prop 'TPPS/2 IBM TrackPoint' "Evdev Wheel Emulation Axes" 6 7 4 5
 
   # http://woozle.org/~neale/src/xss.html
   # launch xlock after timeout

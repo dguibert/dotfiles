@@ -54,10 +54,6 @@ rec {
 
   hardware.opengl.driSupport32Bit = true;
 
-  services.udev.extraRules = with pkgs; ''
-    # This files changes the mode of the Dynastream ANT UsbStick2 so all users can read and write to it.
-    SUBSYSTEM=="usb", ATTR{idVendor}=="0fcf", ATTR{idProduct}=="1008", MODE="0666", SYMLINK+="ttyANT", ACTION=="add"
-  '';
   services.logind.extraConfig = "LidSwitchIgnoreInhibited=no";
 
   hardware.pulseaudio = {
@@ -190,13 +186,27 @@ rec {
   virtualisation.virtualbox.host.enableHardening = false;
 
   virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "overlay";
-  systemd.sockets.docker.socketConfig.ListenStream = pkgs.lib.mkForce [ "0.0.0.0:2375" "/var/run/docker.sock" ];
+  #virtualisation.docker.storageDriver = "overlay";
+  #systemd.sockets.docker.socketConfig.ListenStream = pkgs.lib.mkForce [ "0.0.0.0:2375" "/var/run/docker.sock" ];
   /*networking.firewall.allowedTCPPorts = [ 2375 ];*/
   /*virtualisation.docker.extraOptions = "-e lxc";*/
   /* FATA[0000] Error response from daemon: Cannot start container 237927be402d7427215cbabbfb12988d932d8c655e7ec39d0998e22664662685: fork/exec unshare: no such file or directory  */
   #systemd.network.networks."40-bond0".networkConfig.IPForward = true;
   #systemd.network.networks."40-docker0".networkConfig.IPForward = true;
+  virtualisation.docker.liveRestore = false;
+
+  services.udev.extraRules = with pkgs; ''
+	  # 80ee:0021
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]", MODE="0660", GROUP="users"
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[18d1]", MODE="0660", GROUP="users" # Bus 001 Device 016: ID 18d1:d00d Google Inc.
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_adb"
+	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
+          # This files changes the mode of the Dynastream ANT UsbStick2 so all users can read and write to it.
+          SUBSYSTEM=="usb", ATTR{idVendor}=="0fcf", ATTR{idProduct}=="1008", MODE="0666", SYMLINK+="ttyANT", ACTION=="add"
+  '';
+
+  virtualisation.libvirtd.enable = true;
+  networking.firewall.checkReversePath = false;
 
   # ChromeCast ports
   # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT

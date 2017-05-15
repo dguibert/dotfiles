@@ -6,6 +6,7 @@ let
 in
 [
 vim
+mpv
 #previousPkgs_pu.gitAndTools.git-annex
 gitAndTools.git-annex
 rsync
@@ -69,4 +70,5 @@ unzip
 
 rclone
 #git-annex-remote-rclone
+sshfsFuse
 ]

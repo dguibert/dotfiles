@@ -72,10 +72,10 @@
 *visualBell:                   false
 *urgentOnBell:                 true
 !*font:                         -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
-!*font:                         -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
-*font:                         "-*-droid sans mono-*-*-*-*-12-*-*-*-*-*-iso10646-1"
+*font:                         -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
+!*font:                         "-*-droid sans mono-*-*-*-*-12-*-*-*-*-*-iso10646-1"
 !*font: xft:Terminus:antialias=true:pixelsize=14
-URxvt*font:                    xft:Droid Sans Mono:pixelsize=14:antialias=true:autohint=true
+!URxvt*font:                    xft:Droid Sans Mono:pixelsize=14:antialias=true:autohint=true
 !URxvt*faceName: DejaVu Sans Mono:pixelsize=14:antialias=true:autohint=true
 !URxvt*faceName:           Terminus:style=Regular:size=14
 *saveLines:                    50000
