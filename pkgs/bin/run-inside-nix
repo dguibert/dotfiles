@@ -1,0 +1,5 @@
+#!/bin/sh
+
+exe=$(basename $0)
+export ENVRC=nix
+proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "$exe $*"
