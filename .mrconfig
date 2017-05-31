@@ -271,3 +271,6 @@ checkout = git clone 'https://github.com/dyninst/dyninst' 'dyninst'
 [code/moderngpu]
 checkout = git clone 'https://github.com/moderngpu/moderngpu' 'moderngpu'
 
+
+[code/boost.dispatch]
+checkout = git clone 'https://github.com/NumScale/boost.dispatch' 'boost.dispatch'
