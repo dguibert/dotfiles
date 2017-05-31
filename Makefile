@@ -17,7 +17,8 @@ atos_proxy:
 	$(SHELL)
 
 bup-save:
-	export BUP_DIR=$(HOME)/annex/bup
+	export ANNEX_DIR=/backupwd/annex
+	export BUP_DIR=$$ANNEX_DIR/bup
 	test ! -d $$BUP_DIR && bup init
 	bup index \
 		--exclude=$(HOME)/.git \
@@ -29,8 +30,8 @@ bup-save:
 	#Defend your backups from death rays (OK fine, more likely from the occasional bad disk block). This writes parity information (currently via par2) for all of the existing data so that bup may be able to recover from some amount of repository corruption:
 	
 	bup fsck -g
-
-	cd $(HOME)/annex
+	
+	cd $$ANNEX_DIR
 	git annex add $$BUP_DIR/objects/pack
 	git annex proxy -- git add $${BUP_DIR##$(HOME)/annex/}
 	git annex proxy -- git add bup
