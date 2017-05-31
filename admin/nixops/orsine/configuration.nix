@@ -121,12 +121,80 @@ rec {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.startWhenNeeded = true;
-  #programs.ssh.forwardX11 = true;
-  #programs.ssh.setXAuthLocation = true;
-  users.users.root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAfi56MxrJRRWjj1myan0glpbXiPykZiU3qEzPZc4ijUY0VtGt4HQ7FTNUUHc+xtMqhAVgv2t9UNxkzcjmZjJqNHJ4ppsfJ4Ikam4Q8ENIvJJt4rz/Y6Z5nrMRtHmzNN0weg9R9PiYW5Bsh9epeCQzKl2R+IMTAaeqXf9vPf5uExps7/6xj1j0+KJNGpMB+VLYKAkCo6zg7NdSgA7Nt5AyfdB01snTP0YNf0vZb9v6/ns4cdJt7324/IyC/HlUV/IsnRSkiZBYJSqUSxCCpHfomUBXcnrMnkzb2LAOZBMATkS8qWyk/BXEEX3ENmkr4o8PPBEhvYjOOy3QGeriR69d dguibert@orsine" ];
+  services.openssh.ports = [22322];
+  services.openssh.passwordAuthentication = false;
+  services.openssh.hostKeys = [
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+	  ];
+  services.openssh.extraConfig = ''
+    Ciphers chacha20-poly1305@openssh.com
+    KexAlgorithms curve25519-sha256@libssh.org
+    MACs umac-128-etm@openssh.com
+  '';
+  # https://www.sweharris.org/post/2016-10-30-ssh-certs/
+  # http://www.lorier.net/docs/ssh-ca
+  # https://linux-audit.com/granting-temporary-access-to-servers-using-signed-ssh-keys/
+  users.users.root.openssh.authorizedKeys.keys = [
+    "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHj9CvDWTyCZZnIhq7Gq15a/iDZzFYmcTV8MCb+G/KY44j0gVVpOa7U+LL0HqCyx+nKhx83HGpC7rFq62wQOTVHisws68XlvBqU2XswWvAZqGP1gvtV1P3OMMWxUZ2COIKBJ7a1tzbhOdOtNEaLusl5htOqFigyxhGT+ngkDqJC3M4lF2ayjoGxRvAn88t5kL3yftFwOKvBm6ALEXRwYPqCWJ761J2ML8J/VdUa1OjPd3HXS2r4y4QBxh7eopQrlsQ2xWqH8harP8kTjYPcEgWeRpKl/h7Dzkgxw8G3WMJnob1s5kRdI1LlxhxOZMCMJfpmctY4d70LMuDL/I6haB5 user_ca"
+    ];
+  users.users.dguibert.openssh.authorizedKeys.keys = [
+    "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHj9CvDWTyCZZnIhq7Gq15a/iDZzFYmcTV8MCb+G/KY44j0gVVpOa7U+LL0HqCyx+nKhx83HGpC7rFq62wQOTVHisws68XlvBqU2XswWvAZqGP1gvtV1P3OMMWxUZ2COIKBJ7a1tzbhOdOtNEaLusl5htOqFigyxhGT+ngkDqJC3M4lF2ayjoGxRvAn88t5kL3yftFwOKvBm6ALEXRwYPqCWJ761J2ML8J/VdUa1OjPd3HXS2r4y4QBxh7eopQrlsQ2xWqH8harP8kTjYPcEgWeRpKl/h7Dzkgxw8G3WMJnob1s5kRdI1LlxhxOZMCMJfpmctY4d70LMuDL/I6haB5 user_ca"
+    "cert-authority ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGFz6l5s57+UjjX72iTea17I+qfHWPntFrM0rzYbr+fUBZd0SR2dKnz+nSaBhDtCvD5N+YOWwXEK4WvQ0PkT5Qk= bguibertd@genji0"
+    ];
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  boot.kernel.sysctl = {
+    # enables syn flood protection
+    "net.ipv4.tcp_syncookies" = "1";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.all.accept_source_route" = "0";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.default.accept_source_route" = "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.all.accept_redirects" = "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.default.accept_redirects" = "0";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.all.secure_redirects" = "1";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.default.secure_redirects" = "1";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.ip_forward" = "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.all.send_redirects" = "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.default.send_redirects" = "0";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.all.rp_filter" = "1";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.default.rp_filter" = "1";
+
+    # ignores ICMP broadcasts to avoid participating in Smurf attacks
+    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
+
+    # ignores bad ICMP errors
+    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
+
+    # logs spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.all.log_martians" = "1";
+
+    # log spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.default.log_martians" = "1";
+
+    # implements RFC 1337 fix
+    "net.ipv4.tcp_rfc1337" = "1";
+  };
+
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
