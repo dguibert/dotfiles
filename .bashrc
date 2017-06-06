@@ -5,15 +5,19 @@ umask 0027 # group readable, none for others
 export PATH=$HOME/bin:$PATH
 export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
-export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
-
-export PATH=/home_nfs/isv/allinea/forge-6.1.2/bin:$PATH
-export PATH=/home_nfs/isv/allinea/perfreport-6.1.2/bin:$PATH
 
 # https://sites.google.com/site/ewalker544/research-2/myrt
 export PATH=$HOME/bin:$HOME/myrt/bin:$PATH
-# Nix support on clusters
-export PATH=$HOME/pkgs/bin:$PATH
+case $(hostname) in
+	manny*|\
+	genji*|\
+	robin*)
+	# PATH specific on clusters
+	export PATH=$HOME/pkgs/bin:$PATH
+	export PATH=/home_nfs/isv/allinea/forge-6.1.2/bin:$PATH
+	export PATH=/home_nfs/isv/allinea/perfreport-6.1.2/bin:$PATH
+	;;
+esac
 
 #if [ -d ~/code/spack ]; then
 #  export PATH=~/code/spack/bin:$PATH
@@ -26,6 +30,7 @@ export PATH=$HOME/pkgs/bin:$PATH
 if [ -d ~/pkgs/stowed ]; then
   export PATH=$HOME/pkgs/stowed/bin:$PATH
   export MANPATH=$HOME/pkgs/stowed/share/man:$MANPATH
+  export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
 fi
 
 # User specific aliases and functions
