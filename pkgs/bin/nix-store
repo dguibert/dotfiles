@@ -1,3 +1,1 @@
-#!/bin/sh
-export ENVRC=nix
-proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "nix-store $*"
+run-inside-nix
