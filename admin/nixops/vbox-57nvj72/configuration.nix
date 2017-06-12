@@ -178,7 +178,6 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
   '';
 
-  virtualisation.libvirtd.enable = true;
   networking.firewall.checkReversePath = false;
 
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
