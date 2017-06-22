@@ -7,6 +7,7 @@ in
 [
 vim
 mpv
+pytohnPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
 gitAndTools.git-annex
 rsync
