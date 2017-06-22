@@ -14,6 +14,15 @@ self: super:
 		sha256 = "1gn05pn9zkpc3b8g72w1axjw7s8dx7vibsr8fszvpcrrh85gxry9";
 	  };
 	  buildInputs = [ self.otf2 self.openmpi self.which self.gfortran self.zlib /*opari*/ ];
+	  postInstall = ''
+	  # RPATH of binary /nix/store/8b7q0yzfb8chmgr4yqybfrlrvvnrlq1i-score-p-3.0/bin/scorep-score contains a forbidden reference to /tmp/nix-build-score-p-3.0.drv-0
+	  while IFS= read -r -d ''$'\0' i; do
+            if ! isELF "$i"; then continue; fi
+            echo "patching $i..."
+            rpath=`patchelf --print-rpath $i | sed -e "s@$TMPDIR/.*:@\$out/lib:@"`;
+            patchelf --set-rpath "$rpath" "$i"
+          done < <(find $out/bin -type f -print0)
+	  '';
   };
   muster = self.stdenv.mkDerivation {
 	  name = "muster";
