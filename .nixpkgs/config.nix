@@ -1,3 +1,4 @@
+# vim: set ts=2 :
 { pkgs }:
 with pkgs.lib;
 {
@@ -23,6 +24,8 @@ with pkgs.lib;
   chromium.enableWideVine = true;
 
   packageOverrides = super: let self = super.pkgs; in with self; {
+    home-manager = import ./home-manager { inherit pkgs; };
+
     git-credential-password-store = stdenv.mkDerivation {
       name = "git-credential-password-store";
       src = fetchFromGitHub {
