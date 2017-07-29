@@ -70,7 +70,7 @@ pandoc
 unzip
 
 rclone
-#git-annex-remote-rclone
+gitAndTools.git-annex-remote-rclone
 sshfsFuse
 
 go-mtpfs

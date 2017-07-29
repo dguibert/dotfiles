@@ -131,7 +131,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "fr,us";
+  services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.displayManager.auto.enable = true;
