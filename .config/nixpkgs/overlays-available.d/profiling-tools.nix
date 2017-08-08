@@ -8,14 +8,14 @@ self: super:
 	  };
   };
   score-p = self.stdenv.mkDerivation {
-	  name = "score-p-3.0";
+	  name = "score-p-3.1";
 	  src = self.fetchurl {
-	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-3.0.tar.gz";
-		sha256 = "1gn05pn9zkpc3b8g72w1axjw7s8dx7vibsr8fszvpcrrh85gxry9";
+	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-3.1.tar.gz";
+		sha256 = "0h45357djna4dn9jyxx0n36fhhms3jrf22988m9agz1aw2jfivs9";
 	  };
 	  buildInputs = [ self.otf2 self.openmpi self.which self.gfortran self.zlib /*opari*/ ];
 	  postInstall = ''
-	  # RPATH of binary /nix/store/8b7q0yzfb8chmgr4yqybfrlrvvnrlq1i-score-p-3.0/bin/scorep-score contains a forbidden reference to /tmp/nix-build-score-p-3.0.drv-0
+	  # RPATH of binary /nix/store/8b7q0yzfb8chmgr4yqybfrlrvvnrlq1i-score-p-3.0/bin/scorep-score contains a forbidden reference to /tmp/nix-build-score-p-3.1.drv-0
 	  while IFS= read -r -d ''$'\0' i; do
             if ! isELF "$i"; then continue; fi
             echo "patching $i..."
