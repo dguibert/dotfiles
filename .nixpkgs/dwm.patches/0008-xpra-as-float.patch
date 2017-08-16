@@ -15,7 +15,7 @@ index 1d9097e..a42da60 100644
  	 */
  	/* class      instance    title       tags mask     isfloating   monitor */
  	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-+	{ "Xpra",     NULL,       NULL,       0,            1,           -1 },
++	{ ".xpra-wrapped",     NULL,       NULL,       0,            1,           -1 },
  	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
  };
  
