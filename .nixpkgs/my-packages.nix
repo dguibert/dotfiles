@@ -7,6 +7,7 @@ in
 [
 vim
 mpv
+pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
 gitAndTools.git-annex
 rsync
@@ -71,4 +72,6 @@ unzip
 rclone
 #git-annex-remote-rclone
 sshfsFuse
+
+go-mtpfs
 ]
