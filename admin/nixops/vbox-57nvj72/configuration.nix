@@ -16,7 +16,7 @@
     config.boot.kernelPackages.perf 
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_9;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
   networking.hostId = "a8c01e02";

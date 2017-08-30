@@ -64,6 +64,7 @@ wpsoffice
 file
 pass
 qtpass
+git-credential-password-store
 bc
 parallel
 pandoc

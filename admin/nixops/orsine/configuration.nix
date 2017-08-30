@@ -23,8 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_9;
-  #boot.zfs.enableUnstable = true; # linux v4.9.3 is not yet supported by zfsonlinux v0.6.5.8 (stable)
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
