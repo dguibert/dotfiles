@@ -16,7 +16,7 @@
     config.boot.kernelPackages.perf 
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_9;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
   networking.hostId = "a8c01e02";
@@ -131,7 +131,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "fr,us";
+  services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.displayManager.auto.enable = true;

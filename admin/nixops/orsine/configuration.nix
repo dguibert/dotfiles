@@ -23,8 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_9;
-  #boot.zfs.enableUnstable = true; # linux v4.9.3 is not yet supported by zfsonlinux v0.6.5.8 (stable)
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
@@ -122,12 +121,13 @@ rec {
   services.openssh.ports = [22322];
   services.openssh.passwordAuthentication = false;
   services.openssh.hostKeys = [
+            { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com
-    KexAlgorithms curve25519-sha256@libssh.org
-    MACs umac-128-etm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com
+    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+    MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
   # https://www.sweharris.org/post/2016-10-30-ssh-certs/
   # http://www.lorier.net/docs/ssh-ca
@@ -196,7 +196,7 @@ rec {
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "fr,us";
+  services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.resolutions = [{x=1440; y=900;}];

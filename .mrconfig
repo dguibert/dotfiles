@@ -66,10 +66,6 @@ checkout = git clone 'https://github.com/affinitybridge/git-bpf' 'git-bpf'
 [code/git-integration]
 checkout = git clone 'https://github.com/johnkeeping/git-integration' 'git-integration'
 
-[code/git-stree]
-checkout = git clone 'https://github.com/tdd/git-stree' 'git-stree'
-deleted = true
-
 [code/haskell-fortran/camfort]
 checkout = git clone 'https://github.com/dorchard/camfort' 'camfort'
 
@@ -80,7 +76,10 @@ checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortr
 checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
 
 [code/imp-demo]
-checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-demo'
+deleted = true
+
+[code/imp-code]
+checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'
 
 [code/kokkos]
 checkout = git clone 'https://github.com/kokkos/kokkos' 'kokkos'
@@ -141,7 +140,7 @@ checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph
 checkout = git clone 'git://git.suckless.org/st' 'st'
 
 [code/myrepos]
-checkout = git clone 'https://github.com/joeyh/myrepos' 'myrepos'
+checkout = git clone 'https://git.joeyh.name/git/myrepos.git' 'myrepos'
 fixups = git_add_remotes "
 	origin https://git.joeyh.name/git/myrepos.git/
 	"
@@ -152,7 +151,8 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 [.password-store]
 checkout = git init '.password-store'
 fixups = git_add_remotes "
-	   robin gcrypt::ssh://robin/~/public_git/password-store
+	   genji gcrypt::ssh://genji/~/public_git/password-store
+	   manny gcrypt::ssh://manny/~/public_git/password-store
 	   "
 update = git remote update
 push = git push robin
