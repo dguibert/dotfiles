@@ -97,8 +97,6 @@ rec {
 # lsof - shows open files/sockets, including network
     lsof
     vim ethtool
-    myTexLive
-    firefoxWrapper chromium
     wirelesstools wpa_supplicant_gui
     dmenu xlockmore xss-lock slock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
     evince #calibre

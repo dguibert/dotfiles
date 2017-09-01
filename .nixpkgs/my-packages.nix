@@ -56,6 +56,7 @@ aria2
 nixops
 #chromium
 google-chrome
+firefox-bin
 htop
 tree
 gnupg1compat
