@@ -38,3 +38,29 @@ bup-save:
 	git annex proxy -- git add bup
 	git annex proxy -- git commit -m "Backup on $$(date)"
 	git annex sync --content
+
+init-dotfiles-%:
+	set -x
+	cluster=$*
+	ssh-copy-id -i ~/.ssh/id_bull.pub $$cluster
+	ssh $$cluster mkdir -p ~/bin ~/public_git
+	ssh $$cluster git init --bare ~/public_git/dotfiles.git
+	scp ~/bin/mgit $$cluster:bin/
+	(cd ~/public_git/dotfiles.git; git push --all ssh://$$cluster/~/public_git/dotfiles.git )
+	ssh $$cluster mgit clone file://public_git/dotfiles.git
+
+init-nix-%:
+	set -x
+	cluster=$*
+	#curl -C - -O https://nixos.org/releases/nix/nix-1.11.13/nix-1.11.13-x86_64-linux.tar.bz2
+	rsync -aP nix-1.11.13-x86_64-linux.tar.bz2 $$cluster:
+	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-1.11.13-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
+
+# nix-copy-closure -v --to manny $(nix-build --arg expr "(import <nixpkgs> {}).nix" --keep-going -Q ./maintainers/scripts/all-sources.nix -I nixpkgs=$HOME/code/nixpkgs)
+update-packages-%:
+	set -x
+	cluster=$*
+	rm -f pkgs/$$cluster*
+	packages=$$(nix-build -o pkgs/$$cluster $$HOME/.nixpkgs/my-packages@cluster.nix)
+	nix-copy-closure -v --to $$cluster $$packages
+	ssh $$cluster nix-env -i $$packages
