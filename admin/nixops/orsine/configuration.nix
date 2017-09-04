@@ -107,6 +107,7 @@ rec {
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
   ];
+  programs.browserpass.enable = true;
 
   programs.bash.enableCompletion = true;
   environment.shellInit = ''
