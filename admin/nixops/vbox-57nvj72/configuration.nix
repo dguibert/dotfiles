@@ -168,6 +168,20 @@
 NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
   '';
 
+  networking.wireguard.interfaces.wg0 = {
+    ips = [ "10.147.27.198/24" ];
+    listenPort = 51821;
+    privateKeyFile = "/etc/wireguard_key";
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" ];
+        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+        endpoint   = "orsin.freeboxos.fr:51820";
+	persistentKeepalive = 25;
+      }
+    ];
+  };
+  networking.firewall.allowedUDPPorts = [ 51821 ];
+
   virtualisation.docker.enable = true;
   virtualisation.docker.liveRestore = false;
 

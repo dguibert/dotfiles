@@ -23,7 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_12;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
@@ -242,7 +242,20 @@ rec {
 
   # Enable ZeroTierOne
   services.zerotierone.enable = true;
-  networking.firewall.allowedUDPPorts = [ 9993 ];
+
+  networking.wireguard.interfaces.wg0 = {
+    ips = [ "10.147.27.123/24" ];
+    listenPort = 51820;
+    privateKeyFile = "/etc/wireguard_key";
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" ];
+        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+        endpoint   = "orsin.freeboxos.fr:51821";
+	persistentKeepalive = 25;
+      }
+    ];
+  };
+  networking.firewall.allowedUDPPorts = [ 9993 51820 ];
 
   # Virtualisation
   virtualisation.virtualbox.host.enable = true;
