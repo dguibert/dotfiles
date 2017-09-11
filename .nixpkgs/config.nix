@@ -12,6 +12,7 @@ with pkgs.lib;
     ./dwm.patches/0007-light-solarized-theme.patch
     ./dwm.patches/0008-xpra-as-float.patch
     ./dwm.patches/0009-qtpass-as-float.patch
+    ./dwm.patches/0010-pinenetry-as-float.patch
   ];
   st.patches = [
     ./st.patches/0001-patch-apply-st-no_bold_colors-git-20160620-528241a.d.patch
