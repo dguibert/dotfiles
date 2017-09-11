@@ -280,3 +280,9 @@ checkout = git clone 'https://github.com/systemd/casync' 'casync'
 
 [.nixpkgs/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
+
+[code/charliecloud]
+checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
+
+[code/WireGuard]
+checkout = git clone 'https://git.zx2c4.com/WireGuard' 'WireGuard'
