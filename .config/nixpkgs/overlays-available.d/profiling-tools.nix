@@ -44,4 +44,40 @@ self: super:
 	  };
 	  buildInputs = [ self.otf2 self.muster self.openmpi self.cmake self.qt5.qtbase self.boost ];
   };
+  dyninst = self.stdenv.mkDerivation {
+	  name = "dyninst-9.2.0";
+	  src = self.fetchFromGitHub {
+		owner = "dyninst";
+		repo = "dyninst";
+	       	rev = "refs/tags/v9.2.0";
+		sha256 = "140hpxs5v60cvf92hxa98vyk9fcnn7h2xarhxzwki5yx8d7vgma2";
+	  };
+	  buildInputs = [ self.cmake self.boost self.libelf self.libdwarf self.libiberty ];
+	  postPatch = "patchShebangs .";
+	  cmakeFlags = [
+		  "-DBUILD_RTLIB_32=ON"
+	  ];
+  };
+  Mitos = self.stdenv.mkDerivation {
+	  name = "Mitos-20160228";
+	  src = self.fetchFromGitHub {
+		owner = "LLNL";
+		repo = "Mitos";
+	       	rev = "434597dc78f3cb52be2582938b0115c8332f1c40";
+		sha256 = "1plyan27szy74av49vbd1cipkyjs4z367pb7f3jwr6fkpvnlj419";
+	  };
+	  buildInputs = [ self.cmake self.boost self.dyninst self.hwloc self.openmpi ];
+  };
+  MemAxes = self.stdenv.mkDerivation {
+	  name = "MemAxes-20150408";
+	  src = self.fetchFromGitHub {
+		owner = "LLNL";
+		repo = "MemAxes";
+	       	rev = "57fb31635927960195169b6d6f1ba8f8f70adb1b";
+		sha256 = "17xc3a6h7dqa3srbc8q1ljphqxmg41qkhyaha68qv85vk7y4pzaq";
+	  };
+	  patches = [ ../memaxes-pcvizwidget.patch ];
+	  buildInputs = [ self.cmake self.qt5.qtbase ];
+  };
+ 
 }

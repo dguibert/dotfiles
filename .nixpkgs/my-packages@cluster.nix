@@ -12,4 +12,8 @@ lsof
 xpra
 htop
 tree
+
+# testing
+Mitos
+MemAxes
 ]
