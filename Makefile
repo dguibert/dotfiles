@@ -64,3 +64,7 @@ update-packages-%:
 	packages=$$(nix-build -o pkgs/$$cluster $$HOME/.nixpkgs/my-packages@cluster.nix)
 	nix-copy-closure -v --to $$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
+clean-packages-%:
+	set -x
+	cluster=$*
+	ssh $$cluster nix-collect-garbage -d
