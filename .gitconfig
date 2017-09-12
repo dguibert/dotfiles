@@ -48,3 +48,5 @@
 	autocontinue = true
 [http]
 	sslVerify = false
+[credential]
+	helper = password-store
