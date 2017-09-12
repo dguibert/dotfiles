@@ -56,6 +56,8 @@ init-nix-%:
 	rsync -aP nix-1.11.13-x86_64-linux.tar.bz2 $$cluster:
 	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-1.11.13-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
 
+update-packages:
+	nix-env -f $$HOME/.nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/
 # nix-copy-closure -v --to manny $(nix-build --arg expr "(import <nixpkgs> {}).nix" --keep-going -Q ./maintainers/scripts/all-sources.nix -I nixpkgs=$HOME/code/nixpkgs)
 update-packages-%:
 	set -x
