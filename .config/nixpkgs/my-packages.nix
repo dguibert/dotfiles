@@ -19,6 +19,7 @@ mercurial
 fossil
 gitAndTools.gitRemoteGcrypt
 gitAndTools.git-crypt
+gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
 dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
 asciidoc
 baobab

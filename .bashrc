@@ -35,6 +35,9 @@ if [ -d ~/pkgs/stowed ]; then
 fi
 
 # User specific aliases and functions
+if command -v hub >/dev/null; then
+	alias git=hub
+fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
