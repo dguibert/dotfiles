@@ -26,8 +26,9 @@ rec {
   boot.kernelPackages = pkgs.linuxPackages_4_12;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
-  nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    packageOverrides.linuxPackages = boot.kernelPackages;
+  };
   boot.supportedFilesystems = [ "zfs" ];
 
   networking.hostId = "a8c00e01";
@@ -126,7 +127,7 @@ rec {
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
