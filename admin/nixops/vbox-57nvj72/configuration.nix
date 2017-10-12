@@ -16,6 +16,7 @@
     config.boot.kernelPackages.perf 
   ];
   programs.browserpass.enable = true;
+  programs.sysdig.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];

@@ -23,7 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_12;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
@@ -109,6 +109,7 @@ rec {
     rxvt_unicode
   ];
   programs.browserpass.enable = true;
+  programs.sysdig.enable = true;
 
   programs.bash.enableCompletion = true;
   environment.shellInit = ''
@@ -202,7 +203,8 @@ rec {
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.resolutions = [{x=1440; y=900;}];
-  services.xserver.videoDrivers = [ "intel" "displaylink" ];
+  #services.xserver.videoDrivers = [ "intel" "displaylink" ]; # error: Package ‘evdi-1.4.1+git2017-06-12’ in /home/dguibert/code/nixpkgs/pkgs/os-specific/linux/evdi/default.nix:26 is marked as broken, refusing to evaluate.
+  services.xserver.videoDrivers = [ "intel" ];
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";
