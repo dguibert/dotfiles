@@ -108,10 +108,10 @@ checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training
 checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
 fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
-	   "
-	        git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
-	        git config --get-all remote.origin.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
-	        git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
+	 "
+	 git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
+	 git config --get-all remote.origin.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
+	 #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
 
 update = git remote update
 push = git push -v origin +pu
@@ -155,8 +155,7 @@ fixups = git_add_remotes "
 	   manny gcrypt::ssh://manny/~/public_git/password-store
 	   "
 update = git remote update
-push = git push robin
-	      git push bare
+push = git remote -v | grep push | awk '{print $1}' | xargs --verbose -i git push --all {}
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
