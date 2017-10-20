@@ -7,6 +7,7 @@ all:
 .PHONY:nix
 nix:
 	export ENVRC=nix
+	export NIX_PATH=nixpkgs=$$HOME/code/nixpkgs
 	proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash
 
 _SHELL:=$(shell echo $$SHELL)
