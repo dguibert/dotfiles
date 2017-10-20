@@ -23,11 +23,12 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_12;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
-  nixpkgs.config.packageOverrides.linuxPackages = boot.kernelPackages;
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    packageOverrides.linuxPackages = boot.kernelPackages;
+  };
   boot.supportedFilesystems = [ "zfs" ];
 
   networking.hostId = "a8c00e01";
@@ -108,6 +109,7 @@ rec {
     rxvt_unicode
   ];
   programs.browserpass.enable = true;
+  programs.sysdig.enable = true;
 
   programs.bash.enableCompletion = true;
   environment.shellInit = ''
@@ -126,7 +128,7 @@ rec {
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
@@ -201,7 +203,8 @@ rec {
   services.xserver.xkbOptions = "eurosign:e";
 
   services.xserver.resolutions = [{x=1440; y=900;}];
-  services.xserver.videoDrivers = [ "intel" "displaylink" ];
+  #services.xserver.videoDrivers = [ "intel" "displaylink" ]; # error: Package ‘evdi-1.4.1+git2017-06-12’ in /home/dguibert/code/nixpkgs/pkgs/os-specific/linux/evdi/default.nix:26 is marked as broken, refusing to evaluate.
+  services.xserver.videoDrivers = [ "intel" ];
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
 #  services.xserver.desktopManager.default = "gnome3";

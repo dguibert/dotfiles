@@ -9,45 +9,43 @@ vim
 mpv
 pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
-gitAndTools.git-annex
 rsync
 mr
 vcsh
-gitFull
 mercurial
-(conky.override { x11Support = false; })
-fossil
+
+gitFull
+gitAndTools.git-annex
 gitAndTools.gitRemoteGcrypt
 gitAndTools.git-crypt
+gitAndTools.git-annex-remote-rclone
+rclone
+gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
+
 dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+(conky.override { x11Support = false; })
+
 asciidoc
 baobab
 bup
 par2cmdline
-cabal2nix
+
 ctags
 direnv
-doxygen
 dvtm
-ftop
+
 gnumake
 gnuplot
-iotop
 jq
 mkpasswd
-mr
 nix-repl
 nox
-pmount
 pstree
 python
 ruby
 screen
 #teamviewer
 tig
-vagrant
-valgrind
-vcsh
 virtualgl
 mosh
 lsof
@@ -71,9 +69,10 @@ parallel
 pandoc
 unzip
 
-rclone
-gitAndTools.git-annex-remote-rclone
 sshfsFuse
 
 go-mtpfs
+
+wayland
+sway
 ]

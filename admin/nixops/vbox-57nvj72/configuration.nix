@@ -5,7 +5,7 @@
 
   i18n.consoleKeyMap="fr";
 
-  nixpkgs.config = import ~/.nixpkgs/config.nix;
+  nixpkgs.config = import ~/.config/nixpkgs/config.nix;
   #nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
   #  xorg.fglrxCompat = true;
   #};
@@ -16,6 +16,7 @@
     config.boot.kernelPackages.perf 
   ];
   programs.browserpass.enable = true;
+  programs.sysdig.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
@@ -58,12 +59,13 @@
   services.openssh.ports = [22];
   services.openssh.passwordAuthentication = false;
   services.openssh.hostKeys = [
+            { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com
-    KexAlgorithms curve25519-sha256@libssh.org
-    MACs umac-128-etm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+    MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
   users.users.root.openssh.authorizedKeys.keys = [
     "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHj9CvDWTyCZZnIhq7Gq15a/iDZzFYmcTV8MCb+G/KY44j0gVVpOa7U+LL0HqCyx+nKhx83HGpC7rFq62wQOTVHisws68XlvBqU2XswWvAZqGP1gvtV1P3OMMWxUZ2COIKBJ7a1tzbhOdOtNEaLusl5htOqFigyxhGT+ngkDqJC3M4lF2ayjoGxRvAn88t5kL3yftFwOKvBm6ALEXRwYPqCWJ761J2ML8J/VdUa1OjPd3HXS2r4y4QBxh7eopQrlsQ2xWqH8harP8kTjYPcEgWeRpKl/h7Dzkgxw8G3WMJnob1s5kRdI1LlxhxOZMCMJfpmctY4d70LMuDL/I6haB5 user_ca"
