@@ -104,3 +104,5 @@ fi
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	source $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
+
+export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
