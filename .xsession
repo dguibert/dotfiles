@@ -20,7 +20,7 @@ while :; do
   xset b 0 &
 
   # power saving mode of the screen
-  xset dpms 300 300 300 &
+  xset dpms 299 299 300 &
 
   # typematic repeat rate
   xset r rate 255 47 &
