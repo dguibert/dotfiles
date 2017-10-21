@@ -56,13 +56,15 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # Provide a nice prompt.
 PS1=""
 PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
+PS1+='$(ip netns identify 2>/dev/null)'
 PS1+='${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
 PS1+='${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
 PS1+='${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
 PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
 if !  command -v __git_ps1 >/dev/null; then
-# source $HOME/code/git/contrib/completion/git-prompt.sh
-  source $HOME/code/git-prompt.sh
+  if [ -e $HOME/code/git-prompt.sh ]; then
+    source $HOME/code/git-prompt.sh
+  fi
 fi
 PS1+='$(__git_ps1 "|%s|")'
 PS1+='$\[\033[00m\] '
@@ -107,3 +109,5 @@ fi
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	source $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
+
+export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
