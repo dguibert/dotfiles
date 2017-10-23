@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -vuxe
+set -ue
 
 export LOCKFILE_DIR=${LOCKFILE_DIR:-$PWD}
 export TIMEOUT=2 #minutes

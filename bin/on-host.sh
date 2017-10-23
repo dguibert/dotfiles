@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -vuxe
+set -ue
 
 eexit() {
     local error_str="$@"
@@ -44,7 +44,7 @@ while true; do
 done
 
 # DEBUG
-set -xv
+#set -xv
 # default values if not defined by command line options
 lockdir=${lockdir:-$LOCKFILE_DIR}
 lockfile=${lockfile:-$lockdir/on-master.lock}
