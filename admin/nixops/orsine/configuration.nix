@@ -128,7 +128,7 @@ rec {
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
@@ -260,6 +260,15 @@ rec {
   };
   networking.firewall.allowedUDPPorts = [ 9993 51820 ];
 
+  services.wakeonlan.interfaces = [
+    {
+      interface = "enp0s25";
+      method = "magicpacket";
+      #method = "password";
+      #password = "00:11:22:33:44:55";
+    }
+  ];
+
   # Virtualisation
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = false;
@@ -295,4 +304,24 @@ rec {
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
+
+  ##[Unit]
+  ##After=dev-disk-by\x2did-wwn\x2d0x60014057ab42867d066fd393edb4abd6.device
+  ##
+  ##[Service]
+  ##ExecStart=/usr/sbin/zpool import itank
+  ##ExecStartPost=/usr/bin/logger "started ZFS pool itank"
+  ##
+  ##[Install]
+  ##WantedBy=dev-disk-by\x2did-wwn\x2d0x60014057ab42867d066fd393edb4abd6.device
+  #systemd.services.zfs-import-backupwd = {
+  #  after = [];
+  #  wantedBy = [];
+  #  serviceConfig = {
+  #    Type = "oneshot";
+  #    RemainAfterExit = true;
+  #    ExecStart = "${pkgs.zfs}/sbin/zpool import backupwd";
+  #    #ExecStartPost = "logger \"started ZFS pool backupwd\"";
+  #  };
+  #};
 }
