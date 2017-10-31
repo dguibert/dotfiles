@@ -6,6 +6,8 @@ let
 in
 [
 vim
+editorconfig-core-c
+
 mpv
 pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
