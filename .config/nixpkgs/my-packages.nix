@@ -8,6 +8,8 @@ in
 vim
 editorconfig-core-c
 
+nix-prefetch-scripts
+
 mpv
 pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
@@ -61,7 +63,7 @@ htop
 tree
 gnupg1compat
 x2goclient
-wpsoffice
+#wpsoffice
 file
 pass
 qtpass
