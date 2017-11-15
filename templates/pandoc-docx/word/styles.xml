@@ -1,0 +1,443 @@
+<?xml version="1.0"?>
+<w:styles xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+
+<w:docDefaults>
+<w:rPrDefault>
+<w:rPr>
+<w:rFonts w:asciiTheme="minorHAnsi" w:cstheme="minorBidi"
+w:eastAsiaTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" />
+<w:sz w:val="24" />
+<w:szCs w:val="24" />
+<w:lang w:bidi="ar-SA" w:eastAsia="en-US" w:val="en-US" />
+</w:rPr>
+</w:rPrDefault>
+<w:pPrDefault>
+<w:pPr>
+<w:spacing w:after="200" />
+</w:pPr>
+</w:pPrDefault>
+</w:docDefaults>
+<w:latentStyles w:count="276" w:defLockedState="0" w:defQFormat="0"
+w:defSemiHidden="0" w:defUIPriority="0" w:defUnhideWhenUsed="0" />
+<w:style w:default="1" w:styleId="Normal" w:type="paragraph">
+<w:name w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:spacing w:after="180" w:before="180" />
+</w:pPr>
+</w:style>
+<w:style w:styleId="Compact" w:type="paragraph">
+<w:name w:val="Compact" />
+<w:basedOn w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:spacing w:after="36" w:before="36" />
+</w:pPr>
+</w:style>
+<w:style w:styleId="Title" w:type="paragraph">
+<w:name w:val="Title" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="240" w:before="480" />
+<w:jc w:val="center" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:b />
+<w:bCs />
+<w:color w:themeColor="accent1" w:themeShade="B5" w:val="345A8A" />
+<w:sz w:val="36" />
+<w:szCs w:val="36" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Subtitle" w:type="paragraph">
+<w:name w:val="Subtitle" />
+<w:basedOn w:val="Title" />
+<w:next w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="240" w:before="240" />
+<w:jc w:val="center" />
+</w:pPr>
+<w:rPr>
+<w:sz w:val="30" />
+<w:szCs w:val="30" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Author" w:type="paragraph">
+<w:name w:val="Author" />
+<w:next w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:jc w:val="center" />
+</w:pPr>
+</w:style>
+<w:style w:styleId="Date" w:type="paragraph">
+<w:name w:val="Date" />
+<w:next w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:jc w:val="center" />
+</w:pPr>
+</w:style>
+<w:style w:styleId="Abstract" w:type="paragraph">
+<w:name w:val="Abstract" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" w:before="120" />
+<w:ind w:left="1440" w:right="1440" />
+</w:pPr>
+<w:rPr>
+<w:sz w:val="20" />
+<w:szCs w:val="20" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Bibliography" w:type="paragraph">
+<w:name w:val="Bibliography" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Bibliography" />
+<w:qFormat />
+<w:pPr />
+<w:rPr />
+</w:style>
+<w:style w:styleId="Heading1" w:type="paragraph">
+<w:name w:val="Heading 1" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:pageBreakBefore />
+<w:spacing w:after="0" w:before="480" />
+<w:outlineLvl w:val="0" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:b />
+<w:bCs />
+<w:color w:themeColor="accent1" w:themeShade="B5" w:val="345A8A" />
+<w:sz w:val="32" />
+<w:szCs w:val="32" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Heading2" w:type="paragraph">
+<w:name w:val="Heading 2" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" w:before="200" />
+<w:outlineLvl w:val="1" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:b />
+<w:bCs />
+<w:color w:themeColor="accent1" w:val="4F81BD" />
+<w:sz w:val="32" />
+<w:szCs w:val="32" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Heading3" w:type="paragraph">
+<w:name w:val="Heading 3" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" w:before="200" />
+<w:outlineLvl w:val="1" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:b />
+<w:bCs />
+<w:color w:themeColor="accent1" w:val="4F81BD" />
+<w:sz w:val="28" />
+<w:szCs w:val="28" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Heading4" w:type="paragraph">
+<w:name w:val="Heading 4" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" w:before="200" />
+<w:outlineLvl w:val="1" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:b />
+<w:bCs />
+<w:color w:themeColor="accent1" w:val="4F81BD" />
+<w:sz w:val="24" />
+<w:szCs w:val="24" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Heading5" w:type="paragraph">
+<w:name w:val="Heading 5" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" w:before="200" />
+<w:outlineLvl w:val="1" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:i />
+<w:iCs />
+<w:color w:themeColor="accent1" w:val="4F81BD" />
+<w:sz w:val="24" />
+<w:szCs w:val="24" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="BlockQuote" w:type="paragraph">
+<w:name w:val="Block Quote" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:pPr>
+<w:spacing w:after="100" w:before="100" />
+</w:pPr>
+<w:rPr>
+<w:rFonts w:asciiTheme="majorHAnsi" w:cstheme="majorBidi"
+w:eastAsiaTheme="majorEastAsia" w:hAnsiTheme="majorHAnsi" />
+<w:bCs />
+<w:sz w:val="20" />
+<w:szCs w:val="20" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="FootnoteText" w:type="paragraph">
+<w:name w:val="Footnote Text" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="FootnoteText" />
+<w:uiPriority w:val="9" />
+<w:unhideWhenUsed />
+<w:qFormat />
+</w:style>
+<w:style w:default="1" w:styleId="DefaultParagraphFont"
+w:type="character">
+<w:name w:val="Default Paragraph Font" />
+<w:semiHidden />
+<w:unhideWhenUsed />
+</w:style>
+<w:style w:default="1" w:styleId="TableNormal" w:type="table">
+<w:name w:val="Normal Table" />
+<w:semiHidden />
+<w:unhideWhenUsed />
+<w:qFormat />
+<w:tblPr>
+<w:tblInd w:type="dxa" w:w="0" />
+<w:tblCellMar>
+<w:top w:type="dxa" w:w="0" />
+<w:left w:type="dxa" w:w="108" />
+<w:bottom w:type="dxa" w:w="0" />
+<w:right w:type="dxa" w:w="108" />
+</w:tblCellMar>
+</w:tblPr>
+</w:style>
+<w:style w:styleId="DefinitionTerm" w:type="paragraph">
+<w:name w:val="Definition Term" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Definition" />
+<w:pPr>
+<w:keepNext />
+<w:keepLines />
+<w:spacing w:after="0" />
+</w:pPr>
+<w:rPr>
+<w:b />
+</w:rPr>
+</w:style>
+<w:style w:styleId="Definition" w:type="paragraph">
+<w:name w:val="Definition" />
+<w:basedOn w:val="Normal" />
+</w:style>
+<w:style w:styleId="BodyText" w:type="paragraph">
+<w:name w:val="Body Text" />
+<w:basedOn w:val="Normal" />
+<w:link w:val="BodyTextChar" />
+<w:pPr>
+<w:spacing w:after="120" />
+</w:pPr>
+</w:style>
+<w:style w:styleId="TableCaption" w:type="paragraph">
+<w:name w:val="Table Caption" />
+<w:basedOn w:val="Normal" />
+<w:pPr>
+<w:spacing w:after="120" w:before="0" />
+</w:pPr>
+<w:rPr>
+<w:i />
+</w:rPr>
+</w:style>
+<w:style w:styleId="ImageCaption" w:type="paragraph">
+<w:name w:val="Image Caption" />
+<w:basedOn w:val="Normal" />
+<w:pPr>
+<w:spacing w:after="120" w:before="0" />
+</w:pPr>
+<w:rPr>
+<w:i />
+</w:rPr>
+</w:style>
+<w:style w:customStyle="1" w:styleId="BodyTextChar"
+w:type="character">
+<w:name w:val="Body Text Char" />
+<w:basedOn w:val="DefaultParagraphFont" />
+<w:link w:val="BodyText" />
+</w:style>
+<w:style w:customStyle="1" w:styleId="VerbatimChar"
+w:type="character">
+<w:name w:val="Verbatim Char" />
+<w:basedOn w:val="BodyTextChar" />
+<w:link w:val="SourceCode" />
+<w:rPr>
+<w:rFonts w:ascii="Consolas" w:hAnsi="Consolas" />
+<w:sz w:val="22" />
+</w:rPr>
+</w:style>
+<w:style w:customStyle="1" w:styleId="FootnoteRef"
+w:type="character">
+<w:name w:val="Footnote Ref" />
+<w:basedOn w:val="BodyTextChar" />
+<w:rPr>
+<w:vertAlign w:val="superscript" />
+</w:rPr>
+</w:style>
+<w:style w:customStyle="1" w:styleId="Link" w:type="character">
+<w:name w:val="Link" />
+<w:basedOn w:val="BodyTextChar" />
+<w:rPr>
+<w:color w:themeColor="accent1" w:val="4F81BD" />
+</w:rPr>
+</w:style><% var bkg = (theme.SourceCode) ? theme.SourceCode.background : false; %>
+<w:style w:type="paragraph" w:customStyle="1"
+w:styleId="SourceCode">
+<w:name w:val="SourceCode" />
+<w:basedOn w:val="Normal" />
+<w:link w:val="VerbatimChar" />
+<w:pPr>
+<w:wordWrap w:val="off" /><% if (bkg) { %>
+<w:shd w:fill="<%= bkg %>" w:val="clear" /><% } %>
+</w:pPr>
+<w:rPr>
+<w:noProof />
+</w:rPr>
+</w:style><% _.forEach(theme.tokens, function (tk) { %>
+<w:style w:customStyle="1" w:styleId="<%= tk.name %>"
+w:type="character">
+<w:name w:val="<%= tk.name %>" />
+<w:basedOn w:val="VerbatimChar" />
+<w:rPr>
+<w:color w:val="<%= tk.color %>" /><% if (bkg) { %>
+<w:shd w:fill="<%= bkg %>"
+w:val="clear" /><% } %><% if (tk.italic) { %>
+<w:i /><% } %><% if (tk.bold) { %>
+<w:b /><% } %><% if (tk.underline) { %>
+<w:u /><% } %>
+</w:rPr>
+</w:style><% }); %>
+<w:style w:styleId="TOC1" w:type="paragraph">
+<w:name w:val="toc 1" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:autoRedefine />
+<w:uiPriority w:val="39" />
+<w:pPr>
+<w:tabs>
+<w:tab w:leader="dot" w:pos="3110" w:val="right" />
+</w:tabs>
+<w:spacing w:after="100" w:before="120" />
+</w:pPr>
+<w:rPr>
+<w:b />
+<w:sz w:val="20" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="TOC2" w:type="paragraph">
+<w:name w:val="toc 2" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:autoRedefine />
+<w:uiPriority w:val="39" />
+<w:pPr>
+<w:spacing w:after="100" w:before="120" />
+<w:ind w:left="245" />
+</w:pPr>
+<w:rPr>
+<w:sz w:val="20" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="TOC3" w:type="paragraph">
+<w:name w:val="toc 3" />
+<w:basedOn w:val="Normal" />
+<w:next w:val="Normal" />
+<w:autoRedefine />
+<w:uiPriority w:val="39" />
+<w:pPr>
+<w:spacing w:after="100" w:before="120" />
+<w:ind w:left="475" />
+</w:pPr>
+<w:rPr>
+<w:sz w:val="20" />
+</w:rPr>
+</w:style>
+<w:style w:styleId="TOCHeading" w:type="paragraph">
+<w:name w:val="TOC Heading" />
+<w:basedOn w:val="Heading1" />
+<w:next w:val="Normal" />
+<w:pPr>
+<w:pageBreakBefore w:val="0" />
+<w:spacing w:after="240" />
+<w:jc w:val="center" />
+<w:outlineLvl w:val="9" />
+</w:pPr>
+<w:rPr>
+<w:u w:val="single" />
+</w:rPr>
+</w:style>
+</w:styles>
