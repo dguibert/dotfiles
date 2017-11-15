@@ -34,17 +34,16 @@ if [ -d ~/pkgs/stowed ]; then
   export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
 fi
 
-# User specific aliases and functions
-if command -v hub >/dev/null; then
-	alias git=hub
-fi
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
 alias ls='ls --color'
+# User specific aliases and functions
+if command -v hub >/dev/null; then
+	alias git=hub
+fi
 
 #eval `keychain --noask -q --eval id_dsa david.guibert`
 
