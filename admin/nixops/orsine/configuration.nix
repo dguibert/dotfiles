@@ -143,58 +143,58 @@ rec {
     "cert-authority ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGFz6l5s57+UjjX72iTea17I+qfHWPntFrM0rzYbr+fUBZd0SR2dKnz+nSaBhDtCvD5N+YOWwXEK4WvQ0PkT5Qk= bguibertd@genji0"
     ];
 
-  boot.kernel.sysctl = {
-    # enables syn flood protection
-    "net.ipv4.tcp_syncookies" = "1";
-
-    # ignores source-routed packets
-    "net.ipv4.conf.all.accept_source_route" = "0";
-
-    # ignores source-routed packets
-    "net.ipv4.conf.default.accept_source_route" = "0";
-
-    # ignores ICMP redirects
-    "net.ipv4.conf.all.accept_redirects" = "0";
-
-    # ignores ICMP redirects
-    "net.ipv4.conf.default.accept_redirects" = "0";
-
-    # ignores ICMP redirects from non-GW hosts
-    "net.ipv4.conf.all.secure_redirects" = "1";
-
-    # ignores ICMP redirects from non-GW hosts
-    "net.ipv4.conf.default.secure_redirects" = "1";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.ip_forward" = "0";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.conf.all.send_redirects" = "0";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.conf.default.send_redirects" = "0";
-
-    # reverse path filtering - IP spoofing protection
-    "net.ipv4.conf.all.rp_filter" = "1";
-
-    # reverse path filtering - IP spoofing protection
-    "net.ipv4.conf.default.rp_filter" = "1";
-
-    # ignores ICMP broadcasts to avoid participating in Smurf attacks
-    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
-
-    # ignores bad ICMP errors
-    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
-
-    # logs spoofed, source-routed, and redirect packets
-    "net.ipv4.conf.all.log_martians" = "1";
-
-    # log spoofed, source-routed, and redirect packets
-    "net.ipv4.conf.default.log_martians" = "1";
-
-    # implements RFC 1337 fix
-    "net.ipv4.tcp_rfc1337" = "1";
-  };
+    #  boot.kernel.sysctl = {
+    #    # enables syn flood protection
+    #    "net.ipv4.tcp_syncookies" = "1";
+    #
+    #    # ignores source-routed packets
+    #    "net.ipv4.conf.all.accept_source_route" = "0";
+    #
+    #    # ignores source-routed packets
+    #    "net.ipv4.conf.default.accept_source_route" = "0";
+    #
+    #    # ignores ICMP redirects
+    #    "net.ipv4.conf.all.accept_redirects" = "0";
+    #
+    #    # ignores ICMP redirects
+    #    "net.ipv4.conf.default.accept_redirects" = "0";
+    #
+    #    # ignores ICMP redirects from non-GW hosts
+    #    "net.ipv4.conf.all.secure_redirects" = "1";
+    #
+    #    # ignores ICMP redirects from non-GW hosts
+    #    "net.ipv4.conf.default.secure_redirects" = "1";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.ip_forward" = "0";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.conf.all.send_redirects" = "0";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.conf.default.send_redirects" = "0";
+    #
+    #    # reverse path filtering - IP spoofing protection
+    #    "net.ipv4.conf.all.rp_filter" = "1";
+    #
+    #    # reverse path filtering - IP spoofing protection
+    #    "net.ipv4.conf.default.rp_filter" = "1";
+    #
+    #    # ignores ICMP broadcasts to avoid participating in Smurf attacks
+    #    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
+    #
+    #    # ignores bad ICMP errors
+    #    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
+    #
+    #    # logs spoofed, source-routed, and redirect packets
+    #    "net.ipv4.conf.all.log_martians" = "1";
+    #
+    #    # log spoofed, source-routed, and redirect packets
+    #    "net.ipv4.conf.default.log_martians" = "1";
+    #
+    #    # implements RFC 1337 fix
+    #    "net.ipv4.tcp_rfc1337" = "1";
+    #  };
 
 
   # Enable the X11 windowing system.
@@ -251,7 +251,7 @@ rec {
     listenPort = 51820;
     privateKeyFile = "/etc/wireguard_key";
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" ];
+      { allowedIPs = [ "10.147.27.198/32" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
         endpoint   = "orsin.freeboxos.fr:51821";
 	persistentKeepalive = 25;
