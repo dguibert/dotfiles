@@ -18,9 +18,10 @@
   programs.browserpass.enable = true;
   programs.sysdig.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
   networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
