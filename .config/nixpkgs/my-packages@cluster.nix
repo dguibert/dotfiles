@@ -16,4 +16,6 @@ tree
 # testing
 Mitos
 MemAxes
+
+editorconfig-core-c
 ]

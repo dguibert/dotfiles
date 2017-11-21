@@ -18,9 +18,10 @@
   programs.browserpass.enable = true;
   programs.sysdig.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
   networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
@@ -63,7 +64,7 @@
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
 	  ];
   services.openssh.extraConfig = ''
-    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
@@ -75,58 +76,58 @@
     "cert-authority ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGFz6l5s57+UjjX72iTea17I+qfHWPntFrM0rzYbr+fUBZd0SR2dKnz+nSaBhDtCvD5N+YOWwXEK4WvQ0PkT5Qk= bguibertd@genji0"
     ];
 
-  boot.kernel.sysctl = {
-    # enables syn flood protection
-    "net.ipv4.tcp_syncookies" = "1";
-
-    # ignores source-routed packets
-    "net.ipv4.conf.all.accept_source_route" = "0";
-
-    # ignores source-routed packets
-    "net.ipv4.conf.default.accept_source_route" = "0";
-
-    # ignores ICMP redirects
-    "net.ipv4.conf.all.accept_redirects" = "0";
-
-    # ignores ICMP redirects
-    "net.ipv4.conf.default.accept_redirects" = "0";
-
-    # ignores ICMP redirects from non-GW hosts
-    "net.ipv4.conf.all.secure_redirects" = "1";
-
-    # ignores ICMP redirects from non-GW hosts
-    "net.ipv4.conf.default.secure_redirects" = "1";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.ip_forward" = "0";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.conf.all.send_redirects" = "0";
-
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.conf.default.send_redirects" = "0";
-
-    # reverse path filtering - IP spoofing protection
-    "net.ipv4.conf.all.rp_filter" = "1";
-
-    # reverse path filtering - IP spoofing protection
-    "net.ipv4.conf.default.rp_filter" = "1";
-
-    # ignores ICMP broadcasts to avoid participating in Smurf attacks
-    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
-
-    # ignores bad ICMP errors
-    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
-
-    # logs spoofed, source-routed, and redirect packets
-    "net.ipv4.conf.all.log_martians" = "1";
-
-    # log spoofed, source-routed, and redirect packets
-    "net.ipv4.conf.default.log_martians" = "1";
-
-    # implements RFC 1337 fix
-    "net.ipv4.tcp_rfc1337" = "1";
-  };
+    #  boot.kernel.sysctl = {
+    #    # enables syn flood protection
+    #    "net.ipv4.tcp_syncookies" = "1";
+    #
+    #    # ignores source-routed packets
+    #    "net.ipv4.conf.all.accept_source_route" = "0";
+    #
+    #    # ignores source-routed packets
+    #    "net.ipv4.conf.default.accept_source_route" = "0";
+    #
+    #    # ignores ICMP redirects
+    #    "net.ipv4.conf.all.accept_redirects" = "0";
+    #
+    #    # ignores ICMP redirects
+    #    "net.ipv4.conf.default.accept_redirects" = "0";
+    #
+    #    # ignores ICMP redirects from non-GW hosts
+    #    "net.ipv4.conf.all.secure_redirects" = "1";
+    #
+    #    # ignores ICMP redirects from non-GW hosts
+    #    "net.ipv4.conf.default.secure_redirects" = "1";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.ip_forward" = "0";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.conf.all.send_redirects" = "0";
+    #
+    #    # don't allow traffic between networks or act as a router
+    #    "net.ipv4.conf.default.send_redirects" = "0";
+    #
+    #    # reverse path filtering - IP spoofing protection
+    #    "net.ipv4.conf.all.rp_filter" = "1";
+    #
+    #    # reverse path filtering - IP spoofing protection
+    #    "net.ipv4.conf.default.rp_filter" = "1";
+    #
+    #    # ignores ICMP broadcasts to avoid participating in Smurf attacks
+    #    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
+    #
+    #    # ignores bad ICMP errors
+    #    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
+    #
+    #    # logs spoofed, source-routed, and redirect packets
+    #    "net.ipv4.conf.all.log_martians" = "1";
+    #
+    #    # log spoofed, source-routed, and redirect packets
+    #    "net.ipv4.conf.default.log_martians" = "1";
+    #
+    #    # implements RFC 1337 fix
+    #    "net.ipv4.tcp_rfc1337" = "1";
+    #  };
 
   
   # Set your time zone.
@@ -175,7 +176,7 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
     listenPort = 51821;
     privateKeyFile = "/etc/wireguard_key";
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" ];
+      { allowedIPs = [ "10.147.27.123/32" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
         endpoint   = "orsin.freeboxos.fr:51820";
 	persistentKeepalive = 25;
