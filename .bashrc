@@ -55,7 +55,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # Provide a nice prompt.
 PS1=""
 PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
-PS1+='$(ip netns identify 2>/dev/null)'
+PS1+='$(ip netns identify 2>/dev/null)' # sudo setfacl -m u:$USER:rx /var/run/netns
 PS1+='${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
 PS1+='${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
 PS1+='${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
