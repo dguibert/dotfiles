@@ -81,8 +81,8 @@ export HISTIGNORE="ls:cd:clear:[bf]g"
 export HISTCONTROL=ignoredups:ignorespace
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=10000
-export HISTFILESIZE=20000
+export HISTSIZE=50000
+export HISTFILESIZE=100000
 
 # http://ubuntuforums.org/showthread.php?t=1150822
 ## Save and reload the history after each command finishes
