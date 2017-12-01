@@ -58,29 +58,30 @@ self: super:
 		  "-DBUILD_RTLIB_32=ON"
 	  ];
   };
-  Mitos = super.stdenv.mkDerivation {
-	  name = "Mitos-20160228";
-	  #name = "Mitos-20171119";
-	  src = super.fetchFromGitHub {
-		owner = "LLNL";
-		repo = "Mitos";
-	       	rev = "434597dc78f3cb52be2582938b0115c8332f1c40";
-		sha256 = "1plyan27szy74av49vbd1cipkyjs4z367pb7f3jwr6fkpvnlj419";
-		#rev = "0466847d9fcffb5bb19e0479c6d85788f0c07883"; # develop 20171119
-		#sha256 = "1mnmxh7jaa95yx2k31b8yvhaivgmz0jsf99dz0sxyknzsn93fx6w";
-	  };
-	  buildInputs = [ super.cmake super.boost self.dyninst super.hwloc super.openmpi ];
-  };
-  MemAxes = super.stdenv.mkDerivation {
-	  name = "MemAxes-20150408";
-	  src = super.fetchFromGitHub {
-		owner = "LLNL";
-		repo = "MemAxes";
-	       	rev = "57fb31635927960195169b6d6f1ba8f8f70adb1b";
-		sha256 = "17xc3a6h7dqa3srbc8q1ljphqxmg41qkhyaha68qv85vk7y4pzaq";
-	  };
-	  patches = [ ../memaxes-pcvizwidget.patch ];
-	  buildInputs = [ super.cmake super.qt5.qtbase ];
-  };
+  # need to be updated to develop (20171122)
+  #  Mitos = super.stdenv.mkDerivation {
+  #	  name = "Mitos-20160228";
+  #	  #name = "Mitos-20171119";
+  #	  src = super.fetchFromGitHub {
+  #		owner = "LLNL";
+  #		repo = "Mitos";
+  #	       	rev = "434597dc78f3cb52be2582938b0115c8332f1c40";
+  #		sha256 = "1plyan27szy74av49vbd1cipkyjs4z367pb7f3jwr6fkpvnlj419";
+  #		#rev = "0466847d9fcffb5bb19e0479c6d85788f0c07883"; # develop 20171119
+  #		#sha256 = "1mnmxh7jaa95yx2k31b8yvhaivgmz0jsf99dz0sxyknzsn93fx6w";
+  #	  };
+  #	  buildInputs = [ super.cmake super.boost self.dyninst super.hwloc super.openmpi ];
+  #  };
+  #  MemAxes = super.stdenv.mkDerivation {
+  #	  name = "MemAxes-20150408";
+  #	  src = super.fetchFromGitHub {
+  #		owner = "LLNL";
+  #		repo = "MemAxes";
+  #	       	rev = "57fb31635927960195169b6d6f1ba8f8f70adb1b";
+  #		sha256 = "17xc3a6h7dqa3srbc8q1ljphqxmg41qkhyaha68qv85vk7y4pzaq";
+  #	  };
+  #	  patches = [ ../memaxes-pcvizwidget.patch ];
+  #	  buildInputs = [ super.cmake super.qt5.qtbase ];
+  #  };
  
 }
