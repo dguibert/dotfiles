@@ -19,7 +19,7 @@ include = cat $HOME/.config/mr/config.d/*
 deleted = true
 
 [$HOME/.mgit/dotfiles/.git]
-checkout = mgit clone --recursive git@github.com:dguibert/dotfiles.git
+checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
 push = 
 	mgit dotfiles push

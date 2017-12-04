@@ -11,7 +11,7 @@ mgit_test = perl:
 	-d "$ENV{MR_REPO}/objects" && -f "$ENV{MR_REPO}/config" &&
 	`GIT_CONFIG="$ENV{MR_REPO}/config" git config --get core.worktree` =~ /..\/..\/../
 
-mgit_update = mgit "$(basename $MR_REPO .git)" pull "$@"
+mgit_update = mgit "$(basename $(dirname $MR_REPO))" pull "$@"
 mgit_clean = 
 	mr_repo_basename=`basename $(dirname "$MR_REPO")`
 	if [ "x$1" = x-f ] ; then
