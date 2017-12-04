@@ -15,7 +15,6 @@ pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
 rsync
 mr
-vcsh
 mercurial
 
 gitFull
