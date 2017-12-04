@@ -36,6 +36,8 @@ fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
+# Or in the nix-shell
+if [[ -n $IN_NIX_SHELL ]]; then return; fi
 
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
