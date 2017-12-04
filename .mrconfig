@@ -1,8 +1,9 @@
 [DEFAULT]
 git_gc = git gc "$@"
-include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex
+include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
+          cat $HOME/.config/mr/lib/mgit
 lib = 
-	     source $HOME/.config/mr/lib/git-remotes
+	  source $HOME/.config/mr/lib/git-remotes
 	  git_annex_sync() { git annex -v sync --content; }
 	  new_git_annexed_repo() {
 	    git init $MR_REPO
@@ -15,16 +16,14 @@ push = echo "$MR_REPO has to be manually pushed"
 include = cat $HOME/.config/mr/config.d/*
 
 [$HOME/.config/vcsh/repo.d/dotfiles.git]
-checkout = 
-	  vcsh clone --recursive git@github.com:dguibert/dotfiles.git
-#  vcsh dotfiles remote add remote_name remote_url
-fixups = vcsh dotfiles remote add public_git ~/public_git/dotfiles.git
+deleted = true
 
+[$HOME/.mgit/dotfiles/.git]
+checkout = mgit clone https://github.com/dguibert/dotfiles.git
+fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
 push = 
-	  vcsh dotfiles push
-	  vcsh dotfiles push public_git
-#  vcsh dotfiles push remote_name
-
+	mgit dotfiles push
+	mgit dotfiles push public_git
 
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'

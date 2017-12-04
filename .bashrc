@@ -55,7 +55,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # Provide a nice prompt.
 PS1=""
 PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
-PS1+='$(ip netns identify 2>/dev/null)'
+PS1+='$(ip netns identify 2>/dev/null)' # sudo setfacl -m u:$USER:rx /var/run/netns
 PS1+='${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
 PS1+='${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
 PS1+='${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
@@ -81,8 +81,8 @@ export HISTIGNORE="ls:cd:clear:[bf]g"
 export HISTCONTROL=ignoredups:ignorespace
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=10000
-export HISTFILESIZE=20000
+export HISTSIZE=50000
+export HISTFILESIZE=100000
 
 # http://ubuntuforums.org/showthread.php?t=1150822
 ## Save and reload the history after each command finishes

@@ -13,9 +13,9 @@ xpra
 htop
 tree
 
-# testing
-Mitos
-MemAxes
+# testing (removed 20171122)
+#Mitos
+#MemAxes
 
 editorconfig-core-c
 ]
