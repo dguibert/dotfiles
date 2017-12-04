@@ -112,4 +112,5 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 fi
 
 export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
-export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P"
+#export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
+export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
