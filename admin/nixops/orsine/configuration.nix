@@ -23,7 +23,7 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_13;
+  boot.kernelPackages = pkgs.linuxPackages_4_14;
   boot.kernelModules = [ "fuse" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {

@@ -18,7 +18,7 @@
   programs.browserpass.enable = true;
   programs.sysdig.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_13;
+  boot.kernelPackages = pkgs.linuxPackages_4_14;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
