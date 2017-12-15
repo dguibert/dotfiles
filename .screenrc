@@ -1,0 +1,10 @@
+termcapinfo xterm* ti@:te@
+
+
+vbell off
+altscreen on
+hardstatus off
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W} %c %{g}]'
+defutf8 on # new window in utf8
+utf8 on on # mode utf-8-aware in both sides

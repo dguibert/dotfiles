@@ -1,5 +1,23 @@
 #!/bin/sh
 
+set -ueo pipefail
+
+function requote() {
+  local res=""
+  for x in "${@}" ; do
+  # try to figure out if quoting was required for the $x:
+  grep -q "[[:space:]]" <<< "$x" && res="${res} '${x}'" || res="${res} ${x}"
+  done
+  # remove first space and print:
+  sed -e 's/^ //' <<< "${res}"
+}
 exe=$(basename $0)
 export ENVRC=nix
-proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "$exe $*"
+#proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "$exe $*"
+if [ "$exe" == jq ]; then
+  #proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "$exe $*"
+  proot-x86_64 -b ~/pkgs/nix-mnt:/nix ~/.nix-profile/bin/$exe "${@}"
+else
+  CMD=$(requote "${@}")
+  proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash -l -c "$exe $CMD"
+fi

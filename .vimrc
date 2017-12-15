@@ -33,8 +33,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
-Plugin 'anekos/hledger-vim'
-
+Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "
