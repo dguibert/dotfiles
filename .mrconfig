@@ -212,7 +212,7 @@ push = git push -v public_git
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
 
 [code/parskel]
-checkout = git clone '/home/dguibert/public_git/parskel.git' 'parskel'
+deleted = true
 
 [code/sumatra]
 checkout = git clone 'https://github.com/open-research/sumatra' 'sumatra'
