@@ -185,9 +185,6 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
   };
   networking.firewall.allowedUDPPorts = [ 51821 ];
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.liveRestore = false;
-
   services.udev.extraRules = with pkgs; ''
 	  # 80ee:0021
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]", MODE="0660", GROUP="users"

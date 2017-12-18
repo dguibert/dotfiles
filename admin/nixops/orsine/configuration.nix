@@ -274,16 +274,6 @@ rec {
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableHardening = false;
 
-  virtualisation.docker.enable = true;
-  #virtualisation.docker.storageDriver = "overlay";
-  #systemd.sockets.docker.socketConfig.ListenStream = pkgs.lib.mkForce [ "0.0.0.0:2375" "/var/run/docker.sock" ];
-  /*networking.firewall.allowedTCPPorts = [ 2375 ];*/
-  /*virtualisation.docker.extraOptions = "-e lxc";*/
-  /* FATA[0000] Error response from daemon: Cannot start container 237927be402d7427215cbabbfb12988d932d8c655e7ec39d0998e22664662685: fork/exec unshare: no such file or directory  */
-  #systemd.network.networks."40-bond0".networkConfig.IPForward = true;
-  #systemd.network.networks."40-docker0".networkConfig.IPForward = true;
-  virtualisation.docker.liveRestore = false;
-
   services.udev.extraRules = with pkgs; ''
 	  # 80ee:0021
 	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]", MODE="0660", GROUP="users"
