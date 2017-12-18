@@ -50,3 +50,5 @@
 	sslVerify = false
 [credential]
 	helper = password-store
+[hub]
+	protocol = https
