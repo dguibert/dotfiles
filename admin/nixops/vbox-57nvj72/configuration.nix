@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }:
 {
-  imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
+  imports = [
+    <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
+    ../nixos/yubikey-gpg.nix
+  ];
   services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
   i18n.consoleKeyMap="fr";
@@ -15,7 +18,6 @@
     gnupg1compat
     config.boot.kernelPackages.perf 
   ];
-  programs.browserpass.enable = true;
   programs.sysdig.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_4_14;
