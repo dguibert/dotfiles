@@ -9,6 +9,7 @@
   environment.systemPackages = with pkgs; [
     gnupg
     yubikey-personalization
+    yubico-piv-tool
   ];
 
   environment.shellInit = ''
