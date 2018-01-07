@@ -38,15 +38,15 @@ rec {
   networking.useNetworkd = true;
 
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.interfaces = [ "wls1" ];
-  networking.wireless.driver = "nl80211";
+  networking.wireless.interfaces = [ "wlp0s29f7u1" ];
+  networking.wireless.driver = "wext";
   networking.wireless.userControlled.enable = true;
 
 #  networking.bridges.br0.interfaces = [ "bond0" ];
 #  networking.interfaces.bond0.ip4 = lib.mkOverride 0 [ ];
-  networking.bonds.bond0.interfaces = [ "enp0s25" "wls1" ];
+  networking.bonds.bond0.interfaces = [ "enp0s25" "wlp0s29f7u1" ];
   networking.interfaces.enp0s25.ip4 = lib.mkOverride 0 [ ];
-  networking.interfaces.wls1.ip4 = lib.mkOverride 0 [ ];
+  networking.interfaces.wlp0s29f7u1.ip4 = lib.mkOverride 0 [ ];
   boot.extraModprobeConfig=''
     options bonding mode=active-backup miimon=100 primary=enp0s25
   '';
