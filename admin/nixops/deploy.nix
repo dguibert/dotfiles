@@ -6,6 +6,7 @@
 
   defaults = { nodes, pkgs, config, ...}: {
     deployment.alwaysActivate = false;
+    deployment.hasFastConnection = true;
 
     users.mutableUsers = false;
 
@@ -36,6 +37,12 @@
   orsine = { pkgs, config, ...}: {
     imports = [ ./orsine/configuration.nix ];
     deployment.targetHost = "10.147.17.123";
+
+  };
+
+  rpi31 = { pkgs, config, ...}: {
+    imports = [ ./rpi31/configuration.nix ];
+    deployment.targetHost = "192.168.1.13";
 
   };
 

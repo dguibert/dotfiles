@@ -3,6 +3,7 @@
   imports = [
     <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
     ../nixos/yubikey-gpg.nix
+    ../nixos/distributed-build.nix
   ];
   services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
@@ -178,6 +179,16 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
     listenPort = 51821;
     privateKeyFile = "/etc/wireguard_key";
     peers = [
+      { allowedIPs = [ "10.147.27.0/24" ];
+        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+        endpoint   = "orsin.freeboxos.fr:500";
+	persistentKeepalive = 25;
+      }
+      { allowedIPs = [ "10.147.27.198/32" ];
+        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+        endpoint   = "orsin.freeboxos.fr:51821";
+	persistentKeepalive = 25;
+      }
       { allowedIPs = [ "10.147.27.123/32" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
         endpoint   = "orsin.freeboxos.fr:51820";
