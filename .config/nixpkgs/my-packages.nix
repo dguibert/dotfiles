@@ -66,6 +66,7 @@ x2goclient
 file
 pass
 qtpass
+browserpass
 git-credential-password-store
 bc
 parallel
