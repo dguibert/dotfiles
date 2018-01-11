@@ -16,6 +16,7 @@ tree
 # testing (removed 20171122)
 #Mitos
 #MemAxes
+python3
 
 editorconfig-core-c
 ]

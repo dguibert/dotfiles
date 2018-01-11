@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+##!/usr/bin/env nix-shell
+##! nix-shell -i python3 -p python3
+# -*- coding: utf-8 -*-
+#
+# convert noweb files to pandoc
+#
+# Copyright (c) 2014, 2015 Meik Teßmer
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#    * Redistributions of source code must retain the above copyright notice,
+#      this list of conditions and the following disclaimer.
+#    * Redistributions in binary form must reproduce the above copyright
+#      notice, this list of conditions and the following disclaimer in the
+#      documentation and/or other materials provided with the distribution.
+#    * Neither the name of daemogorgon.net nor the names of its
+#      contributors may be used to endorse or promote products derived from
+#      this without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+
+"""
+nw2md - convert noweb with pandoc markdown to pandoc (from there to X)
+
+usage:
+
+    nw2md <my_file.nw >my_file.md
+
+In combination with pandoc:
+
+    nw2md <my_file.nw >my_file.md
+    pandoc -f markdown -s --toc my_file.md my_file.html
+    pandoc -f markdown -s --toc --latex-engine=xelatex \
+            --bibliography=lit.bib my_file.md my_file.tex
+
+"""
+import re
+import sys
+
+__author__ = "Meik Teßmer"
+__email__ = "mtessmer@wiwi.uni-bielefeld.de"
+__version__ = "0.1.2"
+
+# some globals
+code_chunk_index_as_subsection = False
+# chunk index
+code_chunks = {}
+# markers of code chunk definitions
+open_mark = "<<"
+close_mark = ">>="
+end = "^@"
+in_slide_chunk = False
+
+
+def find_code_chunk_definition(line):
+    """look for code chunk definition and return chunk name"""
+
+    # look for annotated code chunk header, e.g. = (make)
+    match = re.match(open_mark + "([^>]+)" + close_mark + "\s*\((\w+)\)", line)
+    if not match:
+        # ok, use normal noweb syntax
+        match = re.match(open_mark + "([^>]+)" + close_mark, line)
+        if match:
+            return (match.group(1), None)
+        else:
+            return None
+    else:
+        return (match.group(1), match.group(2))
+
+
+def contains_doc_chunk_header(line):
+    match = re.match(end + "[ ]?", line)
+    if match:
+        return True
+    else:
+        return False
+
+def convert_code_chunk_header(chunk_name, language_hint=None):
+    """
+    convert noweb code chunk header to pandoc markdown
+
+    The preceeding whitespace disables the generation of `:` at the end of
+    the paragraph.
+
+
+    """
+
+    if chunk_name in code_chunks and code_chunks[chunk_name] == 0:
+        name = chunk_name
+    else:
+        name = chunk_name + " %d" % code_chunks[chunk_name]
+
+    #label = ".. _" + clean_links(name) + ":"
+    #label = ".. _" + name + ":"
+    label = clean_links(name)
+
+    # docutils 0.9+ has a code directive
+    #return "\n" + label + "\n\n" + "⟨" + name + "⟩≡\n\n.. code:: python\n\n"
+    #return "\n" + label + "\n\n" + "`⟨" + name + "⟩≡` ::\n\n"
+
+    #line = "\n" + "`⟨" + name + "⟩≡`\n\n~~~ {#" + label
+    line = "\n" + "`<" + name + ">=`\n\n~~~ {#" + label
+    if language_hint:
+        line = line + " ." + language_hint
+    line += "}\n"
+
+    # old implementation without language_hint
+    #line = "\n" + "`⟨" + name + "⟩≡`\n\n~~~ {#" + label + "}\n"
+    return line
+
+def convert_slide_chunk_header(chunk_name):
+    name = chunk_name
+
+    #line = "\n" + "`⟨" + name + "⟩≡`\n\n~~~ { .markdown }\n"
+    line = "\n" + "`<" + name + ">=`\n\n~~~ { .markdown }\n"
+    #line = "\n" + "`⟨" + name + "⟩≡`\n\n~~~\n"
+    return line
+
+
+def clean_links(link):
+    """some chars are not allowed in labels and refs"""
+
+    link = link.replace(" ", "_")
+    link = link.replace("/", "_")
+    link = link.replace(".", "_")
+    return link
+
+
+def build_reference(match):
+    """match function for sub"""
+
+    words = match.group(0)
+
+    # clean up title
+    title = words
+    title = title.replace("[[", "")
+    title = title.replace("]]", "")
+
+    # clean up reference string
+    # this is Sphinx style!
+    ref = words
+    ref = ref.replace("[[", ":ref:`")
+    ref = ref.replace("]]", "`")
+    ref = ref.replace(" ", "_")
+    
+    # build final reference
+    ref = ref + " <" + title + ">`"
+
+    return ref
+
+
+def convert_inline_references(line):
+    converted_line = "x"
+    converted_line_ = ""
+
+    # we need a loop here because re.sub replaces only the left-most
+    # appearance of the pattern
+    while True:
+        converted_line = re.sub("\[\[.*\]\]", build_reference, line)
+        if converted_line == converted_line_:
+            break
+        else:
+            converted_line_ = converted_line
+
+    return converted_line
+
+
+def replace_escaped_angle_bracket(line):
+    # we use string concatenation to avoid the replacement here
+    return line.replace("@<" + "<", "<"+"<")
+
+def handle_code_chunk_definition(match, line):
+    language_hint = None
+
+    chunk_name = match[0]
+    if len(match)==2:
+        language_hint = match[1]
+
+    if chunk_name == "slide":
+        # this is not a real code chunk, but a slide chunk
+        in_slide_chunk = True
+        line = convert_slide_chunk_header(chunk_name)
+    else:
+        # normal code chunk
+        #
+        # store code chunk for index
+        if not chunk_name in code_chunks:
+            code_chunks[chunk_name] = 0
+        elif chunk_name in code_chunks and code_chunks[chunk_name] == 0:
+            code_chunks[chunk_name] = 2
+        else:
+            code_chunks[chunk_name] += 1
+
+        line = convert_code_chunk_header(chunk_name, language_hint)
+
+    return line, chunk_name
+
+def handle_doc_chunk(line):
+    return line
+
+
+def translate(in_, out):
+    # state indicator:
+    #   None: doc chunk -> replace [[...]]
+    #   name: code chunk -> add two spaces
+    #
+    # we start in doc chunk mode
+    chunk_name = None
+
+    for line in in_:
+        # look for a code chunk definition
+        match = find_code_chunk_definition(line)
+        if match:
+            line, chunk_name = handle_code_chunk_definition(match, line)
+        else:
+            # is the a new doc chunk?
+            # don't forget to remove the @ marker
+            if contains_doc_chunk_header(line):
+                chunk_name = None
+                line = "\n~~~\n" + convert_inline_references(line[1:])
+
+            if chunk_name:
+                # add two spaces
+                line = "  " + line
+                # replace @< < with < <
+                line = replace_escaped_angle_bracket(line)
+
+            else:
+                line = convert_inline_references(line)
+
+        out.write(line)
+
+    generate_index(sys.stdout)
+
+def generate_index(out):
+    # write header
+    if len(code_chunks.keys()):
+        out.write("\n\n----\n\n")
+        # section or subsection?
+        if code_chunk_index_as_subsection:
+            out.write("## Code Chunks\n")
+        else:
+            out.write("# Code Chunks\n")
+
+    # generate list of chunks
+    for chunk_name in sorted(code_chunks.keys()):
+        if chunk_name in code_chunks and code_chunks[chunk_name] == 0:
+            name = chunk_name
+            #ref = "* `{0}`_\n".format(name)
+            #ref = "* {0}_\n".format(clean_links(name))
+            ref = "* [{0}](#{1})\n".format(name, clean_links(name))
+            out.write(ref)
+        else:
+            name = chunk_name
+            ref = "* {0}\n\n".format(name)
+            #ref += "  * {0}_\n".format(name.replace(" ", "_"))
+            #ref += "    * `{0}`_\n".format(name)
+            ref += "    * [{0}](#{1})\n".format(name, clean_links(name))
+            #ref += "  * {0}_\n".format(clean_links(name))
+            out.write(ref)
+
+            for i in range(2, code_chunks[chunk_name]+1):
+                name = chunk_name + " %d" % i
+
+                # this is Sphinx style!
+                #ref = "* :ref:`{0} <{1}>`\n".format(name.replace(" ", "_"), name)
+                #ref = "  * `{0}`_\n".format(name)
+                ref = "    * [{0}](#{1})\n".format(name, clean_links(name))
+                #ref = "  * {0}_\n".format(clean_links(name))
+
+                out.write(ref)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "-s":
+            code_chunk_index_as_subsection = True
+
+    translate(sys.stdin, sys.stdout)
+
+# vim:tabstop=4:shiftwidth=4:smarttab:expandtab:softtabstop=4:autoindent

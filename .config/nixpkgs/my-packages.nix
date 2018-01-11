@@ -11,6 +11,7 @@ editorconfig-core-c
 nix-prefetch-scripts
 
 mpv
+python3
 pythonPackages.subliminal
 #previousPkgs_pu.gitAndTools.git-annex
 rsync
@@ -44,7 +45,6 @@ mkpasswd
 nix-repl
 nox
 pstree
-python
 ruby
 screen
 #teamviewer
