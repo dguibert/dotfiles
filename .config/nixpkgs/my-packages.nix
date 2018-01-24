@@ -79,4 +79,6 @@ go-mtpfs
 
 wayland
 sway
+
+corkscrew
 ]
