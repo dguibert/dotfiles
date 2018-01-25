@@ -63,7 +63,7 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.startWhenNeeded = true;
-  services.openssh.ports = [22322];
+  services.openssh.ports = [22322 443 ];
   services.openssh.passwordAuthentication = false;
   services.openssh.hostKeys = [
             { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
