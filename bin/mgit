@@ -24,6 +24,7 @@ usage() {
 	echo "   ls-untracked                 list files untracked by any repo"
 	echo "   ls-double-tracked            list files tracked by multiple repos"
 	echo "   ls-tracked                   list files and which repos are tracking them"
+	echo "   which FILENAME               list which repo(s) are tracking a file"
 	echo
 	echo "   init REPO                              create a local repo"
 	echo "   clone [REMOTE/]REPO|URL[=VERSION] ...  clone one ore more repos"
@@ -68,7 +69,7 @@ list_known() {
 
 list_cloned() {
 	check_root
-   (cd .mgit && \
+	(cd .mgit && \
 	for f in *; do
 		[ -d "$f/.git" ] && echo "$f"
 	done)
@@ -105,14 +106,22 @@ tracked_files() {
 	done) | sort | uniq $1
 }
 
+which_tracks() {
+	[ "$1" ] || usage "Filename expected."
+	list_tracked | while IFS=" " read repo file; do
+		[ "$file" == "$1" ] && echo "$repo"
+	done
+}
+
 existing_files() {
 	find * -type f | grep -v "^$1$" | sort
 }
 
 list_tracked() {
 	check_root
+	local MGIT_DIR="$PWD"
 	for repo in `list_cloned`; do
-		GIT_DIR=".mgit/$repo/.git" git ls-files | while read f; do
+		(cd "$PWD0"; GIT_DIR="$MGIT_DIR/.mgit/$repo/.git" git ls-files) | while read f; do
 			printf "%-16s %s\n" "$repo" "$f"
 		done
 	done
@@ -139,7 +148,7 @@ list_double_tracked() {
 	# NOTE: using a temp file because bash on Windows can't do <(tracked_files -d)
 	tracked_files -d > $$.tmp
 	[ "$(cat $$.tmp)" ] && \
-		list_tracked | grep -F -w -f $$.tmp
+		PWD0="$PWD" list_tracked | grep -F -w -f $$.tmp
 	rm $$.tmp
 }
 
@@ -151,9 +160,9 @@ clone_all() {
 
 init() {
 	local name="$1"
-	name="${name//[^-_0123456789abcdefghijklmnopqrstuvwxyz]/}"
+	name="${name//[^.\-_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]/}"
 	[ "$name" = "$1" ] || \
-		usage "Invalid name: '$1'. Only letters, numbers, '-' and '_' allowed."
+		usage "Invalid name: '$1'. Only letters, numbers, '.', '-' and '_' allowed."
 
 	# check that the repo is not already cloned
 	[ -d ".mgit/$name" ] && {
@@ -521,7 +530,7 @@ git_cmd_one() {
 			if [ -f ".mgit/git-$cmd.sh" ]; then
 				PWD0="$PWD0" ".mgit/git-$cmd.sh" "$@"
 			else
-				cd "$PWD0" && git "$cmd" "$@"
+				(cd "$PWD0" && git "$cmd" "$@")
 			fi
 		;;
 	esac
@@ -569,6 +578,7 @@ case "$cmd" in
 	ls-modified)  list_modified ;;
 	st)           list_modified ;;
 	status)       list_modified ;;
+	which)	      which_tracks "$@" ;;
 	ls-unpushed)  list_unpushed ;;
 	ls-untracked) list_untracked ;;
 	ls-double-tracked) list_double_tracked ;;
