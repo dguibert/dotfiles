@@ -13,7 +13,7 @@
       Port 22322
   '';
   nix = {
-    trustedUsers = [ "nixBuild" ];
+    trustedUsers = [ "nixBuild" "dguibert" ];
     distributedBuilds = true;
     buildMachines = [{
       hostName = "rpi31";

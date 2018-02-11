@@ -28,7 +28,7 @@
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.supportedFilesystems = [ "zfs" ];
-  #boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
+  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
   networking.hostId = "8425e349";
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.

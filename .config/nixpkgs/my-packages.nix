@@ -55,6 +55,7 @@ lsof
 xpra
 aria2
 nixops
+haskellPackages.nix-deploy
 #chromium
 google-chrome
 firefox-bin
@@ -81,4 +82,5 @@ wayland
 sway
 
 corkscrew
+autossh
 ]
