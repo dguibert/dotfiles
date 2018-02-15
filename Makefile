@@ -44,18 +44,17 @@ init-dotfiles-%:
 	set -x
 	cluster=$*
 	ssh-copy-id -i ~/.ssh/id_bull.pub $$cluster
-	ssh $$cluster mkdir -p ~/bin ~/public_git
-	ssh $$cluster git init --bare ~/public_git/dotfiles.git
-	scp ~/bin/mgit $$cluster:bin/
-	(cd ~/public_git/dotfiles.git; git push --all ssh://$$cluster/~/public_git/dotfiles.git )
-	ssh $$cluster mgit clone file://public_git/dotfiles.git
+	ssh $$cluster mkdir -p bin
+	scp ~/bin/mgit $$cluster:
+	ssh -vvvv $$cluster ./mgit clone ssh://dguibert@localhost:33122/home/dguibert/public_git/dotfiles.git
+	rsync -aP .vim/ $$cluster:.vim/ --exclude view
 
 init-nix-%:
 	set -x
 	cluster=$*
-	#curl -C - -O https://nixos.org/releases/nix/nix-1.11.13/nix-1.11.13-x86_64-linux.tar.bz2
-	rsync -aP nix-1.11.13-x86_64-linux.tar.bz2 $$cluster:
-	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-1.11.13-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
+	#curl -C - -O https://nixos.org/releases/nix/nix-1.11.16/nix-1.11.16-x86_64-linux.tar.bz2
+	rsync -aP nix-1.11.16-x86_64-linux.tar.bz2 $$cluster:
+	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-1.11.16-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
 
 update-host:
 	cd ~/admin/nixops
@@ -69,6 +68,13 @@ update-packages-%:
 	cluster=$*
 	rm -f pkgs/$$cluster*
 	packages=$$(nix-build -o pkgs/$$cluster $$HOME/.config/nixpkgs/my-packages@cluster.nix)
+	nix-copy-closure -v --to $$cluster $$packages
+	ssh $$cluster nix-env -i $$packages
+update-packages-juelich:
+	set -x
+	cluster=juelich
+	rm -f pkgs/$$cluster*
+	packages=$$(nix-build -o pkgs/$$cluster -E 'with import <nixpkgs> {}; [ gitAndTools.git-annex gitFull tree python3 cmake ncurses.all ]')
 	nix-copy-closure -v --to $$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
 clean-packages-%:

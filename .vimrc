@@ -36,7 +36,7 @@ Plugin 'vim-scripts/DirDiff.vim'
 Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
-"
+" vim +PluginInstall! +PluginClean!
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
