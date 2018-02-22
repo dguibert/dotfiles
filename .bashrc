@@ -12,7 +12,8 @@ case $(hostname) in
 	manny*|\
 	genji*|\
 	login*|\
-	robin*)
+	robin*|\
+	pm-mgt0*)
 	# PATH specific on clusters
 	export PATH=$HOME/pkgs/bin:$PATH
 	export PATH=/home_nfs/isv/allinea/forge-6.1.2/bin:$PATH
@@ -32,6 +33,10 @@ if [ -d ~/pkgs/stowed ]; then
   export PATH=$HOME/pkgs/stowed/bin:$PATH
   export MANPATH=$HOME/pkgs/stowed/share/man:$MANPATH
   export TERMINFO_DIRS=$HOME/pkgs/stowed/share/terminfo:$TERMINFO_DIRS
+fi
+
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+	source $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
 
 # If not running interactively, don't do anything
@@ -105,10 +110,6 @@ fi
 if command -v direnv &> /dev/null; then
   eval "$(direnv hook bash)"
 fi
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-	source $HOME/.nix-profile/etc/profile.d/nix.sh
-fi
-
 export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
 #export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
 export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
