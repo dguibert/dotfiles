@@ -42,7 +42,7 @@ gnumake
 gnuplot
 jq
 mkpasswd
-nix-repl
+#nix-repl
 nox
 pstree
 ruby
