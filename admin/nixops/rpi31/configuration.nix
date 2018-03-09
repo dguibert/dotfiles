@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-{
+rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
     <nixpkgs/nixos/modules/profiles/base.nix>
@@ -17,7 +17,11 @@
   };
 
   # Needed by RPi firmware
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    allowUnfree = true;
+    packageOverrides.linuxPackages = boot.kernelPackages;
+  };
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
