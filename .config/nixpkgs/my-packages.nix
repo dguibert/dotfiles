@@ -83,4 +83,7 @@ sway
 
 corkscrew
 autossh
+
+davmail
+thunderbird
 ]
