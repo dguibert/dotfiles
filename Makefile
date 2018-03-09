@@ -71,8 +71,9 @@ update-packages-%:
 	set -x
 	cluster=$*
 	rm -f pkgs/$$cluster*
-	packages=$$(nix-build -o pkgs/$$cluster $$HOME/.config/nixpkgs/my-packages@cluster.nix)
-	nix-copy-closure -v --to $$cluster $$packages
+	nix build -o pkgs/$$cluster -f $$HOME/.config/nixpkgs/my-packages@cluster.nix
+	packages=$$(readlink pkgs/$$cluster*)
+	nix copy -v --to ssh://$$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
 update-packages-juelich:
 	set -x
