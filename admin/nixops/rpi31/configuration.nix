@@ -53,6 +53,9 @@
   # !!! Adding a swap file is optional, but strongly recommended!
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
 
+  # Set your time zone.
+  time.timeZone = "Europe/Paris";
+
   # Select internationalisation properties.
   i18n = {
      consoleFont = "Lat2-Terminus16";
