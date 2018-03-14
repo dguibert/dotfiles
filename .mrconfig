@@ -308,3 +308,9 @@ checkout = git clone 'https://github.com/svanderburg/disnix' 'disnix'
 
 [code/disnixos]
 checkout = git clone 'https://github.com/svanderburg/disnixos' 'disnixos'
+
+[code/disnix-virtualhosts-example]
+checkout = git clone 'https://github.com/svanderburg/disnix-virtualhosts-example' 'disnix-virtualhosts-example'
+
+[code/legion]
+checkout = git clone 'https://github.com/StanfordLegion/legion' 'legion'
