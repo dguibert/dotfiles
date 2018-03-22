@@ -15,9 +15,10 @@ with pkgs.lib;
     ./dwm.patches/0010-pinenetry-as-float.patch
   ];
   st.patches = [
-    ./st.patches/0001-patch-apply-st-no_bold_colors-git-20160620-528241a.d.patch
-    ./st.patches/0002-patch-apply-st-solarized-light-git-20160620-528241a..patch
+    ./st.patches/0001-apply-st-no_bold_colors-20170623-b331da5.diff.patch
+    ./st.patches/0002-apply-st-solarized-light-20170623-b331da5.diff.patch
     ./st.patches/0003-custom-changes.patch
+    ./st.patches/0004-apply-st-scrollback-0.8.diff.patch
   ];
   allowUnfree = true;
   pulseaudio = true;

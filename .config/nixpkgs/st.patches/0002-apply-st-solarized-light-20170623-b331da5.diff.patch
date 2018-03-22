@@ -1,17 +1,17 @@
-From 73c7ab7d7fef7c2f13c4ce8b9f8367805847785b Mon Sep 17 00:00:00 2001
+From 82a0c1fbdfc85252e8572a433df951ca363ac3bb Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
-Date: Wed, 22 Jun 2016 10:25:37 +0200
-Subject: [PATCH 2/3] patch: apply st-solarized-light-git-20160620-528241a.diff
+Date: Thu, 22 Mar 2018 14:01:43 +0100
+Subject: [PATCH 2/4] apply st-solarized-light-20170623-b331da5.diff
 
 ---
- config.def.h | 45 ++++++++++++++++++++++-----------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+ config.def.h | 50 +++++++++++++++++++++-----------------------------
+ 1 file changed, 21 insertions(+), 29 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index b41747f..386375e 100644
+index 82b1b09..c7ad56b 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -84,31 +84,30 @@ static unsigned int tabspaces = 8;
+@@ -84,31 +84,23 @@ unsigned int tabspaces = 8;
  
  /* Terminal colors (16 first used in escape sequence) */
  static const char *colorname[] = {
@@ -34,6 +34,12 @@ index b41747f..386375e 100644
 -	"magenta",
 -	"cyan",
 -	"white",
+-
+-	[255] = 0,
+-
+-	/* more colors can be added after 255 to use with DefaultXX */
+-	"#cccccc",
+-	"#555555",
 +	/* solarized light */
 +	"#eee8d5",  /*  0: black    */
 +	"#dc322f",  /*  1: red      */
@@ -51,31 +57,24 @@ index b41747f..386375e 100644
 +	"#6c71c4",  /* 13: brmagenta*/
 +	"#586e75",  /* 14: brcyan   */
 +	"#002b36",  /* 15: brwhite  */
- 
- 	[255] = 0,
- 
- 	/* more colors can be added after 255 to use with DefaultXX */
- 	"#cccccc",
- 	"#555555",
-+
  };
  
  
-@@ -116,10 +115,10 @@ static const char *colorname[] = {
+@@ -116,10 +108,10 @@ static const char *colorname[] = {
   * Default colors (colorname index)
   * foreground, background, cursor, reverse cursor
   */
--static unsigned int defaultfg = 7;
--static unsigned int defaultbg = 0;
+-unsigned int defaultfg = 7;
+-unsigned int defaultbg = 0;
 -static unsigned int defaultcs = 256;
 -static unsigned int defaultrcs = 257;
-+static unsigned int defaultfg = 12;
-+static unsigned int defaultbg = 8;
++unsigned int defaultfg = 12;
++unsigned int defaultbg = 8;
 +static unsigned int defaultcs = 14;
 +static unsigned int defaultrcs = 15;
  
  /*
   * Default shape of cursor
 -- 
-2.9.3
+2.16.2
 
