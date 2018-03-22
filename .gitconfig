@@ -52,3 +52,7 @@
 	helper = password-store
 [hub]
 	protocol = https
+[remote "orsine-backupwd"]
+	annex-sync = false
+[remote "orsine"]
+	annex-sync = false

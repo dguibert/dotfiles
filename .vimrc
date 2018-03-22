@@ -34,9 +34,12 @@ Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
 Plugin 'editorconfig/editorconfig-vim'
+
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
 call vundle#end()            " required
 filetype plugin indent on    " required
-"
+" vim +PluginInstall! +PluginClean!
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate

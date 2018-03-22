@@ -42,7 +42,7 @@ gnumake
 gnuplot
 jq
 mkpasswd
-nix-repl
+#nix-repl
 nox
 pstree
 ruby
@@ -55,6 +55,7 @@ lsof
 xpra
 aria2
 nixops
+haskellPackages.nix-deploy
 #chromium
 google-chrome
 #firefox-bin
@@ -81,4 +82,8 @@ wayland
 sway
 
 corkscrew
+autossh
+
+davmail
+thunderbird
 ]
