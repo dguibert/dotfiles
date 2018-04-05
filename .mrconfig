@@ -15,9 +15,6 @@ push = echo "$MR_REPO has to be manually pushed"
 
 include = cat $HOME/.config/mr/config.d/*
 
-[$HOME/.config/vcsh/repo.d/dotfiles.git]
-deleted = true
-
 [$HOME/.mgit/dotfiles/.git]
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
@@ -73,9 +70,6 @@ checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortr
 
 [code/hpx]
 checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
-
-[code/imp-demo]
-deleted = true
 
 [code/imp-code]
 checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'
@@ -210,9 +204,6 @@ push = git push -v public_git
 
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
-
-[code/parskel]
-deleted = true
 
 [code/sumatra]
 checkout = git clone 'https://github.com/open-research/sumatra' 'sumatra'
