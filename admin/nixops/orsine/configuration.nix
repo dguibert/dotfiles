@@ -33,7 +33,6 @@ rec {
     packageOverrides.linuxPackages = boot.kernelPackages;
   };
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
 
   networking.hostId = "a8c00e01";
 
