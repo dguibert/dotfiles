@@ -3,9 +3,10 @@
 with import <nixpkgs> {};
 let
  previousPkgs_pu = import (fetchTarball https://github.com/dguibert/nixpkgs/archive/221683611736b6ff91479ed0aadbf58e31312247.tar.gz) {};
+ my_vim = vim_configurable;
 in
 [
-vim
+my_vim
 editorconfig-core-c
 
 nix-prefetch-scripts
@@ -42,7 +43,7 @@ gnumake
 gnuplot
 jq
 mkpasswd
-nix-repl
+#nix-repl
 nox
 pstree
 ruby
@@ -58,7 +59,7 @@ nixops
 haskellPackages.nix-deploy
 #chromium
 google-chrome
-firefox-bin
+#firefox-bin
 htop
 tree
 gnupg1compat
@@ -83,4 +84,7 @@ sway
 
 corkscrew
 autossh
+
+davmail
+thunderbird
 ]

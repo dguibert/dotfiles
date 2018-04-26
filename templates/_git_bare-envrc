@@ -1,0 +1,2 @@
+export GIT_DIR=$PWD
+unset GIT_WORK_TREE

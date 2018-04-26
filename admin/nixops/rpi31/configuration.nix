@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-{
+rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
     <nixpkgs/nixos/modules/profiles/base.nix>
@@ -17,7 +17,11 @@
   };
 
   # Needed by RPi firmware
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    allowUnfree = true;
+    packageOverrides.linuxPackages = boot.kernelPackages;
+  };
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
@@ -27,8 +31,8 @@
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.loader.grub.configurationLimit = 2;
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
   networking.hostId = "8425e349";
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.
@@ -52,6 +56,9 @@
 
   # !!! Adding a swap file is optional, but strongly recommended!
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
+
+  # Set your time zone.
+  time.timeZone = "Europe/Paris";
 
   # Select internationalisation properties.
   i18n = {

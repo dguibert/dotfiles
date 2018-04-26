@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
-{
+rec {
   imports = [
     <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
     ../nixos/yubikey-gpg.nix
@@ -9,7 +9,10 @@
 
   i18n.consoleKeyMap="fr";
 
-  nixpkgs.config = import ~/.config/nixpkgs/config.nix;
+  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    packageOverrides.linuxPackages = boot.kernelPackages;
+  };
   #nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
   #  xorg.fglrxCompat = true;
   #};
@@ -24,7 +27,6 @@
   boot.kernelPackages = pkgs.linuxPackages_4_14;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true; #error: Package ‘spl-kernel-0.7.3-4.14’
   networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
@@ -198,13 +200,7 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
   };
   networking.firewall.allowedUDPPorts = [ 51821 ];
 
-  services.udev.extraRules = with pkgs; ''
-	  # 80ee:0021
-	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]", MODE="0660", GROUP="users"
-	  SUBSYSTEM=="usb",ATTR{idVendor}=="[18d1]", MODE="0660", GROUP="users" # Bus 001 Device 016: ID 18d1:d00d Google Inc.
-	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_adb"
-	  SUBSYSTEM=="usb",ATTR{idVendor}=="[80ee]",ATTR{idProduct}=="[0021]",SYMLINK+="android_fastboot"
-  '';
+  services.udev.packages = [ pkgs.android-udev-rules ];
 
   networking.firewall.checkReversePath = false;
 

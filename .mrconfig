@@ -15,9 +15,6 @@ push = echo "$MR_REPO has to be manually pushed"
 
 include = cat $HOME/.config/mr/config.d/*
 
-[$HOME/.config/vcsh/repo.d/dotfiles.git]
-deleted = true
-
 [$HOME/.mgit/dotfiles/.git]
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
@@ -73,9 +70,6 @@ checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortr
 
 [code/hpx]
 checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
-
-[code/imp-demo]
-deleted = true
 
 [code/imp-code]
 checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'
@@ -211,9 +205,6 @@ push = git push -v public_git
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
 
-[code/parskel]
-deleted = true
-
 [code/sumatra]
 checkout = git clone 'https://github.com/open-research/sumatra' 'sumatra'
 
@@ -287,3 +278,54 @@ checkout = git clone 'https://git.zx2c4.com/WireGuard' 'WireGuard'
 
 [nixpkgs-overlays]
 checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
+
+[code/vite]
+checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
+
+[code/eztrace]
+checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace.git' 'eztrace'
+
+[code/eztrace-plugins]
+checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-plugins.git' 'eztrace-plugins'
+
+[code/eztrace-tools]
+checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-tools.git' 'eztrace-tools'
+
+[code/dysnomia]
+checkout = git clone 'https://github.com/svanderburg/dysnomia' 'dysnomia'
+
+[code/disnix]
+checkout = git clone 'https://github.com/svanderburg/disnix' 'disnix'
+
+[code/disnixos]
+checkout = git clone 'https://github.com/svanderburg/disnixos' 'disnixos'
+
+[code/disnix-virtualhosts-example]
+checkout = git clone 'https://github.com/svanderburg/disnix-virtualhosts-example' 'disnix-virtualhosts-example'
+
+[code/legion]
+checkout = git clone 'https://github.com/StanfordLegion/legion' 'legion'
+
+[code/caf/nexus]
+checkout = git clone 'https://github.com/actor-framework/nexus' 'nexus'
+
+[code/caf/actor-framework/manual]
+checkout = git clone 'https://github.com/actor-framework/manual' 'manual'
+
+[code/caf/actor-framework]
+checkout = git clone 'https://github.com/actor-framework/actor-framework' 'actor-framework'
+
+[code/caf/conan]
+checkout = git clone 'https://github.com/actor-framework/conan' 'conan'
+
+[code/caf/evolution]
+checkout = git clone 'https://github.com/actor-framework/evolution' 'evolution'
+
+[code/caf/fractal-benchmark]
+checkout = git clone 'https://github.com/actor-framework/fractal-benchmark' 'fractal-benchmark'
+
+[code/caf/riac]
+checkout = git clone 'https://github.com/actor-framework/riac' 'riac'
+
+[code/caf/benchmarks]
+checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks'

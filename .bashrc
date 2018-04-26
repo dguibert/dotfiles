@@ -39,6 +39,40 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	source $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
 
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+export HISTIGNORE="ls:cd:clear:[bf]g"
+export HISTCONTROL=ignoredups:ignorespace
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTSIZE=50000
+export HISTFILESIZE=100000
+
+# http://ubuntuforums.org/showthread.php?t=1150822
+## Save and reload the history after each command finishes
+shopt -s histappend
+export PROMPT_COMMAND="history -a; history -c; history -r"
+#shopt -s histreedit
+#shopt -s histverify
+
+#export AWT_TOOLKIT=MToolkit
+
+# man gpg-agent@EXAMPLES
+# https://www.unix-ag.uni-kl.de/~guenther/gpg-agent-for-ssh.html
+export GPG_TTY=$(tty)
+# If you enabled the Ssh Agent Support, you also need to tell ssh about it by adding this to your init script:
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
+if command -v direnv &> /dev/null; then
+  eval "$(direnv hook bash)"
+fi
+export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
+#export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
+export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
+
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
@@ -80,36 +114,3 @@ case $TERM in
 	;;
 esac
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-export HISTIGNORE="ls:cd:clear:[bf]g"
-export HISTCONTROL=ignoredups:ignorespace
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=50000
-export HISTFILESIZE=100000
-
-# http://ubuntuforums.org/showthread.php?t=1150822
-## Save and reload the history after each command finishes
-shopt -s histappend
-export PROMPT_COMMAND="history -a; history -c; history -r"
-#shopt -s histreedit
-#shopt -s histverify
-
-#export AWT_TOOLKIT=MToolkit
-
-# man gpg-agent@EXAMPLES
-# https://www.unix-ag.uni-kl.de/~guenther/gpg-agent-for-ssh.html
-export GPG_TTY=$(tty)
-# If you enabled the Ssh Agent Support, you also need to tell ssh about it by adding this to your init script:
-unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-fi
-
-if command -v direnv &> /dev/null; then
-  eval "$(direnv hook bash)"
-fi
-export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
-#export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
-export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
