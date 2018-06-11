@@ -8,10 +8,10 @@ self: super:
 	  };
   };
   score-p = super.stdenv.mkDerivation {
-	  name = "score-p-3.1";
+	  name = "score-p-4.0";
 	  src = super.fetchurl {
-	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-3.1.tar.gz";
-		sha256 = "0h45357djna4dn9jyxx0n36fhhms3jrf22988m9agz1aw2jfivs9";
+	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-4.0.tar.gz";
+		sha256 = "0mg602xx3n53g695j26apzwvqwc5p1vl1h9mkfnm0ncn0rb54l60";
 	  };
 	  buildInputs = [ self.otf2 super.openmpi super.which super.gfortran super.zlib /*opari*/ ];
 	  postInstall = ''
