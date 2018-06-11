@@ -1,10 +1,10 @@
 self: super:
 {
   otf2 = super.stdenv.mkDerivation {
-	  name = "otf2-2.0";
+	  name = "otf2-2.1.1";
 	  src = super.fetchurl {
-		  url = "http://www.vi-hps.org/upload/packages/otf2/otf2-2.0.tar.gz";
-		  sha256 = "0m178qlnx7rf7nsywk4v2l3xj1fk7g44sxz5d0ayf4qaiv00mzms";
+		  url = "http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.1.tar.gz";
+		  sha256 = "1ls7rz6qwnqbkifpafc95bnfh3m9xbs74in8zxlnhfbgwx11nn81";
 	  };
   };
   score-p = super.stdenv.mkDerivation {
