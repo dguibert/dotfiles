@@ -3,6 +3,7 @@
 with import <nixpkgs> {};
 [
 gitAndTools.git-annex
+gitAndTools.hub
 gitAndTools.git-crypt
 gitFull #guiSupport is harmless since we also installl xpra
 tig
