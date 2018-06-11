@@ -11,7 +11,7 @@ rec {
 
   nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
-    packageOverrides.linuxPackages = boot.kernelPackages;
+    #packageOverrides.linuxPackages = boot.kernelPackages;
   };
   #nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
   #  xorg.fglrxCompat = true;
@@ -24,9 +24,10 @@ rec {
   ];
   programs.sysdig.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_14;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
   boot.supportedFilesystems = [ "zfs" ];
+  #boot.zfs.enableUnstable = true;
   networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
@@ -176,6 +177,9 @@ rec {
 NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
   '';
 
+  networking.interfaces.zt0.ipv4.addresses = [
+            { address = "10.147.17.198"; prefixLength = 24; }
+  ];
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.198/24" ];
     listenPort = 51821;

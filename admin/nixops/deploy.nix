@@ -32,9 +32,9 @@
 
     # Enable ZeroTierOne
     services.zerotierone.enable = true;
+    services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
 
     networking.useNetworkd = true;
-    networking.firewall.allowedUDPPorts = [ 9993 ];
 
   };
 
@@ -44,7 +44,7 @@
 
   };
 
-  rpi31 = { pkgs, config, ...}: {
+  rpi31 = { config, ...}: {
     imports = [ ./rpi31/configuration.nix ];
     deployment.targetHost = "192.168.1.13";
 
