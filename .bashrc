@@ -66,9 +66,6 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 
-if command -v direnv &> /dev/null; then
-  eval "$(direnv hook bash)"
-fi
 export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
 #export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
 export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
@@ -76,13 +73,16 @@ export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+if command -v direnv &> /dev/null; then
+  eval "$(direnv hook bash)"
+fi
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
 alias ls='ls --color'
 # User specific aliases and functions
-if command -v hub >/dev/null; then
-	alias git=hub
-fi
+#if command -v hub >/dev/null; then
+#	alias git=hub
+#fi
 
 #eval `keychain --noask -q --eval id_dsa david.guibert`
 

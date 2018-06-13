@@ -48,7 +48,7 @@ import re
 import sys
 
 
-__author__ = "Meik Teßmer"
+__author__ = "Meik Tessmer"
 __email__ = "mtessmer@wiwi.uni-bielefeld.de"
 __version__ = "0.1.2"
 
