@@ -25,14 +25,15 @@ rec {
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelPackages = pkgs.linuxPackages_4_14;
   boot.kernelModules = [ "fuse" ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.perf ];
+  #boot.kernelPackages = pkgs.linuxPackages;
+  boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
-    packageOverrides.linuxPackages = boot.kernelPackages;
+    #packageOverrides.linuxPackages = boot.kernelPackages;
   };
   boot.supportedFilesystems = [ "zfs" ];
+  #boot.zfs.enableUnstable = true;
 
   networking.hostId = "a8c00e01";
 
@@ -40,11 +41,11 @@ rec {
   networking.useNetworkd = true;
 
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.interfaces = [ "wlp0s26f7u1" ];
+  networking.wireless.interfaces = [ "wlp0s26f7u1" "wlp0s29f7u1" ];
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
 
-  networking.bonds.bond0.interfaces = [ "enp0s25" "wlp0s26f7u1" ];
+  networking.bonds.bond0.interfaces = [ "enp0s25" /*"wlp0s26f7u1"*/ ];
   boot.extraModprobeConfig=''
     options bonding mode=active-backup miimon=100 primary=enp0s25
   '';

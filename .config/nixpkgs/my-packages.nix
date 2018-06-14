@@ -41,22 +41,18 @@ dvtm
 
 gnumake
 gnuplot
-jq
 mkpasswd
 #nix-repl
-nox
 pstree
 ruby
 screen
 #teamviewer
 tig
-virtualgl
-mosh
 lsof
 xpra
 aria2
 nixops
-haskellPackages.nix-deploy
+#haskellPackages.nix-deploy
 #chromium
 google-chrome
 #firefox-bin
@@ -66,7 +62,7 @@ gnupg1compat
 x2goclient
 #wpsoffice
 file
-pass
+(pass.withExtensions (extensions: with extensions; [ pass-audit pass-update ]))
 qtpass
 browserpass
 git-credential-password-store
@@ -87,4 +83,7 @@ autossh
 
 davmail
 thunderbird
+
+hledger
+pythonPackages.ofxparse
 ]

@@ -37,6 +37,8 @@ Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
+
+Plugin 'ledger/vim-ledger'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -64,3 +66,4 @@ au BufWinEnter * silent! loadview
 au BufWinEnter *.nix set ft=nix
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
+

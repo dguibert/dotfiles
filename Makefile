@@ -65,7 +65,8 @@ update-hosts:
 	source .envrc
 	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs
 update-packages:
-	nix-env -f $$HOME/.config/nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/
+	nix-env -f $$HOME/.config/nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/ --show-trace
+	nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDb
 # nix-copy-closure -v --to manny $(nix-build --arg expr "(import <nixpkgs> {}).nix" --keep-going -Q ./maintainers/scripts/all-sources.nix -I nixpkgs=$HOME/code/nixpkgs)
 update-packages-%:
 	set -x
@@ -79,7 +80,7 @@ update-packages-juelich:
 	set -x
 	cluster=juelich
 	rm -f pkgs/$$cluster*
-	packages=$$(nix-build -o pkgs/$$cluster -E 'with import <nixpkgs> {}; [ gitAndTools.git-annex gitFull tree python3 cmake ncurses.all ]')
+	packages=$$(nix-build -o pkgs/$$cluster -E 'with import <nixpkgs> {}; [ gitAndTools.git-annex gitAndTools.hub gitFull tree python3 cmake ncurses.all ]')
 	nix-copy-closure -v --to $$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
 clean-packages-%:

@@ -9,18 +9,19 @@ rec {
     ../nixos/distributed-build.nix
   ];
 
-  nixpkgs.system = "aarch64-linux";
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "aarch64-linux";
-    message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
-      "it cannot be cross compiled";
-  };
+  # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
+  nixpkgs.localSystem.system = "aarch64-linux";
+  #assertions = lib.singleton {
+  #  assertion = pkgs.stdenv.system == "aarch64-linux";
+  #  message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
+  #    "it cannot be cross compiled";
+  #};
 
   # Needed by RPi firmware
   nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     allowUnfree = true;
-    packageOverrides.linuxPackages = boot.kernelPackages;
+    #packageOverrides.linuxPackages = boot.kernelPackages;
   };
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
@@ -30,9 +31,10 @@ rec {
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.grub.configurationLimit = 2;
   boot.supportedFilesystems = [ "zfs" ];
+  #boot.zfs.enableUnstable = true;
   networking.hostId = "8425e349";
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.

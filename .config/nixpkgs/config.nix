@@ -23,7 +23,6 @@ with pkgs.lib;
   allowUnfree = true;
   pulseaudio = true;
   virtualbox.enableExtensionPack = true;
-  chromium.enableWideVine = true;
 
   packageOverrides = super: let self = super.pkgs; in with self; {
 	  #home-manager = import ./home-manager { inherit pkgs; };

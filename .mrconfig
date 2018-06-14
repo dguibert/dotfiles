@@ -329,3 +329,9 @@ checkout = git clone 'https://github.com/actor-framework/riac' 'riac'
 
 [code/caf/benchmarks]
 checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks'
+
+[code/nixops]
+checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
+
+[code/ssf]
+checkout = git clone 'https://github.com/securesocketfunneling/ssf' 'ssf'

@@ -1,17 +1,17 @@
 self: super:
 {
   otf2 = super.stdenv.mkDerivation {
-	  name = "otf2-2.0";
+	  name = "otf2-2.1.1";
 	  src = super.fetchurl {
-		  url = "http://www.vi-hps.org/upload/packages/otf2/otf2-2.0.tar.gz";
-		  sha256 = "0m178qlnx7rf7nsywk4v2l3xj1fk7g44sxz5d0ayf4qaiv00mzms";
+		  url = "http://www.vi-hps.org/upload/packages/otf2/otf2-2.1.1.tar.gz";
+		  sha256 = "1ls7rz6qwnqbkifpafc95bnfh3m9xbs74in8zxlnhfbgwx11nn81";
 	  };
   };
   score-p = super.stdenv.mkDerivation {
-	  name = "score-p-3.1";
+	  name = "score-p-4.0";
 	  src = super.fetchurl {
-	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-3.1.tar.gz";
-		sha256 = "0h45357djna4dn9jyxx0n36fhhms3jrf22988m9agz1aw2jfivs9";
+	  	url = "http://www.vi-hps.org/upload/packages/scorep/scorep-4.0.tar.gz";
+		sha256 = "0mg602xx3n53g695j26apzwvqwc5p1vl1h9mkfnm0ncn0rb54l60";
 	  };
 	  buildInputs = [ self.otf2 super.openmpi super.which super.gfortran super.zlib /*opari*/ ];
 	  postInstall = ''
