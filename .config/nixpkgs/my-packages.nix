@@ -85,5 +85,6 @@ davmail
 thunderbird
 
 hledger
+haskellPackages.hledger-interest
 pythonPackages.ofxparse
 ]

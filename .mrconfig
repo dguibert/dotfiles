@@ -42,7 +42,8 @@ checkout = git clone 'git://blockit.git.sourceforge.net/gitroot/blockit/blockit'
 checkout = git clone 'git://github.com/cooperative-computing-lab/cctools.git' 'cctools'
 
 [code/chapel]
-checkout = git clone 'https://github.com/chapel-lang/chapel' 'chapel'
+#checkout = git clone 'https://github.com/chapel-lang/chapel' 'chapel'
+deleted = true
 
 [code/dmtcp]
 checkout = git clone 'https://github.com/dmtcp/dmtcp' 'dmtcp'
@@ -69,7 +70,8 @@ checkout = git clone 'https://github.com/dorchard/camfort' 'camfort'
 checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortran'
 
 [code/hpx]
-checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
+#checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
+deleted = true
 
 [code/imp-code]
 checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'

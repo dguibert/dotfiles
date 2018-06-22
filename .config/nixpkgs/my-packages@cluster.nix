@@ -6,6 +6,7 @@ gitAndTools.git-annex
 gitAndTools.hub
 gitAndTools.git-crypt
 gitFull #guiSupport is harmless since we also installl xpra
+subversion
 tig
 direnv
 jq
