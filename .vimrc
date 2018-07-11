@@ -39,6 +39,8 @@ Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 
 Plugin 'ledger/vim-ledger'
+
+Plugin 'ctrlpvim/ctrlp.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -59,6 +61,8 @@ colorscheme solarized
 set laststatus=2
 let g:airline_powerline_fonts=1
 
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
 au BufWinLeave * silent! mkview
 au BufWinEnter * silent! loadview
