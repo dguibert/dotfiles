@@ -7,7 +7,7 @@ export MANPATH=$HOME/man:$MANPATH
 export EDITOR=vim
 
 # https://sites.google.com/site/ewalker544/research-2/myrt
-export PATH=$HOME/bin:$HOME/myrt/bin:$PATH
+#export PATH=$HOME/bin:$HOME/myrt/bin:$PATH
 case $(hostname) in
 	manny*|\
 	genji*|\
@@ -73,8 +73,9 @@ export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-if command -v direnv &> /dev/null; then
-  eval "$(direnv hook bash)"
+if command -v direnv &> /dev/null; then 
+  path_direnv=$(command -v direnv)
+  eval "$(direnv hook bash)| sed \"s:/nix\/.*\/bin/direnv:$path_direnv:\""
 fi
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
