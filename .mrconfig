@@ -4,7 +4,7 @@ include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
 lib = 
 	  source $HOME/.config/mr/lib/git-remotes
-	  git_annex_sync() { git annex -v sync --content; }
+	  git_annex_sync() { git annex -v sync --content $GIT_ANNEX_OPTIONS; }
 	  new_git_annexed_repo() {
 	    git init $MR_REPO
 	    cd $MR_REPO
@@ -337,3 +337,9 @@ checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
 
 [code/ssf]
 checkout = git clone 'https://github.com/securesocketfunneling/ssf' 'ssf'
+
+[code/reframe]
+checkout = git clone 'https://github.com/eth-cscs/reframe' 'reframe'
+
+[code/nix-update]
+checkout = git clone 'https://github.com/ryantm/nix-update' 'nix-update'

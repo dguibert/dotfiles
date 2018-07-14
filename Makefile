@@ -43,7 +43,7 @@ bup-save:
 init-dotfiles-%:
 	set -x
 	cluster=$*
-	ssh-copy-id -i ~/.ssh/id_bull.pub $$cluster
+	ssh-copy-id -i ~/.ssh/id_rsa.pub $$cluster
 	ssh $$cluster mkdir -p bin
 	scp ~/bin/mgit $$cluster:
 	ssh -vvvv $$cluster ./mgit clone ssh://dguibert@localhost:33122/home/dguibert/public_git/dotfiles.git
@@ -66,7 +66,7 @@ update-hosts:
 	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs
 update-packages:
 	nix-env -f $$HOME/.config/nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/ --show-trace
-	nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDb
+	nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
 # nix-copy-closure -v --to manny $(nix-build --arg expr "(import <nixpkgs> {}).nix" --keep-going -Q ./maintainers/scripts/all-sources.nix -I nixpkgs=$HOME/code/nixpkgs)
 update-packages-%:
 	set -x
