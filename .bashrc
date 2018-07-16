@@ -74,8 +74,8 @@ export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 [ -z "$PS1" ] && return
 
 if command -v direnv &> /dev/null; then 
-  path_direnv=$(command -v direnv)
-  eval "$(direnv hook bash)| sed \"s:/nix\/.*\/bin/direnv:$path_direnv:\""
+  path_direnv=$(readlink $(command -v direnv))
+  eval "$(direnv hook bash| sed s:/nix\/.*\/bin/direnv:$path_direnv:)"
 fi
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
