@@ -6,7 +6,7 @@ let
    config = (import <nixpkgs/nixos/lib/eval-config.nix> {
      system = "x86_64-linux";
      modules = [
-       <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
+	<nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
        ({ pkgs, lib, ... }:
          let
            cfg = pkgs.writeText "configuration.nix" ''
@@ -24,12 +24,20 @@ let
     "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCT6I73vMHeTX7X990bcK+RKC8aqFYOLZz5uZhwy8jtx/xEEbKJFT/hggKADaBDNkJl/5141VUJ+HmMEUMu+OznK2gE8IfTNOP1zLXD6SjOxCa55MvnyIiXVMAr7R0uxZWy28IrmcmSx1LY5Mx8V13mjY3mp3LVemAy9im+vj6FymjQqgPMg6dHq+aQCeHpx22GWHYEq2ghqEsRpmIBBwwaVaEH8YIjcqZwDcp273SzBrgMEW44ndul5bvh85c71vjm7kblU/BxwBeLFMJFnXYTPxF2JjxhCSMlHBH9hqQjQ8vwaQev6XaJ5TpHgiT3nLAxCyBBgvnfwM7oq6bjHjuyToKFzUsFH6YVsK+/NjagZ5YKlV7vK0o2oF12GrQvwWwa6DUM+LdUNmSX4l4Xq8lB5YbJ5NK0pHRRdzCZL5kPuV+CkXRAHoUSj/pLUqkqGRL70NMtLIYmQbj/l7BZ4PQNP9zKLB4f5pk02A25DbPVfoW2DFL0DRfSF1L8ZDsAVhzUaRKSBZZ4wG231gvB6pCMTpeuvC9+Z/OmYkiXEOn34Qdjx8Bfi7XWKm/PnSgP7dM9Tcf3I0hvymvP6eZ8BjeriKHUE7b3s1aMQz9I4ctpbCNT5S16XMQZtdO0HZ+nn4Exhy0FHmdCwPXu/VBEBYcy7UpI4vyb1xiz13KVX/5/oQ== CA key for my accounts at home"
            ];
 
+              # Select internationalisation properties.
+              i18n.consoleFont = "Lat2-Terminus16";
+              i18n.consoleKeyMap = "fr";
+              i18n.defaultLocale = "en_US.UTF-8";
+
+              # Set your time zone.
+              time.timeZone = "Europe/Paris";
+
               # this is set for install not to ask for password
               users.mutableUsers = false;
 
-              fileSystems = [
-                { mountPoint = "/"; fsType = "ext4"; label = "root"; }
-              ];
+	      fileSystems = [
+		{ mountPoint="/"; fstype = "ext4"; label = "root" }
+	      ];
             }
            '';
            partitions = pkgs.writeText "partitions" ''
@@ -43,6 +51,14 @@ let
            users.users.root.openssh.authorizedKeys.keys = [
     "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCT6I73vMHeTX7X990bcK+RKC8aqFYOLZz5uZhwy8jtx/xEEbKJFT/hggKADaBDNkJl/5141VUJ+HmMEUMu+OznK2gE8IfTNOP1zLXD6SjOxCa55MvnyIiXVMAr7R0uxZWy28IrmcmSx1LY5Mx8V13mjY3mp3LVemAy9im+vj6FymjQqgPMg6dHq+aQCeHpx22GWHYEq2ghqEsRpmIBBwwaVaEH8YIjcqZwDcp273SzBrgMEW44ndul5bvh85c71vjm7kblU/BxwBeLFMJFnXYTPxF2JjxhCSMlHBH9hqQjQ8vwaQev6XaJ5TpHgiT3nLAxCyBBgvnfwM7oq6bjHjuyToKFzUsFH6YVsK+/NjagZ5YKlV7vK0o2oF12GrQvwWwa6DUM+LdUNmSX4l4Xq8lB5YbJ5NK0pHRRdzCZL5kPuV+CkXRAHoUSj/pLUqkqGRL70NMtLIYmQbj/l7BZ4PQNP9zKLB4f5pk02A25DbPVfoW2DFL0DRfSF1L8ZDsAVhzUaRKSBZZ4wG231gvB6pCMTpeuvC9+Z/OmYkiXEOn34Qdjx8Bfi7XWKm/PnSgP7dM9Tcf3I0hvymvP6eZ8BjeriKHUE7b3s1aMQz9I4ctpbCNT5S16XMQZtdO0HZ+nn4Exhy0FHmdCwPXu/VBEBYcy7UpI4vyb1xiz13KVX/5/oQ== CA key for my accounts at home"
            ];
+           # Select internationalisation properties.
+           i18n.consoleFont = "Lat2-Terminus16";
+           i18n.consoleKeyMap = "fr";
+           i18n.defaultLocale = "en_US.UTF-8";
+
+           # Set your time zone.
+           time.timeZone = "Europe/Paris";
+
           # systemd.services.inception = {
           #   description = "Self-bootstrap a NixOS installation";
           #   wantedBy = [ "multi-user.target" ];

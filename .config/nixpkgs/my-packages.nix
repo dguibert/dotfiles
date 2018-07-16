@@ -86,5 +86,6 @@ thunderbird
 
 hledger
 haskellPackages.hledger-interest
-pythonPackages.ofxparse
+#pythonPackages.ofxparse
+pythonPackages.weboob
 ]

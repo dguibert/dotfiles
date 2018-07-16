@@ -23,4 +23,25 @@
 
   hardware.trackpoint.enable = true;
   hardware.trackpoint.emulateWheel = true;
+
+  #  autoInstall = ''
+  # https://wiki.archlinux.org/index.php/ZFS#Root_on_ZFS
+  #  zpool create -o feature@multi_vdev_crash_dump=disabled \
+  #                  -o feature@large_dnode=disabled        \
+  #                  -o feature@sha512=disabled             \
+  #                  -o feature@skein=disabled              \
+  #                  -o feature@edonr=disabled              \
+  #		  -o feature@encryption=disabled         \
+  #                  $POOL_NAME $VDEVS
+  #  zfs create -o setuid=off -o devices=off -o sync=disabled -o mountpoint=/tmp <pool>/tmp
+  #  systemctl mask tmp.mount
+  #  zfs create <nameofzpool>/<nameofdataset>
+  #  zfs set quota=20G <nameofzpool>/<nameofdataset>/<directory>
+  #  # zfs create -V 8G -b $(getconf PAGESIZE) \
+  #               -o logbias=throughput -o sync=always\
+  #               -o primarycache=metadata \
+  #               -o com.sun:auto-snapshot=false <pool>/swap
+  # # mkswap -f /dev/zvol/<pool>/swap
+  # # swapon /dev/zvol/<pool>/swap
+  #  '';
 }
