@@ -26,6 +26,7 @@
 
           # this is set for install not to ask for password
           users.mutableUsers = false;
+          environment.systemPackages = with pkgs; [ vim git ];
 
           fileSystems."/" =
   { device = "rpool/root/nixos";
