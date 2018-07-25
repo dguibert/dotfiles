@@ -62,9 +62,16 @@ export PROMPT_COMMAND="history -a; history -c; history -r"
 export GPG_TTY=$(tty)
 # If you enabled the Ssh Agent Support, you also need to tell ssh about it by adding this to your init script:
 unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+if [ -z "$SSH_CLIENT" ]; then
+    #export GPG_AGENT_SOCK=$XDG_RUNTIME_DIR/gnupg/S.gpg-agent
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpg-connect-agent /bye
+else
+    if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+    	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    fi
 fi
+
 
 export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
 #export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
