@@ -1,4 +1,5 @@
 { dguibertHashedPassword ? null
+, installer ? false
 , ...}@args:
 {
   network.description = "NixOS Network";
@@ -55,5 +56,10 @@
     imports = [ ./vbox-57nvj72/configuration.nix ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
+  };
+
+  titan = { pkgs, config, ...}: {
+    imports = [ ./titan/configuration.nix ];
+    deployment.targetHost = "192.168.1.40";
   };
 }
