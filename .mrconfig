@@ -343,3 +343,6 @@ checkout = git clone 'https://github.com/eth-cscs/reframe' 'reframe'
 
 [code/nix-update]
 checkout = git clone 'https://github.com/ryantm/nix-update' 'nix-update'
+
+[code/banquise]
+checkout = git clone 'https://github.com/oxedions/banquise' 'banquise'

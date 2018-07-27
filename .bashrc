@@ -37,6 +37,7 @@ fi
 
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	source $HOME/.nix-profile/etc/profile.d/nix.sh
+	export PATH=/nix/var/nix/profiles/disnix/dguibert/bin:$PATH
 fi
 
 # don't put duplicate lines in the history. See bash(1) for more options
