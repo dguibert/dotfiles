@@ -33,6 +33,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
+" This plugin would NOT work if neither +python/+python3 nor EditorConfig core is available.
 Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'vim-pandoc/vim-pandoc'
