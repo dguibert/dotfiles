@@ -75,7 +75,11 @@ export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 
 if command -v direnv &> /dev/null; then 
   path_direnv=$(command -v direnv)
-  eval "$(direnv hook bash)| sed \"s:/nix\/.*\/bin/direnv:$path_direnv:\""
+#  eval "$(direnv hook bash)| sed \"s:/nix\/.*\/bin/direnv:$path_direnv:\""
+  _direnv_hook() { local previous_exit_status=$?; eval "$("$path_direnv" export bash)"; return $previous_exit_status; }
+  if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
+    PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
+  fi
 fi
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
