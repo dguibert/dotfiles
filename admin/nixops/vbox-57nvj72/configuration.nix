@@ -158,7 +158,10 @@ rec {
   #services.xserver.desktopManager.gnome3.enable = true;
 
   nix.useSandbox = true;
-  nix.extraOptions = "auto-optimise-store = true";
+  nix.extraOptions = ''
+    auto-optimise-store = true
+    plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
+  '';
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
   ];

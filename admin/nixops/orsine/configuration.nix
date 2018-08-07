@@ -233,7 +233,10 @@ rec {
   zramSwap.enable = true;
 
   nix.useSandbox = true;
-  nix.extraOptions = "auto-optimise-store = true";
+  nix.extraOptions = ''
+    auto-optimise-store = true
+    plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
+  '';
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
   ];
@@ -244,7 +247,7 @@ rec {
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.123/24" ];
     listenPort = 51820;
-    privateKeyFile = "/etc/wireguard_key";
+    privateKeyFile = "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -255,6 +258,10 @@ rec {
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
         endpoint   = "orsin.freeboxos.fr:51821";
 	persistentKeepalive = 25;
+      }
+      { allowedIPs = [ "10.147.27.128/32" ];
+        publicKey  = "apJCCchRSbJnTH6misznz+re4RYTxfltROp4fbdtGzI=";
+        endpoint   = "192.168.1.45:500";
       }
       { allowedIPs = [ "10.147.27.123/32" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";

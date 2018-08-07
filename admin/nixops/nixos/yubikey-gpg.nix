@@ -12,10 +12,13 @@
     yubico-piv-tool
   ];
 
-  environment.shellInit = ''
-    gpg-connect-agent /bye
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-  '';
+  #environment.shellInit = ''
+  #if [ -z "$SSH_CLIENT" ]; then
+  #  #export GPG_AGENT_SOCK=$XDG_RUNTIME_DIR/gnupg/S.gpg-agent
+  #  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  #	gpg-connect-agent /bye
+  #fi
+  #'';
 
   services.udev.packages = with pkgs; [
     yubikey-personalization

@@ -53,11 +53,16 @@
     deployment.targetHost = "10.147.17.123";
     # disnixos coordinator
     environment.systemPackages = [ pkgs.disnixos ];
+
+    deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/orsine";
+    deployment.keys.wireguard_key.destDir = "/secrets";
   };
 
   rpi31 = { config, ...}: {
     imports = [ ./rpi31/configuration.nix ];
     deployment.targetHost = "192.168.1.13";
+    deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/rpi31";
+    deployment.keys.wireguard_key.destDir = "/secrets";
   };
 
   vbox-57nvj72 = { pkgs, config, ...}: {
@@ -66,6 +71,8 @@
     deployment.targetHost = "10.147.17.198";
     # disnixos coordinator
     environment.systemPackages = [ pkgs.disnixos ];
+    deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/vbox-57nvj72";
+    deployment.keys.wireguard_key.destDir = "/secrets";
   };
 
   titan = { pkgs, config, ...}: {
