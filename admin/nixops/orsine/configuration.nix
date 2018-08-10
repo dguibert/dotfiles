@@ -26,11 +26,11 @@ rec {
   boot.loader.grub.configurationLimit = 10;
 
   boot.kernelModules = [ "fuse" ];
-  #boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
-    #packageOverrides.linuxPackages = boot.kernelPackages;
+    packageOverrides.linuxPackages = boot.kernelPackages;
   };
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true;
@@ -87,7 +87,7 @@ rec {
     vim htop lsof
     wget telnet
     bc
-    subversion mercurial git
+    git
     gnuplot graphviz imagemagick
     diffstat diffutils binutils zip unzip
     unrar cabextract cpio p7zip lzma which file
@@ -100,7 +100,6 @@ rec {
     wirelesstools wpa_supplicant_gui
     dmenu xlockmore xss-lock slock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap
     evince #calibre
-    mplayer gst_all.gstreamer
     alsaPlugins pavucontrol
 
     nixops

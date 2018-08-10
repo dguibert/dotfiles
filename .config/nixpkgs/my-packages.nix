@@ -25,6 +25,8 @@ gitAndTools.gitRemoteGcrypt
 gitAndTools.git-crypt
 gitAndTools.git-annex-remote-rclone
 rclone
+exiftool
+udftools
 gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
 
 dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
@@ -88,4 +90,5 @@ hledger
 haskellPackages.hledger-interest
 #pythonPackages.ofxparse
 pythonPackages.weboob
+
 ]

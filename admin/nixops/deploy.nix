@@ -1,5 +1,5 @@
 { dguibertHashedPassword ? null
-, installer ? false
+#, installer ? false
 , ...}@args:
 {
   network.description = "NixOS Network";
@@ -11,7 +11,11 @@
 
     users.mutableUsers = false;
 
-    users.users.dguibert = pkgs.lib.mkIf (dguibertHashedPassword != null) {
+    users.users.dguibert =
+#      let
+#        dguibertHashedPassword = <dguibertHashedPassword> pkgs.lib.or null;
+#      in
+    pkgs.lib.mkIf (dguibertHashedPassword != null) {
       isNormalUser = true;
       uid = 1000;
       description = "David Guibert";
@@ -42,15 +46,15 @@
 
     # disnix target
     services.disnix.enable = true;
-    services.dysnomia.properties.mem = "$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')";
-    services.dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
+    dysnomia.properties.mem = "$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')";
+    dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
     # https://hydra.nixos.org/job/disnix/disnix-trunk/tarball/latest/download-by-type/doc/manual/#chap-packages
     environment.variables.PATH = [ "/nix/var/nix/profiles/disnix/default/bin" ];
   };
 
   orsine = { pkgs, config, ...}: {
     imports = [ ./orsine/configuration.nix ];
-    deployment.targetHost = "10.147.17.123";
+    #deployment.targetHost = "10.147.17.123";
     # disnixos coordinator
     environment.systemPackages = [ pkgs.disnixos ];
 
@@ -60,7 +64,7 @@
 
   rpi31 = { config, ...}: {
     imports = [ ./rpi31/configuration.nix ];
-    deployment.targetHost = "192.168.1.13";
+    #deployment.targetHost = "192.168.1.13";
     deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/rpi31";
     deployment.keys.wireguard_key.destDir = "/secrets";
   };
