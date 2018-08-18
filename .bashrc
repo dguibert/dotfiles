@@ -73,8 +73,7 @@ else
     fi
 fi
 
-
-export SQUEUE_FORMAT="%.18i %.25P %.8j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
+export SQUEUE_FORMAT="%.18i %.25P %35j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W"
 #export SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P" # with state
 export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 
@@ -82,8 +81,12 @@ export SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P"
 [ -z "$PS1" ] && return
 
 if command -v direnv &> /dev/null; then 
-  path_direnv=$(readlink $(command -v direnv))
-  eval "$(direnv hook bash| sed s:/nix\/.*\/bin/direnv:$path_direnv:)"
+  path_direnv=$(command -v direnv)
+#  eval "$(direnv hook bash)| sed \"s:/nix\/.*\/bin/direnv:$path_direnv:\""
+  _direnv_hook() { local previous_exit_status=$?; eval "$("$path_direnv" export bash)"; return $previous_exit_status; }
+  if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
+    PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
+  fi
 fi
 #eval `dircolors`
 eval $(TERM=xterm-256color dircolors)
