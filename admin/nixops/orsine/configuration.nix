@@ -33,7 +33,7 @@ rec {
     packageOverrides.linuxPackages = boot.kernelPackages;
   };
   boot.supportedFilesystems = [ "zfs" ];
-  #boot.zfs.enableUnstable = true;
+  boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
 
   networking.hostId = "a8c00e01";
 
