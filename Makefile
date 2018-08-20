@@ -59,7 +59,7 @@ init-nix-%:
 update-host:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --include $$HOSTNAME --option extra-builtins-file ~/admin/nixops/extra-builtins.nix
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix --include $$HOSTNAME
 update-hosts:
 	cd ~/admin/nixops
 	source .envrc
