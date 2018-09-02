@@ -4,7 +4,21 @@ include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
 lib = 
 	  source $HOME/.config/mr/lib/git-remotes
-	  git_annex_sync() { git annex -v sync --content $GIT_ANNEX_OPTIONS; }
+	  git_annex_sync() {
+            if git config --get-all remote.orsine.url; then
+              git config remote.orsine.annex-ignore-command || git config remote.orsine.annex-ignore-command "ssh -f orsine sleep 10"
+              git config remote.orsine.annex-sync-command || git config remote.orsine.annex-sync-command "ssh -f orsine sleep 10"
+	    fi
+            #if git config --get-all remote.orsine-backupwd.url; then
+	    #        git config remote.orsine-backupwd.annex-ignore-command || git config remote.orsine-backupwd.annex-ignore-command "ssh -f orsine \"(cd /backupwd; sleep 10)\""
+	    #        git config remote.orsine-backupwd.annex-sync-command || git config remote.orsine-backupwd.annex-sync-command "ssh -f orsine \"(cd backupwd; sleep 10)\""
+	    #fi
+	    if [ -e Makefile ]; then
+              make sync
+	    else
+              git annex -v sync --content $GIT_ANNEX_OPTIONS;
+            fi
+          }
 	  new_git_annexed_repo() {
 	    git init $MR_REPO
 	    cd $MR_REPO
@@ -280,6 +294,8 @@ checkout = git clone 'https://git.zx2c4.com/WireGuard' 'WireGuard'
 
 [nixpkgs-overlays]
 checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
+push = git push -v public_git
+       git push -v origin
 
 [code/vite]
 checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
