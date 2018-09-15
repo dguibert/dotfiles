@@ -1,11 +1,24 @@
 { config, pkgs, lib, ... }:
 
 {
-          boot.loader.grub.enable = true;
-          boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
-          boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "ehci_pci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-          boot.kernelModules = [ "kvm-intel" ];
-          boot.extraModulePackages = [ ];
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
+    };
+    grub = {
+       efiSupport = true;
+       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
+       device = "nodev";
+    };
+  };
 
           boot.supportedFilesystems = [ "zfs" ];
           networking.hostId="8425e349";
@@ -37,7 +50,58 @@ fileSystems."/home" =
   { device = "rpool/home";
     fsType = "zfs";
   };
+  fileSystems."/boot/efi".label = "EFI";
+  networking.hostName = "titan"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  nix.maxJobs = lib.mkDefault 2;
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
+
+  # Enable touchpad support.
+  # services.xserver.libinput.enable = true;
+
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.users.guest = {
+  #   isNormalUser = true;
+  #   uid = 1000;
+  # };
+
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "18.09"; # Did you read the comment?
+
+  #  networking.wireguard.interfaces.wg0 = {
+  #    ips = [ "10.147.27.24/24" ];
+  #    listenPort = 500;
+  #    privateKeyFile = "/secrets/wireguard_key";
+  #    peers = [
+  #      { allowedIPs = [ "10.147.27.0/24" ];
+  #        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+  #        endpoint   = "83.155.85.77:500";
+  #      }
+  #      { allowedIPs = [ "10.147.27.198/32" ];
+  #        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+  #        endpoint   = "orsin.freeboxos.fr:51821";
+  #	#persistentKeepalive = 25;
+  #      }
+  #      { allowedIPs = [ "10.147.27.128/32" ];
+  #        publicKey  = "apJCCchRSbJnTH6misznz+re4RYTxfltROp4fbdtGzI=";
+  #        endpoint   = "192.168.1.45:500";
+  #      }
+  #      { allowedIPs = [ "10.147.27.123/32" ];
+  #        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+  #        endpoint   = "orsin.freeboxos.fr:51820";
+  #      }
+  #    ];
+  #  };
+  #  networking.firewall.allowedUDPPorts = [ 500 ];
+
 }
-

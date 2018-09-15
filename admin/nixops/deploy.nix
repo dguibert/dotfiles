@@ -128,6 +128,6 @@
 
   titan = { pkgs, config, ...}: {
     imports = [ ./titan/configuration.nix ];
-    deployment.targetHost = "192.168.1.40";
+    deployment.targetHost = "192.168.1.24";
   };
 }

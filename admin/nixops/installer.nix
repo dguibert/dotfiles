@@ -31,6 +31,14 @@ let
         set -x
         sleep 5
         ## https://github.com/zfsonlinux/zfs/wiki/Ubuntu-18.04-Root-on-ZFS
+	sgdisk --zap-all /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z
+	sgdisk     -n3:1M:+512M -t3:EF00 /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z
+	sgdisk     -n1:0:0      -t1:BF01 /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z
+
+	sgdisk --zap-all /dev/disk/by-id/ata-ST3160815AS_5RX02WNE
+	sgdisk     -n3:1M:+512M -t3:EF00 /dev/disk/by-id/ata-ST3160815AS_5RX02WNE
+	sgdisk     -n1:0:0      -t1:BF01 /dev/disk/by-id/ata-ST3160815AS_5RX02WNE
+
         #for disk in /dev/sda /dev/sdb; do
         #  mdadm --zero-superblock --force $disk
         #  sgdisk --zap-all $disk
@@ -59,11 +67,11 @@ let
 #        sfdisk --dump /dev/sda | sfdisk --force /dev/sdb
 #
 #        # Unencrypted:
-#        zpool create -o ashift=12 \
-#              -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
-#              -O xattr=sa -O mountpoint=/ -R /mnt \
-#              -f \
-#              rpool mirror /dev/sda2 /dev/sdb2
+        zpool create -o ashift=12 \
+              -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
+              -O xattr=sa -O mountpoint=/ -R /mnt \
+              -f \
+              rpool mirror /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z-part1 /dev/disk/by-id/ata-ST3160815AS_5RX02WNE-part1
 #        # LUKS:
 #        # cryptsetup luksFormat -c aes-xts-plain64 -s 256 -h sha256 \
 #        #      $disk-part1
@@ -73,10 +81,10 @@ let
 #        #      -O xattr=sa -O mountpoint=/ -R /mnt \
 #        #               rpool /dev/mapper/luks1
 #
-#        zfs create -o canmount=off -o mountpoint=none         rpool/root
-#        zfs create -o mountpoint=legacy                       rpool/root/nixos
-#        zfs create -o mountpoint=legacy -o setuid=off         rpool/home
-#        zfs create -o mountpoint=/root                        rpool/home/root
+        zfs create -o canmount=off -o mountpoint=none         rpool/root
+        zfs create -o mountpoint=legacy                       rpool/root/nixos
+        zfs create -o mountpoint=legacy -o setuid=off         rpool/home
+        zfs create -o mountpoint=/root                        rpool/home/root
 
         zpool import rpool
         # Mount the filesystems manually
@@ -87,6 +95,10 @@ let
         
         # set boot property
         zpool set bootfs="rpool/root/nixos" rpool
+
+	mkdosfs -F 32 -n EFI /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z-part3
+	mkdir -p /mnt/boot/efi
+	mount /dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z-part3 /mnt/boot/efi/
 
         mkdir -p /mnt/etc/nixos/
         cp ${cfg} /mnt/etc/nixos/configuration.nix
