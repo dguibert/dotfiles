@@ -87,3 +87,17 @@ clean-packages-%:
 	set -x
 	cluster=$*
 	ssh $$cluster nix-collect-garbage -d
+
+UUID_1=e13483d5-e688-42ea-8ac7-abdfed45bc4c
+BLURAY_ID=1
+BLURAY_UUID=$(UUID_1)
+new_bluray:
+	#read "are you sure?"
+	echo mkfs.udf --utf8 --udfrev=2.01 --label bluray_$(BLURAY_ID) --vsid=$(BLURAY_UUID) --lvid=bluray_$(BLURAY_ID) --vid=bluray_$(BLURAY_ID) --fsid=bluray_$(BLURAY_ID) --fullvsid=bluray_$(BLURAY_ID) /dev/sdb
+
+
+# 	--lvid=            Logical Volume Identifier (default: LinuxUDF)
+#	--vid=             Volume Identifier (default: LinuxUDF)
+#	--vsid=            17.-127. character of Volume Set Identifier (default: LinuxUDF)
+#	--fsid=            File Set Identifier (default: LinuxUDF)
+#	--fullvsid
