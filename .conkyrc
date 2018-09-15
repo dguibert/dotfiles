@@ -17,7 +17,5 @@ ${cpu cpu0}% ${freq_g 0}GHz \
 ${if_existing /sys/class/power_supply/BAT0/present}Bat ${battery_percent BAT0}% (${battery_time BAT0})${else}AC${endif} \
 ${if_up enp0s3}${upspeedf enp0s3}k ${downspeedf enp0s3}k${endif} \
 ${if_up bond0}${upspeedf bond0}k ${downspeedf bond0}k${endif} \
-${if_up wlp0s29f7u1}${upspeedf wlp0s29f7u1}k ${downspeedf wlp0s29f7u1}k${endif} \
-${if_up wlp0s26f7u1}${upspeedf wlp0s26f7u1}k ${downspeedf wlp0s26f7u1}k${endif} \
 ${time %H:%M}
 
