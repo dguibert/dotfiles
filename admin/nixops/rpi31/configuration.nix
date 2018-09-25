@@ -17,12 +17,6 @@ rec {
   #    "it cannot be cross compiled";
   #};
 
-  # Needed by RPi firmware
-  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
-  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
-    allowUnfree = true;
-    #packageOverrides.linuxPackages = boot.kernelPackages;
-  };
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
@@ -58,16 +52,6 @@ rec {
 
   # !!! Adding a swap file is optional, but strongly recommended!
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
-
-  # Select internationalisation properties.
-  i18n = {
-     consoleFont = "Lat2-Terminus16";
-     consoleKeyMap = "fr";
-     defaultLocale = "en_US.UTF-8";
-   };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

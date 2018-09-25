@@ -52,7 +52,7 @@ init-dotfiles-%:
 init-nix-%:
 	set -x
 	cluster=$*
-	curl -C - -O https://nixos.org/releases/nix/nix-2.0.4/nix-2.0.4-x86_64-linux.tar.bz2
+	#curl -C - -O https://nixos.org/releases/nix/nix-2.0.4/nix-2.0.4-x86_64-linux.tar.bz2
 	rsync -aP nix-2.0.4-x86_64-linux.tar.bz2 $$cluster:
 	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-2.0.4-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
 
@@ -80,10 +80,24 @@ update-packages-lobo:
 	set -x
 	cluster=lobo
 	rm -f pkgs/$$cluster*
-	packages=$$(nix-build -o pkgs/$$cluster -E 'with import <nixpkgs> {}; [ gitAndTools.git-annex gitAndTools.hub gitFull tree python3 cmake ncurses.all ]')
+	packages=$$(nix-build -o pkgs/$$cluster -E 'with import <nixpkgs> {}; [ nix gitAndTools.git-annex gitAndTools.hub gitFull tree python3 cmake ncurses.all ]')
 	nix-copy-closure -v --to $$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
 clean-packages-%:
 	set -x
 	cluster=$*
 	ssh $$cluster nix-collect-garbage -d
+
+UUID_1=e13483d5-e688-42ea-8ac7-abdfed45bc4c
+BLURAY_ID=1
+BLURAY_UUID=$(UUID_1)
+new_bluray:
+	#read "are you sure?"
+	echo mkfs.udf --utf8 --udfrev=2.01 --label bluray_$(BLURAY_ID) --vsid=$(BLURAY_UUID) --lvid=bluray_$(BLURAY_ID) --vid=bluray_$(BLURAY_ID) --fsid=bluray_$(BLURAY_ID) --fullvsid=bluray_$(BLURAY_ID) /dev/sdb
+
+
+# 	--lvid=            Logical Volume Identifier (default: LinuxUDF)
+#	--vid=             Volume Identifier (default: LinuxUDF)
+#	--vsid=            17.-127. character of Volume Set Identifier (default: LinuxUDF)
+#	--fsid=            File Set Identifier (default: LinuxUDF)
+#	--fullvsid

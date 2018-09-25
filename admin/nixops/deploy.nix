@@ -12,6 +12,16 @@ in
     deployment.alwaysActivate = false;
     deployment.hasFastConnection = true;
 
+    # Select internationalisation properties.
+    i18n = {
+       consoleFont = "Lat2-Terminus16";
+       consoleKeyMap = "fr";
+       defaultLocale = "en_US.UTF-8";
+     };
+  
+    # Set your time zone.
+    time.timeZone = "Europe/Paris";
+
     users.mutableUsers = false;
 
     users.users.dguibert =
@@ -45,6 +55,7 @@ in
     services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
 
     networking.useNetworkd = true;
+    networking.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
     services.nscd.enable = false; # no real gain (?) on workstations
 
     # disnix target
@@ -59,9 +70,12 @@ in
   };
 
   orsine = { pkgs, config, ...}: {
-    imports = [ ./orsine/configuration.nix ];
+    imports = [ ./orsine/configuration.nix 
+      ./nixos/yubikey-gpg.nix
+      ./nixos/distributed-build.nix
+      ./nixos/nix-conf.nix
+    ];
     #deployment.targetHost = "10.147.17.123";
-    # disnixos coordinator
     environment.systemPackages = [ pkgs.disnixos pkgs.wireguard-tools ];
 
     deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
@@ -129,7 +143,11 @@ in
   };
 
   vbox-57nvj72 = { pkgs, config, ...}: {
-    imports = [ ./vbox-57nvj72/configuration.nix ];
+    imports = [ ./vbox-57nvj72/configuration.nix
+      ./nixos/yubikey-gpg.nix
+      ./nixos/distributed-build.nix
+      ./nixos/nix-conf.nix
+    ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
     deployment.keys.wireguard_key.text = pass_ "wireguard/vbox-57nvj72";
@@ -143,7 +161,13 @@ in
   };
 
   titan = { pkgs, config, ...}: {
-    imports = [ ./titan/configuration.nix ];
-    deployment.targetHost = "192.168.1.40";
+    imports = [ ./titan/configuration.nix 
+      ./nixos/yubikey-gpg.nix
+      ./nixos/distributed-build.nix
+      ./nixos/nix-conf.nix
+    ];
+    deployment.targetHost = "192.168.1.24";
+    deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
+    deployment.keys.wireguard_key.destDir = "/secrets";
   };
 }

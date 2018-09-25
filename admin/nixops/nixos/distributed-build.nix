@@ -6,7 +6,7 @@
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIHV7fF2Ne3Frd+EQlyKgI5XRfq33WfacGLtUSXU+Yrg nixBuild" ];
   };
-  # on the client achine
+  # on the client machine
   programs.ssh.extraConfig = ''
     Host rpi31
       HostName 192.168.1.13

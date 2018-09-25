@@ -16,6 +16,7 @@ let mapAttrs = f: set: builtins.listToAttrs (
       gorilla     = "17.03";
       hummingbird = "17.09";
       impala      = "18.03";
+      jellyfish   = "18.09";
       unstable    = "unstable";
     };
 in mapAttrs (v:

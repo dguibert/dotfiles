@@ -16,8 +16,6 @@ rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../nixos/yubikey-gpg.nix
-      ../nixos/distributed-build.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -38,7 +36,6 @@ rec {
   networking.hostId = "a8c00e01";
 
   networking.hostName = "orsine"; # Define your hostname.
-  networking.useNetworkd = true;
 
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.wireless.interfaces = [ "wlp0s29f7u1" ];
@@ -99,16 +96,6 @@ rec {
     };
   };
   services.tlp.enable = true;
-
-  # Select internationalisation properties.
-  i18n = {
-     consoleFont = "Lat2-Terminus16";
-     consoleKeyMap = "fr";
-     defaultLocale = "en_US.UTF-8";
-   };
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -251,30 +238,9 @@ rec {
 
   security.wrappers.xlock.source = "${pkgs.xlockmore}/bin/xlock";
 
-  security.sudo.enable = true;
-  security.sudo.wheelNeedsPassword = false;
-
   fileSystems = [
   { mountPoint = "/tmp"; device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; }
   ];
-  systemd.tmpfiles.rules = [
-    "D! /tmp 1777 root root"
-    "d /tmp 1777 root root 10d"
-  ];
-
-  zramSwap.enable = true;
-
-  nix.useSandbox = true;
-  nix.extraOptions = ''
-    auto-optimise-store = true
-    plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
-  '';
-  nix.binaryCachePublicKeys = [
-    "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-  ];
-
-  # Enable ZeroTierOne
-  services.zerotierone.enable = true;
 
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.123/24" ];
@@ -349,14 +315,14 @@ rec {
   systemd.services.zfs-import-backupwd = {
     description = "automatically import backupwd zpool";
     after = [
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NHVC1\x2dpart9.device"
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61PEJW5\x2dpart9.device"
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NTXH5\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61NHVC1\\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61PEJW5\\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61NTXH5\\x2dpart9.device"
     ];
     wantedBy = [
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NHVC1\x2dpart9.device"
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61PEJW5\x2dpart9.device"
-      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NTXH5\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61NHVC1\\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61PEJW5\\x2dpart9.device"
+      "dev-disk-by\\x2did-ata\\x2dWDC_WD10TMVV\\x2d11TK7S1_WD\\x2dWXL1E61NTXH5\\x2dpart9.device"
     ];
     serviceConfig = {
       Type = "oneshot";

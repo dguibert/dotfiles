@@ -7,8 +7,6 @@ rec {
   ];
   services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
-  i18n.consoleKeyMap="fr";
-
   nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     #packageOverrides.linuxPackages = boot.kernelPackages;
@@ -132,9 +130,6 @@ rec {
     #  };
 
   
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "fr";
@@ -152,15 +147,6 @@ rec {
   #X11 and Gnome3
   #services.xserver.desktopManager.default = "gnome3";
   #services.xserver.desktopManager.gnome3.enable = true;
-
-  nix.useSandbox = true;
-  nix.extraOptions = ''
-    auto-optimise-store = true
-    plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
-  '';
-  nix.binaryCachePublicKeys = [
-    "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-  ];
 
   services.cntlm.enable = true;
   services.cntlm.username = "a629925";

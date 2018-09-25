@@ -283,7 +283,7 @@ checkout = git clone 'https://github.com/NumScale/boost.dispatch' 'boost.dispatc
 [code/casync]
 checkout = git clone 'https://github.com/systemd/casync' 'casync'
 
-[.nixpkgs/home-manager]
+[.config/nixpkgs/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
 
 [code/charliecloud]

@@ -25,23 +25,23 @@ set hidden
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" let Vundle manage Vundle, required
+"" let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline' " Lean & mean status/tabline for vim that's light as air.
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'godlygeek/tabular' " align everything
+"Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
-" This plugin would NOT work if neither +python/+python3 nor EditorConfig core is available.
+"" This plugin would NOT work if neither +python/+python3 nor EditorConfig core is available.
 Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
-
-Plugin 'ledger/vim-ledger'
-
-Plugin 'ctrlpvim/ctrlp.vim'
+"
+"Plugin 'ledger/vim-ledger'
+"
+""Plugin 'ctrlpvim/ctrlp.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -62,8 +62,8 @@ colorscheme solarized
 set laststatus=2
 let g:airline_powerline_fonts=1
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+"let g:ctrlp_map = '<c-p>'
+"let g:ctrlp_cmd = 'CtrlP'
 
 au BufWinLeave * silent! mkview
 au BufWinEnter * silent! loadview

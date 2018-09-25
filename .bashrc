@@ -40,6 +40,8 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	export PATH=/nix/var/nix/profiles/disnix/dguibert/bin:$PATH
 fi
 
+#export PATH=/scratch_gpfs/bguibertd/nix/var/nix/profiles/default/bin:$PATH
+
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 export HISTIGNORE="ls:cd:clear:[bf]g"
