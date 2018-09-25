@@ -1,6 +1,9 @@
 { dguibertHashedPassword ? null
 #, installer ? false
 , ...}@args:
+let
+  pass_ = key: if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key else "without-pass";
+in
 {
   network.description = "NixOS Network";
   network.enableRollback = true;
@@ -50,6 +53,9 @@
     dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
     # https://hydra.nixos.org/job/disnix/disnix-trunk/tarball/latest/download-by-type/doc/manual/#chap-packages
     environment.variables.PATH = [ "/nix/var/nix/profiles/disnix/default/bin" ];
+
+    # Package ‘openafs-1.6.22.2-4.18.4’ in /home/dguibert/code/nixpkgs/pkgs/servers/openafs/1.6/module.nix:49 is marked as broken, refusing to evaluate.
+    nixpkgs.config.allowBroken = true;
   };
 
   orsine = { pkgs, config, ...}: {
@@ -58,13 +64,12 @@
     # disnixos coordinator
     environment.systemPackages = [ pkgs.disnixos pkgs.wireguard-tools ];
 
-    deployment.keys.wireguard_key.text = if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass "wireguard/orsine" else "without-pass";
-    #deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/orsine";
+    deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
     deployment.keys.wireguard_key.destDir = "/secrets";
 
     #################################################################
     # Test raw networkd wireguard support
-    boot.extraModulePackages = [ pkgs.linuxPackages.wireguard ];
+    # boot.extraModulePackages = [ pkgs.linuxPackages.wireguard ];
     #environment.systemPackages = [ pkgs.wireguard-tools ];
     #deployment.keys."41-wg1-k.netdev".text = if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass "wireguard/orsine-netdev" else "";
     #deployment.keys."41-wg1-k.netdev".destDir = "/etc/systemd/network/";
@@ -98,11 +103,12 @@
     # sys-subsystem-net-devices-wg1.device
     #################################################################
     #################################################################
-    ## mesh wg1
+    ### mesh wg0
     #services.babeld.enable = true;
-    #services.babeld.interfaces.wg1 = {
+    #services.babeld.interfaces.wg0 = {
     #  type = "tunnel";
     #};
+    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:1" ];
     # ip -6 addr add $(ahcp-generate-address fe80::) dev wg1
     #services.babeld.extraConfig = ''
     #redistribute local if <interface> deny
@@ -112,18 +118,28 @@
   rpi31 = { config, ...}: {
     imports = [ ./rpi31/configuration.nix ];
     #deployment.targetHost = "192.168.1.13";
-    deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/rpi31";
+    deployment.keys.wireguard_key.text = pass_ "wireguard/rpi31";
     deployment.keys.wireguard_key.destDir = "/secrets";
+    ### mesh wg0
+    #services.babeld.enable = true;
+    #services.babeld.interfaces.wg0 = {
+    #  type = "tunnel";
+    #};
+    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:2" ];
   };
 
   vbox-57nvj72 = { pkgs, config, ...}: {
     imports = [ ./vbox-57nvj72/configuration.nix ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
-    # disnixos coordinator
-    environment.systemPackages = [ pkgs.disnixos ];
-    deployment.keys.wireguard_key.text = builtins.extraBuiltins.pass "wireguard/vbox-57nvj72";
+    deployment.keys.wireguard_key.text = pass_ "wireguard/vbox-57nvj72";
     deployment.keys.wireguard_key.destDir = "/secrets";
+    ### mesh wg0
+    #services.babeld.enable = true;
+    #services.babeld.interfaces.wg0 = {
+    #  type = "tunnel";
+    #};
+    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:3" ];
   };
 
   titan = { pkgs, config, ...}: {

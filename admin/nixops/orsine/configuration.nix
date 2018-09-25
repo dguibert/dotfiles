@@ -41,14 +41,47 @@ rec {
   networking.useNetworkd = true;
 
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.interfaces = [ "wlp0s26f7u1" "wlp0s29f7u1" ];
+  networking.wireless.interfaces = [ "wlp0s29f7u1" ];
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
 
-  networking.bonds.bond0.interfaces = [ "enp0s25" /*"wlp0s26f7u1"*/ ];
-  boot.extraModprobeConfig=''
-    options bonding mode=active-backup miimon=100 primary=enp0s25
-  '';
+  systemd.network.netdevs."40-bond0" = {
+    netdevConfig.Name = "bond0";
+    netdevConfig.Kind = "bond";
+    bondConfig.Mode="active-backup";
+    bondConfig.MIIMonitorSec="100s";
+    bondConfig.PrimaryReselectPolicy="always";
+  };
+  systemd.network.networks."40-bond0" = {
+    name = "bond0";
+    DHCP = "both";
+    networkConfig.BindCarrier = "enp0s25 wlp0s29f7u1";
+  };
+#  systemd.network.networks = listToAttrs (flip map [ "enp0s25" "wlp0s26f7u1" ] (bi:
+#    nameValuePair "40-${bi}" {
+#      DHCP = "none";
+#      networkConfig.Bond = "bond0";
+#      networkConfig.IPv6PrivacyExtensions = "kernel";
+#    }));
+  systemd.network.networks."99-main".name = "!zt0 wlp2s0";
+  systemd.network.networks."40-enp0s25" = {
+    name = "enp0s25";
+    DHCP = "none";
+    networkConfig.Bond = "bond0";
+    #networkConfig.PrimarySlave=true;
+    networkConfig.IPv6PrivacyExtensions = "kernel";
+  };
+  systemd.network.networks."40-wlp0s29f7u1" = {
+    name = "wlp0s29f7u1";
+    DHCP = "none";
+    networkConfig.Bond = "bond0";
+    #networkConfig.ActiveSlave=false;
+    networkConfig.IPv6PrivacyExtensions = "kernel";
+  };
+  #{networking.bonds.bond0.interfaces = [ "enp0s25" /*"wlp0s26f7u1"*/ ];
+  #{boot.extraModprobeConfig=''
+  #{  options bonding mode=active-backup miimon=100 primary=enp0s25
+  #{'';
 
   hardware.bluetooth.enable = true;
 
@@ -300,6 +333,10 @@ rec {
   # ca.desrt.dconf was not provided by any .service files
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
+  ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61NHVC1-part9
+  ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61PEJW5-part9
+  ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61NTXH5-part9
+  ## 
   ##[Unit]
   ##After=dev-disk-by\x2did-wwn\x2d0x60014057ab42867d066fd393edb4abd6.device
   ##
@@ -309,14 +346,23 @@ rec {
   ##
   ##[Install]
   ##WantedBy=dev-disk-by\x2did-wwn\x2d0x60014057ab42867d066fd393edb4abd6.device
-  #systemd.services.zfs-import-backupwd = {
-  #  after = [];
-  #  wantedBy = [];
-  #  serviceConfig = {
-  #    Type = "oneshot";
-  #    RemainAfterExit = true;
-  #    ExecStart = "${pkgs.zfs}/sbin/zpool import backupwd";
-  #    #ExecStartPost = "logger \"started ZFS pool backupwd\"";
-  #  };
-  #};
+  systemd.services.zfs-import-backupwd = {
+    description = "automatically import backupwd zpool";
+    after = [
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NHVC1\x2dpart9.device"
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61PEJW5\x2dpart9.device"
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NTXH5\x2dpart9.device"
+    ];
+    wantedBy = [
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NHVC1\x2dpart9.device"
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61PEJW5\x2dpart9.device"
+      "dev-disk-by\x2did-ata\x2dWDC_WD10TMVV\x2d11TK7S1_WD\x2dWXL1E61NTXH5\x2dpart9.device"
+    ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.zfs}/sbin/zpool import backupwd";
+      #ExecStartPost = "logger \"started ZFS pool backupwd\"";
+    };
+  };
 }

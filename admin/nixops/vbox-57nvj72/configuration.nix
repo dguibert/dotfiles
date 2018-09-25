@@ -186,17 +186,17 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-        endpoint   = "orsin.freeboxos.fr:500";
+        endpoint   = "83.155.85.77:500";
 	persistentKeepalive = 25;
       }
       { allowedIPs = [ "10.147.27.198/32" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-        endpoint   = "orsin.freeboxos.fr:51821";
+        endpoint   = "83.155.85.77:51821";
 	persistentKeepalive = 25;
       }
       { allowedIPs = [ "10.147.27.123/32" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint   = "orsin.freeboxos.fr:51820";
+        endpoint   = "83.155.85.77:51820";
 	persistentKeepalive = 25;
       }
     ];
@@ -211,4 +211,6 @@ NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
+
+  virtualisation.docker.enable = true;
 }
