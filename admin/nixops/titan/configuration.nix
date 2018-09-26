@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
     ];
 
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.efiSupport = true;
