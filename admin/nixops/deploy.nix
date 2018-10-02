@@ -74,6 +74,7 @@ in
       ./nixos/yubikey-gpg.nix
       ./nixos/distributed-build.nix
       ./nixos/nix-conf.nix
+      ./nixos/x11.nix
     ];
     #deployment.targetHost = "10.147.17.123";
     environment.systemPackages = [ pkgs.disnixos pkgs.wireguard-tools ];
@@ -81,6 +82,10 @@ in
     deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
     deployment.keys.wireguard_key.destDir = "/secrets";
 
+    # for X1.nix
+    services.xserver.resolutions = [{x=1440; y=900;}];
+    services.xserver.videoDrivers = [ "intel" ];
+    hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
     #################################################################
     # Test raw networkd wireguard support
     # boot.extraModulePackages = [ pkgs.linuxPackages.wireguard ];
@@ -165,9 +170,13 @@ in
       ./nixos/yubikey-gpg.nix
       ./nixos/distributed-build.nix
       ./nixos/nix-conf.nix
+      ./nixos/x11.nix
     ];
     deployment.targetHost = "192.168.1.24";
     deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
     deployment.keys.wireguard_key.destDir = "/secrets";
+
+    services.xserver.videoDrivers = [ "nvidia" ];
+    hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
   };
 }
