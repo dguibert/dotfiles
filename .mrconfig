@@ -6,12 +6,14 @@ lib =
 	  source $HOME/.config/mr/lib/git-remotes
 	  git_annex_sync() {
 	           if git config --get-all remote.orsine.url; then
-	             git config remote.orsine.annex-ignore-command || git config remote.orsine.annex-ignore-command "ssh -f orsine sleep 10"
-	             git config remote.orsine.annex-sync-command || git config remote.orsine.annex-sync-command "ssh -f orsine sleep 10"
+	             git config remote.orsine.annex-ignore-command || git config remote.orsine.annex-ignore-command "ssh -Nf orsine sleep 1 2>/dev/null || echo \"orsine ignored\""
+	             git config remote.orsine.annex-sync-command || git config remote.orsine.annex-sync-command "ssh -Nf orsine sleep 1   2>/dev/null || echo \"orsine not synced\""
 	    fi
 	           #if git config --get-all remote.orsine-backupwd.url; then
 	    #        git config remote.orsine-backupwd.annex-ignore-command || git config remote.orsine-backupwd.annex-ignore-command "ssh -f orsine \"(cd /backupwd; sleep 10)\""
 	    #        git config remote.orsine-backupwd.annex-sync-command || git config remote.orsine-backupwd.annex-sync-command "ssh -f orsine \"(cd backupwd; sleep 10)\""
+	## annex-ignore-command = ssh -Nf orsine cd /backupwd 2>/dev/null || echo "orsine-backupwd ignored"
+	## annex-sync-command = ssh -Nf orsine cd /backupwd   2>/dev/null || echo "orsine-backupwd not synced"
 	    #fi
 	    if [ -e Makefile ]; then
 	             make sync
