@@ -12,6 +12,7 @@ in
     deployment.alwaysActivate = false;
     deployment.hasFastConnection = true;
 
+    environment.systemPackages = [ pkgs.vim ];
     # Select internationalisation properties.
     i18n = {
        consoleFont = "Lat2-Terminus16";
@@ -176,7 +177,16 @@ in
     deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
     deployment.keys.wireguard_key.destDir = "/secrets";
 
-    services.xserver.videoDrivers = [ "nvidia" ];
+    # services.xserver.videoDrivers = [ "nvidia" ];
+    #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
+    ## [   13.576513] NVRM: The NVIDIA Quadro FX 550 GPU installed in this system is
+    ##                NVRM:  supported through the NVIDIA 304.xx Legacy drivers. Please
+    ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
+    ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
+    ##                NVRM:  this GPU.  Continuing probe...
+    hardware.nvidia.modesetting.enable = true;
+    services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+
     hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
   };
 }
