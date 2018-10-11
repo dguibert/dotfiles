@@ -2,7 +2,8 @@
 #, installer ? false
 , ...}@args:
 let
-  pass_ = key: if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key else "without-pass";
+  #pass_ = key: if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key else "without-pass";
+  pass_ = key: if builtins ? exec then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ] else "without-pass";
 in
 {
   network.description = "NixOS Network";
