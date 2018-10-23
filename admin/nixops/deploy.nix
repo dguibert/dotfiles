@@ -9,11 +9,15 @@ in
   network.description = "NixOS Network";
   network.enableRollback = true;
 
-  defaults = { nodes, pkgs, config, ...}: {
+  defaults = { nodes, pkgs, config, lib, ...}: {
+    imports = [
+      ~/.config/nixpkgs/home-manager/nixos/default.nix
+      ];
     deployment.alwaysActivate = false;
     deployment.hasFastConnection = true;
 
     environment.systemPackages = [ pkgs.vim ];
+    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
     # Select internationalisation properties.
     i18n = {
        consoleFont = "Lat2-Terminus16";
