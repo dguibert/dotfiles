@@ -39,6 +39,9 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 	source $HOME/.nix-profile/etc/profile.d/nix.sh
 	export PATH=/nix/var/nix/profiles/disnix/dguibert/bin:$PATH
 fi
+if [ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+	. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+fi
 
 #export PATH=/scratch_gpfs/bguibertd/nix/var/nix/profiles/default/bin:$PATH
 

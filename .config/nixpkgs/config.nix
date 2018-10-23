@@ -25,7 +25,7 @@ with pkgs.lib;
   virtualbox.enableExtensionPack = true;
 
   packageOverrides = super: let self = super.pkgs; in with self; {
-	  #home-manager = import ./home-manager { inherit pkgs; };
+	  home-manager = import ./home-manager { inherit pkgs; };
 
     git-credential-password-store = stdenv.mkDerivation {
       name = "git-credential-password-store";
