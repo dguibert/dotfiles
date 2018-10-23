@@ -42,6 +42,7 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 "Plugin 'ledger/vim-ledger'
 "
 ""Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'kalafut/vim-taskjuggler'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
