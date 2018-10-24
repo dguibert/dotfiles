@@ -59,11 +59,11 @@ init-nix-%:
 update-host:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix --include $$HOSTNAME
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option allow-unsafe-native-code-during-evaluation true --include $$HOSTNAME
 update-hosts:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs -option allow-unsafe-native-code-during-evaluation true
 update-packages:
 	nix-env -f $$HOME/.config/nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/ --show-trace
 	nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
