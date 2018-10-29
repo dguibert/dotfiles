@@ -10,18 +10,18 @@ rec {
 
   zramSwap.enable = true;
 
-  # FIXME
-  # Checking that Nix can read nix.conf...
-  # error: could not dynamically open plugin file '/nix/store/3s0msjb7l1m0xff6j0lvg6ycwvy43b5g-nix-plugins-5.0.0/lib/nix/plugins/libnix-extra-builtins.so': /nix/store/3s0msjb7l1m0xff6j0lvg6ycwvy43b5g-nix-plugins-5.0.0/lib/nix/plugins/libnix-extra-builtins.so: undefined symbol: _Z18GC_throw_bad_allocv
-  #nix.checkConfig = false;
-
   nix.useSandbox = true;
-  nix.extraOptions = ''
-    auto-optimise-store = true
-    #plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
-  '';
+  nix.autoOptimiseStore = true;
+  #nix.extraOptions = ''
+  #   plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
+  # '';
+  nix.binaryCaches = [
+    "https://cache.nixos.org"
+    "https://r-ryantm.cachix.org"
+  ];
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+    "r-ryantm.cachix.org-1:gkUbLkouDAyvBdpBX0JOdIiD2/DP1ldF3Z3Y6Gqcc4c="
   ];
 
   # Needed by RPi firmware

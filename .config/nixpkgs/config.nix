@@ -2,6 +2,9 @@
 { pkgs }:
 with pkgs.lib;
 {
+  permittedInsecurePackages = [
+    "oraclejdk-10.0.2"
+  ];
   dwm.patches = [
     ./dwm.patches/0001-pertag.patch
     ./dwm.patches/0002-apply-dwm-6.1-systray.diff.patch
