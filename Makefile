@@ -89,8 +89,9 @@ clean-packages-%:
 	ssh $$cluster nix-collect-garbage -d
 
 UUID_1=e13483d5-e688-42ea-8ac7-abdfed45bc4c
-BLURAY_ID=1
-BLURAY_UUID=$(UUID_1)
+UUID_2=d8c5a336-76b1-44a6-a49e-8968928f5193
+BLURAY_ID=2
+BLURAY_UUID=$(UUID_2)
 new_bluray:
 	#read "are you sure?"
 	echo mkfs.udf --utf8 --udfrev=2.01 --label bluray_$(BLURAY_ID) --vsid=$(BLURAY_UUID) --lvid=bluray_$(BLURAY_ID) --vid=bluray_$(BLURAY_ID) --fsid=bluray_$(BLURAY_ID) --fullvsid=bluray_$(BLURAY_ID) /dev/sdb
