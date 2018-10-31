@@ -13,17 +13,17 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "rpool/root/nixos";
+    { device = "icybox1/root/nixos";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "rpool/home";
+    { device = "icybox1/home";
       fsType = "zfs";
     };
 
   fileSystems."/boot/efi" =
-    { label = "EFI";
+    { label = "EFI1";
       fsType = "vfat";
     };
 

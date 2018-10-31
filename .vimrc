@@ -42,6 +42,7 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 "Plugin 'ledger/vim-ledger'
 "
 ""Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'kalafut/vim-taskjuggler'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -54,7 +55,7 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 set background=light
-"set background=dark
+" set background=dark
 set t_Co=256
 colorscheme solarized
 

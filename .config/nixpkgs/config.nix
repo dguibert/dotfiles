@@ -2,6 +2,9 @@
 { pkgs }:
 with pkgs.lib;
 {
+  permittedInsecurePackages = [
+    "oraclejdk-10.0.2"
+  ];
   dwm.patches = [
     ./dwm.patches/0001-pertag.patch
     ./dwm.patches/0002-apply-dwm-6.1-systray.diff.patch
@@ -25,7 +28,7 @@ with pkgs.lib;
   virtualbox.enableExtensionPack = true;
 
   packageOverrides = super: let self = super.pkgs; in with self; {
-	  #home-manager = import ./home-manager { inherit pkgs; };
+	  home-manager = import ./home-manager { inherit pkgs; };
 
     git-credential-password-store = stdenv.mkDerivation {
       name = "git-credential-password-store";

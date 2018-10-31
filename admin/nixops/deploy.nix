@@ -2,18 +2,24 @@
 #, installer ? false
 , ...}@args:
 let
-  #pass_ = key: if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key else "without-pass";
-  pass_ = key: if builtins ? exec then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ] else "without-pass";
+  pass_ = key: if builtins ? extraBuiltins then 
+                 if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
+                 else "without-pass"
+                 else if builtins ? exec then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ] else "without-pass";
 in
 {
   network.description = "NixOS Network";
   network.enableRollback = true;
 
-  defaults = { nodes, pkgs, config, ...}: {
+  defaults = { nodes, pkgs, config, lib, ...}: {
+    imports = [
+      ~/.config/nixpkgs/home-manager/nixos/default.nix
+      ];
     deployment.alwaysActivate = false;
     deployment.hasFastConnection = true;
 
     environment.systemPackages = [ pkgs.vim ];
+    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
     # Select internationalisation properties.
     i18n = {
        consoleFont = "Lat2-Terminus16";

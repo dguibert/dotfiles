@@ -21,12 +21,12 @@ rec {
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
+  boot.loader.generic-extlinux-compatible.configurationLimit = 2;
 
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
   #boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.loader.grub.configurationLimit = 2;
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true;
   networking.hostId = "8425e349";
@@ -103,4 +103,8 @@ rec {
   };
   networking.firewall.allowedUDPPorts = [ 9993 500 ];
 
-}
+  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
+  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
+    #packageOverrides.linuxPackages = boot.kernelPackages;
+  };
+ }

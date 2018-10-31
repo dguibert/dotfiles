@@ -59,11 +59,13 @@ init-nix-%:
 update-host:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix --include $$HOSTNAME
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option allow-unsafe-native-code-during-evaluation true --include $$HOSTNAME
+	#nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix --include $$HOSTNAME
 update-hosts:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option allow-unsafe-native-code-during-evaluation true --include $$HOSTNAME
+	#nixops deploy -I nixpkgs=$$HOME/code/nixpkgs -option extra-builtins-file ~/admin/nixops/extra-builtins.nix
 update-packages:
 	nix-env -f $$HOME/.config/nixpkgs/my-packages.nix -ir -I nixpkgs=$$HOME/code/nixpkgs/ --show-trace
 	nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
@@ -89,8 +91,9 @@ clean-packages-%:
 	ssh $$cluster nix-collect-garbage -d
 
 UUID_1=e13483d5-e688-42ea-8ac7-abdfed45bc4c
-BLURAY_ID=1
-BLURAY_UUID=$(UUID_1)
+UUID_2=d8c5a336-76b1-44a6-a49e-8968928f5193
+BLURAY_ID=2
+BLURAY_UUID=$(UUID_2)
 new_bluray:
 	#read "are you sure?"
 	echo mkfs.udf --utf8 --udfrev=2.01 --label bluray_$(BLURAY_ID) --vsid=$(BLURAY_UUID) --lvid=bluray_$(BLURAY_ID) --vid=bluray_$(BLURAY_ID) --fsid=bluray_$(BLURAY_ID) --fullvsid=bluray_$(BLURAY_ID) /dev/sdb

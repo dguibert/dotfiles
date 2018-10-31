@@ -145,7 +145,8 @@ rec {
   fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
 
   #X11 and Gnome3
-  #services.xserver.desktopManager.default = "gnome3";
+  services.xserver.desktopManager.default = "xfce";
+  services.xserver.desktopManager.xfce.enable = true;
   #services.xserver.desktopManager.gnome3.enable = true;
 
   services.cntlm.enable = true;

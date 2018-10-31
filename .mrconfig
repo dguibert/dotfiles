@@ -367,3 +367,9 @@ checkout = git clone 'https://github.com/oxedions/banquise' 'banquise'
 
 [code/krops]
 checkout = git clone 'https://cgit.krebsco.de/krops/' 'krops'
+
+[code/morph]
+checkout = git clone 'https://github.com/DBCDK/morph' 'morph'
+
+[code/nixrbd]
+checkout = git clone 'https://github.com/rickynils/nixrbd' 'nixrbd'
