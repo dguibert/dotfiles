@@ -1,0 +1,18 @@
+[creditmutuel]
+_module = creditmutuel
+password = `pass dag/www.creditmutuel.fr|head -n 1`
+login = `pass dag/www.creditmutuel.fr |grep -oP "login: \K.*"`
+
+[youtube]
+_module = youtube
+password = 
+username = 
+
+[freemobile]
+_module = freemobile
+login =
+password =
+
+[allocine]
+_module = allocine
+
