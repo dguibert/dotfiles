@@ -26,7 +26,6 @@ rec {
   boot.kernelModules = [ "fuse" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
-  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     packageOverrides.linuxPackages = boot.kernelPackages;
   };
