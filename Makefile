@@ -1,6 +1,12 @@
+is_feature = $(if $(filter $1,$(.FEATURES)),T)
+ifneq ($(call is_feature,oneshell),T)
+	$(error This Makefile only works with a Make program that supports "oneshell" feature (version>=3.82))
+endif
+
 .ONESHELL:
 .POSIX:
 #.SHELLFLAGS=-x -c
+HOSTNAME?=$(shell hostname -s)
 
 all:
 
@@ -56,11 +62,14 @@ init-nix-%:
 	rsync -aP nix-2.0.4-x86_64-linux.tar.bz2 $$cluster:
 	ssh $$cluster "(mkdir -p ~/pkgs/nix-mnt; cd ~/pkgs/nix-mnt; tar xv --strip-components=1 -f ~/nix-2.0.4-x86_64-linux.tar.bz2; proot-x86_64 -b ~/pkgs/nix-mnt:/nix ./install)"
 
-update-host:
+update-%:
 	cd ~/admin/nixops
 	source .envrc
-	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option allow-unsafe-native-code-during-evaluation true --include $$HOSTNAME
+	nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option allow-unsafe-native-code-during-evaluation true --include $*
 	#nixops deploy -I nixpkgs=$$HOME/code/nixpkgs --option extra-builtins-file ~/admin/nixops/extra-builtins.nix --include $$HOSTNAME
+update-host: update-$(HOSTNAME)
+	$(shell echo $(HOSTNAME))
+
 update-hosts:
 	cd ~/admin/nixops
 	source .envrc
