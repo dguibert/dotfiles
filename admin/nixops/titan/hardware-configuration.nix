@@ -12,23 +12,15 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "icybox1/root/nixos";
-      fsType = "zfs";
-    };
+  fileSystems."/"         = { device = "icybox1/root/nixos"; fsType = "zfs"; };
+  fileSystems."/home"     = { device = "icybox1/home"; fsType = "zfs"; };
+  fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
+  fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; };
 
-  fileSystems."/home" =
-    { device = "icybox1/home";
-      fsType = "zfs";
-    };
+  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" ];
+  swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
 
-  fileSystems."/boot/efi" =
-    { label = "EFI1";
-      fsType = "vfat";
-    };
-
-  swapDevices = [ ];
-
-  nix.maxJobs = lib.mkDefault 16;
+  nix.maxJobs = lib.mkDefault 4;
+  nix.buildCores = lib.mkDefault 16;
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 }

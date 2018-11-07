@@ -24,7 +24,7 @@ rec {
   boot.loader.grub.configurationLimit = 10;
 
   boot.kernelModules = [ "fuse" ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_18;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     packageOverrides.linuxPackages = boot.kernelPackages;
