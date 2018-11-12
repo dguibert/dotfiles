@@ -1,1 +1,1 @@
-ssh://dguibert@localhost:33322/~/public_git/dotfiles.git
+git@github.com:dguibert/dotfiles.git

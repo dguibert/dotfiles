@@ -7,7 +7,6 @@ rec {
   ];
   services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
-  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     #packageOverrides.linuxPackages = boot.kernelPackages;
   };

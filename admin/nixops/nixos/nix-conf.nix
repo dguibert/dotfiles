@@ -27,7 +27,8 @@ rec {
   ];
 
   # Needed by RPi firmware
-  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { system = nixpkgs.system; }) ];
+  # TODO restore system/localSystem for rpi31
+  nixpkgs.overlays = [ (import ../pkgs-pinned-overlay.nix { }) ];
   nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
     allowUnfree = true;
     #packageOverrides.linuxPackages = boot.kernelPackages;

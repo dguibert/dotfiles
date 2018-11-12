@@ -194,6 +194,7 @@ in
       ./nixos/distributed-build.nix
       ./nixos/nix-conf.nix
       ./nixos/x11.nix
+      ./nixos/zfs.nix
     ];
     deployment.targetHost = "192.168.1.24";
     deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
@@ -211,5 +212,10 @@ in
 
     hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
     home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
+
+    # https://nixos.org/nixops/manual/#idm140737318329504
+    virtualisation.libvirtd.enable = true;
+    networking.firewall.checkReversePath = false;
+    systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
   };
 }
