@@ -153,7 +153,9 @@ in
     #  type = "tunnel";
     #};
     #systemd.network.networks."41-wg0".address = [ "fe80::cafe:2" ];
-    home-manager.users.dguibert = import ~/.config/nixpkgs/home-nox11.nix { inherit pkgs lib; };
+    environment.noXlibs = true;
+    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; noXlibs=true; };
+    #home-manager.users.dguibert = import ~/.config/nixpkgs/home-nox11.nix { inherit pkgs lib; };
     users.users.rdolbeau = {
       isNormalUser = true;
       uid = 1501;
