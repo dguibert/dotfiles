@@ -87,6 +87,11 @@ update-packages-%:
 	packages=$$(readlink pkgs/$$cluster*)
 	nix copy -v --to ssh://$$cluster $$packages
 	ssh $$cluster nix-env -i $$packages
+shell-nix-scratch-gpfs:
+	export PATH=/scratch_gpfs/bguibertd/nix/var/nix/profiles/default/bin:$$PATH
+	export NIX_PATH=nixpkgs=${HOME}/code/nixpkgs:nixpkgs-overlays=${HOME}/nixpkgs-overlays-scratch-gpfs/overlays 
+	export ENVRC=nix-cratch-gpfs
+	$(SHELL)
 update-packages-lobo:
 	set -x
 	cluster=lobo
