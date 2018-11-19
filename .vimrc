@@ -37,11 +37,11 @@ Plugin 'vim-scripts/DirDiff.vim'
 Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
+"Plugin 'vim-pandoc/vim-pandoc-syntax'
 "
 "Plugin 'ledger/vim-ledger'
 "
-""Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kalafut/vim-taskjuggler'
 call vundle#end()            " required
 filetype plugin indent on    " required
