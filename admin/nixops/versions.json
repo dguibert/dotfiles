@@ -2,14 +2,14 @@
   "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
-    "rev": "283875c86f3f799e5d41893d1eb4917a66657ef7",
-    "sha256": "0jaf6bwrjhq73mgzs6krk9b8zznhi11klnhkywx4hgfbvlbiw1yr"
+    "rev": "4c8cbc4d64ccd9cba34900471dae41328b36fbcd",
+    "sha256": "09dlzpil7z5a8sdn8jrprdffgdq5azbv868w99w019n535pax1hk"
   },
   "haskell-updates": {
     "owner": "NixOS",
     "repo": "nixpkgs",
-    "rev": "a85274e238ddb601fec5e94f3407ed9e0ff927e7",
-    "sha256": "01ksdiykf7kx570vn0wrjw7wdpl9qfp1rbjwkgrzqqcj5il2qh0l"
+    "rev": "da13df8b9f9be2df8f9d7584498dd9924617c174",
+    "sha256": "16mrkqppb02lsdhj98fa0s6g1g6pdxhkd0vyyykxh0w0ryj38l0d"
   },
   "nixos-17.09": {
     "owner": "NixOS",
@@ -20,13 +20,13 @@
   "nixos-18.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "21b7f59ae1292b316188c5b0f934513dba31657b",
-    "sha256": "1l0mxncgmxjc4rcxz5nmmi057gk5v001xnfk49ipafp7y05bajdp"
+    "rev": "263f7b78d6f034f6db4479a9f9d9ce24e1494613",
+    "sha256": "1ambfa9mbb5qn33i90dikqw2awl55y0z4bdq0l5f9108b1z44np0"
   },
   "nixos-18.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "bf7930d582bcf7953c3b87e649858f3f1873eb9c",
-    "sha256": "0nvn6g0pxp0glqjg985qxs7ash0cmcdc80h8jxxk6z4pnr3f2n1m"
+    "rev": "b37872d4268164614e3ecef6e1f730d48cf5a90f",
+    "sha256": "05km33sz4srf05vvmkidz3k59phm5a3k9wpj1jc6ly9yqws0dbn4"
   }
 }
