@@ -5,6 +5,12 @@
     "rev": "4c8cbc4d64ccd9cba34900471dae41328b36fbcd",
     "sha256": "09dlzpil7z5a8sdn8jrprdffgdq5azbv868w99w019n535pax1hk"
   },
+  "nixpkgs-overlays": {
+    "owner": "dguibert",
+    "repo": "nixpkgs-overlays",
+    "rev": "c14ce10c0b1f8e52c89cf06d69bd4adf93ae5431",
+    "sha256": "1ilp2mycc1g03aipxsg4qy787i1rvdb2nm47dvi6620iacndsfg4"
+  },
   "krops": {
     "url": "https://cgit.krebsco.de/krops/",
     "rev": "ce37b2a9c2a438b7278e8e8ab045df34f00ad386",
