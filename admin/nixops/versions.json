@@ -5,6 +5,11 @@
     "rev": "4c8cbc4d64ccd9cba34900471dae41328b36fbcd",
     "sha256": "09dlzpil7z5a8sdn8jrprdffgdq5azbv868w99w019n535pax1hk"
   },
+  "krops": {
+    "url": "https://cgit.krebsco.de/krops/",
+    "rev": "ce37b2a9c2a438b7278e8e8ab045df34f00ad386",
+    "sha256": "0mswzlr5xkgbns20gd93x3xha65xhvf10y49zxd951jr2f5zl07l"
+  },
   "haskell-updates": {
     "owner": "NixOS",
     "repo": "nixpkgs",
