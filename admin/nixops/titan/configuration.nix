@@ -31,30 +31,28 @@ rec {
   # should.
   system.stateVersion = "18.09"; # Did you read the comment?
 
-  #  networking.wireguard.interfaces.wg0 = {
-  #    ips = [ "10.147.27.24/24" ];
-  #    listenPort = 500;
-  #    privateKeyFile = "/secrets/wireguard_key";
-  #    peers = [
-  #      { allowedIPs = [ "10.147.27.0/24" ];
-  #        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-  #        endpoint   = "83.155.85.77:500";
-  #      }
-  #      { allowedIPs = [ "10.147.27.198/32" ];
-  #        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-  #        endpoint   = "orsin.freeboxos.fr:51821";
-  #	#persistentKeepalive = 25;
-  #      }
-  #      { allowedIPs = [ "10.147.27.128/32" ];
-  #        publicKey  = "apJCCchRSbJnTH6misznz+re4RYTxfltROp4fbdtGzI=";
-  #        endpoint   = "192.168.1.45:500";
-  #      }
-  #      { allowedIPs = [ "10.147.27.123/32" ];
-  #        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-  #        endpoint   = "orsin.freeboxos.fr:51820";
-  #      }
-  #    ];
-  #  };
-  #  networking.firewall.allowedUDPPorts = [ 500 ];
-
+  systemd.network.netdevs."40-bond0" = {
+    netdevConfig.Name = "bond0";
+    netdevConfig.Kind = "bond";
+    bondConfig.Mode="active-backup";
+    bondConfig.MIIMonitorSec="100s";
+    bondConfig.PrimaryReselectPolicy="always";
+  };
+  systemd.network.networks."40-bond0" = {
+    name = "bond0";
+    DHCP = "both";
+    networkConfig.BindCarrier = "eno1 eno2";
+  };
+  systemd.network.networks."40-eno1" = {
+    name = "eno1";
+    DHCP = "none";
+    networkConfig.Bond = "bond0";
+    networkConfig.IPv6PrivacyExtensions = "kernel";
+  };
+  systemd.network.networks."40-eno2" = {
+    name = "eno2";
+    DHCP = "none";
+    networkConfig.Bond = "bond0";
+    networkConfig.IPv6PrivacyExtensions = "kernel";
+  };
 }

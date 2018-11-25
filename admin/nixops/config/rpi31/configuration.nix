@@ -1,21 +1,28 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+let
+  nodes = import <modules/infra.nix>;
+in
+
 rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
     <nixpkgs/nixos/modules/profiles/base.nix>
     #../../profiles/installation-device.nix
     #./sd-image.nix
-    ../nixos/distributed-build.nix
+    <modules/distributed-build.nix>
+    (import <network>).defaults
+    (import <network>).rpi31
   ];
 
   # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
   nixpkgs.localSystem.system = "aarch64-linux";
-  #assertions = lib.singleton {
-  #  assertion = pkgs.stdenv.system == "aarch64-linux";
-  #  message = "sd-image-aarch64.nix can be only built natively on Aarch64 / ARM64; " +
-  #    "it cannot be cross compiled";
-  #};
+  assertions = lib.singleton {
+    assertion = pkgs.stdenv.system == "aarch64-linux";
+    message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
+      "it cannot be cross compiled";
+  };
 
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
@@ -82,7 +89,7 @@ rec {
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.13/24" ];
     listenPort = 500;
-    privateKeyFile = "/etc/wireguard_key";
+    privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";

@@ -1,22 +1,11 @@
-{ dguibertHashedPassword ? null
-#, installer ? false
-, ...}@args:
-let
-  pass_ = key: if builtins ? extraBuiltins then 
-                 if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
-                 else "without-pass"
-                 else if builtins ? exec then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ] else "without-pass";
-in
 {
   network.description = "NixOS Network";
   network.enableRollback = true;
 
   defaults = { nodes, pkgs, config, lib, ...}: {
     imports = [
-      ~/.config/nixpkgs/home-manager/nixos/default.nix
-      ];
-    deployment.alwaysActivate = false;
-    deployment.hasFastConnection = true;
+      <home-manager/nixos>
+    ];
 
     environment.systemPackages = [ pkgs.vim ];
     # Select internationalisation properties.
@@ -32,15 +21,12 @@ in
     users.mutableUsers = false;
 
     users.users.dguibert =
-#      let
-#        dguibertHashedPassword = <dguibertHashedPassword> pkgs.lib.or null;
-#      in
-    pkgs.lib.mkIf (dguibertHashedPassword != null) {
+    {
       isNormalUser = true;
       uid = 1000;
       description = "David Guibert";
       home = "/home/dguibert";
-      hashedPassword = dguibertHashedPassword;
+      hashedPassword = "$6$h1H22Nd9YDRVlAt$YqlyCmQXuFiVAtecebSjvlmJM0WoZmLaaTLF52PuMH6Wz3mYKtWioNcWe2pQJOOoEq68Im7ZJZo9TsZnvcG5h1";
       group = "dguibert";
       extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
         ] ++ pkgs.lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
@@ -91,8 +77,8 @@ in
     #deployment.targetHost = "10.147.17.123";
     environment.systemPackages = [ pkgs.disnixos pkgs.wireguard-tools ];
 
-    deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
-    deployment.keys.wireguard_key.destDir = "/secrets";
+    #deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
+    #deployment.keys.wireguard_key.destDir = "/secrets";
 
     # for X1.nix
     services.xserver.resolutions = [{x=1440; y=900;}];
@@ -148,16 +134,7 @@ in
   };
 
   rpi31 = { pkgs, config, lib, ...}: {
-    imports = [ ./rpi31/configuration.nix ];
-    #deployment.targetHost = "192.168.1.13";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/rpi31";
-    deployment.keys.wireguard_key.destDir = "/secrets";
-    ### mesh wg0
-    #services.babeld.enable = true;
-    #services.babeld.interfaces.wg0 = {
-    #  type = "tunnel";
-    #};
-    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:2" ];
+    #toString <secrets/wpa_supplicant.conf>;
     environment.noXlibs = true;
     #home-manager.users.dguibert = import ~/.config/nixpkgs/home-nox11.nix { inherit pkgs lib; };
     users.users.rdolbeau = {
@@ -181,8 +158,8 @@ in
     ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/vbox-57nvj72";
-    deployment.keys.wireguard_key.destDir = "/secrets";
+    #deployment.keys.wireguard_key.text = pass_ "wireguard/vbox-57nvj72";
+    #deployment.keys.wireguard_key.destDir = "/secrets";
     ### mesh wg0
     #services.babeld.enable = true;
     #services.babeld.interfaces.wg0 = {
@@ -201,8 +178,8 @@ in
       ./nixos/zfs.nix
     ];
     deployment.targetHost = "192.168.1.24";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
-    deployment.keys.wireguard_key.destDir = "/secrets";
+    #deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
+    #deployment.keys.wireguard_key.destDir = "/secrets";
 
     # services.xserver.videoDrivers = [ "nvidia" ];
     #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];

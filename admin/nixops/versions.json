@@ -1,4 +1,10 @@
 {
+  "home-manager": {
+    "owner": "rycee",
+    "repo": "home-manager",
+    "rev": "a9a4fb641feb89da9f9d9140b5299cbb4c433d29",
+    "sha256": "05v9c5vxj6cj4cfyjy49fb9ipinm3dblg0icn65wbxcbfghdag4q"
+  },
   "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
