@@ -25,7 +25,9 @@ with pkgs.lib;
     ./st.patches/0003-custom-changes.patch
     ./st.patches/0004-apply-st-scrollback-0.8.diff.patch
   ];
+  # Package ‘oraclejre-8u191’ in /home/dguibert/code/nixpkgs/pkgs/development/compilers/oraclejdk/jdk-linux-base.nix:71 has an unfree license (‘unfree’), refusing to evaluate.
   allowUnfree = true;
+  allowBroken = true; # xpra-2.3.4
   pulseaudio = true;
   virtualbox.enableExtensionPack = true;
 

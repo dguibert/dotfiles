@@ -13,24 +13,65 @@
 
 rec {
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    <config/common.nix>
+    <config/users/dguibert>
+    <modules/nix-conf.nix>
+    <modules/yubikey-gpg.nix>
+    <modules/distributed-build.nix>
+    <modules/x11.nix>
+  ];
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B";
   boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
-  boot.kernelModules = [ "fuse" ];
+  boot.kernelModules = [ "fuse" "kvm-intel" ];
+  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usb_storage" "tm-smapi" ];
   boot.kernelPackages = pkgs.linuxPackages_4_18;
-  boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
-  nixpkgs.config = {pkgs}: (import ~/.config/nixpkgs/config.nix { inherit pkgs; }) // {
-    packageOverrides.linuxPackages = boot.kernelPackages;
-  };
+  boot.extraModulePackages = [ pkgs.linuxPackages.perf config.boot.kernelPackages.tp_smapi ];
+#  nixpkgs.config = {pkgs}: (import <config/nixpkgs/config.nix> { inherit pkgs; }) // {
+#    allowUnfree = true;
+#    packageOverrides.linuxPackages = boot.kernelPackages;
+#  };
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/cc74b0e1-c5fb-4bf2-870a-e23363cd7849";
+      fsType = "xfs";
+    };
+  fileSystems."/tmp" = { device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; };
+
+  swapDevices = [ { device = "/dev/sda2"; } ];
+
+  nix.maxJobs = 2;
+
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = true;
+
+  #  autoInstall = ''
+  # https://wiki.archlinux.org/index.php/ZFS#Root_on_ZFS
+  #  zpool create -o feature@multi_vdev_crash_dump=disabled \
+  #                  -o feature@large_dnode=disabled        \
+  #                  -o feature@sha512=disabled             \
+  #                  -o feature@skein=disabled              \
+  #                  -o feature@edonr=disabled              \
+  #		  -o feature@encryption=disabled         \
+  #                  $POOL_NAME $VDEVS
+  #  zfs create -o setuid=off -o devices=off -o sync=disabled -o mountpoint=/tmp <pool>/tmp
+  #  systemctl mask tmp.mount
+  #  zfs create <nameofzpool>/<nameofdataset>
+  #  zfs set quota=20G <nameofzpool>/<nameofdataset>/<directory>
+  #  # zfs create -V 8G -b $(getconf PAGESIZE) \
+  #               -o logbias=throughput -o sync=always\
+  #               -o primarycache=metadata \
+  #               -o com.sun:auto-snapshot=false <pool>/swap
+  # # mkswap -f /dev/zvol/<pool>/swap
+  # # swapon /dev/zvol/<pool>/swap
+  #  '';
 
   networking.hostId = "a8c00e01";
 
@@ -94,6 +135,7 @@ rec {
   };
   services.tlp.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; let
@@ -121,7 +163,13 @@ rec {
     config.boot.kernelPackages.perf 
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
+    pkgs.disnixos pkgs.wireguard-tools
   ];
+
+  # for X11.nix
+  services.xserver.resolutions = [{x=1440; y=900;}];
+  services.xserver.videoDrivers = [ "intel" ];
+  hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
   programs.sysdig.enable = true;
 
@@ -138,9 +186,9 @@ rec {
   services.openssh.ports = [22322];
   services.openssh.passwordAuthentication = false;
   services.openssh.hostKeys = [
-            { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
-            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-	  ];
+    { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
+    { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+  ];
   services.openssh.extraConfig = ''
     Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
@@ -206,14 +254,10 @@ rec {
     #  };
 
 
-  fileSystems = [
-  { mountPoint = "/tmp"; device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; }
-  ];
-
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.123/24" ];
     listenPort = 51820;
-    privateKeyFile = "/secrets/wireguard_key";
+    privateKeyFile = toString <secrets/orsine/wireguard_key>;
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -299,4 +343,5 @@ rec {
       #ExecStartPost = "logger \"started ZFS pool backupwd\"";
     };
   };
+
 }

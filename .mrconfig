@@ -373,3 +373,6 @@ checkout = git clone 'https://github.com/DBCDK/morph' 'morph'
 
 [code/nixrbd]
 checkout = git clone 'https://github.com/rickynils/nixrbd' 'nixrbd'
+
+[code/nix-patchtools]
+checkout = git clone 'https://github.com/svanderburg/nix-patchtools' 'nix-patchtools'

@@ -1,6 +1,6 @@
 # https://tech.ingolf-wagner.de/nixos/krops/
 let
-  versions = import ./lib/versions.nix;
+  versions = import ./config/lib/versions.nix;
 
   lib_ = import "${versions.krops}/lib";
   pkgs = import "${versions.krops}/pkgs" { };
@@ -27,7 +27,7 @@ let
 
   orsine = pkgs.krops.writeDeploy "deploy-orsine" {
     source = source "orsine";
-    target = "root@192.168.1.6:22322";
+    target = "root@192.168.1.12:22322";
   };
 
 in {

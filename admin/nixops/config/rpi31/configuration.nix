@@ -12,8 +12,8 @@ rec {
     #../../profiles/installation-device.nix
     #./sd-image.nix
     <modules/distributed-build.nix>
-    (import <network>).defaults
-    (import <network>).rpi31
+    <config/users/dguibert>
+    <config/users/rdolbeau>
   ];
 
   # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
@@ -89,7 +89,7 @@ rec {
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.13/24" ];
     listenPort = 500;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString <secrets/rpi31/wireguard_key>;
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -109,4 +109,6 @@ rec {
     ];
   };
   networking.firewall.allowedUDPPorts = [ 9993 500 ];
+
+  environment.noXlibs = true;
 }

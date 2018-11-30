@@ -11,93 +11,11 @@ in
   network.description = "NixOS Network";
   network.enableRollback = true;
 
-  defaults = { nodes, pkgs, config, lib, ...}: {
-    imports = [
-      ~/.config/nixpkgs/home-manager/nixos/default.nix
-      ];
-    deployment.alwaysActivate = false;
-    deployment.hasFastConnection = true;
-
-    environment.systemPackages = [ pkgs.vim ];
-    # Select internationalisation properties.
-    i18n = {
-       consoleFont = "Lat2-Terminus16";
-       consoleKeyMap = "fr";
-       defaultLocale = "en_US.UTF-8";
-     };
-  
-    # Set your time zone.
-    time.timeZone = "Europe/Paris";
-
-    users.mutableUsers = false;
-
-    users.users.dguibert =
-#      let
-#        dguibertHashedPassword = <dguibertHashedPassword> pkgs.lib.or null;
-#      in
-    pkgs.lib.mkIf (dguibertHashedPassword != null) {
-      isNormalUser = true;
-      uid = 1000;
-      description = "David Guibert";
-      home = "/home/dguibert";
-      hashedPassword = dguibertHashedPassword;
-      group = "dguibert";
-      extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
-        ] ++ pkgs.lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
-        ] ++ pkgs.lib.optionals (config.users.groups ? docker) [ "docker"
-        ] ++ pkgs.lib.optionals (config.users.groups ? libvirtd) [ "libvirtd"
-        ] ++ pkgs.lib.optionals (config.users.groups ? disnix) [ "disnix"
-        ];
-      openssh.authorizedKeys.keys = [
-        "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCT6I73vMHeTX7X990bcK+RKC8aqFYOLZz5uZhwy8jtx/xEEbKJFT/hggKADaBDNkJl/5141VUJ+HmMEUMu+OznK2gE8IfTNOP1zLXD6SjOxCa55MvnyIiXVMAr7R0uxZWy28IrmcmSx1LY5Mx8V13mjY3mp3LVemAy9im+vj6FymjQqgPMg6dHq+aQCeHpx22GWHYEq2ghqEsRpmIBBwwaVaEH8YIjcqZwDcp273SzBrgMEW44ndul5bvh85c71vjm7kblU/BxwBeLFMJFnXYTPxF2JjxhCSMlHBH9hqQjQ8vwaQev6XaJ5TpHgiT3nLAxCyBBgvnfwM7oq6bjHjuyToKFzUsFH6YVsK+/NjagZ5YKlV7vK0o2oF12GrQvwWwa6DUM+LdUNmSX4l4Xq8lB5YbJ5NK0pHRRdzCZL5kPuV+CkXRAHoUSj/pLUqkqGRL70NMtLIYmQbj/l7BZ4PQNP9zKLB4f5pk02A25DbPVfoW2DFL0DRfSF1L8ZDsAVhzUaRKSBZZ4wG231gvB6pCMTpeuvC9+Z/OmYkiXEOn34Qdjx8Bfi7XWKm/PnSgP7dM9Tcf3I0hvymvP6eZ8BjeriKHUE7b3s1aMQz9I4ctpbCNT5S16XMQZtdO0HZ+nn4Exhy0FHmdCwPXu/VBEBYcy7UpI4vyb1xiz13KVX/5/oQ== CA key for my accounts at home"
-        "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/ybduCylLGOCgnOdyKZM3rsXr3WnMu9SHSxMV5EY5LkT7Gv1lamNuZbByUY2dPVSgBstYSpbPcmwjYQSqRRuPtgHsRAqvgc2lrGKBKw0tXYgWXFEjXugDMgi9safr86+bbmRhNgU5jzJZ7/BDHDLW5dWMPGK/B6mg9e+E+gZM7Fh99FYn+ys6qB2Ca0tu0jXFLRN5fMe640DI0vjk5lctJikXtfKsyFqiiwjVcqMpVJuCrDpnhp2+uJz/19cjHwjJx8WmLSyYJf0gXlcklgKp781J4D3diLmN9Sz9r22T5WXCiljgsod91eok0rqQxh21DOtGuHXlNkdzjiMHgB/fMAA5NS5ql09cTC4pvL3XQYMbmnGU0gVs25048duwLCs5ISH5kPIsmDUsYU6/O1f7JVboHKNc5EfpGGJnuzUvgLA5ox8tQdHb+DOSp1GSm3JQs6cRzJlW73b/NVPqRqgZVqzC72NkxxdvMrxLE6riajtKW5AU45ZT8hOgNSiQKSxvnc68awni/59aObNEeOJzUo0BqKCB5VLGbK1u6nCrU3l+5U1LXKUDmmokgNOktKRgLkkkXkwfV6o0JKetODZUceN1hfveDpqYZ2Jm43VJrAetUX5AlOqE8z6Ok4RHq79gtBHs5fHEmKW3QeJkau0PDi7BAPSpWy3glZrFTztHgQ== CA key for my accounts at work"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4j+CEKsGc4N/TJ7scLZO6joBjCoEjzalODyoIFvjS6A0bgbvI26KEwt4WCtrMYGn3quni9eQRFn6X/Z9yCxHy8Gugwwj+dHTXEzELABspyyjpgdUphL+2k0eFv7n5/OtWBw3XU/EfXeCAQX7guEdUT4Vavn9fXBIHE46HU+vkgRHib8xrYOwBnQeqEgBkH+qs//0aD1x6X3Wt8W1R+TWM/vjuo/myimYzAxNvdCvlYuWzUNZGMXWmASfnEzTb+W06gtO0ofCaUnlZXmk9Fh9sYSIhEQ4DoyX2Fr3PiaiOE0iQr/kzqrFJ3UrdpHzPp7tehgeaEYOBIXDN6dbAPezJ u0_a81@localhost"
-      ];
-    };
-
-    users.groups.dguibert.gid = 1000;
-
-    # Enable ZeroTierOne
-    services.zerotierone.enable = true;
-    services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
-
-    networking.useNetworkd = true;
-    networking.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
-    services.nscd.enable = false; # no real gain (?) on workstations
-    # unreachable DNS entries from home
-    networking.hosts = {
-      "208.118.235.200" = [ "ftpmirror.gnu.org" ];
-      "208.118.235.201" = [ "git.savannah.gnu.org" ];
-    };
-
-    # disnix target
-    services.disnix.enable = true;
-    dysnomia.properties.mem = "$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')";
-    dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
-    # https://hydra.nixos.org/job/disnix/disnix-trunk/tarball/latest/download-by-type/doc/manual/#chap-packages
-    environment.variables.PATH = [ "/nix/var/nix/profiles/disnix/default/bin" ];
-
-    # Package ‘openafs-1.6.22.2-4.18.4’ in /home/dguibert/code/nixpkgs/pkgs/servers/openafs/1.6/module.nix:49 is marked as broken, refusing to evaluate.
-    nixpkgs.config.allowBroken = true;
-  };
-
   orsine = { pkgs, config, lib, ...}: {
-    imports = [ ./orsine/configuration.nix 
-      ./nixos/yubikey-gpg.nix
-      ./nixos/distributed-build.nix
-      ./nixos/nix-conf.nix
-      ./nixos/x11.nix
+    imports = [ ./config/orsine/configuration.nix 
     ];
     #deployment.targetHost = "10.147.17.123";
-    environment.systemPackages = [ pkgs.disnixos pkgs.wireguard-tools ];
 
-    deployment.keys.wireguard_key.text = pass_ "wireguard/orsine";
-    deployment.keys.wireguard_key.destDir = "/secrets";
-
-    # for X1.nix
-    services.xserver.resolutions = [{x=1440; y=900;}];
-    services.xserver.videoDrivers = [ "intel" ];
-    hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
     #################################################################
     # Test raw networkd wireguard support
     # boot.extraModulePackages = [ pkgs.linuxPackages.wireguard ];
@@ -148,79 +66,19 @@ in
   };
 
   rpi31 = { pkgs, config, lib, ...}: {
-    imports = [ ./rpi31/configuration.nix ];
-    #deployment.targetHost = "192.168.1.13";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/rpi31";
-    deployment.keys.wireguard_key.destDir = "/secrets";
-    ### mesh wg0
-    #services.babeld.enable = true;
-    #services.babeld.interfaces.wg0 = {
-    #  type = "tunnel";
-    #};
-    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:2" ];
-    environment.noXlibs = true;
-    #home-manager.users.dguibert = import ~/.config/nixpkgs/home-nox11.nix { inherit pkgs lib; };
-    users.users.rdolbeau = {
-      isNormalUser = true;
-      uid = 1501;
-      group = "rdolbeau";
-      openssh.authorizedKeys.keys = [
-	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZMjCvizoNrDojOFOMazBBgFfyFrBieu5DFiiFgY4VJHPtOchSPAF4K+Q8hgbFU1cP8q4NoncPSS2BEp3FAtiuUZyHRV72yUlx12BOdlVpAtpjtphr2CZMPhzo89k1yQ6W2sHP52igF9DWeMTj9lLgpjjsCbA8qjT3cdLUiDh0anrFQjzgGRemhuxxsUV8L0XB4TDfg0/qSOrrKNLX5NnuEghpJOak3NS/2WDz6QGQbqdUKlKxDcHuaLK1FJRSvJIUFk23EUv8TfwL3B8u9FMblFFM5BUHelNpNNobI7LfTJB/Qv2YVEWjFXirSJEf7U0MCeLDu9hrKPGu1X8kmWc7 dolbeau@c2sbe"
-        "cert-authority ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCT6I73vMHeTX7X990bcK+RKC8aqFYOLZz5uZhwy8jtx/xEEbKJFT/hggKADaBDNkJl/5141VUJ+HmMEUMu+OznK2gE8IfTNOP1zLXD6SjOxCa55MvnyIiXVMAr7R0uxZWy28IrmcmSx1LY5Mx8V13mjY3mp3LVemAy9im+vj6FymjQqgPMg6dHq+aQCeHpx22GWHYEq2ghqEsRpmIBBwwaVaEH8YIjcqZwDcp273SzBrgMEW44ndul5bvh85c71vjm7kblU/BxwBeLFMJFnXYTPxF2JjxhCSMlHBH9hqQjQ8vwaQev6XaJ5TpHgiT3nLAxCyBBgvnfwM7oq6bjHjuyToKFzUsFH6YVsK+/NjagZ5YKlV7vK0o2oF12GrQvwWwa6DUM+LdUNmSX4l4Xq8lB5YbJ5NK0pHRRdzCZL5kPuV+CkXRAHoUSj/pLUqkqGRL70NMtLIYmQbj/l7BZ4PQNP9zKLB4f5pk02A25DbPVfoW2DFL0DRfSF1L8ZDsAVhzUaRKSBZZ4wG231gvB6pCMTpeuvC9+Z/OmYkiXEOn34Qdjx8Bfi7XWKm/PnSgP7dM9Tcf3I0hvymvP6eZ8BjeriKHUE7b3s1aMQz9I4ctpbCNT5S16XMQZtdO0HZ+nn4Exhy0FHmdCwPXu/VBEBYcy7UpI4vyb1xiz13KVX/5/oQ== CA key for my accounts at home"
-      ];
-    };
-    users.groups.rdolbeau.gid = 1501;
-
+    imports = [ ./config/rpi31/configuration.nix ];
   };
 
   vbox-57nvj72 = { pkgs, config, lib, ...}: {
-    imports = [ ./vbox-57nvj72/configuration.nix
-      ./nixos/yubikey-gpg.nix
-      ./nixos/distributed-build.nix
-      ./nixos/nix-conf.nix
+    imports = [ ./config/vbox-57nvj72/configuration.nix
     ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/vbox-57nvj72";
-    deployment.keys.wireguard_key.destDir = "/secrets";
-    ### mesh wg0
-    #services.babeld.enable = true;
-    #services.babeld.interfaces.wg0 = {
-    #  type = "tunnel";
-    #};
-    #systemd.network.networks."41-wg0".address = [ "fe80::cafe:3" ];
     home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
   };
 
   titan = { pkgs, config, lib, ...}: {
-    imports = [ ./titan/configuration.nix 
-      ./nixos/yubikey-gpg.nix
-      ./nixos/distributed-build.nix
-      ./nixos/nix-conf.nix
-      ./nixos/x11.nix
-      ./nixos/zfs.nix
+    imports = [ ./config/titan/configuration.nix 
     ];
-    deployment.targetHost = "192.168.1.24";
-    deployment.keys.wireguard_key.text = pass_ "wireguard/titan";
-    deployment.keys.wireguard_key.destDir = "/secrets";
-
-    # services.xserver.videoDrivers = [ "nvidia" ];
-    #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-    ## [   13.576513] NVRM: The NVIDIA Quadro FX 550 GPU installed in this system is
-    ##                NVRM:  supported through the NVIDIA 304.xx Legacy drivers. Please
-    ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
-    ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
-    ##                NVRM:  this GPU.  Continuing probe...
-    hardware.nvidia.modesetting.enable = true;
-    services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
-
-    hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
-    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
-
-    # https://nixos.org/nixops/manual/#idm140737318329504
-    virtualisation.libvirtd.enable = true;
-    virtualisation.docker.enable = true;
-    networking.firewall.checkReversePath = false;
-    systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
   };
 }
