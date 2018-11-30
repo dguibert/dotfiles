@@ -376,3 +376,6 @@ checkout = git clone 'https://github.com/rickynils/nixrbd' 'nixrbd'
 
 [code/nix-patchtools]
 checkout = git clone 'https://github.com/svanderburg/nix-patchtools' 'nix-patchtools'
+
+[code/mobile-nixos]
+checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
