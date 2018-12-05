@@ -11,6 +11,8 @@ rec {
     <nixpkgs/nixos/modules/profiles/base.nix>
     #../../profiles/installation-device.nix
     #./sd-image.nix
+    <config/common.nix>
+    <modules/nix-conf.nix>
     <modules/distributed-build.nix>
     <config/users/dguibert>
     <config/users/rdolbeau>

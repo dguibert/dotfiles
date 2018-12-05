@@ -19,7 +19,7 @@ let
   updater = writeScript "updater.sh" ''
     #!/usr/bin/env bash
     ${./updater} versions.json nixpkgs pu
-    ${./updater} versions.json nixpkgs-overlays pu
+    ${./updater} versions.json nixpkgs-overlays master
     ${./updater} versions.json krops master
     ${./updater} versions.json haskell-updates haskell-updates
     ${./updater} versions.json nixos-17.09 nixos-17.09

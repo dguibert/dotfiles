@@ -2,14 +2,14 @@
   "home-manager": {
     "owner": "rycee",
     "repo": "home-manager",
-    "rev": "a9a4fb641feb89da9f9d9140b5299cbb4c433d29",
-    "sha256": "05v9c5vxj6cj4cfyjy49fb9ipinm3dblg0icn65wbxcbfghdag4q"
+    "rev": "15bca92b2c7d8f0a709bbc9fcb8a005c7c38c092",
+    "sha256": "116fzzn2gfzfh5kajr9qg9bvimhg50lw2bv2990pz96ak2rkimia"
   },
   "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
-    "rev": "4c8cbc4d64ccd9cba34900471dae41328b36fbcd",
-    "sha256": "09dlzpil7z5a8sdn8jrprdffgdq5azbv868w99w019n535pax1hk"
+    "rev": "5e0b2e7feb1970a9b62be4d2066dd8e133ae71e9",
+    "sha256": "0jzd7jaa0ns5wswqa98gma8bk8kplayggxabn9qc5wc2kp2cdx4m"
   },
   "nixpkgs-overlays": {
     "owner": "dguibert",
@@ -19,14 +19,14 @@
   },
   "krops": {
     "url": "https://cgit.krebsco.de/krops/",
-    "rev": "ce37b2a9c2a438b7278e8e8ab045df34f00ad386",
-    "sha256": "0mswzlr5xkgbns20gd93x3xha65xhvf10y49zxd951jr2f5zl07l"
+    "rev": "eb68146cc4848cfc0c0339c72a44a96fdeb4a1de",
+    "sha256": "1js4ijpnadksybcadff9bw46m58sfhkkbzlsvng98myi9rvvcpwx"
   },
   "haskell-updates": {
     "owner": "NixOS",
     "repo": "nixpkgs",
-    "rev": "da13df8b9f9be2df8f9d7584498dd9924617c174",
-    "sha256": "16mrkqppb02lsdhj98fa0s6g1g6pdxhkd0vyyykxh0w0ryj38l0d"
+    "rev": "8b606aeb0f4dcc3da628ccdd9d4c85c5b4c18aab",
+    "sha256": "1bs7d03p9g05w296pcilqcw7624yz1mc2d6izca0j4kq47bqqck0"
   },
   "nixos-17.09": {
     "owner": "NixOS",
@@ -37,13 +37,13 @@
   "nixos-18.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "263f7b78d6f034f6db4479a9f9d9ce24e1494613",
-    "sha256": "1ambfa9mbb5qn33i90dikqw2awl55y0z4bdq0l5f9108b1z44np0"
+    "rev": "a18112a7e8fb6207ef36f667fa4fb4d39fa7584a",
+    "sha256": "1arfc4y08i66prazqwpc44hj3nhn8gj6553lm1by2gdl8bb731fp"
   },
   "nixos-18.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "b37872d4268164614e3ecef6e1f730d48cf5a90f",
-    "sha256": "05km33sz4srf05vvmkidz3k59phm5a3k9wpj1jc6ly9yqws0dbn4"
+    "rev": "db561c90ef34cc64287ee1c366ab9eec85b2af50",
+    "sha256": "06114dqsd401c6vi6iqzxvp1c1s6g1ganhx65ph2ng06q7chggh9"
   }
 }
