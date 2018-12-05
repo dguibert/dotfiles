@@ -10,9 +10,18 @@ username =
 
 [freemobile]
 _module = freemobile
-login =
-password =
+login = 
+password = 
 
 [allocine]
 _module = allocine
+
+[chronopost]
+_module = chronopost
+
+[colisprive]
+_module = colisprive
+
+[colissimo]
+_module = colissimo
 
