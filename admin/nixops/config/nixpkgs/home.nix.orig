@@ -1,0 +1,412 @@
+# https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
+{ pkgs, lib
+, noXlibs ? false
+, ...}:
+with lib;
+{
+  programs.home-manager.enable = true;
+
+  programs.bash.enable = true;
+  programs.bash.historySize = 50000;
+  programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+  programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g" ];
+
+  programs.bash.shellAliases.ls="ls --color";
+
+  programs.bash.initExtra = ''
+# Provide a nice prompt.
+PS1=""
+PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
+PS1+='$(ip netns identify 2>/dev/null)' # sudo setfacl -m u:$USER:rx /var/run/netns
+PS1+=' ''${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
+PS1+=' ''${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
+PS1+=' ''${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
+PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
+if !  command -v __git_ps1 >/dev/null; then
+  if [ -e $HOME/code/git-prompt.sh ]; then
+    source $HOME/code/git-prompt.sh
+  fi
+fi
+PS1+='$(__git_ps1 "|%s|")'
+PS1+='$\[\033[00m\] '
+
+export PS1
+case $TERM in
+	dvtm*|st*|rxvt|*term)
+		trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
+	;;
+esac
+
+eval "$(${pkgs.coreutils}/bin/dircolors)"
+  '';
+
+  programs.direnv.enable = true;
+
+  programs.git.enable = true;
+  programs.git.package = pkgs.gitFull;
+  programs.git.userName = "David Guibert";
+  programs.git.userEmail = "david.guibert@gmail.com";
+  programs.git.aliases.files = 	"ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard";
+  programs.git.aliases.wdiff = "diff --word-diff=color --unified=1";
+  #programs.git.ignores
+  programs.git.iniContent.clean.requireForce = true;
+  programs.git.iniContent.rerere.enabled = true;
+  programs.git.iniContent.rerere.autoupdate = true;
+  programs.git.iniContent.rebase.autosquash = true;
+  programs.git.iniContent.credential.helper = "password-store";
+  programs.git.iniContent."url \"software.ecmwf.int\"".insteadOf = "ssh://git@software.ecmwf.int:7999";
+  programs.git.iniContent.color.branch = "auto";
+  programs.git.iniContent.color.diff = "auto";
+  programs.git.iniContent.color.interactive = "auto";
+  programs.git.iniContent.color.status = "auto";
+  programs.git.iniContent.color.ui = "auto";
+  programs.git.iniContent.diff.tool = "vimdiff";
+  programs.git.iniContent.diff.renames = "copies";
+  programs.git.iniContent.merge.tool = "vimdiff";
+
+  # http://ubuntuforums.org/showthread.php?t=1150822
+  ## Save and reload the history after each command finishes
+  home.sessionVariables.PROMPT_COMMAND="history -a; history -c; history -r";
+  home.sessionVariables.SQUEUE_FORMAT="%.18i %.25P %35j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W";
+ #home.sessionVariables.SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P"; # with state
+  home.sessionVariables.SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P";
+  home.sessionVariables.PATH="$HOME/bin:$PATH";
+  home.sessionVariables.MANPATH="$HOME/man:$MANPATH";
+  home.sessionVariables.EDITOR="vim";
+  home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
+  # ✗ 1    dguibert@vbox-57nvj72 ~ $ systemctl --user status
+  # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
+  # ✗ 130    dguibert@vbox-57nvj72 ~ $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
+  home.sessionVariables.XDG_RUNTIME_DIR="/run/user/$(id -u)";
+
+
+  # Fix stupid java applications like android studio
+  home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
+
+  home.packages = with pkgs; [
+    vim_configurable
+    editorconfig-core-c
+
+    #previousPkgs_pu.gitAndTools.git-annex
+    rsync
+
+    gitAndTools.gitRemoteGcrypt
+    gitAndTools.git-crypt
+
+    asciidoc
+
+    ctags
+    direnv
+    dvtm
+
+    gnumake
+    #nix-repl
+    pstree
+
+    screen
+    #teamviewer
+    tig
+    lsof
+    #haskellPackages.nix-deploy
+    htop
+    tree
+    gnupg1compat
+
+    #wpsoffice
+    file
+    (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update ]))
+    git-credential-password-store
+    bc
+    parallel
+    pandoc
+    unzip
+
+    sshfsFuse
+
+    muchsync
+  ] ++ lib.optionals (! noXlibs) [
+    nix-prefetch-scripts
+
+    mr
+    mercurial
+    gitAndTools.git-annex
+    gitAndTools.git-annex-remote-rclone
+    rclone
+
+    exiftool
+    udftools
+    gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
+
+    dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+    (conky.override { x11Support = false; })
+    gnuplot
+    mkpasswd
+    xpra
+    aria2
+    nixops
+    x2goclient
+    qtpass
+
+    go-mtpfs
+
+    wayland
+    sway
+
+    corkscrew
+    autossh
+
+    davmail
+    thunderbird-bin
+    neomutt
+
+    hledger
+    haskellPackages.hledger-interest
+    #pythonPackages.ofxparse
+    pythonPackages.weboob
+
+    mpv
+    pythonPackages.subliminal
+    python3
+
+    baobab
+    #bup
+    #par2cmdline
+
+    gmailieer
+    muchsync
+  ];
+
+  xsession = {
+    enable = ! noXlibs;
+    windowManager.command = "${pkgs.dwm}/bin/dwm";
+    initExtra = ''
+      # Turn off beeps.
+      xset -b
+      # launch daemons
+      # Speed up terminal startup
+      # This needs to run in the desktop session for child
+      # processes (shells etc) to also run in the session
+      ${pkgs.rxvt_unicode}/bin/urxvtd -q -o -f &
+      ${pkgs.qtpass}/bin/qtpass &
+      ${pkgs.davmail}/bin/davmail &
+
+      conky -c ~/.conkyrc | while read line; do
+          xsetroot -name "$line"
+      done &
+     '';
+  };
+
+  programs.browserpass.enable = ! noXlibs;
+  programs.google-chrome.enable = ! noXlibs;
+  programs.google-chrome.extensions = [
+    "oeehiifcaeengdofhogmkblhkmpephcj" # active inbox
+    "mhkbaognlahkdimlfcfhbeihldmjofgg" # circuit by unify
+    "padekgcemlokbadohgkifijomclgjgif" # Proxy SwitchyOmega
+    "oiigbmnaadbkfbmpbfijlflahbdbdgdf" # script safe
+    "naepdomgkenhinolocfifgehidddafch" # browserpass-ce
+    "hipbfijinpcgfogaopmgehiegacbhmob" # feedly
+  ];
+
+  programs.zathura.enable = ! noXlibs;
+  programs.zathura.extraConfig = ''
+    # zoom and scroll step size
+    set zoom-step 20
+    set scroll-step 80
+
+  #   # copy selection to system clipboard
+  #   set selection-clipboard clipboard
+
+  #   # enable incremental search
+  #   set incremental-search true
+
+  #   # zoom
+  #   map <C-i> zoom in
+  #   map <C-o> zoom out
+  #'';
+
+  services.gpg-agent.enable = true;
+  services.gpg-agent.enableSshSupport = true;
+
+  services.udiskie.enable = ! noXlibs;
+
+  xresources.properties = {
+    "*visualBell" = false;
+    "*urgentOnBell" = true;
+    "*font" = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1";
+    "*saveLines" = 50000;
+    "Rxvt.scrollBar" = false;
+    "Rxvt.scrollTtyOutput" = false;
+    "Rxvt.scrollTtyKeypress" = true;
+    "Rxvt.scrollWithBuffer" = false;
+    "Rxvt.jumpScroll" = true;
+    "*loginShell" = true;
+
+    "URxvt.searchable-scrollback" = "CM-s";
+    "URxvt.utf8" = true;
+
+    "URxvt.transparent" = false;
+    "URxvt.depth" = 32;
+    "URxvt.intensityStyles" = false;
+    "URxvt.termName" = "xterm-256color";
+  };
+  xresources.extraConfig = builtins.readFile (
+      pkgs.fetchFromGitHub {
+          owner = "solarized";
+          repo = "xresources";
+          rev = "refs/heads/master";
+          sha256 = "0lxv37gmh38y9d3l8nbnsm1mskcv10g3i83j0kac0a2qmypv1k9f";
+      } + "/Xresources.light"
+  );
+
+  home.file.".inputrc".text = ''
+    set show-all-if-ambiguous on
+    set visible-stats on
+    set page-completions off
+    # http://www.caliban.org/bash/
+    #set editing-mode vi
+    #set keymap vi
+    set show-all-if-ambiguous on
+    #Control-o: ">&sortie"
+    "\e[A": history-search-backward
+    "\e[B": history-search-forward
+
+    "\e[1~": beginning-of-line
+    "\e[4~": end-of-line
+    "\e[7~": beginning-of-line
+    "\e[8~": end-of-line
+    "\eOH": beginning-of-line
+    "\eOF": end-of-line
+    "\e[H": beginning-of-line
+    "\e[F": end-of-line
+  '';
+
+  fonts.fontconfig.enableProfileFonts = ! noXlibs;
+
+  # mimeapps.list
+  # https://github.com/bobvanderlinden/nix-home/blob/master/home.nix
+  home.keyboard.layout = "fr";
+
+  #systemd.user.sockets.socks-rpi31 = {
+  #  Unit.Description = "Socks tunnel on 33328 via my rpi31";
+  #  Socket = {
+  #    ListenStream = "127.0.0.1:33328";
+  #    Accept=true;
+  #  };
+  #  Install.WantedBy = [ "sockets.target" ];
+  #};
+  #systemd.user.services.socks-rpi31 = {
+  #  Unit = {
+  #    Description = "Socks tunnel on 33328 via my rpi31";
+  #    #Requires = "socks-rpi31.socket";
+  #    #After = "socks-rpi31.socket";
+  #    ## This is a socket-activated service:
+  #    #RefuseManualStart = true;
+  #  };
+  #  Service.ExecStart = "${pkgs.openssh}/bin/ssh -N -D 33328 rpi31";
+  #  Service.StandardInput= "socket";
+  #};
+
+  programs.autorandr.enable = true;
+  programs.autorandr.profiles.bureau = {
+    fingerprint = {
+      "DVI-I-2" = "00ffffffffffff000469c123010101013419010380331d78eadd45a3554fa027125054afcf80714f8180818fb30081409500a9400101023a801871382d40582c4500fe221100001e000000fd00384b1e530f000a202020202020000000fc0056583233380a20202020202020000000ff0046434c4d52533033333439370a017d02031df14a900403011412051f1013230907078301000065030c002000023a801871382d40582c4500fe221100001e011d8018711c1620582c2500fe221100009e011d007251d01e206e285500fe221100001e8c0ad08a20e02d10103e9600fe22110000180000000000000000000000000000000000000000000000000000d6";
+      "DVI-I-3" = "00ffffffffffff000469c123010101013419010380331d78eadd45a3554fa027125054afcf80714f8180818fb30081409500a9400101023a801871382d40582c4500fe221100001e000000fd00384b1e530f000a202020202020000000fc0056583233380a20202020202020000000ff0046434c4d52533033333234370a018402031df14a900403011412051f1013230907078301000065030c002000023a801871382d40582c4500fe221100001e011d8018711c1620582c2500fe221100009e011d007251d01e206e285500fe221100001e8c0ad08a20e02d10103e9600fe22110000180000000000000000000000000000000000000000000000000000d6";
+    };
+    config = {
+      "DVI-I-2" = {
+        enable = true;
+        primary = true;
+        position = "1920x0";
+        mode = "1920x1080";
+      };
+
+      "DVI-I-3" = {
+        enable = true;
+        position = "0x0";
+        mode = "1920x1080";
+      };
+    };
+  };
+
+  accounts.email = {
+    accounts = {
+      gmail = {
+        realName = "David Guibert";
+        address = "david.guibert@gmail.com";
+        userName = "david.guibert@gmail.com";
+        flavor = "gmail.com";
+        passwordCommand = "${pkgs.pass}/bin/pass dag/gmail.mbsync | head -n 1";
+        primary = true;
+        msmtp.enable = true;
+        mbsync = {
+          enable = false;
+          expunge = "both";
+          patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
+        };
+        notmuch.enable = true;
+      };
+      atos = {
+        realName = "David Guibert";
+        address = "david.guibert@atos.net";
+        userName = "david.guibert@atos.net";
+        passwordCommand = "${pkgs.pass}/bin/pass bull/das | head -n 1";
+        imap = {
+          host = "localhost";
+          port = 1143;
+          tls.enable = false;
+        };
+        msmtp.enable = true;
+        smtp = {
+          auth = "login";
+          host = "localhost";
+          port = 1025;
+          tls.enable = false;
+        };
+        mbsync = {
+          enable = true;
+          expunge = "both";
+          patterns = [ "INBOX*" "Archive*" "Drafts" ];
+          extraConfig.account.AuthMechs="LOGIN";
+        };
+        notmuch.enable = true;
+      };
+    };
+  };
+  programs.mbsync.enable = true;
+  programs.msmtp.enable = true;
+  programs.notmuch.enable = true;
+<<<<<<< Updated upstream
+  programs.notmuch.new.tags = [ "unread" "inbox" ];
+  #programs.notmuch.hooks.preNew = "mbsync --all";
+  #https://notmuchmail.org/initial_tagging/
+  programs.notmuch.hooks.postNew = ''
+    echo "Running global tag additions to tag new mail"
+=======
+  programs.notmuch.new.tags = [ "new" ];
+  programs.notmuch.new.ignore = [ "*.json" "*.json.bak" ];
+  #programs.notmuch.hooks.preNew = "mbsync --all";
+  programs.notmuch.hooks.postNew = ''
+    notmuch tag +nixos -- not tag:nixos and from:nixos1@discoursemail.com
+
+    notmuch tag -new -inbox +atos -- tag:inbox and folder:/atos.Inbox.0-current-month/
+    notmuch tag -new -inbox +atos -- tag:inbox and folder:/atos.Inbox.2018-09/
+    notmuch tag -new -inbox +atos -- tag:inbox and folder:/atos.Inbox.2018-08/
+    notmuch tag -new -inbox +atos -- tag:inbox and folder:/atos.Inbox.2018-07/
+
+    notmuch tag -new +inbox -- tag:new
+  '';
+>>>>>>> Stashed changes
+
+    notmuch tag +nixos -- not tag:nixos and from:nixos1@discoursemail.com
+
+    # Note mail sent specifically to me (excluding bug mail)
+    notmuch tag +to-me -- not tag:to-me and to:david.guibert@gmail.com
+    notmuch tag +to-me -- not tag:to-me and to:david.guibert@atos.net
+    
+    # And note all mail sent from me
+    notmuch tag +sent -- not tag:sent and to:david.guibert@gmail.com
+    notmuch tag +sent -- not tag:sent and to:david.guibert@atos.net
+
+    echo "Done."
+  '';
+}

@@ -21,6 +21,7 @@
       sshKey = "/root/.ssh/id_nixBuild";
       sshUser = "nixBuild";
       system = "aarch64-linux";
+      supportedFeatures = [ "big-parallel" ];
     }];
   };
 }

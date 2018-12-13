@@ -22,6 +22,7 @@ rec {
     <modules/distributed-build.nix>
     <modules/x11.nix>
   ];
+  nixpkgs.localSystem.system = "x86_64-linux";
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B";
@@ -43,7 +44,7 @@ rec {
     { device = "/dev/disk/by-uuid/cc74b0e1-c5fb-4bf2-870a-e23363cd7849";
       fsType = "xfs";
     };
-  fileSystems."/tmp" = { device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; };
+  fileSystems."/tmp" = { device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; neededForBoot=true; };
 
   swapDevices = [ { device = "/dev/sda2"; } ];
 
@@ -74,8 +75,6 @@ rec {
   #  '';
 
   networking.hostId = "a8c00e01";
-
-  networking.hostName = "orsine"; # Define your hostname.
 
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.wireless.interfaces = [ "wlp0s29f7u1" ];
@@ -344,4 +343,5 @@ rec {
     };
   };
 
+  services.disnix.enable = true;
 }
