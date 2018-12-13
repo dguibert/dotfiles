@@ -62,7 +62,7 @@ in
     #services.babeld.extraConfig = ''
     #redistribute local if <interface> deny
     #'';
-    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
+    #home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
   };
 
   rpi31 = { pkgs, config, lib, ...}: {
@@ -74,7 +74,7 @@ in
     ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
-    home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
+    #home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
   };
 
   titan = { pkgs, config, lib, ...}: {
