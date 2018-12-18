@@ -90,7 +90,7 @@ update-packages-%:
 shell-nix-scratch-gpfs:
 	export PATH=/scratch_gpfs/bguibertd/nix/var/nix/profiles/default/bin:$$PATH
 	export NIX_PATH=nixpkgs=${HOME}/code/nixpkgs:nixpkgs-overlays=${HOME}/nixpkgs-overlays-scratch-gpfs/overlays 
-	export ENVRC=nix-cratch-gpfs
+	export ENVRC=nix-scratch-gpfs
 	$(SHELL)
 update-packages-lobo:
 	set -x
