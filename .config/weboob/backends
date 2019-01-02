@@ -10,8 +10,8 @@ username =
 
 [freemobile]
 _module = freemobile
-login = 
-password = 
+password = `pass dag/fr.free.mobile|head -n 1`
+login = `pass dag/fr.free.mobile|grep -oP "login: \K.*"`
 
 [allocine]
 _module = allocine
