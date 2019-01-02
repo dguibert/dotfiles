@@ -2,14 +2,14 @@
   "home-manager": {
     "owner": "rycee",
     "repo": "home-manager",
-    "rev": "15bca92b2c7d8f0a709bbc9fcb8a005c7c38c092",
-    "sha256": "116fzzn2gfzfh5kajr9qg9bvimhg50lw2bv2990pz96ak2rkimia"
+    "rev": "e68d6e7924925b28ddd46bd7748be7aa3e5c57bd",
+    "sha256": "0ak46iqm0fcwmjggqrp6xk9yh9q8wwj26bdgikmibs0v71wa9w4r"
   },
   "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
-    "rev": "5e0b2e7feb1970a9b62be4d2066dd8e133ae71e9",
-    "sha256": "0jzd7jaa0ns5wswqa98gma8bk8kplayggxabn9qc5wc2kp2cdx4m"
+    "rev": "c6171104004edff8f808b42d59c86204baefb3a2",
+    "sha256": "0jvixrj92pj2wiljx5p8k6rwbyq8v2hnrpmwxh8mav6kk0jl89l0"
   },
   "nixpkgs-overlays": {
     "owner": "dguibert",
@@ -19,14 +19,14 @@
   },
   "krops": {
     "url": "https://cgit.krebsco.de/krops/",
-    "rev": "eb68146cc4848cfc0c0339c72a44a96fdeb4a1de",
-    "sha256": "1js4ijpnadksybcadff9bw46m58sfhkkbzlsvng98myi9rvvcpwx"
+    "rev": "61b5ef3b8e7e4d601db67a20f14a5022e9de8398",
+    "sha256": "13sc8c3fid9iapabynkpjl4q147ii9yidzaqc3i90p4ar13lg352"
   },
   "haskell-updates": {
     "owner": "NixOS",
     "repo": "nixpkgs",
-    "rev": "8b606aeb0f4dcc3da628ccdd9d4c85c5b4c18aab",
-    "sha256": "1bs7d03p9g05w296pcilqcw7624yz1mc2d6izca0j4kq47bqqck0"
+    "rev": "f89242c0c3859ede3ffbdff2a2b2c211ec8d656c",
+    "sha256": "0p4zcz27c4vk4qsmml0xkyp2hwjgwv6qdcdj5c5wda1jmbsqjvkq"
   },
   "nixos-17.09": {
     "owner": "NixOS",
@@ -37,13 +37,13 @@
   "nixos-18.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "a18112a7e8fb6207ef36f667fa4fb4d39fa7584a",
-    "sha256": "1arfc4y08i66prazqwpc44hj3nhn8gj6553lm1by2gdl8bb731fp"
+    "rev": "b551f89e2568a0ee444a39972943dbadd488063d",
+    "sha256": "0p9f7mpd5cpy4mf8j2dq78mqbvwfcdzmhp95hn3lklmrpf8wam2j"
   },
   "nixos-18.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
-    "rev": "db561c90ef34cc64287ee1c366ab9eec85b2af50",
-    "sha256": "06114dqsd401c6vi6iqzxvp1c1s6g1ganhx65ph2ng06q7chggh9"
+    "rev": "7e88992a8c7b2de0bcb89182d8686b27bd93e46a",
+    "sha256": "1f6lf4addczi81hchqbzjlhrsmkrj575dmdjdhyl0jkm7ypy2lgk"
   }
 }

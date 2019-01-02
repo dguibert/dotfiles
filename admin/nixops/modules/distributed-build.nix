@@ -14,6 +14,7 @@
   '';
   nix = {
     trustedUsers = [ "nixBuild" "dguibert" ];
+    # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
     distributedBuilds = true;
     buildMachines = [{
       hostName = "rpi31";
@@ -21,7 +22,7 @@
       sshKey = "/root/.ssh/id_nixBuild";
       sshUser = "nixBuild";
       system = "aarch64-linux";
-      supportedFeatures = [ "big-parallel" ];
+    #  supportedFeatures = [ "big-parallel" ];
     }];
   };
 }

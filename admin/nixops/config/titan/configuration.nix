@@ -14,6 +14,7 @@ rec {
       <modules/nix-conf.nix>
       <modules/x11.nix>
       <modules/zfs.nix>
+      <modules/qemu.nix>
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" ];
@@ -24,7 +25,7 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" ];
+  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS1,57600n8" ];
   swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
@@ -38,6 +39,8 @@ rec {
   boot.loader.grub.device = "nodev";
 
   networking.hostId="8425e349";
+
+  qemu-user.aarch64 = true;
 
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [
@@ -83,13 +86,14 @@ rec {
   ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
   ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
   ##                NVRM:  this GPU.  Continuing probe...
-  hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+  #hardware.nvidia.modesetting.enable = true;
+  services.xserver.videoDrivers = [ "nouveau" /*"nvidiaLegacy304"*/ ];
 
-  hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
+  hardware.opengl.enable = true;
+  hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
 
   hardware.pulseaudio.enable = true;
-  environment.systemPackages = [ pkgs.pavucontrol ];
+  environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool ];
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;

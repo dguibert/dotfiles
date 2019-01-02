@@ -25,4 +25,7 @@ in self: super: {
     #  };
     #});
   };
+
+  pkgs-18_09 = (import versions."nixos-18.09" { inherit system; });
+  nixops = (import versions."nixos-18.09" { inherit system; }).nixops;
 }
