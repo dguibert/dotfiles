@@ -1,6 +1,9 @@
 # vim: set ts=2 :
 { pkgs }:
 with pkgs.lib;
+let
+  versions = import <config/lib/versions.nix>;
+in
 {
   permittedInsecurePackages = [
     "oraclejdk-10.0.2"
@@ -33,19 +36,23 @@ with pkgs.lib;
 
   packageOverrides = super: let self = super.pkgs; in with self; {
 	  home-manager = import ./home-manager { inherit pkgs; };
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
 
     git-credential-password-store = stdenv.mkDerivation {
       name = "git-credential-password-store";
       src = fetchFromGitHub {
         owner = "ccrusius";
-	repo = "git-credential-password-store";
-	rev = "225582e9a1a9bd9a63e3dfde858f4cc028b07d3e";
-	sha256 = "06ly4qcy0g57jyqnl5q524pcypm85ny4pzac3ljz1dim181zlq3c";
+	      repo = "git-credential-password-store";
+	      rev = "225582e9a1a9bd9a63e3dfde858f4cc028b07d3e";
+	      sha256 = "06ly4qcy0g57jyqnl5q524pcypm85ny4pzac3ljz1dim181zlq3c";
       };
       preBuild = "ln -s GNUmakefile Makefile";
       installFlags = "PREFIX=$(out)";
       buildInputs = [ gnugrep ];
     };
+    pkgs-18_09 = (import versions."nixos-18.09" { inherit system; });
 	  #pkgsWithGcc6 = let
     	  #  gccOverrides = self: super: {
     	  #    stdenvGcc6 = self.overrideCC self.stdenv self.gcc6;
