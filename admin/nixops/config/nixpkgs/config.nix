@@ -63,6 +63,9 @@ in
     	  #    openmpi = super.openmpi.override { stdenv = self.stdenvGcc6; };
     	  #  };
     	  #in fix' (extends gccOverrides self.__unfix__);
+    gitAndTools = super.gitAndTools // {
+      git-annex = haskell.lib.appendConfigureFlag super.gitAndTools.git-annex "--ghc-options=-XNoMonadFailDesugaring";
+    };
 
   };
 }
