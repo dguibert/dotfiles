@@ -73,3 +73,4 @@ au BufWinEnter *.nix set ft=nix
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
+let g:ctrlp_working_path_mode = 'ra'
