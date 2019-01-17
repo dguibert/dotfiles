@@ -25,6 +25,7 @@ host-%:
 	fi
 
 dguibert-titan: ATTR=hm_dguibert_x11.x86_64-linux
+dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
 dguibert-%:
