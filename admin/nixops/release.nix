@@ -6,7 +6,7 @@ with (import <nixpkgs/lib>);
 let
   trace = if builtins.getEnv "VERBOSE" == "1" then builtins.trace else (x: y: y);
 
-  mkHost = name: system: config: import <nixpkgs/nixos> { 
+  mkHost = name: system: config: import <nixpkgs/nixos> {
     inherit system;
     configuration = {
       imports = [
@@ -18,7 +18,7 @@ let
     };
   };
 
-  mkIso = name: system: config: import <nixpkgs/nixos> { 
+  mkIso = name: system: config: import <nixpkgs/nixos> {
     inherit system;
     configuration = {
       imports = [
@@ -35,7 +35,7 @@ let
         ##  #packageOverrides.linuxPackages = boot.kernelPackages;
         };
       };
-      confPath = import <config/nixpkgs/home.nix> { noXlibs = false; };
+      confPath = import <config/nixpkgs/home.nix> { noXlibs = noX11; inherit system; };
       confAttr = "";
       check = true;
       newsReadIdsFile = null;
@@ -50,8 +50,8 @@ let
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
 
-    hm_dguibert_nox11 = genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system false);
-    hm_dguibert_x11   = genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system true);
+    hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system true));
+    hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system false));
   };
   # https://katyucha.ovh/posts/2018-07-23-nix-container.html
 in jobs

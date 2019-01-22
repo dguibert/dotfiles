@@ -9,6 +9,7 @@ in
     "oraclejdk-10.0.2"
   ];
   psxe.licenseFile = ~/admin/nixops/secrets/pxse2019.1019.lic;
+  oraclejdk.accept_license = true;
 
   dwm.patches = [
     ./dwm.patches/0001-pertag.patch
