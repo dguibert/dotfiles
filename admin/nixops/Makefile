@@ -28,13 +28,15 @@ dguibert-titan: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
+
 dguibert-%:
 	set -xeuf -o pipefail
 	user=dguibert
 	host=$*
+	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
-	  $$(nix-build ./release.nix -A $$ATTR)/activate
+	  $$hm/activate
 	else
-	  nix copy --to ssh://$$host $$(nix-build ./release.nix -A $$ATTR)
-	  ssh $$user@$$host $$(nix-build ./release.nix -A hm_$${user}_x11.x86_64-linux)/activate
+	  nix copy --to ssh://$$host $$hm
+	  ssh $$user@$$host $$hm/activate
 	fi
