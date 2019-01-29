@@ -74,3 +74,6 @@ au BufWinEnter *.nix set ft=nix
 autocmd VimResized * :wincmd =
 
 let g:ctrlp_working_path_mode = 'ra'
+" case insensitve search unless on letter capital
+set ignorecase
+set smartcase
