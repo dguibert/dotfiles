@@ -5,16 +5,16 @@ login = `pass dag/www.creditmutuel.fr |grep -oP "login: \K.*"`
 
 [youtube]
 _module = youtube
-password = 
-username = 
+password =
+username =
 
 [freemobile]
 _module = freemobile
 password = `pass dag/fr.free.mobile|head -n 1`
 login = `pass dag/fr.free.mobile|grep -oP "login: \K.*"`
 
-[allocine]
-_module = allocine
+#[allocine]
+#_module = allocine
 
 [chronopost]
 _module = chronopost
@@ -24,4 +24,19 @@ _module = colisprive
 
 [colissimo]
 _module = colissimo
+
+[opensubtitles]
+_module = opensubtitles
+
+[limetorrents]
+_module = limetorrents
+
+[torrentz]
+_module = torrentz
+
+[cpasbien]
+_module = cpasbien
+
+[btmon]
+_module = btmon
 
