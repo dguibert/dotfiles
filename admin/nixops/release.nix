@@ -28,12 +28,12 @@ let
     };
   };
 
-  mkHome = system: noX11: (import <home-manager/home-manager/home-manager.nix> {
+  mkHome = system: home_config: confAttr: (import <home-manager/home-manager/home-manager.nix> {
       pkgs = import <nixpkgs> {
         overlays = [ ];
 	config = { };
       };
-      confPath = import <config/nixpkgs/home.nix> { noXlibs = noX11; inherit system; };
+      confPath = (import home_config { inherit system; }).${confAttr};
       confAttr = "";
       check = true;
       newsReadIdsFile = null;
@@ -48,8 +48,8 @@ let
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
 
-    hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system true));
-    hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system false));
+    hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system <config/users/dguibert/home.nix> "withoutX11"));
+    hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system <config/users/dguibert/home.nix> "withX11"));
   };
   # https://katyucha.ovh/posts/2018-07-23-nix-container.html
 in jobs

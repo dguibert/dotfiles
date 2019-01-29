@@ -1,6 +1,6 @@
 termcapinfo xterm* ti@:te@
 
-
+login on
 vbell off
 altscreen on
 hardstatus off
