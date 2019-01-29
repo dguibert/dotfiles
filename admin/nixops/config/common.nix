@@ -33,9 +33,6 @@
   # https://hydra.nixos.org/job/disnix/disnix-trunk/tarball/latest/download-by-type/doc/manual/#chap-packages
   environment.variables.PATH = [ "/nix/var/nix/profiles/disnix/default/bin" ];
 
-  # Package ‘openafs-1.6.22.2-4.18.4’ in /home/dguibert/code/nixpkgs/pkgs/servers/openafs/1.6/module.nix:49 is marked as broken, refusing to evaluate.
-  nixpkgs.config.allowBroken = true;
-
   services.openssh.startWhenNeeded = true;
   services.openssh.passwordAuthentication = false;
   # https://www.sweharris.org/post/2016-10-30-ssh-certs/

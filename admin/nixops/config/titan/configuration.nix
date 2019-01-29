@@ -14,7 +14,7 @@ rec {
       <modules/nix-conf.nix>
       <modules/x11.nix>
       <modules/zfs.nix>
-      <modules/qemu.nix>
+      (import <nur_dguibert/modules>).qemu-user
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" ];
@@ -25,7 +25,7 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS1,57600n8" ];
+  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS0,115200n8" ];
   swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
@@ -93,10 +93,10 @@ rec {
   environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool ];
 
   # https://nixos.org/nixops/manual/#idm140737318329504
-  virtualisation.libvirtd.enable = true;
-  virtualisation.docker.enable = true;
+  #virtualisation.libvirtd.enable = false;
+  #virtualisation.docker.enable = false;
   networking.firewall.checkReversePath = false;
-  systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
+  #systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
   services.disnix.enable = true;
 }

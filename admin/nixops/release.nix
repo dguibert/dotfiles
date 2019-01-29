@@ -30,10 +30,8 @@ let
 
   mkHome = system: noX11: (import <home-manager/home-manager/home-manager.nix> {
       pkgs = import <nixpkgs> {
-        overlays = [ (import <config/pkgs-pinned-overlay.nix> { }) ];
-        config = {pkgs}: (import <config/nixpkgs/config.nix> { inherit pkgs; }) // {
-        ##  #packageOverrides.linuxPackages = boot.kernelPackages;
-        };
+        overlays = [ ];
+	config = { };
       };
       confPath = import <config/nixpkgs/home.nix> { noXlibs = noX11; inherit system; };
       confAttr = "";
