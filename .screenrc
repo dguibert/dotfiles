@@ -1,5 +1,6 @@
 termcapinfo xterm* ti@:te@
 
+shell -$SHELL
 login on
 vbell off
 altscreen on
