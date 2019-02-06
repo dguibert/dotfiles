@@ -8,6 +8,7 @@ endif
 HOSTNAME?=$(shell hostname -s)
 
 export ATTR=
+export U=
 build:
 	nix-build --no-out-link ./release.nix
 host-%:
@@ -29,9 +30,16 @@ dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
 
+dguibert-manny: ATTR=hm_dguibert_manny
+dguibert-manny: U=bguibertd
+dguibert-genji: ATTR=hm_dguibert_genji
+dguibert-genji: U=bguibertd
+dguibert-inti: ATTR=hm_dguibert_inti
+dguibert-inti: U=bguibertd
+
 dguibert-%:
 	set -xeuf -o pipefail
-	user=dguibert
+	user=$${U:-dguibert}
 	host=$*
 	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then

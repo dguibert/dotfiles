@@ -28,12 +28,12 @@ let
     };
   };
 
-  mkHome = system: home_config: confAttr: (import <home-manager/home-manager/home-manager.nix> {
+  mkHome = system: home_config: confAttr: overlays: (import <home-manager/home-manager/home-manager.nix> {
       pkgs = import <nixpkgs> {
         overlays = [ ];
 	config = { };
       };
-      confPath = (import home_config { inherit system; }).${confAttr};
+      confPath = (import home_config { inherit system overlays; }).${confAttr};
       confAttr = "";
       check = true;
       newsReadIdsFile = null;
@@ -48,8 +48,19 @@ let
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
 
-    hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system <config/users/dguibert/home.nix> "withoutX11"));
-    hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system <config/users/dguibert/home.nix> "withX11"));
+    hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system <config/users/dguibert/home.nix> "withoutX11" []));
+    hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system <config/users/dguibert/home.nix> "withX11" []));
+
+    hm_dguibert_genji = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "cluster" [
+      (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
+    ];
+    hm_dguibert_manny = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "manny" [
+      (import <nur_dguibert/overlays>).nix-home-nfs-bguibertd
+    ];
+    hm_dguibert_inti = mkHome "aarch64-linux" <config/users/dguibert/home.nix> "manny" [
+      (import <nur_dguibert/overlays>).nix-ccc-guibertd
+      (import <nur_dguibert/overlays/local-inti.nix>)
+    ];
   };
   # https://katyucha.ovh/posts/2018-07-23-nix-container.html
 in jobs
