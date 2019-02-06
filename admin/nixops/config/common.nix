@@ -17,8 +17,10 @@
   services.zerotierone.enable = true;
   services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
 
-  networking.useNetworkd = true;
   systemd.network.enable = true;
+  # https://github.com/NixOS/nixpkgs/issues/18962
+  # Prevent networkd from managing unconfigured links.
+  systemd.network.networks."99-main".enable = false;
   networking.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
   services.nscd.enable = false; # no real gain (?) on workstations
   # unreachable DNS entries from home

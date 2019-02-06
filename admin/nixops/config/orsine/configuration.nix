@@ -76,6 +76,7 @@ rec {
 
   networking.hostId = "a8c00e01";
 
+  #networking.wireless.iwd.enable = true; # wifi usb dongle does show in device list
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.wireless.interfaces = [ "wlp0s29f7u1" ];
   networking.wireless.driver = "nl80211,wext";
@@ -159,7 +160,7 @@ rec {
     alsaPlugins pavucontrol
 
     nixops
-    config.boot.kernelPackages.perf 
+    config.boot.kernelPackages.perf
   ] ++ (with aspellDicts; [en fr]) ++ [
     rxvt_unicode
     pkgs.disnixos pkgs.wireguard-tools
@@ -299,7 +300,7 @@ rec {
   ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61NHVC1-part9
   ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61PEJW5-part9
   ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61NTXH5-part9
-  ## 
+  ##
   ##[Unit]
   ##After=dev-disk-by\x2did-wwn\x2d0x60014057ab42867d066fd393edb4abd6.device
   ##
