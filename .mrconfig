@@ -382,3 +382,12 @@ checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
 
 [code/NUR]
 checkout = git clone 'https://github.com/nix-community/NUR' 'NUR'
+
+[code/kubenix]
+checkout = git clone 'https://github.com/xtruder/kubenix' 'kubenix'
+
+[code/kubenix-modules]
+checkout = git clone 'https://github.com/xtruder/kubenix-modules' 'kubenix-modules'
+
+[code/nixos-org-configurations]
+checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-org-configurations'
