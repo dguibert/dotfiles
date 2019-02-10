@@ -43,6 +43,8 @@ Plugin 'vim-pandoc/vim-pandoc'
 "
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kalafut/vim-taskjuggler'
+
+Plugin 'hashivim/vim-terraform.git'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
