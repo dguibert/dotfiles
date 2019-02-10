@@ -391,3 +391,6 @@ checkout = git clone 'https://github.com/xtruder/kubenix-modules' 'kubenix-modul
 
 [code/nixos-org-configurations]
 checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-org-configurations'
+
+[code/nix-deploy]
+checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
