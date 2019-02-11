@@ -57,7 +57,7 @@ let
     hm_dguibert_manny = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "manny" [
       (import <nur_dguibert/overlays>).nix-home-nfs-bguibertd
     ];
-    hm_dguibert_inti = mkHome "aarch64-linux" <config/users/dguibert/home.nix> "manny" [
+    hm_dguibert_inti = mkHome "aarch64-linux" <config/users/dguibert/home.nix> "inti" [
       (import <nur_dguibert/overlays>).nix-ccc-guibertd
       (import <nur_dguibert/overlays/local-inti.nix>)
     ];

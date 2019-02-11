@@ -94,6 +94,7 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
+  #services.nfs.server.enable = true;
   #virtualisation.docker.enable = false;
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];

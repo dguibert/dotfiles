@@ -17,7 +17,7 @@ rec {
     vim vcsh gitFull pavucontrol
     gnupg
     gnupg1compat
-    config.boot.kernelPackages.perf 
+    config.boot.kernelPackages.perf
   ];
   programs.sysdig.enable = true;
 
@@ -114,7 +114,7 @@ rec {
     #    "net.ipv4.tcp_rfc1337" = "1";
     #  };
 
-  
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "fr";
@@ -134,19 +134,28 @@ rec {
   #services.xserver.desktopManager.xfce.enable = true;
   #services.xserver.desktopManager.gnome3.enable = true;
 
-  services.cntlm.enable = true;
-  services.cntlm.username = "a629925";
-  services.cntlm.domain = "ww930";
-  services.cntlm.netbios_hostname = "fr-57nvj72";
-  services.cntlm.proxy = [
-    "10.89.0.72:84"
-    #"proxy-emea.my-it-solutions.net:84"
-    #"10.92.32.21:84"
-    #"proxy-americas.my-it-solutions.net:84"
+  # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
+  nesting.clone = [
+    {
+      boot.loader.grub.configurationName = "Work";
+      networking.proxy.default = "http://localhost:3128";
+      networking.proxy.noProxy = "127.0.0.1,localhost,10.*,192.168.*";
+      services.cntlm.enable = true;
+      services.cntlm.username = "a629925";
+      services.cntlm.domain = "ww930";
+      services.cntlm.netbios_hostname = "fr-57nvj72";
+      services.cntlm.proxy = [
+        "10.89.0.72:84"
+        #"proxy-emea.my-it-solutions.net:84"
+        #"10.92.32.21:84"
+        #"proxy-americas.my-it-solutions.net:84"
+      ];
+      services.cntlm.extraConfig = ''
+    NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+      '';
+
+    }
   ];
-  services.cntlm.extraConfig = ''
-NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
-  '';
 
   networking.interfaces.zt0.ipv4.addresses = [
             { address = "10.147.17.198"; prefixLength = 24; }
