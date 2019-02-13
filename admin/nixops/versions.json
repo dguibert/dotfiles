@@ -1,0 +1,44 @@
+{
+  "home-manager": {
+    "owner": "dguibert",
+    "repo": "home-manager",
+    "branch": "pu",
+    "rev": "ef9ebc3555e4fb3ad2b1f889580fa1ff993122fe",
+    "sha256": "1xyn2v63cdc1wzdrw9k8ch9abpkdhdqra4p4gzxd0azww9rjf4ma"
+  },
+  "nixpkgs": {
+    "owner": "dguibert",
+    "repo": "nixpkgs",
+    "branch": "pu",
+    "rev": "aaf6988fd84267799775cc412015724b974bd31b",
+    "sha256": "0465dv4s06djz0krbxr2sg0iy0vxl9sajpg5hqwjzm3m601jmk1d"
+  },
+  "nur_dguibert": {
+    "owner": "dguibert",
+    "repo": "nur-packages",
+    "branch": "master",
+    "rev": "bb5cefeed2d315321278e8ffda407cbd1af81bc3",
+    "sha256": "06vqkp6mb6hssyfh4byy78hvvgprjhdjsp3v75h1cj2q7828pph6"
+  },
+  "nixos-17.09": {
+    "owner": "NixOS",
+    "repo": "nixpkgs-channels",
+    "branch": "nixos-17.09",
+    "rev": "14f9ee66e63077539252f8b4550049381a082518",
+    "sha256": "1wn7nmb1cqfk2j91l3rwc6yhimfkzxprb8wknw5wi57yhq9m6lv1"
+  },
+  "nixos-18.03": {
+    "owner": "NixOS",
+    "repo": "nixpkgs-channels",
+    "branch": "nixos-18.03",
+    "rev": "138f2cc707d7ee13d93c86db3285460e244c402c",
+    "sha256": "0h49j1cbnccqx996x80z7na9p7slnj9liz646s73s55am8wc9q8q"
+  },
+  "nixos-18.09": {
+    "owner": "NixOS",
+    "repo": "nixpkgs-channels",
+    "branch": "nixos-18.09",
+    "rev": "168cbb39691cca2822ce1fdb3e8c0183af5c6d0d",
+    "sha256": "0fqasswfqrz2rbag9bz17j8y7615s0p9l23cw4sk2f384gk0zf6c"
+  }
+}
