@@ -1,7 +1,10 @@
 { versions ? import ./versions.nix
 , nixpkgs ? versions.nixpkgs
+# , nur_dguibert ? versions.nur_dguibert
+, home-manager ? versions.home-manager
+#, nixpkgs ? builtins.getEnv "HOME" + "code/nixpkgs"
 , nur_dguibert ? builtins.getEnv "HOME" + "/nur-packages" # versions.nur_dguibert
-, home-manager ? builtins.getEnv "HOME" + "/code/home-manager" # versions.home-manager
+#, home-manager ? builtins.getEnv "HOME" + "/code/home-manager" # versions.home-manager
 , overlays_ ? []
 
 , pkgs ? import nixpkgs {
