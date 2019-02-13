@@ -30,6 +30,11 @@ dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
 
+root-titan: ATTR=hm_root.x86_64-linux
+root-vbox-57nvj72: ATTR=hm_root.x86_64-linux
+root-orsine: ATTR=hm_root.x86_64-linux
+root-rpi31: ATTR=hm_root.aarch64-linux
+
 dguibert-manny: ATTR=hm_dguibert_manny
 dguibert-manny: U=bguibertd
 dguibert-genji: ATTR=hm_dguibert_genji
@@ -44,6 +49,17 @@ dguibert-%:
 	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
+	else
+	  nix copy --to ssh://$$host $$hm
+	  ssh $$user@$$host $$hm/activate
+	fi
+root-%:
+	set -xeuf -o pipefail
+	user=root
+	host=$*
+	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
+	if [ "$$HOSTNAME" == "$$host" ]; then
+	  sudo -i $$hm/activate
 	else
 	  nix copy --to ssh://$$host $$hm
 	  ssh $$user@$$host $$hm/activate

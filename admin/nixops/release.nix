@@ -48,6 +48,7 @@ let
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
 
+    hm_root   = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system <config/users/root/home.nix> "home" []));
     hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system <config/users/dguibert/home.nix> "withoutX11" []));
     hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system <config/users/dguibert/home.nix> "withX11" []));
 
