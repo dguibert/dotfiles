@@ -2,7 +2,7 @@
 git_gc = git gc "$@"
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	  source $HOME/.config/mr/lib/git-remotes
 	  git_annex_sync() {
 	           if git config --get-all remote.orsine.url; then
@@ -34,7 +34,7 @@ include = cat $HOME/.config/mr/config.d/*
 [$HOME/.mgit/dotfiles/.git]
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
-push = 
+push =
 	mgit dotfiles push
 	mgit dotfiles push public_git
 
@@ -285,7 +285,7 @@ checkout = git clone 'https://github.com/NumScale/boost.dispatch' 'boost.dispatc
 [code/casync]
 checkout = git clone 'https://github.com/systemd/casync' 'casync'
 
-[.config/nixpkgs/home-manager]
+[code/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
 
 [code/charliecloud]
