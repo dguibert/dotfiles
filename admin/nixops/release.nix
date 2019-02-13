@@ -53,6 +53,7 @@ let
 
     hm_dguibert_genji = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
+      (import <nur_dguibert/overlays/local-genji.nix>)
     ];
     hm_dguibert_manny = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "manny" [
       (import <nur_dguibert/overlays>).nix-home-nfs-bguibertd
