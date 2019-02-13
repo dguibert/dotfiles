@@ -287,6 +287,14 @@ checkout = git clone 'https://github.com/systemd/casync' 'casync'
 
 [code/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
+fixups = #git_add_remotes "
+	 #  github https://github.com/NixOS/nixpkgs
+	 #"
+	 git config --get-all remote.dguibert.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
+
+update = git remote update
+push = git push -v dguibert +pu
+       git push -v dguibert
 
 [code/charliecloud]
 checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
