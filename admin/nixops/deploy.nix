@@ -2,7 +2,7 @@
 #, installer ? false
 , ...}@args:
 let
-  pass_ = key: if builtins ? extraBuiltins then 
+  pass_ = key: if builtins ? extraBuiltins then
                  if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
                  else "without-pass"
                  else if builtins ? exec then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ] else "without-pass";
@@ -12,7 +12,8 @@ in
   network.enableRollback = true;
 
   orsine = { pkgs, config, lib, ...}: {
-    imports = [ ./config/orsine/configuration.nix 
+    imports = [ ./config/orsine/configuration.nix
+      <home-manager/nixos>
     ];
     #deployment.targetHost = "10.147.17.123";
 
@@ -62,23 +63,34 @@ in
     #services.babeld.extraConfig = ''
     #redistribute local if <interface> deny
     #'';
-    #home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
+    home-manager.users.dguibert = (import ./config/users/dguibert/home.nix {}).withX11 { inherit pkgs lib; };
+    home-manager.users.root = (import ./config/users/root/home.nix {}).home { inherit pkgs lib; };
   };
 
   rpi31 = { pkgs, config, lib, ...}: {
-    imports = [ ./config/rpi31/configuration.nix ];
+    imports = [ ./config/rpi31/configuration.nix
+      <home-manager/nixos>
+    ];
+    home-manager.users.dguibert = (import ./config/users/dguibert/home.nix { system=config.nixpkgs.localSystem.system; }).withoutX11 { inherit pkgs lib; };
+    home-manager.users.root = (import ./config/users/root/home.nix { system=config.nixpkgs.localSystem.system; }).home { inherit pkgs lib; };
   };
 
   vbox-57nvj72 = { pkgs, config, lib, ...}: {
     imports = [ ./config/vbox-57nvj72/configuration.nix
+      <home-manager/nixos>
     ];
     #deployment.targetHost = "10.0.2.15";
     deployment.targetHost = "10.147.17.198";
     #home-manager.users.dguibert = import ~/.config/nixpkgs/home.nix { inherit pkgs lib; };
+    home-manager.users.dguibert = (import ./config/users/dguibert/home.nix {}).withX11 { inherit pkgs lib; };
+    home-manager.users.root = (import ./config/users/root/home.nix {}).home { inherit pkgs lib; };
   };
 
   titan = { pkgs, config, lib, ...}: {
-    imports = [ ./config/titan/configuration.nix 
+    imports = [ ./config/titan/configuration.nix
+      <home-manager/nixos>
     ];
+    home-manager.users.dguibert = (import ./config/users/dguibert/home.nix {}).withX11 { inherit pkgs lib; };
+    home-manager.users.root = (import ./config/users/root/home.nix {}).home { inherit pkgs lib; };
   };
 }
