@@ -6,8 +6,8 @@ let
            , ...}:
            with lib;
     {
-      home.username = "root";
-      home.homeDirectory = "/root";
+      home.username = lib.mkForce "root";
+      home.homeDirectory = lib.mkForce "/root";
 
       nixpkgs.system = system;
       nixpkgs.pkgs = import <nixpkgs> {
