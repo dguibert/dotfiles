@@ -5,8 +5,8 @@
 #, nixpkgs ? builtins.getEnv "HOME" + "/code/nixpkgs"
 , nur_dguibert ? builtins.getEnv "HOME" + "/nur-packages" # versions.nur_dguibert
 #, home-manager ? builtins.getEnv "HOME" + "/code/home-manager" # versions.home-manager
-, nixops ? versions.nixops
-#, nixops ? builtins.getEnv "HOME" + "/code/nixops"
+#, nixops ? versions.nixops
+, nixops ? builtins.getEnv "HOME" + "/code/nixops"
 , overlays_ ? []
 
 , pkgs ? import nixpkgs {

@@ -10,8 +10,8 @@
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "81d148e9927eb4f316057285025695a2420c8dd5",
-    "sha256": "1322sr2sabs3iw634difzzgjbj7hy43zc292c589c99aifiiazl0"
+    "rev": "7108a732a9b36e1f533643585c4fa461ecd9385e",
+    "sha256": "0pj39f281ax1x6xaj0nzad1yi9myfnk8qcyj3ysdqpg5vxka3dz0"
   },
   "nur_dguibert": {
     "owner": "dguibert",
