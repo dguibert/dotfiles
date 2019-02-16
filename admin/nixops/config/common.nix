@@ -26,8 +26,8 @@
   services.nscd.enable = false; # no real gain (?) on workstations
   # unreachable DNS entries from home
   networking.hosts = {
-    "208.118.235.200" = [ "ftpmirror.gnu.org" ];
-    "208.118.235.201" = [ "git.savannah.gnu.org" ];
+    "209.51.188.200" = [ "ftpmirror.gnu.org" ];
+    "209.51.188.201" = [ "git.savannah.gnu.org" ];
   };
 
   # disnix target
