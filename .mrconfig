@@ -1,32 +1,46 @@
 [DEFAULT]
 git_gc = git gc "$@"
+git_allupdate = git remote update --prune
+git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
 lib =
-	  source $HOME/.config/mr/lib/git-remotes
-	  git_annex_sync() {
-	           if git config --get-all remote.orsine.url; then
-	             git config remote.orsine.annex-ignore-command || git config remote.orsine.annex-ignore-command "ssh -Nf orsine sleep 1 2>/dev/null || echo \"orsine ignored\""
-	             git config remote.orsine.annex-sync-command || git config remote.orsine.annex-sync-command "ssh -Nf orsine sleep 1   2>/dev/null || echo \"orsine not synced\""
-	    fi
-	           #if git config --get-all remote.orsine-backupwd.url; then
-	    #        git config remote.orsine-backupwd.annex-ignore-command || git config remote.orsine-backupwd.annex-ignore-command "ssh -f orsine \"(cd /backupwd; sleep 10)\""
-	    #        git config remote.orsine-backupwd.annex-sync-command || git config remote.orsine-backupwd.annex-sync-command "ssh -f orsine \"(cd backupwd; sleep 10)\""
-	## annex-ignore-command = ssh -Nf orsine cd /backupwd 2>/dev/null || echo "orsine-backupwd ignored"
-	## annex-sync-command = ssh -Nf orsine cd /backupwd   2>/dev/null || echo "orsine-backupwd not synced"
-	    #fi
-	    if [ -e Makefile ]; then
-	             make sync
-	    else
-	             git annex -v sync --content $GIT_ANNEX_OPTIONS;
-	           fi
-	         }
-	  new_git_annexed_repo() {
-	    git init $MR_REPO
-	    cd $MR_REPO
-	    git annex init
-	    git_annex_sync
-	  }
+	if [ -n "$HOSTNAME" ]; then
+		hostname="$HOSTNAME"
+	else
+		hostname="$(hostname)"
+	fi
+	whoami="$(whoami)"
+	anon() {
+		( GIT_CONFIG=$HOME/.git/config git config remote.origin.url || cat .git/remotes/origin ) | grep -q 'git://'
+	}
+	on() {
+		for host in $@; do
+			if [ "${host%@*}" != "${host#*@}" ]; then
+				if [ "$whoami" != "${host%@*}" ]; then
+					continue
+				fi
+				host="${host#*@}"
+			fi
+			if [ "$hostname" = "$host" ]; then
+				return 0
+			fi
+		done
+		return 1
+	}
+	ismounted() {
+		mount | grep -q "$1"
+	}
+	wantmedia() {
+		test "$whoami" = dguibert && on titan orsine
+	}
+	wantsound() {
+		test "$whoami" = dguibert && on titan orsine
+	}
+	wantarchives() {
+		test "$whoami" = dguibert && on titan orsine
+	}
+	source $HOME/.config/mr/lib/git-remotes
 push = echo "$MR_REPO has to be manually pushed"
 
 include = cat $HOME/.config/mr/config.d/*
@@ -176,8 +190,20 @@ fixups = git_add_remotes "
 	   "
 
 [$HOME/work]
-checkout = new_git_annexed_repo
-push = git_annex_sync
+checkout = git init $MR_REPO
+	   cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = git_add_remotes "
+	   orsine orsine:work
+           orsine-backupwd orsine:/backupwd/work
+           vbox-57nvj72 vbox-57nvj72:work
+           genji genji:work
+           manny manny:work
+           genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
+	   "
+         git remote remove manny_lustre_na 2>/dev/null || true
 
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
@@ -402,3 +428,13 @@ checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-
 
 [code/nix-deploy]
 checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
+
+[$HOME/archives]
+checkout = git init $MR_REPO
+	   cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+order = 100
+skip = ([ "$1" = update ] && ! hours_since "$1" 192) && ! wantarchives # 8 days
+

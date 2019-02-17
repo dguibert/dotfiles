@@ -56,7 +56,7 @@ git_add_remote () {
     existing_url=$( git config "remote.$remote.url" ) || true
     if [ -n "$existing_url" ]; then
         if [ "$url" = "$existing_url" ]; then
-            #info "Remote $remote already points to $url"
+            info "Remote $remote already points to $url"
             return
         fi
 
@@ -98,7 +98,7 @@ git_add_remotes () {
             exception="$remote"
         fi
         if [ "$LOCALHOST_NICKNAME" = "$exception" ]; then
-            #info "Won't add remote $url for $exception"
+            info "Won't add remote $url for $exception"
             continue
         fi
 
