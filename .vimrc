@@ -6,6 +6,13 @@ filetype off                  " required
 syntax on
 set hidden
 
+"" https://github.com/chriskempson/base16-vim
+let base16colorspace=256  " Access colors present in 256 colorspace
+so ~/.vim/base16.vim
+" status line
+set laststatus=2
+let g:airline_powerline_fonts=1
+
 " Vundle is short for Vim bundle and is a Vim plugin manager.
 "
 " Vundle allows you to...
@@ -29,7 +36,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline' " Lean & mean status/tabline for vim that's light as air.
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'altercation/vim-colors-solarized'
+"Plugin 'altercation/vim-colors-solarized'
 "Plugin 'godlygeek/tabular' " align everything
 Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
@@ -45,6 +52,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kalafut/vim-taskjuggler'
 
 Plugin 'hashivim/vim-terraform.git'
+Plugin 'edkolev/tmuxline.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -56,14 +64,11 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-set background=light
-" set background=dark
-set t_Co=256
-colorscheme solarized
-
-" status line
-set laststatus=2
-let g:airline_powerline_fonts=1
+"set t_Co=256
+"set background=light
+""" set background=dark
+""set t_Co=256
+"colorscheme solarized
 
 "let g:ctrlp_map = '<c-p>'
 "let g:ctrlp_cmd = 'CtrlP'
@@ -79,3 +84,33 @@ let g:ctrlp_working_path_mode = 'ra'
 " case insensitve search unless on letter capital
 set ignorecase
 set smartcase
+
+"let g:airline#extensions#tmuxline#enabled = 0
+" #H    Hostname of local host
+" #h    Hostname of local host without the domain name
+" #F    Current window flag
+" #I    Current window index
+" #S    Session name
+" #W    Current window name
+" #(shell-command)  First line of the command's output
+"let g:tmuxline_preset = 'tmux'
+"let g:tmuxline_preset = 'full'
+"let g:tmuxline_preset = 'nightly_fox'
+let g:tmuxline_preset = {
+        \ 'a': '[#S]',
+        \ 'win': '#I:#W#F',
+        \ 'cwin': '#I:#W#F',
+        \ 'x': '$wg_is_keys_off',
+        \ 'y': [ '%d-%b-%y', '%H:%M' ],
+        \ 'z': '#H',
+        \ 'options': {
+        \'status-justify': 'left',
+        \'status-position': 'top'}
+        \}
+"      \'a'    : '#S',
+"      \'c'    : ['#(whoami)', '#(uptime | cut -d " " -f 1,2,3)'],
+"      \'win'  : ['#I', '#W'],
+"      \'cwin' : ['#I', '#W', '#F'],
+"      \'x'    : '#(date)',
+"      \'y'    : ['%R', '%a', '%Y'],
+"      \'z'    : '#H'}
