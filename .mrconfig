@@ -3,8 +3,9 @@ git_gc = git gc "$@"
 git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
-	         cat $HOME/.config/mr/lib/mgit
+	  cat $HOME/.config/mr/lib/mgit
 lib =
+	source $HOME/.config/mr/lib/git-remotes
 	if [ -n "$HOSTNAME" ]; then
 		hostname="$HOSTNAME"
 	else
@@ -45,9 +46,34 @@ push = echo "$MR_REPO has to be manually pushed"
 
 include = cat $HOME/.config/mr/config.d/*
 
+#[$HOME/Videos]
+##checkout =
+## 	git clone git://example.org/my_tunes $MR_REPO
+## 	cd $MR_REPO
+## 	git annex init
+## 	git_annex_sync
+#update = git annex sync
+#push = git_annex_sync
+#fullupdate =
+#	mr -n push
+##	if ismounted /backupwd/Vidoes; then
+##		git annex move --to passport --include=out --include='*/out'
+##	fi
+#skip = ! wantmedia
+
+# [tunes]
+# checkout =
+# 	git clone git://example.org/my_tunes $MR_REPO
+# 	cd $MR_REPO
+# 	git annex init
+# 	git_annex_sync
+
 [$HOME/.mgit/dotfiles/.git]
+order = 1
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
-fixups = mgit dotfiles remote add public_git ~/public_git/dotfiles.git
+fixups = git_add_remotes "
+	   public_git ~/public_git/dotfiles.git
+	   "
 push =
 	mgit dotfiles push
 	mgit dotfiles push public_git
@@ -428,6 +454,39 @@ checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-
 
 [code/nix-deploy]
 checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
+
+[$HOME/Documents]
+checkout = git init $MR_REPO
+	   cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = git_add_remotes "
+	   titan titan:Documents
+	   orsine orsine:Documents
+           orsine-backupwd orsine:/backupwd/Documents
+           vbox-57nvj72 vbox-57nvj72:Documents
+	   backupwd /backupwd/Documents
+	   "
+	 #bluray_1 /run/media/dguibert/bluray_1/Documents/
+         #git remote remove repo 2>/dev/null || true
+skip = ! on titan orsine vbox-57nvj72
+
+[$HOME/Videos]
+checkout = git init $MR_REPO
+	   cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = git_add_remotes "
+	   titan titan:Videos
+	   orsine orsine:Videos
+           orsine-backupwd orsine:/backupwd/Videos
+           vbox-57nvj72 vbox-57nvj72:Videos
+	   "
+         #git remote remove repo 2>/dev/null || true
+skip = ! wantmedia
+
 
 [$HOME/archives]
 checkout = git init $MR_REPO

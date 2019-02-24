@@ -1,4 +1,5 @@
 # -*- mode: sh -*-
+# vim: ft=sh :
 # https://raw.githubusercontent.com/aspiers/mr-config/master/sh.d/git-remotes
 
 # Utilities for ensuring that a git repository has the right remotes
