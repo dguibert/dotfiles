@@ -6,20 +6,8 @@
     "rev": "ef9ebc3555e4fb3ad2b1f889580fa1ff993122fe",
     "sha256": "1xyn2v63cdc1wzdrw9k8ch9abpkdhdqra4p4gzxd0azww9rjf4ma"
   },
-  "nixpkgs": {
-    "owner": "dguibert",
-    "repo": "nixpkgs",
-    "branch": "pu",
-    "rev": "7108a732a9b36e1f533643585c4fa461ecd9385e",
-    "sha256": "0pj39f281ax1x6xaj0nzad1yi9myfnk8qcyj3ysdqpg5vxka3dz0"
-  },
-  "nur_dguibert": {
-    "owner": "dguibert",
-    "repo": "nur-packages",
-    "branch": "master",
-    "rev": "bb5cefeed2d315321278e8ffda407cbd1af81bc3",
-    "sha256": "06vqkp6mb6hssyfh4byy78hvvgprjhdjsp3v75h1cj2q7828pph6"
-  },
+  "nixpkgs": "/home/dguibert/code/nixpkgs",
+  "nur_dguibert": "/home/dguibert/nur-packages",
   "nixos-17.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
@@ -31,15 +19,15 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.03",
-    "rev": "138f2cc707d7ee13d93c86db3285460e244c402c",
-    "sha256": "0h49j1cbnccqx996x80z7na9p7slnj9liz646s73s55am8wc9q8q"
+    "rev": "cb0e20d6db96fe09a501076c7a2c265359982814",
+    "sha256": "0d9pkbax0phh392j6pzkn365wbsgd0h1cmm58rwq8zf9lb0pgkg2"
   },
   "nixos-18.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.09",
-    "rev": "168cbb39691cca2822ce1fdb3e8c0183af5c6d0d",
-    "sha256": "0fqasswfqrz2rbag9bz17j8y7615s0p9l23cw4sk2f384gk0zf6c"
+    "rev": "343abf7730fb4ea5046a60a553720004e6789d54",
+    "sha256": "1as8v41cc35l9g7gkzzpj1rk82cxpb4z4wacsaqdf1mnq43x1zv9"
   },
   "nixops": {
     "owner": "NixOS",
@@ -47,5 +35,12 @@
     "branch": "master",
     "rev": "8ed39f9cadddd1d35a67096d0109151ae6ddc8b5",
     "sha256": "1ninymk1jcvh3b1q0wgnmiya95rx8rdf9pw4hw3kffbg1izzp91c"
+  },
+  "base16-nix": {
+    "owner": "atpotts",
+    "repo": "base16-nix",
+    "branch": "master",
+    "rev": "e6de76f0899795def0be8b1bfdc8c10628099661",
+    "sha256": "12hjpymk9nglvqm1zfbc4w2d06n2b5iriwh01ga2ndh4ys2p26n8"
   }
 }

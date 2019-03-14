@@ -42,7 +42,6 @@ Plugin 'LnL7/vim-nix'
 Plugin 'vim-scripts/DirDiff.vim'
 "" This plugin would NOT work if neither +python/+python3 nor EditorConfig core is available.
 Plugin 'editorconfig/editorconfig-vim'
-
 Plugin 'vim-pandoc/vim-pandoc'
 "Plugin 'vim-pandoc/vim-pandoc-syntax'
 "
@@ -50,9 +49,9 @@ Plugin 'vim-pandoc/vim-pandoc'
 "
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kalafut/vim-taskjuggler'
-
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'edkolev/tmuxline.vim'
+" Plugin 'guyzmo/notmuch-abook' " requires to be patched for nix
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -64,10 +63,9 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+" set background=light
+"set background=dark
 "set t_Co=256
-"set background=light
-""" set background=dark
-""set t_Co=256
 "colorscheme solarized
 
 "let g:ctrlp_map = '<c-p>'
@@ -101,7 +99,7 @@ let g:tmuxline_preset = {
         \ 'win': '#I:#W#F',
         \ 'cwin': '#I:#W#F',
         \ 'x': '$wg_is_keys_off',
-        \ 'y': [ '%d-%b-%y', '%H:%M' ],
+        \ 'y': [ '#(cat ~/.conky.out)', '%H:%M' ],
         \ 'z': '#H',
         \ 'options': {
         \'status-justify': 'left',

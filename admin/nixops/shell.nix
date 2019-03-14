@@ -1,12 +1,9 @@
 { versions ? import ./versions.nix
 , nixpkgs ? versions.nixpkgs
-# , nur_dguibert ? versions.nur_dguibert
 , home-manager ? versions.home-manager
-#, nixpkgs ? builtins.getEnv "HOME" + "/code/nixpkgs"
 , nur_dguibert ? builtins.getEnv "HOME" + "/nur-packages" # versions.nur_dguibert
-#, home-manager ? builtins.getEnv "HOME" + "/code/home-manager" # versions.home-manager
-#, nixops ? versions.nixops
 , nixops ? builtins.getEnv "HOME" + "/code/nixops"
+, base16-nix ? versions.base16-nix
 , overlays_ ? []
 
 , pkgs ? import nixpkgs {
@@ -17,18 +14,23 @@
   }
 }:
 let
+  nix = pkgs.nix;
 
-in with pkgs; lib.mkEnv {
+in with pkgs; mkEnv {
   name = "nixops";
   buildInputs = [
-    (import "${nixops}/release.nix" { }).build.x86_64-linux
+    nix
+    #(import "${nixops}/release.nix" { }).build.x86_64-linux
+    nixops
   ];
+  inherit nix;
   shellHook = ''
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL
     unset TMP
     unset TMPDIR
 
-    export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}:home-manager=${home-manager}:.:$NIX_PATH
+    # FIXME: hack to remove upstream /nix/store paths
+    #export PATH=$(echo $PATH| tr : '\n' |grep -v "^/nix/store" | paste -s -d:)
   '';
 }

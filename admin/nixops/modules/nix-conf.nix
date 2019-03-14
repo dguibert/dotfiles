@@ -9,6 +9,7 @@ rec {
   ];
 
   zramSwap.enable = true;
+  zramSwap.algorithm = "lzo";
 
   nix.useSandbox = true;
   nix.autoOptimiseStore = true;

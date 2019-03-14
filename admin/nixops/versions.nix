@@ -11,8 +11,17 @@ let
       inherit url sha256;
     };
   versions = builtins.mapAttrs
-     (_: fetcher)
-       (builtins.fromJSON (builtins.readFile ./versions.json));
+     (_: fetchOrPath) sources;
+
+  sources = (builtins.fromJSON (builtins.readFile ./versions.json));
+
+  NIX_PATH = builtins.concatStringsSep ":" (builtins.map (x: "${x}=${versions."${x}"}") (builtins.attrNames versions));
+
+  fetchOrPath = value:
+    if builtins.typeOf value == "set" then
+      fetcher value
+    else
+      toString value;
 
   inherit (import versions.nixpkgs {}) writeScript;
   updater = writeScript "updater.sh" ''
@@ -23,5 +32,6 @@ let
     ${./version-updater.sh} versions.json nixos-18.03
     ${./version-updater.sh} versions.json nixos-18.09
     ${./version-updater.sh} versions.json home-manager
+    ${./version-updater.sh} versions.json base16-nix
   '';
-in versions // updater
+in versions // { inherit updater NIX_PATH sources; }
