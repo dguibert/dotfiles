@@ -99,8 +99,8 @@ rec {
   ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
   ##                NVRM:  this GPU.  Continuing probe...
   hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = [ /*"nouveau"*/ "nvidiaLegacy304" "displaylink" ];
-  nixpkgs.config.xorg.abiCompat = "1.18";
+  services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ "displaylink" ];
+  #nixpkgs.config.xorg.abiCompat = "1.18";
 
   hardware.opengl.enable = true;
   hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
@@ -110,6 +110,7 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
+  virtualisation.anbox.enable = true;
   #services.nfs.server.enable = true;
   #virtualisation.docker.enable = false;
   networking.firewall.checkReversePath = false;

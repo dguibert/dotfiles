@@ -7,8 +7,11 @@ rec {
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
+    #<home-manager/nixos>
   ];
-  services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
+  #home-manager.users.dguibert = (import ../users/dguibert/home.nix {}).withoutX11 { inherit config pkgs lib; };
+  #home-manager.users.root = (import ../users/root/home.nix {}).home { inherit pkgs lib; };
+  #services.xserver.videoDrivers = lib.mkForce [ "virtualbox" "modesetting" ];
 
   #nixpkgs.config = pkgs: (import ~/.nixpkgs/config.nix { inherit pkgs; }) // {
   #  xorg.fglrxCompat = true;
@@ -28,11 +31,12 @@ rec {
   networking.hostId = "a8c01e02";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
-  fileSystems."/a629925" = {
-    fsType = "vboxsf";
-    device = "a629925";
-    options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
-  };
+  #fileSystems."/a629925" = {
+  #  fsType = "vboxsf";
+  #  device = "a629925";
+  #  options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
+  #};
+  networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   zramSwap.enable = true;
   swapDevices = [ { device = "/swapfile"; } ];
   systemd.tmpfiles.rules = [
@@ -120,8 +124,10 @@ rec {
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
-  services.xserver.displayManager.auto.enable = true;
-  services.xserver.displayManager.auto.user = "dguibert";
+  #services.xserver.displayManager.auto.enable = true;
+  #services.xserver.displayManager.auto.user = "dguibert";
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
 
   # fonts
   fonts.enableFontDir = true;
