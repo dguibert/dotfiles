@@ -47,8 +47,8 @@ Plugin 'vim-pandoc/vim-pandoc'
 "
 "Plugin 'ledger/vim-ledger'
 "
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'kalafut/vim-taskjuggler'
+" Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'kalafut/vim-taskjuggler'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'edkolev/tmuxline.vim'
 " Plugin 'guyzmo/notmuch-abook' " requires to be patched for nix
