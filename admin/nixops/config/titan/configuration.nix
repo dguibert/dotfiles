@@ -110,11 +110,13 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
-  virtualisation.anbox.enable = true;
+  #virtualisation.anbox.enable = true;
   #services.nfs.server.enable = true;
   #virtualisation.docker.enable = false;
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
   services.disnix.enable = true;
+
+  programs.adb.enable = true;
 }

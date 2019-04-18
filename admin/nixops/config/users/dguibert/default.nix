@@ -10,6 +10,7 @@
     group = "dguibert";
     extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
       ] ++ pkgs.lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
+      ] ++ pkgs.lib.optionals (config.users.groups ? adbusers) [ "adbusers"
       ] ++ pkgs.lib.optionals (config.users.groups ? docker) [ "docker"
       ] ++ pkgs.lib.optionals (config.users.groups ? libvirtd) [ "libvirtd"
       ] ++ pkgs.lib.optionals (config.users.groups ? disnix) [ "disnix"
