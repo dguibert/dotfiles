@@ -124,10 +124,10 @@ rec {
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
-  #services.xserver.displayManager.auto.enable = true;
-  #services.xserver.displayManager.auto.user = "dguibert";
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.auto.user = "dguibert";
+  #services.xserver.displayManager.lightdm.enable = true;
+  #services.xserver.desktopManager.pantheon.enable = true;
 
   # fonts
   fonts.enableFontDir = true;
