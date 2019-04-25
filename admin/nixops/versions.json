@@ -1,5 +1,6 @@
 {
-  "home-manager": {
+  "home-manager": "/home/dguibert/code/home-manager",
+  "home-manager-github": {
     "owner": "dguibert",
     "repo": "home-manager",
     "branch": "pu",

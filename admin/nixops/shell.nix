@@ -29,8 +29,5 @@ in with pkgs; mkEnv {
     unset IN_NIX_SHELL
     unset TMP
     unset TMPDIR
-
-    # FIXME: hack to remove upstream /nix/store paths
-    #export PATH=$(echo $PATH| tr : '\n' |grep -v "^/nix/store" | paste -s -d:)
   '';
 }
