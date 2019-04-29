@@ -8,9 +8,8 @@ with lib;
 rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
+    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix>
     <nixpkgs/nixos/modules/profiles/minimal.nix>
-    #../../profiles/installation-device.nix
-    #./sd-image.nix
     <config/common.nix>
     <modules/nix-conf.nix>
     <modules/distributed-build.nix>
@@ -25,6 +24,7 @@ rec {
     message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
       "it cannot be cross compiled";
   };
+  sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
@@ -44,20 +44,20 @@ rec {
   #nix.binaryCaches = lib.mkForce [ "http://nixos-arm.dezgeg.me/channel" ];
   #nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
 
-  # !!! Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough.
-  boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+  ## !!! Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough.
+  #boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
-  # File systems configuration for using the installer's partition layout
-  fileSystems = {
-    "/boot" = {
-      device = "/dev/disk/by-label/NIXOS_BOOT";
-      fsType = "vfat";
-    };
-    "/" = {
-      device = "/dev/disk/by-label/NIXOS_SD";
-      fsType = "ext4";
-    };
-  };
+  ## File systems configuration for using the installer's partition layout
+  #fileSystems = {
+  #  "/boot" = {
+  #    device = "/dev/disk/by-label/NIXOS_BOOT";
+  #    fsType = "vfat";
+  #  };
+  #  "/" = {
+  #    device = "/dev/disk/by-label/NIXOS_SD";
+  #    fsType = "ext4";
+  #  };
+  #};
 
   # !!! Adding a swap file is optional, but strongly recommended!
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
@@ -95,9 +95,9 @@ rec {
   networking.firewall.allowedUDPPorts = [ 9993 500 ];
 
   environment.noXlibs = true;
-    programs.ssh.setXAuthLocation = false;
-    security.pam.services.su.forwardXAuth = lib.mkForce false;
+  programs.ssh.setXAuthLocation = false;
+  security.pam.services.su.forwardXAuth = lib.mkForce false;
 
-    fonts.fontconfig.enable = false;
+  fonts.fontconfig.enable = false;
 
 }

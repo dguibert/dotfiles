@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	  cat $HOME/.config/mr/lib/mgit
-lib =
+lib = 
 	source $HOME/.config/mr/lib/git-remotes
 	if [ -n "$HOSTNAME" ]; then
 		hostname="$HOSTNAME"
@@ -30,7 +30,9 @@ lib =
 		return 1
 	}
 	ismounted() {
+		set -x
 		mount | grep -q "$1"
+		set +x
 	}
 	wantmedia() {
 		test "$whoami" = dguibert && on titan orsine
@@ -44,7 +46,7 @@ lib =
 	source $HOME/.config/mr/lib/git-remotes
 push = echo "$MR_REPO has to be manually pushed"
 
-include = cat $HOME/.config/mr/config.d/*
+#include = cat $HOME/.config/mr/config.d/*
 
 #[$HOME/Videos]
 ##checkout =
@@ -74,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	   public_git ~/public_git/dotfiles.git
 	   "
-push =
+push = 
 	mgit dotfiles push
 	mgit dotfiles push public_git
 
@@ -223,13 +225,13 @@ update = git annex sync
 fullupdate = git annex sync --content
 fixups = git_add_remotes "
 	   orsine orsine:work
-           orsine-backupwd orsine:/backupwd/work
-           vbox-57nvj72 vbox-57nvj72:work
-           genji genji:work
-           manny manny:work
-           genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
+	          orsine-backupwd orsine:/backupwd/work
+	          vbox-57nvj72 vbox-57nvj72:work
+	          genji genji:work
+	          manny manny:work
+	          genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
 	   "
-         git remote remove manny_lustre_na 2>/dev/null || true
+	        git remote remove manny_lustre_na 2>/dev/null || true
 
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
@@ -346,7 +348,7 @@ fixups = #git_add_remotes "
 
 update = git remote update
 push = git push -v dguibert +pu
-       git push -v dguibert
+	      git push -v dguibert
 
 [code/charliecloud]
 checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
@@ -464,13 +466,24 @@ fullupdate = git annex sync --content
 fixups = git_add_remotes "
 	   titan titan:Documents
 	   orsine orsine:Documents
-           orsine-backupwd orsine:/backupwd/Documents
-           vbox-57nvj72 vbox-57nvj72:Documents
+	          orsine-backupwd orsine:/backupwd/Documents
+	          vbox-57nvj72 vbox-57nvj72:Documents
 	   backupwd /backupwd/Documents
+	   transfer /run/media/dguibert/esiwace_key/Documents
 	   "
 	 #bluray_1 /run/media/dguibert/bluray_1/Documents/
-         #git remote remove repo 2>/dev/null || true
+	        #git remote remove repo 2>/dev/null || true
 skip = ! on titan orsine vbox-57nvj72
+
+[/run/media/dguibert/esiwace_key/Documents]
+checkout = git init "$MR_REPO"
+	   cd "$MR_REPO"; git annex reinit c3b81e3c-48f8-496d-91d3-a1f5acb32169
+	          git annex wanted . standard
+	          git annex group . transfer
+skip = ! ismounted "$MR_REPO"
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
 
 [$HOME/Videos]
 checkout = git init $MR_REPO
@@ -481,10 +494,10 @@ fullupdate = git annex sync --content
 fixups = git_add_remotes "
 	   titan titan:Videos
 	   orsine orsine:Videos
-           orsine-backupwd orsine:/backupwd/Videos
-           vbox-57nvj72 vbox-57nvj72:Videos
+	          orsine-backupwd orsine:/backupwd/Videos
+	          vbox-57nvj72 vbox-57nvj72:Videos
 	   "
-         #git remote remove repo 2>/dev/null || true
+	        #git remote remove repo 2>/dev/null || true
 skip = ! wantmedia
 
 
@@ -497,3 +510,13 @@ fullupdate = git annex sync --content
 order = 100
 skip = ([ "$1" = update ] && ! hours_since "$1" 192) && ! wantarchives # 8 days
 
+
+[nur-packages]
+checkout = git clone 'git@github.com:dguibert/nur-packages.git' 'nur-packages'
+push = git push -v origin
+
+[code/nixos-generators]
+checkout = git clone 'https://github.com/nix-community/nixos-generators' 'nixos-generators'
+
+[code/terraform-nixos]
+checkout = git clone 'https://github.com/tweag/terraform-nixos' 'terraform-nixos'

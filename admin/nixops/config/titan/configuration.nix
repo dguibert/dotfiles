@@ -25,7 +25,7 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS0,115200n8" ];
+  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS2,115200n8" ];
   swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
@@ -52,16 +52,31 @@ rec {
   # should.
   system.stateVersion = "18.09"; # Did you read the comment?
 
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
+  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
+    "" # clear old command
+    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore eno1 --ignore eno2"
+  ];
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";
+    #[Bond]
+    #Mode=active-backup
+    #PrimaryReselectPolicy=always
+    #PrimarySlave=enp3s0
+    #TransmitHashPolicy=layer3+4
+    #MIIMonitorSec=1s
+    #LACPTransmitRate=fast
+
     bondConfig.Mode="active-backup";
+    #bondConfig.PrimarySlave="eno1";
     bondConfig.MIIMonitorSec="100s";
     bondConfig.PrimaryReselectPolicy="always";
   };
   systemd.network.networks."40-bond0" = {
     name = "bond0";
-    DHCP = "both";
+    DHCP = "yes";
     networkConfig.BindCarrier = "eno1 eno2";
   };
   systemd.network.networks."40-eno1" = {
@@ -83,8 +98,9 @@ rec {
   ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
   ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
   ##                NVRM:  this GPU.  Continuing probe...
-  #hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = [ "nouveau" /*"nvidiaLegacy304"*/ ];
+  hardware.nvidia.modesetting.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ "displaylink" ];
+  #nixpkgs.config.xorg.abiCompat = "1.18";
 
   hardware.opengl.enable = true;
   hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
@@ -94,10 +110,13 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
+  #virtualisation.anbox.enable = true;
   #services.nfs.server.enable = true;
   #virtualisation.docker.enable = false;
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
   services.disnix.enable = true;
+
+  programs.adb.enable = true;
 }

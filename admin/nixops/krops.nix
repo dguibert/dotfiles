@@ -20,10 +20,14 @@ let
     };
   }];
 
-  rpi31 = pkgs.krops.writeDeploy "deploy-rpi31" {
-    source = source "rpi31";
-    target = "root@192.168.1.13:443";
-  };
+  rpi31 = pkgs.krops.writeScript "deploy-rpi31" ''
+      set -efu
+      ${populate { force=false;
+                   source=source "rpi31";
+                   target = lib_.mkTarget "rpi31"; }} >&2
+  '';
+  #  target = "root@192.168.1.13:443";
+  #};
 
   orsine = pkgs.krops.writeDeploy "deploy-orsine" {
     source = source "orsine";
@@ -33,6 +37,6 @@ let
 in {
   rpi31 = rpi31;
   orsine = orsine;
-  all = pkgs.krops.writeDeploy "deploy-home-servers"
+  all = pkgs.krops.writeScript "deploy-home-servers"
     (pkgs.lib.concatStringSep "\n" [ rpi31 orsine ]);
 }
