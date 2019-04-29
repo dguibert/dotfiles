@@ -1,14 +1,28 @@
 {
-  "home-manager": "/home/dguibert/code/home-manager",
-  "home-manager-github": {
+  "_home-manager": "/home/dguibert/code/home-manager",
+  "home-manager": {
     "owner": "dguibert",
     "repo": "home-manager",
     "branch": "pu",
-    "rev": "ef9ebc3555e4fb3ad2b1f889580fa1ff993122fe",
-    "sha256": "1xyn2v63cdc1wzdrw9k8ch9abpkdhdqra4p4gzxd0azww9rjf4ma"
+    "rev": "5cbe32484e7b0040071ef2e8c84d6f3f38d5c521",
+    "sha256": "0krwbx9nxlvaayc8397i10lvv5i29kcqig3k6a973g20fib5sn9a"
   },
-  "nixpkgs": "/home/dguibert/code/nixpkgs",
-  "nur_dguibert": "/home/dguibert/nur-packages",
+  "_nixpkgs": "/home/dguibert/code/nixpkgs",
+  "nixpkgs": {
+    "owner": "dguibert",
+    "repo": "nixpkgs",
+    "branch": "pu",
+    "rev": "2db8ad9d34201b8cded6b2cbb5a1ff362382397d",
+    "sha256": "1xqyqh8rba6clpb4zhvcpf66bg8n98avz3f1m4mqk8g39dbwisdw"
+  },
+  "_nur_dguibert": "/home/dguibert/nur-packages",
+  "nur_dguibert": {
+    "owner": "dguibert",
+    "repo": "nur-packages",
+    "branch": "master",
+    "rev": "fbca4823ed371f150d825a1ae4c2210d8ec85f8c",
+    "sha256": "0d8cg5hlpza34x8r0247q3759csdg0myqa567in9b84gcic0n0w6"
+  },
   "nixos-17.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
@@ -27,8 +41,15 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.09",
-    "rev": "343abf7730fb4ea5046a60a553720004e6789d54",
-    "sha256": "1as8v41cc35l9g7gkzzpj1rk82cxpb4z4wacsaqdf1mnq43x1zv9"
+    "rev": "571b40d3f50466d3e91c1e609d372de96d782793",
+    "sha256": "0qjpkx2b5pac1nqr5chvlrlcyyk294w2079ybf88p95qxkqbbby5"
+  },
+  "nixos-19.03": {
+    "owner": "NixOS",
+    "repo": "nixpkgs-channels",
+    "branch": "nixos-19.03",
+    "rev": "cf3e277dd0bd710af0df667e9364f4bd80c72713",
+    "sha256": "1abyadl3sxf67yi65758hq6hf2j07afgp1fmkk7kd94dadx6r6f4"
   },
   "nixops": {
     "owner": "NixOS",
