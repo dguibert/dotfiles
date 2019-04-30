@@ -15,7 +15,7 @@ let
 
   sources = (builtins.fromJSON (builtins.readFile ./versions.json));
 
-  NIX_PATH = builtins.concatStringsSep ":" (builtins.map (x: "${x}=${versions."${x}"}") (builtins.attrNames versions));
+  NIX_PATH = ".:" + builtins.concatStringsSep ":" (builtins.map (x: "${x}=${versions."${x}"}") (builtins.attrNames versions));
 
   fetchOrPath = value:
     if builtins.typeOf value == "set" then

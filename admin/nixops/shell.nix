@@ -23,7 +23,7 @@ in with pkgs; mkEnv {
     #(import "${nixops}/release.nix" { }).build.x86_64-linux
     nixops
   ];
-  inherit nix;
+  inherit (versions) NIX_PATH;
   shellHook = ''
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL
