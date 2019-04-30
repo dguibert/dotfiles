@@ -520,3 +520,6 @@ checkout = git clone 'https://github.com/nix-community/nixos-generators' 'nixos-
 
 [code/terraform-nixos]
 checkout = git clone 'https://github.com/tweag/terraform-nixos' 'terraform-nixos'
+
+[code/hledger]
+checkout = git clone 'https://github.com/simonmichael/hledger' 'hledger'
