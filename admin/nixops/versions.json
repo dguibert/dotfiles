@@ -12,8 +12,8 @@
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "2db8ad9d34201b8cded6b2cbb5a1ff362382397d",
-    "sha256": "1xqyqh8rba6clpb4zhvcpf66bg8n98avz3f1m4mqk8g39dbwisdw"
+    "rev": "97b9cd3d06bd8a9367c19b43b4ddd223622c1098",
+    "sha256": "03hviq7srk7qk068bv9cbm17qwirvaf35scj16ab4d50d8r4aczy"
   },
   "_nur_dguibert": "/home/dguibert/nur-packages",
   "nur_dguibert": {
