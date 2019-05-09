@@ -2,6 +2,8 @@
 {
   services.zfs.autoSnapshot.enable = true;
   services.zfs.autoSnapshot.flags = "-k -p --utc";
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.interval = "monthly";
 
   boot.kernelParams = [ "elevator=none" ];
   boot.extraModprobeConfig = ''

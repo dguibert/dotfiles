@@ -8,11 +8,12 @@ let
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WGY"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WJB"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WK1"
-    "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25WVG"
+    #"/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25WVG"
+    "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS1T415"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25XFD"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25Z1Y"
   ];
-  disks = [ 
+  disks = [
     "/dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z"
     "/dev/disk/by-id/ata-ST3160815AS_5RX02WNE"
   ];
@@ -28,7 +29,7 @@ let
     sgdisk     -n3:1M:+512M -t3:EF00 ${disk}
     #  # Unencrypted:
     sgdisk     -n1:0:0      -t1:BF01 ${disk}
-    
+
     # LUKS:
     # sgdisk     -n4:0:+512M  -t4:8300 ${disk}
     # sgdisk     -n1:0:0      -t1:8300 ${disk}
@@ -51,22 +52,22 @@ let
     #      -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
     #      -O xattr=sa -O mountpoint=/ -R /mnt \
     #               ${pool_name} /dev/mapper/luks1
-    
+
     zfs create -o canmount=off -o mountpoint=none         ${pool_name}/root
     zfs create -o mountpoint=legacy                       ${pool_name}/root/nixos
     zfs create -o mountpoint=legacy -o setuid=off         ${pool_name}/home
     zfs create -o mountpoint=/root                        ${pool_name}/home/root
-    
+
     # set boot property
     zpool set bootfs="${pool_name}/root/nixos" ${pool_name}
-    
+
     zfs create -V 4G -b $(getconf PAGESIZE) \
                -o compression=zle \
                -o logbias=throughput -o sync=always \
                -o primarycache=metadata -o secondarycache=none \
                -o com.sun:auto-snapshot=false ${pool_name}/swap
   '';
-  
+
   config = (import <nixpkgs/nixos/lib/eval-config.nix> {
     system = "x86_64-linux";
     modules = [
@@ -86,8 +87,8 @@ let
 
           # Set your time zone.
           time.timeZone = "Europe/Paris";
-          
-          environment.systemPackages = [ 
+
+          environment.systemPackages = [
             (pkgs.writeScriptBin "install-titan" ''
 #!${pkgs.stdenv.shell}
 set -eux -o pipefail
@@ -126,7 +127,7 @@ ${config.system.build.nixos-install}/bin/nixos-install
 ##   of=/dev/disk/by-id/scsi-SATA_disk2-part3
 ##efibootmgr -c -g -d /dev/disk/by-id/scsi-SATA_disk2 \
 ##       -p 3 -L "ubuntu-2" -l '\EFI\Ubuntu\grubx64.efi'
- 
+
 #umount /mnt
             '')
             ];
