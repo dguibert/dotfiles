@@ -1,15 +1,23 @@
 let
   # https://vaibhavsagar.com/blog/2018/05/27/quick-easy-nixpkgs-pinning/
-  fetcher = { owner?null, repo?null, rev, sha256, branch
-    , url ? "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz"
-  }: if owner == null then
-    builtins.fetchGit {
-      inherit url rev;
-    }
-  else
-    builtins.fetchTarball {
-      inherit url sha256;
-    };
+  fetcher = {type ? "github", ...}@args: fetchers."${type}" args;
+
+  fetchers = {
+    github = { owner?null, repo?null, rev?null, branch?null
+      , url ? "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz"
+      , sha256
+      , type ? "github"
+    }: if owner == null then
+      builtins.fetchGit {
+        inherit url rev;
+      }
+    else
+      builtins.fetchTarball {
+        inherit url sha256;
+      };
+    url = {url, sha256, type}: builtins.fetchTarball { inherit url sha256; };
+  };
+
   versions = builtins.mapAttrs
      (_: fetchOrPath) sources;
 
@@ -42,21 +50,32 @@ let
     OWNER=$(cat $FILE | jq -r ".[\"$PROJECT\"].owner")
     REPO=$(cat $FILE | jq -r ".[\"$PROJECT\"].repo")
     BRANCH=$(cat $FILE | jq -r ".[\"$PROJECT\"].branch")
+    REV="null"
 
     if [ "''${OWNER}" != "null" ]; then
       REV=$(curl "https://api.github.com/repos/$OWNER/$REPO/branches/$BRANCH" | jq -r '.commit.sha')
       URL="https://github.com/$OWNER/$REPO/archive/$REV.tar.gz"
       SHA256=$(nix-prefetch-url --unpack "$URL")
-    else
+    elif [ "''${BRANCH}" != "null" ]; then
       URL=$(jq -r '.[$project].url' --arg project "$PROJECT" < "$FILE")
       REV=$(git ls-remote $URL | grep refs/heads/$BRANCH | awk '{print $1}')
       SHA256=$(nix-prefetch-git "$URL" "$REV" | jq -r '.sha256')
+    else
+      URL=$(jq -r '.[$project].url' --arg project "$PROJECT" < "$FILE")
+      NAME=$(jq -r '.[$project].name' --arg project "$PROJECT" < "$FILE")
+      SHA256=$(nix-prefetch-url --unpack "$URL")
     fi
 
+    if [ "''${REV}" != "null" ]; then
     TJQ=$(cat $FILE \
         | jq -rM ".[\"$PROJECT\"].rev = \"$REV\"" \
         | jq -rM ".[\"$PROJECT\"].sha256 = \"$SHA256\""
         )
+    else
+    TJQ=$(cat $FILE \
+        | jq -rM ".[\"$PROJECT\"].sha256 = \"$SHA256\""
+        )
+    fi
 
     if [[ $? == 0 ]]; then
       diff -u <(cat $FILE | jq -S .) <(echo "$TJQ" | jq -S .) || true
@@ -74,5 +93,6 @@ let
     ${version-updater} versions.json nixos-19.03
     ${version-updater} versions.json home-manager
     ${version-updater} versions.json base16-nix
+    ${version-updater} versions.json NUR
   '';
 in versions // { inherit updater NIX_PATH sources; }
