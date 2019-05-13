@@ -15,8 +15,8 @@
     "rev": "97b9cd3d06bd8a9367c19b43b4ddd223622c1098",
     "sha256": "03hviq7srk7qk068bv9cbm17qwirvaf35scj16ab4d50d8r4aczy"
   },
-  "_nur_dguibert": "/home/dguibert/nur-packages",
-  "nur_dguibert": {
+  "nur_dguibert": "/home/dguibert/nur-packages",
+  "_nur_dguibert": {
     "owner": "dguibert",
     "repo": "nur-packages",
     "branch": "master",
