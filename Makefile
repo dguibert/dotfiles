@@ -34,11 +34,11 @@ bup-save:
 		--exclude=$$BUP_DIR \
 		$(HOME)
 	bup save -n home-$$(hostname) $(HOME)
-	
+
 	#Defend your backups from death rays (OK fine, more likely from the occasional bad disk block). This writes parity information (currently via par2) for all of the existing data so that bup may be able to recover from some amount of repository corruption:
-	
+
 	bup fsck -g
-	
+
 	cd $$ANNEX_DIR
 	git annex add $$BUP_DIR/objects/pack
 	git annex proxy -- git add $${BUP_DIR##$(HOME)/annex/}
@@ -89,7 +89,7 @@ update-packages-%:
 	ssh $$cluster nix-env -i $$packages
 shell-nix-scratch-gpfs:
 	export PATH=/scratch_gpfs/bguibertd/nix/var/nix/profiles/default/bin:$$PATH
-	export NIX_PATH=nixpkgs=${HOME}/code/nixpkgs:nixpkgs-overlays=${HOME}/nixpkgs-overlays-scratch-gpfs/overlays 
+	export NIX_PATH=nixpkgs=${HOME}/code/nixpkgs:nixpkgs-overlays=${HOME}/nixpkgs-overlays-scratch-gpfs/overlays
 	export ENVRC=nix-scratch-gpfs
 	$(SHELL)
 update-packages-lobo:
