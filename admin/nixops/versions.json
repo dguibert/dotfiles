@@ -41,15 +41,15 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.09",
-    "rev": "571b40d3f50466d3e91c1e609d372de96d782793",
-    "sha256": "0qjpkx2b5pac1nqr5chvlrlcyyk294w2079ybf88p95qxkqbbby5"
+    "rev": "41245517a981989d5356d6e11f891988e36895f1",
+    "sha256": "1rabc9as7min53g47gllfq455vhv7j2y6vjhr1kxv5nn6jdamd2w"
   },
   "nixos-19.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "cf3e277dd0bd710af0df667e9364f4bd80c72713",
-    "sha256": "1abyadl3sxf67yi65758hq6hf2j07afgp1fmkk7kd94dadx6r6f4"
+    "rev": "b2b5c1d5af2a3e743a388ffb807db64d6b776a5d",
+    "sha256": "0zg58h2j55aq8pr5b16h2jlns1215rnc2q9ap4bmdcxcqidm62ra"
   },
   "nixops": {
     "owner": "NixOS",
@@ -64,5 +64,12 @@
     "branch": "master",
     "rev": "e6de76f0899795def0be8b1bfdc8c10628099661",
     "sha256": "12hjpymk9nglvqm1zfbc4w2d06n2b5iriwh01ga2ndh4ys2p26n8"
+  },
+  "NUR": {
+    "owner": "nix-community",
+    "repo": "NUR",
+    "branch": "master",
+    "rev": "6af2dd0103ece10f46fd5703208a19a660975a6d",
+    "sha256": "0kk78yak6zdbbalc5jqs8vv9rr7rv5m80idhpqs1qhixvvq24agg"
   }
 }

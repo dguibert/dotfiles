@@ -106,7 +106,7 @@ rec {
   hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
 
   hardware.pulseaudio.enable = true;
-  environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool ];
+  environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
