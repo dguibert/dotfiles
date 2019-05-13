@@ -7,16 +7,16 @@
     "rev": "5cbe32484e7b0040071ef2e8c84d6f3f38d5c521",
     "sha256": "0krwbx9nxlvaayc8397i10lvv5i29kcqig3k6a973g20fib5sn9a"
   },
-  "_nixpkgs": "/home/dguibert/code/nixpkgs",
-  "nixpkgs": {
+  "nixpkgs": "/home/dguibert/code/nixpkgs",
+  "_nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
     "rev": "97b9cd3d06bd8a9367c19b43b4ddd223622c1098",
     "sha256": "03hviq7srk7qk068bv9cbm17qwirvaf35scj16ab4d50d8r4aczy"
   },
-  "_nur_dguibert": "/home/dguibert/nur-packages",
-  "nur_dguibert": {
+  "nur_dguibert": "/home/dguibert/nur-packages",
+  "_nur_dguibert": {
     "owner": "dguibert",
     "repo": "nur-packages",
     "branch": "master",
