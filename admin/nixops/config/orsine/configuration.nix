@@ -75,6 +75,7 @@ rec {
   #  '';
 
   networking.hostId = "a8c00e01";
+  networking.hostName = "orsine";
 
   #networking.wireless.iwd.enable = true; # wifi usb dongle does show in device list
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -119,6 +120,10 @@ rec {
   #{boot.extraModprobeConfig=''
   #{  options bonding mode=active-backup miimon=100 primary=enp0s25
   #{'';
+  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
+    "" # clear old command
+    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore wlp0s29f7u1 --ignore wlp2s0 --ignore enp0s25 --ignore vboxnet0"
+  ];
 
   hardware.bluetooth.enable = true;
 
@@ -243,7 +248,7 @@ rec {
   networking.wireguard.interfaces.wg0 = {
     ips = [ "10.147.27.123/24" ];
     listenPort = 51820;
-    privateKeyFile = toString <secrets/orsine/wireguard_key>;
+    privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
       { allowedIPs = [ "10.147.27.0/24" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -276,8 +281,10 @@ rec {
   ];
 
   # Virtualisation
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableHardening = false;
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableHardening = false;
+  virtualisation.libvirtd.enable = true;
+  systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
   services.udev.packages = [ pkgs.android-udev-rules ];
   services.udev.extraRules = with pkgs; ''

@@ -39,6 +39,7 @@ rec {
   boot.loader.grub.device = "nodev";
 
   networking.hostId="8425e349";
+  networking.hostName = "titan";
 
   qemu-user.aarch64 = true;
 
@@ -112,7 +113,7 @@ rec {
   virtualisation.libvirtd.enable = true;
   #virtualisation.anbox.enable = true;
   #services.nfs.server.enable = true;
-  #virtualisation.docker.enable = false;
+  virtualisation.docker.enable = true;
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 

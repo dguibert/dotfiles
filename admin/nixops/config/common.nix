@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 {
+  boot.consoleLogLevel = 6; #KERN_INFO
   environment.systemPackages = [ pkgs.vim ];
   # Select internationalisation properties.
   i18n = {
