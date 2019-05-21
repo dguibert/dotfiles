@@ -1,8 +1,28 @@
-{
+{ versions ? import ./versions.nix
+, nixpkgs ? { outPath = versions.nixpkgs; revCount = 123456; shortRev = "gfedcba"; }
+, nur_dguibert ? { outPath = versions.nur_dguibert; revCount = 123456; shortRev = "gfedcba"; }
+, overlays_ ? []
+#, overlays_ ? [ (import "${nur_dguibert}/overlays/local-aloy.nix") ]
+, system ? builtins.currentSystem
+
+, pkgs ? import nixpkgs {
+    config = import "${nur_dguibert}/config.nix";
+    overlays = let
+      overlays' = import "${nur_dguibert}/overlays";
+    in [
+      overlays'.default
+      overlays'.aocc
+      overlays'.flang
+      overlays'.intel-compilers
+      #overlays.arm
+      overlays'.pgi
+      overlays'.local
+    ] ++ overlays_;
+  }
 }:
 
-with (import <nixpkgs> {});
-with (import <nixpkgs/lib>);
+with pkgs;
+with pkgs.lib;
 let
   trace = if builtins.getEnv "VERBOSE" == "1" then builtins.trace else (x: y: y);
 
@@ -40,6 +60,8 @@ let
       }).activationPackage;
 
   jobs = recurseIntoAttrs {
+    nix = pkgs.nix;
+
     vbox-57nvj72  = (mkHost "vbox-57nvj72"  "x86_64-linux" <config/vbox-57nvj72/configuration.nix>).system;
 
     titan         = (mkHost "titan"  "x86_64-linux" <config/titan/configuration.nix>).system;
@@ -53,6 +75,10 @@ let
     hm_dguibert_nox11 = recurseIntoAttrs (genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system <config/users/dguibert/home.nix> "withoutX11" []));
     hm_dguibert_x11   = recurseIntoAttrs (genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system <config/users/dguibert/home.nix> "withX11" []));
 
+    hm_dguibert_aloy = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "cluster" [
+      (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
+      (import <nur_dguibert/overlays/local-aloy.nix>)
+    ];
     hm_dguibert_genji = mkHome "x86_64-linux" <config/users/dguibert/home.nix> "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-genji.nix>)

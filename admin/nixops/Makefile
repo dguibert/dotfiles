@@ -39,20 +39,56 @@ dguibert-manny: ATTR=hm_dguibert_manny
 dguibert-manny: U=bguibertd
 dguibert-genji: ATTR=hm_dguibert_genji
 dguibert-genji: U=bguibertd
+dguibert-aloy: ATTR=hm_dguibert_aloy
+dguibert-aloy: U=bguibertd
 dguibert-inti: ATTR=hm_dguibert_inti
 dguibert-inti: U=bguibertd
 
+# Install with default /nix/store
+#dguibert-%:
+#	set -xeuf -o pipefail
+#	user=$${U:-dguibert}
+#	host=$*
+#	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
+#	if [ "$$HOSTNAME" == "$$host" ]; then
+#	  $$hm/activate
+#	else
+#	  nix copy --to ssh://$$host $$hm
+#	  ssh $$user@$$host $$hm/activate
+#	fi
+
+export args=
+
+args_manny+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays).nix-home-nfs-bguibertd ]"
+args_genji+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-genji.nix) ]"
+args_aloy+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-aloy.nix) ]"
+args_inti+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
+args+=$(args_$(HOSTNAME))
+args+=$(A_)
+
+
+dguibert-genji: HOSTNAME=genji
+dguibert-aloy: HOSTNAME=aloy
 dguibert-%:
 	set -xeuf -o pipefail
 	user=$${U:-dguibert}
 	host=$*
-	hm=$$(nix-build --no-out-link ./release.nix -A $$ATTR)
+	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
+	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	hm=$$($$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-build ./release.nix $(args) --no-out-link -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
 	else
-	  nix copy --to ssh://$$host $$hm
+	  $$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix copy --to ssh://$$host $$hm
 	  ssh $$user@$$host $$hm/activate
 	fi
+shell-genji: HOSTNAME=genji
+shell-aloy: HOSTNAME=aloy
+shell-%:
+	set -xeuf -o pipefail
+	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
+	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-shell ./shell.nix $(args)
 root-%:
 	set -xeuf -o pipefail
 	user=root
