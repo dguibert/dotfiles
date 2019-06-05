@@ -92,6 +92,66 @@ rec {
     networkConfig.Bond = "bond0";
     networkConfig.IPv6PrivacyExtensions = "kernel";
   };
+  # rpi31
+  networking.wireguard.interfaces.rpi31 = {
+    ips = [
+      "fe80::216:3eff:fe3f:017c/64"
+    ];
+    listenPort = 500;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+        endpoint   = "orsin.freeboxos.fr:503";
+        persistentKeepalive = 25;
+      }
+    ];
+  };
+  # orsine
+  networking.wireguard.interfaces.orsine = {
+    ips = [
+      "fe80::216:3eff:fe58:2eae/64"
+    ];
+    listenPort = 501;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+	endpoint   = "192.168.1.32:503";
+	persistentKeepalive = 25;
+      }
+    ];
+  };
+  # vbox-54nj72
+  networking.wireguard.interfaces.vbox-54nvj72 = {
+    ips = [
+      "fe80::216:3eff:fe16:d620/64"
+    ];
+    listenPort = 502;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+	#endpoint   = "orsin.freeboxos.fr:503";
+	#persistentKeepalive = 25;
+      }
+    ];
+  };
+  # titan
+  networking.wireguard.interfaces.titan = {
+    ips = [
+      "10.147.27.24/24"
+      "fe80::216:3eff:fe06:e0b6/64"
+    ];
+    listenPort = 503;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+  };
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 ];
+
   # services.xserver.videoDrivers = [ "nvidia" ];
   #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
   ## [   13.576513] NVRM: The NVIDIA Quadro FX 550 GPU installed in this system is

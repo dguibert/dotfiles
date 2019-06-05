@@ -32,6 +32,7 @@ let
                    target = lib.mkTarget "rpi31"; }} >&2
   '';
 
+  #writeDeploy = name: { force ? false, source, target-host }
   writeDeploy' = name: { force ? false, source, target-host, build-host }: let
     target' = lib.mkTarget target-host;
     build-host' = lib.mkTarget build-host;
@@ -73,14 +74,18 @@ artifacts will be copied to the local machine).
 
 You can include a remote user name in the host name (user@host). You can also set ssh options by defining the NIX_SSHOPTS environment variable.
 */
-  orsine = writeDeploy' "deploy-orsine" {
-    source = source "orsine";
-    target-host = "root@orsine/var/src/orsine";
-    build-host = "dguibert@titan:22/var/src/orsine";
+  deploy = hostname: writeDeploy' "deploy-${hostname}" {
+    source = source "${hostname}";
+    target-host = "root@${hostname}/var/src/${hostname}";
+    build-host = "dguibert@titan:22/var/src/${hostname}";
   };
 
-in {
-  inherit rpi31 orsine ;
+in rec {
+  rpi31 = deploy "rpi31";
+  orsine = deploy "orsine";
+  vbox-57nvj72 = deploy "vbox-57nvj72";
+  titan = pkgs.krops.writeDeploy "titan" { source = source "titan"; target="root@titan/var/src/titan"; };
+
   all = pkgs.krops.writeScript "deploy-home-servers"
-    (pkgs.lib.concatStringSep "\n" [ rpi31 orsine ]);
+    (pkgs.lib.concatStringSep "\n" [ rpi31 orsine titan]);
 }

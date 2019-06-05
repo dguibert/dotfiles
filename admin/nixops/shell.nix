@@ -39,6 +39,6 @@ in with pkgs; mkEnv {
     export DISNIX_TARGET_PROPERTY=target
 
     export PASSWORD_STORE_DIR=$PWD/secrets
-    #
+    export SHELL=${bashInteractive}/bin/bash
 '';
 }

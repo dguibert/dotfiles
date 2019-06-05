@@ -29,6 +29,7 @@ rec {
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true;
   networking.hostId = "a8c01e02";
+  networking.hostName = "vbox-57nvj72";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
   #fileSystems."/a629925" = {
@@ -163,32 +164,70 @@ rec {
     }
   ];
 
-  networking.interfaces.zt0.ipv4.addresses = [
-            { address = "10.147.17.198"; prefixLength = 24; }
+  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
+    "" # clear old command
+    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore docker0"
   ];
-  networking.wireguard.interfaces.wg0 = {
-    ips = [ "10.147.27.198/24" ];
-    listenPort = 51821;
-    privateKeyFile = toString <secrets/vbox-57nvj72/wireguard_key>;
+  # rpi31
+  networking.wireguard.interfaces.rpi31 = {
+    ips = [
+      "fe80::216:3eff:fe0c:6b11/64"
+    ];
+    listenPort = 500;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" ];
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-        endpoint   = "83.155.85.77:500";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.198/32" ];
-        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-        endpoint   = "83.155.85.77:51821";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.123/32" ];
-        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint   = "83.155.85.77:51820";
-	persistentKeepalive = 25;
+        endpoint   = "orsin.freeboxos.fr:502";
+        persistentKeepalive = 25;
       }
     ];
   };
-  networking.firewall.allowedUDPPorts = [ 51821 ];
+  # orsine
+  networking.wireguard.interfaces.orsine = {
+    ips = [
+      "fe80::216:3eff:fe34:aa1b/64"
+    ];
+    listenPort = 501;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+        endpoint   = "192.168.1.32:502";
+	      persistentKeepalive = 25;
+      }
+    ];
+  };
+  # vbox-54nj72
+  networking.wireguard.interfaces.vbox-54nvj72 = {
+    ips = [
+      "10.147.27.198/24"
+      "fe80::216:3eff:fe24:c117/64"
+    ];
+    listenPort = 502;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+  };
+  # titan
+  networking.wireguard.interfaces.titan = {
+    ips = [
+      "fe80::216:3eff:fe06:e0b6/64"
+    ];
+    listenPort = 503;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+        publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+        endpoint   = "192.168.1.24:502";
+	#persistentKeepalive = 25;
+      }
+    ];
+  };
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 ];
+
 
   services.udev.packages = [ pkgs.android-udev-rules ];
 

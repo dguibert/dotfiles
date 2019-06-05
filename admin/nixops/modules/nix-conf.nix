@@ -13,9 +13,9 @@ rec {
 
   nix.useSandbox = "relaxed";
   nix.autoOptimiseStore = true;
-  nix.extraOptions = ''
-     plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
-   '';
+#  nix.extraOptions = ''
+#     plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
+#   '';
   nix.binaryCaches = [
     "https://cache.nixos.org"
     "https://r-ryantm.cachix.org"

@@ -89,13 +89,13 @@ let
     #${version-updater} versions.json nixpkgs
     #${version-updater} versions.json krops
     #${version-updater} versions.json nur_dguibert
-    #${version-updater} versions.json nixos-17.09
-    #${version-updater} versions.json nixos-18.03
-    #${version-updater} versions.json nixos-18.09
-    #${version-updater} versions.json nixos-19.03
+    ${version-updater} versions.json nixos-17.09
+    ${version-updater} versions.json nixos-18.03
+    ${version-updater} versions.json nixos-18.09
+    ${version-updater} versions.json nixos-19.03
     #${version-updater} versions.json home-manager
-    #${version-updater} versions.json base16-nix
-    #${version-updater} versions.json NUR
+    ${version-updater} versions.json base16-nix
+    ${version-updater} versions.json NUR
     ${version-updater} versions.json gitignore
   '';
 in versions // { inherit updater NIX_PATH sources; }

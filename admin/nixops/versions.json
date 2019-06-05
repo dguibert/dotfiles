@@ -1,7 +1,7 @@
 {
   "krops": "/home/dguibert/code/krops",
-  "_home-manager": "/home/dguibert/code/home-manager",
-  "home-manager": {
+  "home-manager": "/home/dguibert/code/home-manager",
+  "_home-manager": {
     "owner": "dguibert",
     "repo": "home-manager",
     "branch": "pu",
@@ -42,15 +42,15 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.09",
-    "rev": "1e9e709953e315ab004951248b186ac8e2306451",
-    "sha256": "0vimw4pqiqiz23hnpbcir413n4mbmz8bpq430w7d234mpzws48w7"
+    "rev": "a7e559a5504572008567383c3dc8e142fa7a8633",
+    "sha256": "16j95q58kkc69lfgpjkj76gw5sx8rcxwi3civm0mlfaxxyw9gzp6"
   },
   "nixos-19.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "c21f08bfedde0f7d00a5ebc85455fb28b9037932",
-    "sha256": "0sndhal0a61zzgc8k2lhba356mkrgq0hwf5aa61f6kvpvn4isjmg"
+    "rev": "06602f4bc76e46fe25e4c6e6e3db3f62714451d7",
+    "sha256": "0a2pqnfk6m5ys2z47n463f86kqzk1g4527vib8fj9yagir4c1ph4"
   },
   "nixops": {
     "owner": "NixOS",
@@ -70,14 +70,14 @@
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "68c2d7d51a2ff2f83c399bea68df9777b22a69a5",
-    "sha256": "1z53gfs0f1p0shdd92gg316w9sjmqr6fhb6kxk8mnd71f0v20irr"
+    "rev": "7750180da0822db15fb7901f2c07b142aaec8068",
+    "sha256": "1aqwcknzs6s3hgs3a2zag6kx78ksdagaq3aqnm7sdbc3nplkm6q8"
   },
   "gitignore": {
     "owner": "hercules-ci",
     "repo": "gitignore",
     "branch": "master",
-    "rev": "a829865d6cf35655790c152a12e75484687d2317",
-    "sha256": "0dj9yi201pr6dn0bfaipff72s8q19abxxwl0vxphaas9fnbk7l46"
+    "rev": "ec5dd0536a5e4c3a99c797b86180f7261197c124",
+    "sha256": "0k2r8y21rn4kr5dmddd3906x0733fs3bb8hzfpabkdav3wcy3klv"
   }
 }
