@@ -523,3 +523,6 @@ checkout = git clone 'https://github.com/tweag/terraform-nixos' 'terraform-nixos
 
 [code/hledger]
 checkout = git clone 'https://github.com/simonmichael/hledger' 'hledger'
+
+[code/nixos-on-arm]
+checkout = git clone 'https://github.com/illegalprime/nixos-on-arm' 'nixos-on-arm'
