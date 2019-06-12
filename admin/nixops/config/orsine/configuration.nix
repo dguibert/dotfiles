@@ -83,6 +83,8 @@ rec {
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
 
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";
@@ -191,96 +193,44 @@ rec {
 # https://www.sweharris.org/post/2016-10-30-ssh-certs/
   # http://www.lorier.net/docs/ssh-ca
   # https://linux-audit.com/granting-temporary-access-to-servers-using-signed-ssh-keys/
-  boot.kernel.sysctl = {
-    #    # enables syn flood protection
-    #    "net.ipv4.tcp_syncookies" = "1";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.all.accept_source_route" = "0";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.default.accept_source_route" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.all.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.default.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.all.secure_redirects" = "1";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.default.secure_redirects" = "1";
-    #
-    # don't allow traffic between networks or act as a router
-    "net.ipv4.ip_forward" = "1";
-    "net.ipv6.conf.all.forwarding"="1";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.all.send_redirects" = "0";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.default.send_redirects" = "0";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.all.rp_filter" = "1";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.default.rp_filter" = "1";
-    #
-    #    # ignores ICMP broadcasts to avoid participating in Smurf attacks
-    #    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
-    #
-    #    # ignores bad ICMP errors
-    #    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
-    #
-    #    # logs spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.all.log_martians" = "1";
-    #
-    #    # log spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.default.log_martians" = "1";
-    #
-    #    # implements RFC 1337 fix
-    #    "net.ipv4.tcp_rfc1337" = "1";
-  };
-
   # rpi31
   networking.wireguard.interfaces.rpi31 = {
     ips = [
+      "10.147.27.123/32"
       "fe80::216:3eff:fe5d:005f/64"
     ];
     listenPort = 500;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
         endpoint   = "orsin.freeboxos.fr:501";
         persistentKeepalive = 25;
       }
     ];
   };
-  # orsine
-  networking.wireguard.interfaces.orsine = {
-    ips = [
-      "10.147.27.123/24"
-      "fe80::216:3eff:fe56:f0ca/64"
-    ];
-    listenPort = 501;
-    allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
-  };
+  ## orsine
+  #networking.wireguard.interfaces.orsine = {
+  #  ips = [
+  #    "10.147.27.123/32"
+  #    "fe80::216:3eff:fe56:f0ca/64"
+  #  ];
+  #  listenPort = 501;
+  #  allowedIPsAsRoutes=false;
+  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #};
   # vbox-54nj72
   networking.wireguard.interfaces.vbox-54nvj72 = {
     ips = [
+      "10.147.27.123/32"
       "fe80::216:3eff:fe6b:1f11/64"
     ];
     listenPort = 502;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
 	#endpoint   = "orsin.freeboxos.fr:501";
 	#persistentKeepalive = 25;
@@ -290,20 +240,43 @@ rec {
   # titan
   networking.wireguard.interfaces.titan = {
     ips = [
+      "10.147.27.123/32"
       "fe80::216:3eff:fe59:99d6/64"
     ];
     listenPort = 503;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
 	endpoint   = "192.168.1.24:501";
 	#persistentKeepalive = 25;
       }
     ];
   };
-  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = "1";
+    "net.ipv6.conf.all.forwarding"="1";
+  };
+  services.babeld.enable = true;
+  services.babeld.interfaceDefaults = {
+    type = "tunnel";
+    "split-horizon" = true;
+  };
+  services.babeld.extraConfig = ''
+    interface orsine
+    interface titan
+    interface rpi31
+    interface vbox-54nvj72
+    # mesh IPv4
+    redistribute local ip 10.147.27.0/24 metric 128
+    redistribute ip 10.147.27.0/24 ge 13 metric 128
+    ## refuse anything else not explicitely allowed
+    redistribute local deny
+    redistribute deny
+  '';
+
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 6696 ];
 
   #services.wakeonlan.interfaces = [
   #  {

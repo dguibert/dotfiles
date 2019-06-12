@@ -164,20 +164,23 @@ rec {
     }
   ];
 
-  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
-    "" # clear old command
-    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore docker0"
-  ];
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
+  systemd.network.networks."enp0s3" = {
+    name = "enp0s3";
+    DHCP = "both";
+  };
   # rpi31
   networking.wireguard.interfaces.rpi31 = {
     ips = [
+      "10.147.27.198/32"
       "fe80::216:3eff:fe0c:6b11/64"
     ];
     listenPort = 500;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
         endpoint   = "orsin.freeboxos.fr:502";
         persistentKeepalive = 25;
@@ -187,46 +190,70 @@ rec {
   # orsine
   networking.wireguard.interfaces.orsine = {
     ips = [
+      "10.147.27.198/32"
       "fe80::216:3eff:fe34:aa1b/64"
     ];
     listenPort = 501;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
         endpoint   = "192.168.1.32:502";
 	      persistentKeepalive = 25;
       }
     ];
   };
-  # vbox-54nj72
-  networking.wireguard.interfaces.vbox-54nvj72 = {
-    ips = [
-      "10.147.27.198/24"
-      "fe80::216:3eff:fe24:c117/64"
-    ];
-    listenPort = 502;
-    allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
-  };
+  ## vbox-54nj72
+  #networking.wireguard.interfaces.vbox-54nvj72 = {
+  #  ips = [
+  #    "10.147.27.198/32"
+  #    "fe80::216:3eff:fe24:c117/64"
+  #  ];
+  #  listenPort = 502;
+  #  allowedIPsAsRoutes=false;
+  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #};
   # titan
   networking.wireguard.interfaces.titan = {
     ips = [
+      "10.147.27.198/32"
       "fe80::216:3eff:fe06:e0b6/64"
     ];
     listenPort = 503;
     allowedIPsAsRoutes=false;
     privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" "::/0" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
         endpoint   = "192.168.1.24:502";
 	#persistentKeepalive = 25;
       }
     ];
   };
-  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 ];
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 6696 ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = "1";
+    "net.ipv6.conf.all.forwarding"="1";
+  };
+  services.babeld.enable = true;
+  services.babeld.interfaceDefaults = {
+    type = "tunnel";
+    "split-horizon" = true;
+  };
+  services.babeld.extraConfig = ''
+    interface orsine
+    interface titan
+    interface rpi31
+    interface vbox-54nvj72
+    # mesh IPv4
+    redistribute local ip 10.147.27.0/24 metric 128
+    redistribute ip 10.147.27.0/24 ge 13 metric 128
+    ## refuse anything else not explicitely allowed
+    redistribute local deny
+    redistribute deny
+  '';
+
 
 
   services.udev.packages = [ pkgs.android-udev-rules ];

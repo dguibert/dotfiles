@@ -32,7 +32,7 @@ let
       imports = [
         config
 	({...}: {
-           networking.hostName = name;
+           networking.hostName = mkDefault name;
 	 })
       ];
     };
@@ -67,6 +67,7 @@ let
     titan         = (mkHost "titan"  "x86_64-linux" <config/titan/configuration.nix>).system;
     orsine        = (mkHost "orsine" "x86_64-linux" <config/orsine/configuration.nix>).system;
     rpi31         = (mkHost "rpi31"  "aarch64-linux" <config/rpi31/configuration.nix>).system;
+    #rpi31         = (mkHost "rpi31"  builtins.currentSystem <config/rpi31/configuration.nix>).system;
     rpi31_sd      = (mkHost "rpi31"  "aarch64-linux" <config/rpi31/configuration.nix>).config.system.build.sdImage;
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
