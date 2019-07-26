@@ -45,7 +45,7 @@ rec {
 
   services.openssh.enable = true;
 
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_2;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
@@ -185,7 +185,7 @@ rec {
   ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
   ##                NVRM:  this GPU.  Continuing probe...
   hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ "displaylink" ];
+  services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
   #nixpkgs.config.xorg.abiCompat = "1.18";
 
   hardware.opengl.enable = true;
@@ -205,4 +205,12 @@ rec {
   services.disnix.enable = true;
 
   programs.adb.enable = true;
+
+  services.jellyfin.enable = true;
+  networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
+
+  # https://nixos.org/nixos/manual/index.html#sec-container-networking
+  networking.nat.enable = true;
+  networking.nat.internalInterfaces = ["ve-+"];
+  networking.nat.externalInterface = "bond0";
 }

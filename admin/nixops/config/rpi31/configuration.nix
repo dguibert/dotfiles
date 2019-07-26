@@ -25,7 +25,7 @@ rec {
   #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
   #    "it cannot be cross compiled";
   #};
-  sdImage.bootSize = 512;
+  #sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;

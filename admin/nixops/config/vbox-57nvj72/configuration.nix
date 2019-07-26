@@ -2,11 +2,11 @@
 rec {
   imports = [
     <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
-    ../../config/common.nix
-    ../../config/users/dguibert
-    ../../modules/yubikey-gpg.nix
-    ../../modules/distributed-build.nix
-    ../../modules/nix-conf.nix
+    <config/common.nix>
+    <config/users/dguibert>
+    <modules/yubikey-gpg.nix>
+    <modules/distributed-build.nix>
+    <modules/nix-conf.nix>
     #<home-manager/nixos>
   ];
   #home-manager.users.dguibert = (import ../users/dguibert/home.nix {}).withoutX11 { inherit config pkgs lib; };
