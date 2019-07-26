@@ -43,6 +43,8 @@ dguibert-aloy: ATTR=hm_dguibert_aloy
 dguibert-aloy: U=bguibertd
 dguibert-inti: ATTR=hm_dguibert_inti
 dguibert-inti: U=bguibertd
+dguibert-login-arm: ATTR=hm_dguibert_inti
+dguibert-login-arm: U=bguibertd
 
 # Install with default /nix/store
 #dguibert-%:
@@ -63,12 +65,14 @@ args_manny+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays).nix-home-n
 args_genji+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-genji.nix) ]"
 args_aloy+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-aloy.nix) ]"
 args_inti+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
+args_login-arm+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
 args+=$(args_$(HOSTNAME))
 args+=$(A_)
 
 
 dguibert-genji: HOSTNAME=genji
 dguibert-aloy: HOSTNAME=aloy
+dguibert-login-arm: HOSTNAME=login-arm
 dguibert-%:
 	set -xeuf -o pipefail
 	user=$${U:-dguibert}
