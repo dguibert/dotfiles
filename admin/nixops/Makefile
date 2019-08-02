@@ -29,9 +29,13 @@ secrets-%:
 	host=$*
 	source_path=$(PWD)/secrets
 	pass_prefix=$$source_path/$$host
-	dest_path=/tmp/$$host
+	dest_path=/secrets
 	local_pass_info=$$(git -C $$source_path log -1 --format=%H $$host)
-	remote_pass_info=$(ssh $$host cat $$dest_path/.pass_info || :)
+	if [ "$$HOSTNAME" == "$$host" ]; then
+	remote_pass_info=$$(           cat $$dest_path/.pass_info || :)
+	else
+	remote_pass_info=$$(ssh root@$$host cat $$dest_path/.pass_info || :)
+	fi
 	if test "$$local_pass_info" = "$$remote_pass_info"; then
 		exit 0
 	fi
@@ -51,22 +55,22 @@ secrets-%:
 		PASSWORD_STORE_DIR=$$source_path pass show "$$pass_name" > "$$tmp_path"
 		touch -d "$$pass_date" "$$tmp_path"
 	done
-	if test -n "''$${local_pass_info-}"; then
+	if test -n "$${local_pass_info-}"; then
 		echo "$$local_pass_info" > "$$tmp_dir"/.pass_info
 	fi
-	#if [ "$$HOSTNAME" == "$$host" ]; then
-	#  rsync --checksum \
-	#	  -vFrlptD \
-	#	  --delete-excluded \
-	#	  $$tmp_dir/ \
-	#	  $$dest_path
-	#else
-	#  rsync --checksum \
-	#	  -vFrlptD \
-	#	  --delete-excluded \
-	#	  $$tmp_dir/ \
-	#	  $$host:$$dest_path
-	#fi
+	if [ "$$HOSTNAME" == "$$host" ]; then
+	  sudo -E rsync --checksum \
+		  -vFrlptD \
+		  --delete-excluded \
+		  $$tmp_dir/ \
+		  $$dest_path
+	else
+	  rsync --checksum \
+		  -vFrlptD \
+		  --delete-excluded \
+		  $$tmp_dir/ \
+		  root@$$host:$$dest_path
+	fi
 
 dguibert-titan: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
