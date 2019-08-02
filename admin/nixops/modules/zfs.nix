@@ -34,6 +34,7 @@
 
     options zfs zfs_dirty_data_max_percent=40
     options zfs zfs_top_maxinflight=320
+    options zfs zfs_txg_timeout=15
 
     # use the prefetch method
     options zfs zfs_prefetch_disable=0
