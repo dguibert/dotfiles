@@ -52,6 +52,7 @@ Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'edkolev/tmuxline.vim'
 " Plugin 'guyzmo/notmuch-abook' " requires to be patched for nix
+Plugin 'jamessan/vim-gnupg'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
