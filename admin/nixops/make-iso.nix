@@ -6,12 +6,13 @@ with import <nixpkgs/lib>;
 let
   disks_st1000lm049 = [
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WGY"
-    "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WJB"
+    #"/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WJB" #20190726
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS20WK1"
     #"/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25WVG"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS1T415"
     "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25XFD"
-    "/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25Z1Y"
+    #"/dev/disk/by-id/ata-ST1000LM049-2GH172_WGS25Z1Y" # 20190726
+    "/dev/disk/by-id/ata-ST1000LM048-2E7172_WQ90DBRQ"
   ];
   disks = [
     "/dev/disk/by-id/ata-ST3160812AS_5LS8DN8Z"
@@ -71,8 +72,10 @@ let
   config = (import <nixpkgs/nixos/lib/eval-config.nix> {
     system = "x86_64-linux";
     modules = [
-       <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
+      <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
+      <modules/zfs.nix>
       ({ pkgs, lib, ... }: {
+   	  boot.kernelPackages = pkgs.linuxPackages_4_19;
           boot.supportedFilesystems = [ "zfs" ];
           users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";
           services.openssh.enable = true;
@@ -117,8 +120,7 @@ mkdir -p /mnt/boot/efi
 mount ${head disks_st1000lm049}-part3 /mnt/boot/efi/
 
 mkdir -p /mnt/etc/nixos/
-cp -v ${./titan/configuration.nix} /mnt/etc/nixos/configuration.nix
-cp -v ${./titan/hardware-configuration.nix} /mnt/etc/nixos/hardware-configuration.nix
+cp -v ${./config/titan/configuration.nix} /mnt/etc/nixos/configuration.nix
 ${config.system.build.nixos-install}/bin/nixos-install
 
 ##umount /mnt/boot/efi
