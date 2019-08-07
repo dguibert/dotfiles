@@ -237,7 +237,7 @@ rec {
   ];
 
   services.postgresql = {
-    package = pkgs.postgresql94;
+    package = pkgs.postgresql95;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
   };
 
