@@ -163,13 +163,11 @@ fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
 	 "
 	 git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
-	 git config --get-all remote.origin.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
 	 #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
 
 update = git remote update
 push = git push -v origin +pu
 	      git push -v origin
-	      git push -v origin refs/int/pu:refs/int/pu
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
@@ -344,7 +342,6 @@ checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
 fixups = #git_add_remotes "
 	 #  github https://github.com/NixOS/nixpkgs
 	 #"
-	 git config --get-all remote.dguibert.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
 
 update = git remote update
 push = git push -v dguibert +pu
