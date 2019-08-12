@@ -2,11 +2,12 @@
 rec {
   imports = [
     <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
-    <config/common.nix>
-    <config/users/dguibert>
-    <modules/yubikey-gpg.nix>
-    <modules/distributed-build.nix>
-    <modules/nix-conf.nix>
+    ../../config/common.nix
+    ../../config/users/dguibert
+    ../../modules/yubikey-gpg.nix
+    ../../modules/distributed-build.nix
+    ../../modules/nix-conf.nix
+    ../../modules/zfs.nix
     #<home-manager/nixos>
   ];
   #home-manager.users.dguibert = (import ../users/dguibert/home.nix {}).withoutX11 { inherit config pkgs lib; };
@@ -66,60 +67,6 @@ rec {
   services.openssh.enable = true;
   services.openssh.ports = [22];
 
-    #  boot.kernel.sysctl = {
-    #    # enables syn flood protection
-    #    "net.ipv4.tcp_syncookies" = "1";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.all.accept_source_route" = "0";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.default.accept_source_route" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.all.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.default.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.all.secure_redirects" = "1";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.default.secure_redirects" = "1";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.ip_forward" = "0";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.all.send_redirects" = "0";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.default.send_redirects" = "0";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.all.rp_filter" = "1";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.default.rp_filter" = "1";
-    #
-    #    # ignores ICMP broadcasts to avoid participating in Smurf attacks
-    #    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
-    #
-    #    # ignores bad ICMP errors
-    #    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
-    #
-    #    # logs spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.all.log_martians" = "1";
-    #
-    #    # log spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.default.log_martians" = "1";
-    #
-    #    # implements RFC 1337 fix
-    #    "net.ipv4.tcp_rfc1337" = "1";
-    #  };
-
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "fr";
@@ -128,7 +75,7 @@ rec {
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "dguibert";
   #services.xserver.displayManager.lightdm.enable = true;
-  #services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
 
   # fonts
   fonts.enableFontDir = true;
@@ -258,12 +205,12 @@ rec {
 
   services.udev.packages = [ pkgs.android-udev-rules ];
 
-  networking.firewall.checkReversePath = false;
+  #networking.firewall.checkReversePath = false;
 
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 }

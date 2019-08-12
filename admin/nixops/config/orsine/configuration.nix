@@ -15,12 +15,12 @@ rec {
 
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    <config/common.nix>
-    <config/users/dguibert>
-    <modules/nix-conf.nix>
-    <modules/yubikey-gpg.nix>
-    <modules/distributed-build.nix>
-    <modules/x11.nix>
+    ../../config/common.nix
+    ../../config/users/dguibert
+    ../../modules/nix-conf.nix
+    ../../modules/yubikey-gpg.nix
+    ../../modules/distributed-build.nix
+    ../../modules/x11.nix
   ];
   nixpkgs.localSystem.system = "x86_64-linux";
 
@@ -33,7 +33,7 @@ rec {
   boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usb_storage" "tm-smapi" ];
   boot.kernelPackages = pkgs.linuxPackages_4_19;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf config.boot.kernelPackages.tp_smapi ];
-#  nixpkgs.config = {pkgs}: (import <config/nixpkgs/config.nix> { inherit pkgs; }) // {
+#  nixpkgs.config = {pkgs}: (import ../../config/nixpkgs/config.nix { inherit pkgs; }) // {
 #    allowUnfree = true;
 #    packageOverrides.linuxPackages = boot.kernelPackages;
 #  };

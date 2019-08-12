@@ -7,13 +7,13 @@
 rec {
   imports =
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-      <config/common.nix>
-      <config/users/dguibert>
-      <modules/yubikey-gpg.nix>
-      <modules/distributed-build.nix>
-      <modules/nix-conf.nix>
-      <modules/x11.nix>
-      <modules/zfs.nix>
+      ../../config/common.nix
+      ../../config/users/dguibert
+      ../../modules/yubikey-gpg.nix
+      ../../modules/distributed-build.nix
+      ../../modules/nix-conf.nix
+      ../../modules/x11.nix
+      ../../modules/zfs.nix
       (import <nur_dguibert/modules>).qemu-user
     ];
 
@@ -237,7 +237,7 @@ rec {
   ];
 
   services.postgresql = {
-    package = pkgs.postgresql95;
+    #package = pkgs.postgresql_11;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
   };
 

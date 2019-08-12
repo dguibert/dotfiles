@@ -2,7 +2,7 @@
 
 with lib;
 #let
-#  nodes = import <modules/infra.nix>;
+#  nodes = import ../../modules/infra.nix;
 #in
 
 rec {
@@ -10,11 +10,11 @@ rec {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix>
     <nixpkgs/nixos/modules/profiles/minimal.nix>
-    <config/common.nix>
-    <modules/nix-conf.nix>
-    <modules/distributed-build.nix>
-    <config/users/dguibert>
-    <config/users/rdolbeau>
+    ../../config/common.nix
+    ../../modules/nix-conf.nix
+    ../../modules/distributed-build.nix
+    ../../config/users/dguibert
+    ../../config/users/rdolbeau
   ];
 
   # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
