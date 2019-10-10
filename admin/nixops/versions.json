@@ -1,4 +1,5 @@
 {
+  "krops": "/home/dguibert/code/krops",
   "_home-manager": "/home/dguibert/code/home-manager",
   "home-manager": {
     "owner": "dguibert",
@@ -12,8 +13,8 @@
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "97b9cd3d06bd8a9367c19b43b4ddd223622c1098",
-    "sha256": "03hviq7srk7qk068bv9cbm17qwirvaf35scj16ab4d50d8r4aczy"
+    "rev": "b1a89a4bad3317c759659cfd43895bf7d42f9fac",
+    "sha256": "1cqybbi6xg3avr47jk57pgljsgf27gw7r65fs6v2ahx9abj61qsa"
   },
   "nur_dguibert": "/home/dguibert/nur-packages",
   "_nur_dguibert": {
@@ -41,15 +42,15 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-18.09",
-    "rev": "1e9e709953e315ab004951248b186ac8e2306451",
-    "sha256": "0vimw4pqiqiz23hnpbcir413n4mbmz8bpq430w7d234mpzws48w7"
+    "rev": "a7e559a5504572008567383c3dc8e142fa7a8633",
+    "sha256": "16j95q58kkc69lfgpjkj76gw5sx8rcxwi3civm0mlfaxxyw9gzp6"
   },
   "nixos-19.03": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "727e5bce880137a23d98cd02c69dc268d9a638d2",
-    "sha256": "1gwfyidnm2228v4rw98a0rnlhmicaz5mc8cygdlbhf3pi0dci8ga"
+    "rev": "b978a94c8f9167fb86372ce1044a23f8df2edea0",
+    "sha256": "0p6n5f1m45mhms9nbpr08gh4as8vys6ii65mcs227dbq3nn126x1"
   },
   "nixops": {
     "owner": "NixOS",
@@ -62,14 +63,21 @@
     "owner": "atpotts",
     "repo": "base16-nix",
     "branch": "master",
-    "rev": "e6de76f0899795def0be8b1bfdc8c10628099661",
-    "sha256": "12hjpymk9nglvqm1zfbc4w2d06n2b5iriwh01ga2ndh4ys2p26n8"
+    "rev": "944303d2b9889bc0c2c38773183f5e149c0fbea5",
+    "sha256": "1i6w110n4ncs0fx3dckr99k20m2i54fia0q4ygzyjv04mxi52ayi"
   },
   "NUR": {
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "9b137ddb168f8f0089e727a58e5ad22efcffba65",
-    "sha256": "1x973bzw76dpv0qrc9pbadm9gd67yjqvrghs2vw7yjhcif5p11n3"
+    "rev": "e9331b3a415c2a339e070bf162a0db1dad268df6",
+    "sha256": "16qpdsk4fiq1rmh35gp4anvdbqdkw3c5prf17jns0hh7gxkawfnq"
+  },
+  "gitignore": {
+    "owner": "hercules-ci",
+    "repo": "gitignore",
+    "branch": "master",
+    "rev": "ec5dd0536a5e4c3a99c797b86180f7261197c124",
+    "sha256": "0k2r8y21rn4kr5dmddd3906x0733fs3bb8hzfpabkdav3wcy3klv"
   }
 }

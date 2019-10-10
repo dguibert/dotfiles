@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	  cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	source $HOME/.config/mr/lib/git-remotes
 	if [ -n "$HOSTNAME" ]; then
 		hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	   public_git ~/public_git/dotfiles.git
 	   "
-push = 
+push =
 	mgit dotfiles push
 	mgit dotfiles push public_git
 
@@ -163,13 +163,11 @@ fixups = git_add_remotes "
 	   github https://github.com/NixOS/nixpkgs
 	 "
 	 git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
-	 git config --get-all remote.origin.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
 	 #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
 
 update = git remote update
 push = git push -v origin +pu
 	      git push -v origin
-	      git push -v origin refs/int/pu:refs/int/pu
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
@@ -344,7 +342,6 @@ checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
 fixups = #git_add_remotes "
 	 #  github https://github.com/NixOS/nixpkgs
 	 #"
-	 git config --get-all remote.dguibert.fetch "refs/int/pu" &>/dev/null || git config --add remote.origin.fetch refs/int/pu:refs/int/pu
 
 update = git remote update
 push = git push -v dguibert +pu
@@ -500,6 +497,20 @@ fixups = git_add_remotes "
 	        #git remote remove repo 2>/dev/null || true
 skip = ! wantmedia
 
+[$HOME/Music]
+checkout = git init $MR_REPO
+	   cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = git_add_remotes "
+	   titan titan:Music
+	   orsine orsine:Music
+	          orsine-backupwd orsine:/backupwd/Music
+	          vbox-57nvj72 vbox-57nvj72:Music
+	   "
+skip = ! wantmedia
+
 
 [$HOME/archives]
 checkout = git init $MR_REPO
@@ -523,3 +534,6 @@ checkout = git clone 'https://github.com/tweag/terraform-nixos' 'terraform-nixos
 
 [code/hledger]
 checkout = git clone 'https://github.com/simonmichael/hledger' 'hledger'
+
+[code/nixos-on-arm]
+checkout = git clone 'https://github.com/illegalprime/nixos-on-arm' 'nixos-on-arm'

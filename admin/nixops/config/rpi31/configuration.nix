@@ -2,7 +2,7 @@
 
 with lib;
 #let
-#  nodes = import <modules/infra.nix>;
+#  nodes = import ../../modules/infra.nix;
 #in
 
 rec {
@@ -10,21 +10,22 @@ rec {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix>
     <nixpkgs/nixos/modules/profiles/minimal.nix>
-    <config/common.nix>
-    <modules/nix-conf.nix>
-    <modules/distributed-build.nix>
-    <config/users/dguibert>
-    <config/users/rdolbeau>
+    ../../config/common.nix
+    ../../modules/nix-conf.nix
+    ../../modules/distributed-build.nix
+    ../../config/users/dguibert
+    ../../config/users/rdolbeau
   ];
 
   # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
+  #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
   nixpkgs.localSystem.system = "aarch64-linux";
-  assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "aarch64-linux";
-    message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
-      "it cannot be cross compiled";
-  };
-  sdImage.bootSize = 512;
+  #assertions = lib.singleton {
+  #  assertion = pkgs.stdenv.system == "aarch64-linux";
+  #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
+  #    "it cannot be cross compiled";
+  #};
+  #sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
@@ -36,9 +37,11 @@ rec {
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
   #boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.supportedFilesystems = [ "zfs" ];
+  #boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = mkForce [ /*"btrfs" "reiserfs"*/ "vfat" "f2fs" /*"xfs" "zfs"*/ "ntfs" /*"cifs"*/ ];
   #boot.zfs.enableUnstable = true;
   networking.hostId = "8425e349";
+  networking.hostName = "rpi31";
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.
   #nix.binaryCaches = lib.mkForce [ "http://nixos-arm.dezgeg.me/channel" ];
@@ -70,29 +73,112 @@ rec {
 
   nix.maxJobs = 4;
 
-  networking.wireguard.interfaces.wg0 = {
-    ips = [ "10.147.27.13/24" ];
-    listenPort = 500;
-    privateKeyFile = toString <secrets/rpi31/wireguard_key>;
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
+  systemd.network.networks."eth0" = {
+    name = "eth0";
+    DHCP = "both";
+  };
+
+  ## rpi31
+  #networking.wireguard.interfaces.rpi31 = {
+  #  ips = [
+  #    "10.147.27.13/32"
+  #    "fe80::216:3eff:fe14:bb31/64"
+  #  ];
+  #  listenPort = 500;
+  #  allowedIPsAsRoutes=false;
+  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #};
+  # orsine
+  networking.wireguard.interfaces.orsine = {
+    ips = [
+      "10.147.27.13/32"
+      "fe80::216:3eff:fe07:ed74/64"
+    ];
+    listenPort = 501;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" ];
-        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-        endpoint   = "orsin.freeboxos.fr:500";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.198/32" ];
-        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-        endpoint   = "orsin.freeboxos.fr:51821";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.123/32" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint   = "orsin.freeboxos.fr:51820";
+	endpoint   = "192.168.1.32:500";
 	persistentKeepalive = 25;
       }
     ];
   };
-  networking.firewall.allowedUDPPorts = [ 9993 500 ];
+  # vbox-54nj72
+  networking.wireguard.interfaces.vbox-54nvj72 = {
+    ips = [
+      "10.147.27.13/32"
+      "fe80::216:3eff:fe1c:82d3/64"
+    ];
+    listenPort = 502;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+	#endpoint   = "orsin.freeboxos.fr:500";
+	persistentKeepalive = 25;
+      }
+    ];
+  };
+  # titan
+  networking.wireguard.interfaces.titan = {
+    ips = [
+      "10.147.27.13/32"
+      "fe80::216:3eff:fe6a:481f/64"
+    ];
+    listenPort = 503;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+        publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+	endpoint   = "192.168.1.24:500";
+      }
+    ];
+  };
+  # oneplus1
+  networking.wireguard.interfaces.oneplus1 = {
+    ips = [
+      "10.147.27.13/32"
+      "fe80::216:3eff:fe09:495d/64"
+    ];
+    listenPort = 504;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+        publicKey  = "MkVk/+vE2kNw8Pi5UljJifp0esCBxztPwQ7AFNMkkW4=";
+	persistentKeepalive = 25;
+      }
+    ];
+  };
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 504 6696 ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = "1";
+    "net.ipv6.conf.all.forwarding"="1";
+  };
+  services.babeld.enable = true;
+  services.babeld.interfaceDefaults = {
+    type = "tunnel";
+    "split-horizon" = true;
+  };
+  services.babeld.extraConfig = ''
+    interface orsine
+    interface titan
+    interface rpi31
+    interface vbox-54nvj72
+    # mesh IPv4
+    redistribute local ip 10.147.27.0/24 metric 128
+    redistribute ip 10.147.27.0/24 ge 13 metric 128
+    ## refuse anything else not explicitely allowed
+    redistribute local deny
+    redistribute deny
+  '';
+
 
   environment.noXlibs = true;
   programs.ssh.setXAuthLocation = false;

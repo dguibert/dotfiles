@@ -7,6 +7,7 @@ rec {
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
+    ../../modules/zfs.nix
     #<home-manager/nixos>
   ];
   #home-manager.users.dguibert = (import ../users/dguibert/home.nix {}).withoutX11 { inherit config pkgs lib; };
@@ -29,6 +30,7 @@ rec {
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true;
   networking.hostId = "a8c01e02";
+  networking.hostName = "vbox-57nvj72";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
   fileSystems."/a629925" = {
@@ -65,60 +67,6 @@ rec {
   services.openssh.enable = true;
   services.openssh.ports = [22];
 
-    #  boot.kernel.sysctl = {
-    #    # enables syn flood protection
-    #    "net.ipv4.tcp_syncookies" = "1";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.all.accept_source_route" = "0";
-    #
-    #    # ignores source-routed packets
-    #    "net.ipv4.conf.default.accept_source_route" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.all.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects
-    #    "net.ipv4.conf.default.accept_redirects" = "0";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.all.secure_redirects" = "1";
-    #
-    #    # ignores ICMP redirects from non-GW hosts
-    #    "net.ipv4.conf.default.secure_redirects" = "1";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.ip_forward" = "0";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.all.send_redirects" = "0";
-    #
-    #    # don't allow traffic between networks or act as a router
-    #    "net.ipv4.conf.default.send_redirects" = "0";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.all.rp_filter" = "1";
-    #
-    #    # reverse path filtering - IP spoofing protection
-    #    "net.ipv4.conf.default.rp_filter" = "1";
-    #
-    #    # ignores ICMP broadcasts to avoid participating in Smurf attacks
-    #    "net.ipv4.icmp_echo_ignore_broadcasts" = "1";
-    #
-    #    # ignores bad ICMP errors
-    #    "net.ipv4.icmp_ignore_bogus_error_responses" = "1";
-    #
-    #    # logs spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.all.log_martians" = "1";
-    #
-    #    # log spoofed, source-routed, and redirect packets
-    #    "net.ipv4.conf.default.log_martians" = "1";
-    #
-    #    # implements RFC 1337 fix
-    #    "net.ipv4.tcp_rfc1337" = "1";
-    #  };
-
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "fr";
@@ -127,7 +75,7 @@ rec {
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "dguibert";
   #services.xserver.displayManager.lightdm.enable = true;
-  #services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
 
   # fonts
   fonts.enableFontDir = true;
@@ -163,41 +111,106 @@ rec {
     }
   ];
 
-  networking.interfaces.zt0.ipv4.addresses = [
-            { address = "10.147.17.198"; prefixLength = 24; }
-  ];
-  networking.wireguard.interfaces.wg0 = {
-    ips = [ "10.147.27.198/24" ];
-    listenPort = 51821;
-    privateKeyFile = toString <secrets/vbox-57nvj72/wireguard_key>;
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
+  systemd.network.networks."enp0s3" = {
+    name = "enp0s3";
+    DHCP = "both";
+  };
+  # rpi31
+  networking.wireguard.interfaces.rpi31 = {
+    ips = [
+      "10.147.27.198/32"
+      "fe80::216:3eff:fe0c:6b11/64"
+    ];
+    listenPort = 500;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
     peers = [
-      { allowedIPs = [ "10.147.27.0/24" ];
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-        endpoint   = "83.155.85.77:500";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.198/32" ];
-        publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-        endpoint   = "83.155.85.77:51821";
-	persistentKeepalive = 25;
-      }
-      { allowedIPs = [ "10.147.27.123/32" ];
-        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint   = "83.155.85.77:51820";
-	persistentKeepalive = 25;
+        endpoint   = "orsin.freeboxos.fr:502";
+        persistentKeepalive = 25;
       }
     ];
   };
-  networking.firewall.allowedUDPPorts = [ 51821 ];
+  # orsine
+  networking.wireguard.interfaces.orsine = {
+    ips = [
+      "10.147.27.198/32"
+      "fe80::216:3eff:fe34:aa1b/64"
+    ];
+    listenPort = 501;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+        endpoint   = "192.168.1.32:502";
+	      persistentKeepalive = 25;
+      }
+    ];
+  };
+  ## vbox-54nj72
+  #networking.wireguard.interfaces.vbox-54nvj72 = {
+  #  ips = [
+  #    "10.147.27.198/32"
+  #    "fe80::216:3eff:fe24:c117/64"
+  #  ];
+  #  listenPort = 502;
+  #  allowedIPsAsRoutes=false;
+  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #};
+  # titan
+  networking.wireguard.interfaces.titan = {
+    ips = [
+      "10.147.27.198/32"
+      "fe80::216:3eff:fe06:e0b6/64"
+    ];
+    listenPort = 503;
+    allowedIPsAsRoutes=false;
+    privateKeyFile = toString <secrets/wireguard_key>;
+    peers = [
+      { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+        publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+        endpoint   = "192.168.1.24:502";
+	#persistentKeepalive = 25;
+      }
+    ];
+  };
+  networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 6696 ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = "1";
+    "net.ipv6.conf.all.forwarding"="1";
+  };
+  services.babeld.enable = true;
+  services.babeld.interfaceDefaults = {
+    type = "tunnel";
+    "split-horizon" = true;
+  };
+  services.babeld.extraConfig = ''
+    interface orsine
+    interface titan
+    interface rpi31
+    interface vbox-54nvj72
+    # mesh IPv4
+    redistribute local ip 10.147.27.0/24 metric 128
+    redistribute ip 10.147.27.0/24 ge 13 metric 128
+    ## refuse anything else not explicitely allowed
+    redistribute local deny
+    redistribute deny
+  '';
+
+
 
   services.udev.packages = [ pkgs.android-udev-rules ];
 
-  networking.firewall.checkReversePath = false;
+  #networking.firewall.checkReversePath = false;
 
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 }

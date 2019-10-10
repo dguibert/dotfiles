@@ -43,6 +43,7 @@ let
 
     test -n "$VERBOSE" && set -x
     set -eufo pipefail
+    unset GIT_DIR GIT_WORKTREE
 
     FILE=$1
     PROJECT=$2
@@ -85,14 +86,16 @@ let
 
   updater = writeScript "updater.sh" ''
     #!/usr/bin/env bash
-    ${version-updater} versions.json nixpkgs
-    ${version-updater} versions.json nur_dguibert
+    #${version-updater} versions.json nixpkgs
+    #${version-updater} versions.json krops
+    #${version-updater} versions.json nur_dguibert
     ${version-updater} versions.json nixos-17.09
     ${version-updater} versions.json nixos-18.03
     ${version-updater} versions.json nixos-18.09
     ${version-updater} versions.json nixos-19.03
-    ${version-updater} versions.json home-manager
+    #${version-updater} versions.json home-manager
     ${version-updater} versions.json base16-nix
     ${version-updater} versions.json NUR
+    ${version-updater} versions.json gitignore
   '';
 in versions // { inherit updater NIX_PATH sources; }
