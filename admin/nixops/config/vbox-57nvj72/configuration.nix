@@ -33,11 +33,11 @@ rec {
   networking.hostName = "vbox-57nvj72";
 
   #sudo mount -t vboxsf a629925  /a629925 -o uid=dguibert,gid=dguibert,fmask=111
-  #fileSystems."/a629925" = {
-  #  fsType = "vboxsf";
-  #  device = "a629925";
-  #  options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
-  #};
+  fileSystems."/a629925" = {
+    fsType = "vboxsf";
+    device = "a629925";
+    options = [ "rw" "uid=dguibert" "gid=dguibert" "fmask=117" "dmask=007" ];
+  };
   networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   zramSwap.enable = true;
   swapDevices = [ { device = "/swapfile"; } ];
