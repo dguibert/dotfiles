@@ -1,29 +1,38 @@
 {
+  "secrets": "/secrets",
   "krops": "/home/dguibert/code/krops",
+  "_krops": {
+    "owner": "dguibert",
+    "repo": "krops",
+    "branch": "pu",
+    "rev": "453548eccc346dce7ec339ea240a85ea8d809e49",
+    "sha256": "139jgh2dy4hdw3s1978qalaz3vrbdkzi3n2wgnglj30axkbdik08"
+  },
   "_home-manager": "/home/dguibert/code/home-manager",
   "home-manager": {
     "owner": "dguibert",
     "repo": "home-manager",
     "branch": "pu",
-    "rev": "5cbe32484e7b0040071ef2e8c84d6f3f38d5c521",
-    "sha256": "0krwbx9nxlvaayc8397i10lvv5i29kcqig3k6a973g20fib5sn9a"
+    "rev": "0181c4ba20c6534b33dd5b84f3a6b00ed8978403",
+    "sha256": "0px0v37i2rram9z6a5j0ql4ny2adqgrghggrpxhv1gnib7faz4ph"
   },
   "_nixpkgs": "/home/dguibert/code/nixpkgs",
   "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "b1a89a4bad3317c759659cfd43895bf7d42f9fac",
-    "sha256": "1cqybbi6xg3avr47jk57pgljsgf27gw7r65fs6v2ahx9abj61qsa"
+    "rev": "2ca0982ea6c88695c785347197b2909136b8dd52",
+    "sha256": "0x7kl2v6lxl2qbqv1ln8yd10scizrbc7ry3fyzqxjg5riyay2srj"
   },
   "_nur_dguibert": "/home/dguibert/nur-packages",
   "nur_dguibert": {
     "owner": "dguibert",
     "repo": "nur-packages",
     "branch": "master",
-    "rev": "fbca4823ed371f150d825a1ae4c2210d8ec85f8c",
-    "sha256": "0d8cg5hlpza34x8r0247q3759csdg0myqa567in9b84gcic0n0w6"
+    "rev": "17c2652201b7dbb069d2628e79ec7dd6cc0144a6",
+    "sha256": "1lyvddv2270a5gsmbmx1gvgm2khbxg592gj0zjhqg7g13d5qzk25"
   },
+  "nixos-generators": "/home/dguibert/code/nixos-generators",
   "nixos-17.09": {
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
@@ -49,8 +58,8 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "bd1358fed9d1ccd67f250063a542ecc71f6ebbb9",
-    "sha256": "1v6x59ldjh7yd3dllchgvdv8lcah3dss085n8hfwqzpqfh0116wq"
+    "rev": "df7e351af91e6cbf4434e281d35fec39348a5d91",
+    "sha256": "19fpg1pya2iziwk10wja69ma65r985zdcd9blkplyg0l1lnn8haq"
   },
   "nixops": {
     "owner": "NixOS",
@@ -70,14 +79,14 @@
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "c01f33839bd9f31766f9e75bcd173cde2039c335",
-    "sha256": "040f808y68dcg983nlhiwg7q4vfp6zmhs93l7v19cwfgnaz1mynz"
+    "rev": "1ec9a1abbc2265a44476f4e01e552447aa245625",
+    "sha256": "1cj7imm89f20axjqh1jnz73zab1mnlkhif4acyv9biz97h97wb1z"
   },
   "gitignore": {
     "owner": "hercules-ci",
     "repo": "gitignore",
     "branch": "master",
-    "rev": "ec5dd0536a5e4c3a99c797b86180f7261197c124",
-    "sha256": "0k2r8y21rn4kr5dmddd3906x0733fs3bb8hzfpabkdav3wcy3klv"
+    "rev": "f9e996052b5af4032fe6150bba4a6fe4f7b9d698",
+    "sha256": "0jrh5ghisaqdd0vldbywags20m2cxpkbbk5jjjmwaw0gr8nhsafv"
   }
 }

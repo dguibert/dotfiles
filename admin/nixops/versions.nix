@@ -23,7 +23,8 @@ let
 
   sources = (builtins.fromJSON (builtins.readFile ./versions.json));
 
-  NIX_PATH = ".:" + builtins.concatStringsSep ":" (builtins.map (x: "${x}=${versions."${x}"}") (builtins.attrNames versions));
+  NIX_PATH = builtins.concatStringsSep ":" (builtins.map (x: "${x}=${versions."${x}"}") (builtins.attrNames versions))
+           + ":.";
 
   fetchOrPath = value:
     if builtins.typeOf value == "set" then
@@ -86,14 +87,14 @@ let
 
   updater = writeScript "updater.sh" ''
     #!/usr/bin/env bash
-    #${version-updater} versions.json nixpkgs
-    #${version-updater} versions.json krops
-    #${version-updater} versions.json nur_dguibert
+    ${version-updater} versions.json nixpkgs
+    ${version-updater} versions.json krops
+    ${version-updater} versions.json nur_dguibert
     ${version-updater} versions.json nixos-17.09
     ${version-updater} versions.json nixos-18.03
     ${version-updater} versions.json nixos-18.09
     ${version-updater} versions.json nixos-19.03
-    #${version-updater} versions.json home-manager
+    ${version-updater} versions.json home-manager
     ${version-updater} versions.json base16-nix
     ${version-updater} versions.json NUR
     ${version-updater} versions.json gitignore

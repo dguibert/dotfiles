@@ -7,12 +7,24 @@ let
   lib = import "${versions.krops}/lib";
   pkgs = import "${versions.krops}/pkgs" { };
 
-  inherit (import versions.gitignore { inherit (pkgs) lib; }) gitignoreSource;
+  lib' = (import versions.nixpkgs { config={}; overlays=[]; }).lib;
+
+  inherit (import versions.gitignore { lib = lib'; }) gitignoreSource;
+
+  noDownloads = _path: _type: let
+    baseName = baseNameOf (toString _path);
+  in !(
+    (_type == "directory" && baseName == "downloads")
+    );
 
   source = name: lib.evalSource [{
     nixpkgs.file = versions.nixpkgs;
     home-manager.file = versions.home-manager;
-    nur_dguibert.file = (gitignoreSource versions.nur_dguibert).outPath;
+    nur_dguibert.file = versions.nur_dguibert;
+    #nur_dguibert.file = (gitignoreSource versions.nur_dguibert).outPath;
+    /*nur_dguibert.file = (gitignoreSource (lib'.cleanSourceWith {
+      filter=noDownloads;
+      src=versions.nur_dguibert; })).outPath;*/
     base16-nix.file = versions.base16-nix;
     NUR.file = versions.NUR;
 
@@ -40,9 +52,9 @@ let
     pkgs.writeDash name ''
       set -efux
       ${pkgs.populate { inherit force source; target = build-host'; }}
-      ${pkgs.populate { inherit force source; target = target'; }}
       ${nixos-rebuild ["switch"] build-host' target'}
     '';
+      /*${pkgs.populate { inherit force source; target = target'; }}*/
   nixos-rebuild = args: build-host: target:
     pkgs.exec "nixops-rebuild.${build-host.host}.${target.host}" rec {
       filename = "/run/current-system/sw/bin/nixos-rebuild";

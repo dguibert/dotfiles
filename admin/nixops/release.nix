@@ -1,6 +1,7 @@
 { versions ? import ./versions.nix
 , nixpkgs ? { outPath = versions.nixpkgs; revCount = 123456; shortRev = "gfedcba"; }
 , nur_dguibert ? { outPath = versions.nur_dguibert; revCount = 123456; shortRev = "gfedcba"; }
+, nixos-generators ? { outPath = versions.nixos-generators; revCount = 123456; shortRev = "gfedcba"; }
 , overlays_ ? []
 #, overlays_ ? [ (import "${nur_dguibert}/overlays/local-aloy.nix") ]
 , system ? builtins.currentSystem
@@ -59,6 +60,37 @@ let
       newsReadIdsFile = null;
       }).activationPackage;
 
+  makeNetboot = system: config:
+    let
+      configEvaled = import <nixpkgs/nixos> {
+        inherit system;
+        configuration = {
+          imports = [
+            <nixpkgs/nixos/modules/installer/netboot/netboot.nix>
+            config
+          ];
+	};
+      };
+      build = configEvaled.config.system.build;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+    in
+      pkgs.symlinkJoin {
+        name = "netboot";
+        paths = [
+          build.netbootRamdisk
+          build.kernel
+          build.netbootIpxeScript
+        ];
+        postBuild = ''
+          mkdir -p $out/nix-support
+          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
+        '';
+        preferLocalBuild = true;
+      };
+
+
   jobs = {
     nix = pkgs.nix;
 
@@ -71,6 +103,16 @@ let
     rpi31_sd      = (mkHost "rpi31"  "aarch64-linux" ./config/rpi31/configuration.nix).config.system.build.sdImage;
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
+
+    #dt2-64g_iso = (import "${nixos-generators}/nixos-generate.nix" { inherit nixpkgs;
+    #  configuration = ./config/dt2-64g/configuration.nix;
+    #  format-config = "${nixos-generators}/formats/iso.nix";
+    #}).config.system.build.isoImage;
+
+    dt2-64g_sd = (mkHost "dt2-64g" "x86_64-linux" ./config/dt2-64g/configuration.nix).config.system.build.sdImage;
+
+    netboot = makeNetboot "x86_64-linux" ./netboot.nix;
+    netboot_iso = (mkIso "iso" "x86_64-linux" ./netboot.nix).config.system.build.isoImage;
 
     hm_root   = genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system ./config/users/root/home.nix "home" []);
     hm_dguibert_nox11 = genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system ./config/users/dguibert/home.nix "withoutX11" []);

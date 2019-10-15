@@ -18,12 +18,11 @@
 let
   nix = pkgs.nix;
 
-in with pkgs; mkEnv {
-  name = "nixops";
+in with pkgs; mkShell {
   buildInputs = [
     nix
     #(import "${nixops}/release.nix" { }).build.x86_64-linux
-    nixops
+    #nixops
   ];
   inherit (versions) NIX_PATH;
   shellHook = ''
@@ -32,6 +31,7 @@ in with pkgs; mkEnv {
     unset TMP TMPDIR
 
     # https://blog.wearewizards.io/how-to-use-nixops-in-a-team
+    export HOME=/home/dguibert
     export GIT_DIR=$HOME/.mgit/dotfiles/.git
     export NIXOPS_STATE=secrets/deploy.nixops
 

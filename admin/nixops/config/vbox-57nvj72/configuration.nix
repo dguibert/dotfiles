@@ -8,6 +8,7 @@ rec {
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
     ../../modules/zfs.nix
+    ../../modules/x11.nix
     #<home-manager/nixos>
   ];
   #home-manager.users.dguibert = (import ../users/dguibert/home.nix {}).withoutX11 { inherit config pkgs lib; };
@@ -72,10 +73,10 @@ rec {
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
 
-  services.xserver.displayManager.auto.enable = true;
-  services.xserver.displayManager.auto.user = "dguibert";
+  #services.xserver.displayManager.auto.enable = true;
+  #services.xserver.displayManager.auto.user = "dguibert";
   #services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
+  #services.xserver.desktopManager.pantheon.enable = true;
 
   # fonts
   fonts.enableFontDir = true;
@@ -84,6 +85,7 @@ rec {
   fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
 
   #X11 and Gnome3
+  #services.xserver.displayManager.startx.enable = true;
   #services.xserver.desktopManager.default = "xfce";
   #services.xserver.desktopManager.xfce.enable = true;
   #services.xserver.desktopManager.gnome3.enable = true;

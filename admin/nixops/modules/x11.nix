@@ -12,8 +12,9 @@
 #  services.xserver.desktopManager.gnome3.enable = true;
 #  networking.wireless.enable = mkForce false; # - You can not use networking.networkmanager with services.networking.wireless
 # TODO check incompatibilities with home-manager xsession
-  #services.xserver.displayManager.auto.enable = true;
-  #services.xserver.displayManager.auto.user = "dguibert";
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.auto.user = "dguibert";
+  services.xserver.desktopManager.xterm.enable = true;
 
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;

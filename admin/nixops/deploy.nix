@@ -13,7 +13,7 @@ in
 
   orsine = { pkgs, config, lib, ...}: {
     imports = [ ./config/orsine/configuration.nix
-      <home-manager/nixos>
+      #<home-manager/nixos>
     ];
     #deployment.targetHost = "10.147.17.123";
 
@@ -63,8 +63,8 @@ in
     #services.babeld.extraConfig = ''
     #redistribute local if <interface> deny
     #'';
-    home-manager.users.dguibert = (import ./config/users/dguibert/home.nix {}).withX11 { inherit pkgs lib; };
-    home-manager.users.root = (import ./config/users/root/home.nix {}).home { inherit pkgs lib; };
+    #home-manager.users.dguibert = (import ./config/users/dguibert/home.nix {}).withX11 { inherit pkgs lib; };
+    #home-manager.users.root = (import ./config/users/root/home.nix {}).home { inherit pkgs lib; };
   };
 
   rpi31 = { pkgs, config, lib, ...}: {
