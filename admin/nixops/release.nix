@@ -109,10 +109,10 @@ let
     #  format-config = "${nixos-generators}/formats/iso.nix";
     #}).config.system.build.isoImage;
 
-    dt2-64g_sd = (mkHost "dt2-64g" "x86_64-linux" ./config/dt2-64g/configuration.nix).config.system.build.sdImage;
+    #dt2-64g_sd = (mkHost "dt2-64g" "x86_64-linux" ./config/dt2-64g/configuration.nix).config.system.build.sdImage;
 
-    netboot = makeNetboot "x86_64-linux" ./netboot.nix;
-    netboot_iso = (mkIso "iso" "x86_64-linux" ./netboot.nix).config.system.build.isoImage;
+    #netboot = makeNetboot "x86_64-linux" ./netboot.nix;
+    #netboot_iso = (mkIso "iso" "x86_64-linux" ./netboot.nix).config.system.build.isoImage;
 
     hm_root   = genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system ./config/users/root/home.nix "home" []);
     hm_dguibert_nox11 = genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system ./config/users/dguibert/home.nix "withoutX11" []);
