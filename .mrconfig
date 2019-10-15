@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	  cat $HOME/.config/mr/lib/mgit
-lib =
+lib = 
 	source $HOME/.config/mr/lib/git-remotes
 	if [ -n "$HOSTNAME" ]; then
 		hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	   public_git ~/public_git/dotfiles.git
 	   "
-push =
+push = 
 	mgit dotfiles push
 	mgit dotfiles push public_git
 
@@ -524,6 +524,7 @@ skip = ([ "$1" = update ] && ! hours_since "$1" 192) && ! wantarchives # 8 days
 
 [nur-packages]
 checkout = git clone 'git@github.com:dguibert/nur-packages.git' 'nur-packages'
+update = git pull "$@"
 push = git push -v origin
 
 [code/nixos-generators]
@@ -537,3 +538,27 @@ checkout = git clone 'https://github.com/simonmichael/hledger' 'hledger'
 
 [code/nixos-on-arm]
 checkout = git clone 'https://github.com/illegalprime/nixos-on-arm' 'nixos-on-arm'
+
+[code/nixos-hardware]
+checkout = git clone 'https://github.com/NixOS/nixos-hardware' 'nixos-hardware'
+
+[code/nixos-channel-scripts]
+checkout = git clone 'https://github.com/NixOS/nixos-channel-scripts' 'nixos-channel-scripts'
+
+[code/terranix]
+checkout = git clone 'https://github.com/mrVanDalo/terranix' 'terranix'
+
+[code/RAJA]
+checkout = git clone 'https://github.com/LLNL/RAJA' 'RAJA'
+
+[code/RAJAPerf]
+checkout = git clone 'https://github.com/LLNL/RAJAPerf' 'RAJAPerf'
+
+[code/caliper]
+checkout = git clone 'https://github.com/LLNL/caliper' 'caliper'
+
+[code/caliper-examples]
+checkout = git clone 'https://github.com/LLNL/caliper-examples' 'caliper-examples'
+
+[code/hpc-container-maker]
+checkout = git clone 'https://github.com/NVIDIA/hpc-container-maker' 'hpc-container-maker'
