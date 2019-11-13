@@ -88,6 +88,8 @@ dguibert-genji: ATTR=hm_dguibert_genji
 dguibert-genji: U=bguibertd
 dguibert-aloy: ATTR=hm_dguibert_aloy
 dguibert-aloy: U=bguibertd
+dguibert-spartan: ATTR=hm_dguibert_spartan
+dguibert-spartan: U=bguibertd
 dguibert-inti: ATTR=hm_dguibert_inti
 dguibert-inti: U=bguibertd
 dguibert-login-arm: ATTR=hm_dguibert_inti
@@ -111,6 +113,7 @@ export args=
 args_manny+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays).nix-home-nfs-bguibertd ]"
 args_genji+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-genji.nix) ]"
 args_aloy+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-aloy.nix) ]"
+args_spartan+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-spartan.nix) ]"
 args_inti+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
 args_login-arm+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
 args+=$(args_$(HOSTNAME))
@@ -119,6 +122,7 @@ args+=$(A_)
 
 dguibert-genji: HOSTNAME=genji
 dguibert-aloy: HOSTNAME=aloy
+dguibert-spartan: HOSTNAME=spartan
 dguibert-login-arm: HOSTNAME=login-arm
 dguibert-%:
 	set -xeuf -o pipefail
@@ -126,6 +130,7 @@ dguibert-%:
 	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
 	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
 	hm=$$($$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-build ./release.nix $(args) --no-out-link -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
@@ -137,8 +142,10 @@ shell-genji: HOSTNAME=genji
 shell-aloy: HOSTNAME=aloy
 shell-%:
 	set -xeuf -o pipefail
+	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
 	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
 	$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-shell ./shell.nix $(args)
 root-%:
 	set -xeuf -o pipefail

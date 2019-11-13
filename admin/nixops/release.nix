@@ -122,6 +122,10 @@ let
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-aloy.nix>)
     ];
+    hm_dguibert_spartan = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "cluster" [
+      (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
+      (import <nur_dguibert/overlays/local-spartan.nix>)
+    ];
     hm_dguibert_genji = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-genji.nix>)
