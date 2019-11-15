@@ -81,8 +81,7 @@ rec {
   # fonts
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
-  fonts.enableCoreFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts ];
+  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts corefonts ];
 
   #X11 and Gnome3
   #services.xserver.displayManager.startx.enable = true;
