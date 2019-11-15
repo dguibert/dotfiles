@@ -15,7 +15,7 @@
   users.mutableUsers = false;
 
   # Enable ZeroTierOne
-  services.zerotierone.enable = true;
+  services.zerotierone.enable = false;
   services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
 
   networking.useNetworkd = true;
@@ -52,6 +52,8 @@
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
   '';
+
+  documentation.nixos.enable = false;
   #services.openssh.hostKeys = [
   #  { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
   #  { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }

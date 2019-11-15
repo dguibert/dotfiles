@@ -14,7 +14,6 @@
 rec {
 
   imports = [
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ../../config/common.nix
     ../../config/users/dguibert
     ../../modules/nix-conf.nix
@@ -181,10 +180,6 @@ rec {
   programs.sysdig.enable = true;
 
   programs.bash.enableCompletion = true;
-  environment.shellInit = ''
-    export NIX_PATH=nixpkgs=https://github.com/dguibert/nixpkgs/archive/pu.tar.gz:nixos-config=$HOME/admin/nixops/$(hostname)/configuration.nix
-  '';
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -201,7 +196,7 @@ rec {
     ];
     listenPort = 500;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -228,7 +223,7 @@ rec {
     ];
     listenPort = 502;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
@@ -245,7 +240,7 @@ rec {
     ];
     listenPort = 503;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";

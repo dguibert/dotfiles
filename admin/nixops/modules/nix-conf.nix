@@ -13,7 +13,9 @@ rec {
 
   nix.useSandbox = "relaxed";
   nix.autoOptimiseStore = true;
-#  nix.extraOptions = ''
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 #     plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
 #   '';
   nix.binaryCaches = [
@@ -38,9 +40,4 @@ rec {
   #  allowUnfree = true;
   ###  #packageOverrides.linuxPackages = boot.kernelPackages;
   #};
-  nixpkgs.config = import <nur_dguibert/config.nix>;
-  nixpkgs.overlays = [
-    (import <nur_dguibert/overlays>).default
-    (import <nur_dguibert/overlays>).qemu-user
-  ];
 }

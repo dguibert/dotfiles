@@ -15,6 +15,7 @@ host-%:
 	set -xeuf -o pipefail
 	host=$*
 	profile=/nix/var/nix/profiles/system
+	#$$(nix-build ./krops.nix -A $$host)
 	pathToConfig=$$(nix-build --no-out-link ./release.nix -A $$host)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  sudo -E nix-env -p $$profile --set $$pathToConfig

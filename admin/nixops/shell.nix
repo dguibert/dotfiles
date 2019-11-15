@@ -20,7 +20,7 @@ let
 
 in with pkgs; mkShell {
   buildInputs = [
-    nix
+    #nix
     #(import "${nixops}/release.nix" { }).build.x86_64-linux
     #nixops
   ];

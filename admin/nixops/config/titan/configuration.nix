@@ -6,16 +6,24 @@
 
 rec {
   imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-      ../../config/common.nix
+    [ ../../config/common.nix
       ../../config/users/dguibert
       ../../modules/yubikey-gpg.nix
       ../../modules/distributed-build.nix
       ../../modules/nix-conf.nix
       ../../modules/x11.nix
       ../../modules/zfs.nix
-      (import <nur_dguibert/modules>).qemu-user
+      #(import <nur_dguibert/modules>).qemu-user
+      #../../modules/wayland-nvidia.nix
     ];
+  #nesting.clone = [
+  #  {
+  #    imports = [
+  #      ../../modules/wayland-nvidia.nix
+  #    ];
+  #    boot.loader.grub.configurationName = "Wayland NVIDIA";
+  #  }
+  #];
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
@@ -41,7 +49,12 @@ rec {
   networking.hostId="8425e349";
   networking.hostName = "titan";
 
-  qemu-user.aarch64 = true;
+  #qemu-user.aarch64 = true;
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
+  #boot.binfmt.registrations."aarch64-linux".preserveArgvZero=true;
+  #boot.binfmt.registrations."aarch64-linux".fixBinary=true;
+  #boot.binfmt.registrations."armv7l-linux".preserveArgvZero=true;
+  #boot.binfmt.registrations."armv7l-linux".fixBinary=true;
 
   services.openssh.enable = true;
 
@@ -100,7 +113,7 @@ rec {
     ];
     listenPort = 500;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -117,12 +130,12 @@ rec {
     ];
     listenPort = 501;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-	endpoint   = "192.168.1.32:503";
-	persistentKeepalive = 25;
+        endpoint   = "192.168.1.32:503";
+        persistentKeepalive = 25;
       }
     ];
   };
@@ -134,12 +147,12 @@ rec {
     ];
     listenPort = 502;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-	#endpoint   = "orsin.freeboxos.fr:503";
-	#persistentKeepalive = 25;
+        #endpoint   = "orsin.freeboxos.fr:503";
+        #persistentKeepalive = 25;
       }
     ];
   };
@@ -151,7 +164,7 @@ rec {
   #  ];
   #  listenPort = 503;
   #  allowedIPsAsRoutes=false;
-  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #  privateKeyFile = toString "/secrets/wireguard_key";
   #};
   networking.firewall.allowedUDPPorts = [ 9993 500 501 502 503 6696 ];
   boot.kernel.sysctl = {
@@ -192,13 +205,16 @@ rec {
   hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
 
   hardware.pulseaudio.enable = true;
+  # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
+  hardware.pulseaudio.daemon.config.default-fragments = "5";
+  hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
   environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
   #virtualisation.anbox.enable = true;
   #services.nfs.server.enable = true;
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
@@ -214,58 +230,13 @@ rec {
   networking.nat.internalInterfaces = ["ve-+"];
   networking.nat.externalInterface = "bond0";
 
-  services.hydra = {
-    enable = true;
-    hydraURL = "http://localhost:3000";
-    notificationSender = "hydra@orsin.freeboxos.fr";
-    port = 3000;
-    extraConfig = ''
-      store_uri = file:///var/lib/hydra/cache?secret-key=/etc/nix/hydra.orsin.freeboxos.fr-1/secret
-      #binary_cache_secret_key_file = /etc/nix/hydra.orsin.freeboxos.fr-1/secret
-    '';
-    buildMachinesFiles = [ /*"/etc/nix/machines"*/ ];
-  };
-  nix.buildMachines = [
-    {
-      hostName = "localhost";
-      systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-      maxJobs = 16;
-      # for building VirtualBox VMs as build artifacts, you might need other
-      # features depending on what you are doing
-      supportedFeatures = [ "big-parallel" "kvm" ];
-    }
-  ];
-
-  services.postgresql = {
-    #package = pkgs.postgresql_11;
-    dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
-  };
-
-  systemd.services.hydra-manual-setup = {
-    description = "Create Admin User for Hydra";
-    serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = true;
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "hydra-init.service" ];
-    after = [ "hydra-init.service" ];
-    environment = config.systemd.services.hydra-init.environment;
-    script = ''
-      if [ ! -e ~hydra/.setup-is-complete ]; then
-        # create admin user
-        /run/current-system/sw/bin/hydra-create-user dguibert --full-name 'David G. User' --email-address 'dguibert@orsin.freeboxos.fr' --password foobar --role admin
-        # create signing keys
-        /run/current-system/sw/bin/install -d -m 551 /etc/nix/hydra.orsin.freeboxos.fr-1
-        /run/current-system/sw/bin/nix-store --generate-binary-cache-key hydra.orsin.freeboxos.fr-1 /etc/nix/hydra.orsin.freeboxos.fr-1/secret /etc/nix/hydra.orsin.freeboxos.fr-1/public
-        /run/current-system/sw/bin/chown -R hydra:hydra /etc/nix/hydra.orsin.freeboxos.fr-1
-        /run/current-system/sw/bin/chmod 440 /etc/nix/hydra.orsin.freeboxos.fr-1/secret
-        /run/current-system/sw/bin/chmod 444 /etc/nix/hydra.orsin.freeboxos.fr-1/public
-        # create cache (https://qfpl.io/posts/nix/starting-simple-hydra/)
-        /run/current-system/sw/bin/install -d -m 755 /var/lib/hydra/cache
-        /run/current-system/sw/bin/chown -R hydra-queue-runner:hydra /var/lib/hydra/cache
-        # done
-        touch ~hydra/.setup-is-complete
-      fi
-    '';
-  };
-
+  # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
+  services.udev.extraRules = with pkgs; ''
+    # set scheduler for NVMe
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+    # set scheduler for SSD and eMMC
+    ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+    # set scheduler for rotating disks
+    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
+  '';
 }

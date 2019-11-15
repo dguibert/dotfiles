@@ -8,8 +8,6 @@ with lib;
 rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
-    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix>
-    <nixpkgs/nixos/modules/profiles/minimal.nix>
     ../../config/common.nix
     ../../modules/nix-conf.nix
     ../../modules/distributed-build.nix
@@ -17,14 +15,6 @@ rec {
     ../../config/users/rdolbeau
   ];
 
-  # see commit c6f7d4367894047592cc412740f0c1f5b2ca2b59
-  #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-  nixpkgs.localSystem.system = "aarch64-linux";
-  #assertions = lib.singleton {
-  #  assertion = pkgs.stdenv.system == "aarch64-linux";
-  #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
-  #    "it cannot be cross compiled";
-  #};
   #sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default
@@ -88,7 +78,7 @@ rec {
   #  ];
   #  listenPort = 500;
   #  allowedIPsAsRoutes=false;
-  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #  privateKeyFile = toString "/secrets/wireguard_key";
   #};
   # orsine
   networking.wireguard.interfaces.orsine = {
@@ -98,7 +88,7 @@ rec {
     ];
     listenPort = 501;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
@@ -115,7 +105,7 @@ rec {
     ];
     listenPort = 502;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
@@ -132,7 +122,7 @@ rec {
     ];
     listenPort = 503;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
@@ -148,7 +138,7 @@ rec {
     ];
     listenPort = 504;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "MkVk/+vE2kNw8Pi5UljJifp0esCBxztPwQ7AFNMkkW4=";

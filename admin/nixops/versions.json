@@ -16,21 +16,21 @@
     "rev": "0181c4ba20c6534b33dd5b84f3a6b00ed8978403",
     "sha256": "0px0v37i2rram9z6a5j0ql4ny2adqgrghggrpxhv1gnib7faz4ph"
   },
-  "_nixpkgs": "/home/dguibert/code/nixpkgs",
-  "nixpkgs": {
+  "nixpkgs": "/home/dguibert/code/nixpkgs",
+  "_nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "2ca0982ea6c88695c785347197b2909136b8dd52",
-    "sha256": "0x7kl2v6lxl2qbqv1ln8yd10scizrbc7ry3fyzqxjg5riyay2srj"
+    "rev": "72f1d1bd512abffdce71e1b82143e6a9a4107e59",
+    "sha256": "0yz9w4nan1z5dm9x366m1p98zl42jynp0pnba44zy4fq2x6gw44z"
   },
-  "_nur_dguibert": "/home/dguibert/nur-packages",
-  "nur_dguibert": {
+  "nur_dguibert": "/home/dguibert/nur-packages",
+  "_nur_dguibert": {
     "owner": "dguibert",
     "repo": "nur-packages",
-    "branch": "master",
-    "rev": "17c2652201b7dbb069d2628e79ec7dd6cc0144a6",
-    "sha256": "1lyvddv2270a5gsmbmx1gvgm2khbxg592gj0zjhqg7g13d5qzk25"
+    "branch": "pu",
+    "rev": "7007d09db18620ec6f5cc83a063e0294fc3197e4",
+    "sha256": "0xd37hd1m7myga85z72bprn2dh4sl63c0bidg2ippyr5j2v4mzrz"
   },
   "nixos-generators": "/home/dguibert/code/nixos-generators",
   "nixos-17.09": {
@@ -58,8 +58,8 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "df7e351af91e6cbf4434e281d35fec39348a5d91",
-    "sha256": "19fpg1pya2iziwk10wja69ma65r985zdcd9blkplyg0l1lnn8haq"
+    "rev": "e758436f98683a77b8cd119886c9ded8b8d80759",
+    "sha256": "0wwl7hh47nq1nb69nmnrpiy4an18614vkikvljj2x86pd164781m"
   },
   "nixops": {
     "owner": "NixOS",
@@ -79,8 +79,8 @@
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "1ec9a1abbc2265a44476f4e01e552447aa245625",
-    "sha256": "1cj7imm89f20axjqh1jnz73zab1mnlkhif4acyv9biz97h97wb1z"
+    "rev": "0751ed480dd8deb03112152c9ab59f79e1e36949",
+    "sha256": "0li66kilmna09hzv3h1p0bw0lx9wc6g0xyc9mz1icqvz0043ivx9"
   },
   "gitignore": {
     "owner": "hercules-ci",
