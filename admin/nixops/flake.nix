@@ -116,8 +116,6 @@
     nixopsConfigurations.default = with nixpkgs.lib; {
       inherit nixpkgs;
       orsine = { config, pkgs, resources, ... }: {
-        #deployment.targetHost = "10.147.27.123";
-        deployment.targetHost = "orsine";
         imports = [
           nixpkgs.nixosModules.notDetected
           (import ./config/orsine/configuration.nix)
@@ -140,7 +138,96 @@
           plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
         '';
       };
-      titan = { config, pkgs, resources, ... }: {
+      titan = { config, lib, pkgs, resources, ... }: {
+        imports = [
+          nixpkgs.nixosModules.notDetected
+          hydra.nixosModules.hydra
+          (import ./config/titan/configuration.nix)
+        ];
+        nixpkgs.config = import "${nur_dguibert}/config.nix";
+        nixpkgs.overlays = [
+          nur_dguibert.overlays.default
+          nix.overlay
+        ];
+      #(import "${home-manager}/nixos")
+      ## file 'nixpkgs/nixos/modules/misc/assertions.nix' was not found in the Nix search path (add it using $NIX_PATH or -I), at /nix/store/0kj2qmx1g7y1y42icd9aqk9rzc3dvfyd-source/modules/modules.nix:144:17
+      #({ pkgs, config, lib, ... }: {
+      #  home-manager.users.dguibert = (import ./users/dguibert/home.nix { system="x86_64-linux"; }).withX11 { inherit pkgs lib config; };
+      #})
+        environment.shellInit = ''
+           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
+        '';
+
+        nix.autoOptimiseStore = true;
+        nix.package = pkgs.nix;
+        nix.systemFeatures = [ "recursive-nix" ] ++ # default
+        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+        lib.optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+          # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
+          [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
+            sandybridge    = [ "gccarch-westmere" ];
+            ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
+            haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+            broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+            skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+            skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
+          }.${pkgs.hostPlatform.platform.gcc.arch} or []
+          );
+        services.hydra-dev = {
+          enable = true;
+          hydraURL = "http://localhost:3000";
+          notificationSender = "hydra@orsin.freeboxos.fr";
+          port = 3000;
+          useSubstitutes = true;
+          extraConfig = ''
+            store_uri = file:///var/lib/hydra/cache?secret-key=/etc/nix/hydra.orsin.freeboxos.fr-1/secret
+
+            max_concurrent_evals = 1
+          '';
+          #buildMachinesFiles = [ /*"/etc/nix/machines"*/ ];
+        };
+        nix.buildMachines = [
+          {
+            hostName = "localhost";
+            systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+            maxJobs = 16;
+        #    # for building VirtualBox VMs as build artifacts, you might need other
+        #    # features depending on what you are doing
+            supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
+          }
+        ];
+
+        services.postgresql = {
+          package = pkgs.postgresql_9_6;
+          dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
+        };
+
+        systemd.services.hydra-manual-setup = {
+          description = "Create Admin User for Hydra";
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+          wantedBy = [ "multi-user.target" ];
+          requires = [ "hydra-init.service" ];
+          after = [ "hydra-init.service" ];
+          environment = lib.mkForce config.systemd.services.hydra-init.environment;
+          script = ''
+            if [ ! -e ~hydra/.setup-is-complete ]; then
+              # create admin user
+              /run/current-system/sw/bin/hydra-create-user dguibert --full-name 'David G. User' --email-address 'dguibert@orsin.freeboxos.fr' --password foobar --role admin
+              # create signing keys
+              /run/current-system/sw/bin/install -d -m 551 /etc/nix/hydra.orsin.freeboxos.fr-1
+              /run/current-system/sw/bin/nix-store --generate-binary-cache-key hydra.orsin.freeboxos.fr-1 /etc/nix/hydra.orsin.freeboxos.fr-1/secret /etc/nix/hydra.orsin.freeboxos.fr-1/public
+              /run/current-system/sw/bin/chown -R hydra:hydra /etc/nix/hydra.orsin.freeboxos.fr-1
+              /run/current-system/sw/bin/chmod 440 /etc/nix/hydra.orsin.freeboxos.fr-1/secret
+              /run/current-system/sw/bin/chmod 444 /etc/nix/hydra.orsin.freeboxos.fr-1/public
+              # create cache (https://qfpl.io/posts/nix/starting-simple-hydra/)
+              /run/current-system/sw/bin/install -d -m 755 /var/lib/hydra/cache
+              /run/current-system/sw/bin/chown -R hydra-queue-runner:hydra /var/lib/hydra/cache
+              # done
+              touch ~hydra/.setup-is-complete
+            fi
+          '';
+        };
       };
       rpi31 = { config, pkgs, resources, ... }: {
       };
