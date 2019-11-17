@@ -428,6 +428,10 @@ checkout = git clone 'https://github.com/svanderburg/nix-patchtools' 'nix-patcht
 
 [code/mobile-nixos]
 checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
+fixups = git_add_remotes "
+           origin https://github.com/samueldr/mobile-nixos
+           nixos https://github.com/nixos/mobile-nixos
+         "
 
 [code/NUR]
 checkout = git clone 'https://github.com/nix-community/NUR' 'NUR'
