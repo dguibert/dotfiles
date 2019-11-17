@@ -54,6 +54,7 @@
   '';
 
   documentation.nixos.enable = false;
+  programs.gnupg.agent.enable = true;
   #services.openssh.hostKeys = [
   #  { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
   #  { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
