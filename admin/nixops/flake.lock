@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-L8eVL2gVuOytilrOj+77hNEcEF+SbQgQ8AeqtJU5FN8=",
+            "narHash": "sha256-cdQnDNLRrvbJ+nw+U7CD+qWKIPm9kmDQoemzWnuU6xY=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/f72990047164f8075f670fc4ca4eb6f154419d95"
+            "url": "github:nix-community/NUR/c3031c52e9b89fb153426c3d21b613f36ebe95ce"
         },
         "base16-nix": {
             "inputs": {},
@@ -62,6 +62,31 @@
             "narHash": "sha256-5dcw4d8sSKbgmabK5AwFGnS4moGNg6d8kvttzuorTcA=",
             "originalUrl": "/home/dguibert/code/nix",
             "url": "/home/dguibert/code/nix?ref=HEAD&rev=00bc7e0d991b6de94dead2c269020ad589caa71d"
+        },
+        "nixops": {
+            "inputs": {
+                "nixops-aws": {
+                    "inputs": {},
+                    "narHash": "sha256-XIiiRQZL5IhIYcVKFeBV3Whl+VzkYfqmYZL0YTCIPrY=",
+                    "originalUrl": "github:NixOS/nixops-aws",
+                    "url": "github:NixOS/nixops-aws/1bd5ee0c4d715c6b394d40f296967861cbb42206"
+                },
+                "nixops-hetzner": {
+                    "inputs": {},
+                    "narHash": "sha256-2YDEG+84zjmLoyvDiNZAXPhhtt5yMlnwr9QB1Xu/8vo=",
+                    "originalUrl": "github:NixOS/nixops-hetzner",
+                    "url": "github:NixOS/nixops-hetzner/6245ca44f3682e45d6d82cee7d873f76b51ff693"
+                },
+                "nixpkgs": {
+                    "inputs": {},
+                    "narHash": "sha256-ZzR2l1dovxeZ555KXxz7SAXrC72BfaR4BeqvJzRdmwQ=",
+                    "originalUrl": "nixpkgs/release-19.09",
+                    "url": "github:edolstra/nixpkgs/d37927a77e70a2b3408ceaa2e763b6df1f4d941a"
+                }
+            },
+            "narHash": "sha256-LEaV5SxWJtzgMjvXx/ZQmNBHewQbNnRm7I6xGu7e3F0=",
+            "originalUrl": "/home/dguibert/code/nixops",
+            "url": "/home/dguibert/code/nixops?ref=HEAD&rev=898b6b04d7fea3fd845464e84e4c6b0cb878b17b"
         },
         "nixpkgs": {
             "inputs": {},

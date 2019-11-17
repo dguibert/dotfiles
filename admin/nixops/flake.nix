@@ -10,6 +10,7 @@
   inputs = {
     #nix.uri = "/home/dguibert/code/nix";
     #nixpkgs.uri = "github:dguibert/nixpkgs/pu";
+    nixops.uri = "/home/dguibert/code/nixops";
     nixpkgs.uri = "/home/dguibert/code/nixpkgs";
     nix.uri = "/home/dguibert/code/nix";
     hydra.uri = "/home/dguibert/code/hydra";
@@ -36,6 +37,7 @@
 	    , terranix
 	    , hydra
 	    , nix
+	    , nixops
             }@flakes: let
       systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
 
@@ -44,7 +46,7 @@
       pkgs = forAllSystems (system: import "${nur_dguibert}/pkgs.nix" {
         inherit nixpkgs;
         localSystem = { inherit system; };# FIXME hard coded for now
-        overlays = [ nix.overlay ];
+        overlays = [ nix.overlay nixops.overlay nur_dguibert.overlay ];
       });
     in rec {
 
@@ -62,45 +64,47 @@
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
     ## - devShell: A derivation that defines the shell environment used by nix dev-shell if no specific attribute is given. If it does not exist, then nix dev-shell will use defaultPackage.
-    devShell = with pkgs; let
-      my-terraform = pkgs.terraform.withPlugins (p: with p; [
+    devShell.x86_64-linux = with pkgs.x86_64-linux; let
+      my-terraform = terraform.withPlugins (p: with p; [
         libvirt
         random
         external
         p."null"
       ]);
-      terranix_ = pkgs.callPackages terranix {};
+      terranix_ = callPackages terranix {};
     in mkEnv {
-      name = "nix";
+      name = "deploy";
       buildInputs = [ nix jq
         terranix_
         jq
 
-	#my-terraform
+	      #my-terraform
         terraform-landscape
-        (pkgs.writeShellScriptBin "terraform" ''
-	  set -x
-	  #export TF_VAR_wireguard_deploy_nixos_orsine="`${pkgs.pass}/bin/pass orsine/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pkgs.pass}/bin/pass rpi31/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_titan="`${pkgs.pass}/bin/pass titan/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_vbox_57nvj72="`${pkgs.pass}/bin/pass vbox-57nvj72/wireguard_key`"
-	  set +x
+        (writeShellScriptBin "terraform" ''
+	        set -x
+	        #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
+          #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
+          #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
+          #export TF_VAR_wireguard_deploy_nixos_vbox_57nvj72="`${pass}/bin/pass vbox-57nvj72/wireguard_key`"
+          set +x
           ${my-terraform}/bin/terraform "$@"
         '')
+
+        pkgs.x86_64-linux.nixops
       ];
       shellHook = ''
         unset NIX_INDENT_MAKE
-        unset IN_NIX_SHELL
+        unset IN_NIX_SHELL NIX_REMOTE
         unset TMP TMPDIR
 
         # https://blog.wearewizards.io/how-to-use-nixops-in-a-team
-        #export GIT_DIR=$HOME/.mgit/dotfiles/.git
-        #export NIXOPS_STATE=secrets/deploy.nixops
+        export GIT_DIR=$HOME/.mgit/dotfiles/.git
+        export NIXOPS_STATE=secrets/deploy.nixops
 
-        #export DISNIXOS_USE_NIXOPS=1
-        #export DISNIX_TARGET_PROPERTY=target
+        export DISNIXOS_USE_NIXOPS=1
+        export DISNIX_TARGET_PROPERTY=target
 
-        #export PASSWORD_STORE_DIR=$PWD/secrets
+        export PASSWORD_STORE_DIR=$PWD/secrets
         export SHELL=${bashInteractive}/bin/bash
       '';
     };
@@ -110,6 +114,16 @@
       orsine = import ./config/orsine.nix flakes;
       titan = import ./config/titan.nix flakes;
       rpi31 = import ./config/rpi31.nix flakes;
+    };
+
+    nixopsConfigurations.default = with nixpkgs.lib; {
+      inherit nixpkgs;
+      orsine = { config, pkgs, resources, ... }: {
+      };
+      titan = { config, pkgs, resources, ... }: {
+      };
+      rpi31 = { config, pkgs, resources, ... }: {
+      };
     };
 
     nixosModules.systemTarget = import ./modules/system-target.nix;
