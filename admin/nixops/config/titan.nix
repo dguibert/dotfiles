@@ -28,6 +28,19 @@ nixpkgs.lib.nixosSystem {
 
       nix.autoOptimiseStore = true;
       nix.package = pkgs.nix;
+      nix.systemFeatures = [ "recursive-nix" ] ++ # default
+      [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+      lib.optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+        # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
+        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
+          sandybridge    = [ "gccarch-westmere" ];
+          ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
+          haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+          broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+          skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+          skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
+        }.${pkgs.hostPlatform.platform.gcc.arch} or []
+        );
     })
     hydra.nixosModules.hydra
     ({config, lib, pkgs, ...}: {
@@ -51,7 +64,7 @@ nixpkgs.lib.nixosSystem {
           maxJobs = 16;
       #    # for building VirtualBox VMs as build artifacts, you might need other
       #    # features depending on what you are doing
-          supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
+          supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
         }
       ];
 

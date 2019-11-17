@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-WTddmR6LLQglveGhQdQhSYyShgIvEuzpbC1lZUolfOU=",
+            "narHash": "sha256-L8eVL2gVuOytilrOj+77hNEcEF+SbQgQ8AeqtJU5FN8=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/7247603a0515e2f4eba16eb03356b23524cbaa34"
+            "url": "github:nix-community/NUR/f72990047164f8075f670fc4ca4eb6f154419d95"
         },
         "base16-nix": {
             "inputs": {},
@@ -46,9 +46,9 @@
                     "url": "github:edolstra/nixpkgs/d37927a77e70a2b3408ceaa2e763b6df1f4d941a"
                 }
             },
-            "narHash": "sha256-C6gEXjUL+COIut0viWr236vxghEg9YPsbC0kTdE5pmk=",
+            "narHash": "sha256-WxRTGN+v0XNnGWaVnvDyaKXvPVjHUbA+2Rg5bSfyV2w=",
             "originalUrl": "/home/dguibert/code/hydra",
-            "url": "/home/dguibert/code/hydra?ref=HEAD&rev=01663e160a94cfa36908673095b4c61ce74b7bbd"
+            "url": "/home/dguibert/code/hydra?ref=HEAD&rev=3be37bf9a6893598c9007f03758ddaf81ea38b3d"
         },
         "nix": {
             "inputs": {
@@ -65,9 +65,9 @@
         },
         "nixpkgs": {
             "inputs": {},
-            "narHash": "sha256-Rfx+2vg7umDFXxOSF8XK3id1JAv8H0M0dJU41XQ9iXI=",
+            "narHash": "sha256-AjqgQ06qOuKst36EhvX6M6V+FAfOnnTlaDpcilEaeLw=",
             "originalUrl": "/home/dguibert/code/nixpkgs",
-            "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=97938ba381e175812534bae95725dd0d4e866578"
+            "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=decd6dd153575bc8588a6a6e01c5928a03527ca9"
         },
         "nur_dguibert": {
             "inputs": {
@@ -86,9 +86,9 @@
                 },
                 "nixpkgs": {
                     "inputs": {},
-                    "narHash": "sha256-Rfx+2vg7umDFXxOSF8XK3id1JAv8H0M0dJU41XQ9iXI=",
+                    "narHash": "sha256-AjqgQ06qOuKst36EhvX6M6V+FAfOnnTlaDpcilEaeLw=",
                     "originalUrl": "/home/dguibert/code/nixpkgs",
-                    "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=97938ba381e175812534bae95725dd0d4e866578"
+                    "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=decd6dd153575bc8588a6a6e01c5928a03527ca9"
                 }
             },
             "narHash": "sha256-WWU7UJc3rTQlxvbv9RnlxQKmrkvAVloF23/biDjDmsE=",

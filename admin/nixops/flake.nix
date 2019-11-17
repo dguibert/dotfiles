@@ -44,7 +44,7 @@
       pkgs = forAllSystems (system: import "${nur_dguibert}/pkgs.nix" {
         inherit nixpkgs;
         localSystem = { inherit system; };# FIXME hard coded for now
-	overlays = [ nix.overlay ];
+        overlays = [ nix.overlay ];
       });
     in rec {
 
