@@ -67,8 +67,6 @@
     devShell.x86_64-linux = with pkgs.x86_64-linux; let
       my-terraform = terraform.withPlugins (p: with p; [
         libvirt
-        random
-        external
         p."null"
       ]);
       terranix_ = callPackages terranix {};
@@ -111,7 +109,6 @@
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosConfigurations = with nixpkgs.lib; {
-      orsine = import ./config/orsine.nix flakes;
       titan = import ./config/titan.nix flakes;
       rpi31 = import ./config/rpi31.nix flakes;
     };
@@ -119,6 +116,29 @@
     nixopsConfigurations.default = with nixpkgs.lib; {
       inherit nixpkgs;
       orsine = { config, pkgs, resources, ... }: {
+        #deployment.targetHost = "10.147.27.123";
+        deployment.targetHost = "orsine";
+        imports = [
+          nixpkgs.nixosModules.notDetected
+          (import ./config/orsine/configuration.nix)
+        ];
+        nixpkgs.config = import "${nur_dguibert}/config.nix";
+        nixpkgs.overlays = [
+          nur_dguibert.overlays.default
+        ];
+        #(import "${home-manager}/nixos")
+        ## file 'nixpkgs/nixos/modules/misc/assertions.nix' was not found in the Nix search path (add it using $NIX_PATH or -I), at /nix/store/0kj2qmx1g7y1y42icd9aqk9rzc3dvfyd-source/modules/modules.nix:144:17
+        #({ pkgs, config, lib, ... }: {
+        #  home-manager.users.dguibert = (import ./users/dguibert/home.nix { system="x86_64-linux"; }).withX11 { inherit pkgs lib config; };
+        #})
+        environment.shellInit = ''
+           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
+        '';
+
+        nix.autoOptimiseStore = true;
+        nix.extraOptions = ''
+          plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
+        '';
       };
       titan = { config, pkgs, resources, ... }: {
       };
