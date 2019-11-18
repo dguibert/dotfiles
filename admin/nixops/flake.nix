@@ -230,6 +230,17 @@
         };
       };
       rpi31 = { config, pkgs, resources, ... }: {
+        imports = [
+          (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")
+          (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+          (import ./config/rpi31/configuration.nix)
+        ];
+        nixpkgs.localSystem.system = "aarch64-linux";
+        #assertions = lib.singleton {
+        #  assertion = pkgs.stdenv.system == "aarch64-linux";
+        #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
+        #    "it cannot be cross compiled";
+        #};
       };
     };
   };
