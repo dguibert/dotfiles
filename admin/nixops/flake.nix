@@ -104,6 +104,13 @@
 
         export PASSWORD_STORE_DIR=$PWD/secrets
         export SHELL=${bashInteractive}/bin/bash
+
+        NIX_OPTIONS=()
+        NIX_OPTIONS+=("--option plugin-files ${(pkgs.x86_64-linux.nix-plugins.override { nix = pkgs.x86_64-linux.nix; }).overrideAttrs (o: {
+            buildInputs = o.buildInputs ++ [ boehmgc ];
+          })}/lib/nix/plugins/libnix-extra-builtins.so")
+        NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
+        export NIX_OPTIONS
       '';
     };
     ## -
@@ -115,64 +122,58 @@
 
     nixopsConfigurations.default = with nixpkgs.lib; {
       inherit nixpkgs;
-      orsine = { config, pkgs, resources, ... }: {
+      defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
           nixpkgs.nixosModules.notDetected
-          (import ./config/orsine/configuration.nix)
         ];
         nixpkgs.config = import "${nur_dguibert}/config.nix";
         nixpkgs.overlays = [
+          nix.overlay
+          nixops.overlay
           nur_dguibert.overlays.default
         ];
+        nix.autoOptimiseStore = true;
+        nix.package = pkgs.nix;
         #(import "${home-manager}/nixos")
         ## file 'nixpkgs/nixos/modules/misc/assertions.nix' was not found in the Nix search path (add it using $NIX_PATH or -I), at /nix/store/0kj2qmx1g7y1y42icd9aqk9rzc3dvfyd-source/modules/modules.nix:144:17
         #({ pkgs, config, lib, ... }: {
         #  home-manager.users.dguibert = (import ./users/dguibert/home.nix { system="x86_64-linux"; }).withX11 { inherit pkgs lib config; };
         #})
         environment.shellInit = ''
-           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
+          export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
+          NIX_OPTIONS=()
+          NIX_OPTIONS+=("--option plugin-files ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
+              buildInputs = o.buildInputs ++ [ pkgs.boehmgc ];
+            })}/lib/nix/plugins/libnix-extra-builtins.so")
+          NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
+          export NIX_OPTIONS
         '';
+        nix.systemFeatures = [ "recursive-nix" ] ++ # default
+          [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+          lib.optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+            # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
+            [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
+              sandybridge    = [ "gccarch-westmere" ];
+              ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
+              haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+              broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+              skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+              skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
+            }.${pkgs.hostPlatform.platform.gcc.arch} or []
+        );
+      };
 
-        nix.autoOptimiseStore = true;
-        nix.extraOptions = ''
-          plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
-        '';
+      orsine = { config, pkgs, resources, ... }: {
+        imports = [
+          (import ./config/orsine/configuration.nix)
+        ];
       };
       titan = { config, lib, pkgs, resources, ... }: {
         imports = [
-          nixpkgs.nixosModules.notDetected
           hydra.nixosModules.hydra
           (import ./config/titan/configuration.nix)
         ];
-        nixpkgs.config = import "${nur_dguibert}/config.nix";
-        nixpkgs.overlays = [
-          nur_dguibert.overlays.default
-          nix.overlay
-        ];
-      #(import "${home-manager}/nixos")
-      ## file 'nixpkgs/nixos/modules/misc/assertions.nix' was not found in the Nix search path (add it using $NIX_PATH or -I), at /nix/store/0kj2qmx1g7y1y42icd9aqk9rzc3dvfyd-source/modules/modules.nix:144:17
-      #({ pkgs, config, lib, ... }: {
-      #  home-manager.users.dguibert = (import ./users/dguibert/home.nix { system="x86_64-linux"; }).withX11 { inherit pkgs lib config; };
-      #})
-        environment.shellInit = ''
-           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
-        '';
 
-        nix.autoOptimiseStore = true;
-        nix.package = pkgs.nix;
-        nix.systemFeatures = [ "recursive-nix" ] ++ # default
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        lib.optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
-          # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
-          [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
-            sandybridge    = [ "gccarch-westmere" ];
-            ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
-            haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
-            broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
-            skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
-            skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
-          }.${pkgs.hostPlatform.platform.gcc.arch} or []
-          );
         services.hydra-dev = {
           enable = true;
           hydraURL = "http://localhost:3000";
@@ -191,8 +192,7 @@
             hostName = "localhost";
             systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
             maxJobs = 16;
-        #    # for building VirtualBox VMs as build artifacts, you might need other
-        #    # features depending on what you are doing
+            # for building VirtualBox VMs as build artifacts, you might need other features depending on what you are doing
             supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
           }
         ];
@@ -232,12 +232,5 @@
       rpi31 = { config, pkgs, resources, ... }: {
       };
     };
-
-    nixosModules.systemTarget = import ./modules/system-target.nix;
-    #lib = pkgs.lib;
-    #builders
-    #htmlDocs
-    #legacyPackages
-    #overlays = pkgs.overlays;
   };
 }
