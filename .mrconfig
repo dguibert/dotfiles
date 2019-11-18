@@ -565,3 +565,6 @@ checkout = git clone 'https://github.com/nixos/hydra' 'hydra'
 
 [code/nix-ccache]
 checkout = git clone 'https://github.com/edolstra/nix-ccache' 'nix-ccache'
+
+[code/hydra-provisioner]
+checkout = git clone 'https://github.com/NixOS/hydra-provisioner' 'hydra-provisioner'
