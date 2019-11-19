@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-cdQnDNLRrvbJ+nw+U7CD+qWKIPm9kmDQoemzWnuU6xY=",
+            "narHash": "sha256-+Xy9I/qGVhugeQmnbiIJcvxA8YJ4EiyORQR1o0P9UoQ=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/c3031c52e9b89fb153426c3d21b613f36ebe95ce"
+            "url": "github:nix-community/NUR/b8f990c80e485dbd2e6e5fd34138470f14b44c11"
         },
         "base16-nix": {
             "inputs": {},
@@ -59,9 +59,9 @@
                     "url": "github:edolstra/nixpkgs/d37927a77e70a2b3408ceaa2e763b6df1f4d941a"
                 }
             },
-            "narHash": "sha256-5dcw4d8sSKbgmabK5AwFGnS4moGNg6d8kvttzuorTcA=",
+            "narHash": "sha256-bxheKF4swRaAEjuiOx62dYztbkbpJH88V/P36OEEMuk=",
             "originalUrl": "/home/dguibert/code/nix",
-            "url": "/home/dguibert/code/nix?ref=HEAD&rev=00bc7e0d991b6de94dead2c269020ad589caa71d"
+            "url": "/home/dguibert/code/nix?ref=HEAD&rev=d076a18be58f0f42820630641bef2d68b1c4dc8f"
         },
         "nixops": {
             "inputs": {
@@ -105,9 +105,9 @@
                             "url": "github:edolstra/nixpkgs/d37927a77e70a2b3408ceaa2e763b6df1f4d941a"
                         }
                     },
-                    "narHash": "sha256-5dcw4d8sSKbgmabK5AwFGnS4moGNg6d8kvttzuorTcA=",
+                    "narHash": "sha256-bxheKF4swRaAEjuiOx62dYztbkbpJH88V/P36OEEMuk=",
                     "originalUrl": "/home/dguibert/code/nix",
-                    "url": "/home/dguibert/code/nix?ref=HEAD&rev=00bc7e0d991b6de94dead2c269020ad589caa71d"
+                    "url": "/home/dguibert/code/nix?ref=HEAD&rev=d076a18be58f0f42820630641bef2d68b1c4dc8f"
                 },
                 "nixpkgs": {
                     "inputs": {},
