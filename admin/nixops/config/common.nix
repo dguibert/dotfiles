@@ -55,6 +55,8 @@
 
   documentation.nixos.enable = false;
   programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.pinentryFlavor = "gnome3";
+  programs.gnupg.agent.enableSSHSupport = true;
   #services.openssh.hostKeys = [
   #  { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
   #  { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
