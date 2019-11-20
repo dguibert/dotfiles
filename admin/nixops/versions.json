@@ -58,8 +58,8 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "e758436f98683a77b8cd119886c9ded8b8d80759",
-    "sha256": "0wwl7hh47nq1nb69nmnrpiy4an18614vkikvljj2x86pd164781m"
+    "rev": "6d448d7fbd69b0985e83c741d097c0742821a836",
+    "sha256": "0qym74ria7g5ar1v5c9fa4bhp3iil5rj1dxyz07pjcrpx7xqda9q"
   },
   "nixops": {
     "owner": "NixOS",
@@ -79,8 +79,8 @@
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "0751ed480dd8deb03112152c9ab59f79e1e36949",
-    "sha256": "0li66kilmna09hzv3h1p0bw0lx9wc6g0xyc9mz1icqvz0043ivx9"
+    "rev": "dac468d0a5ad374219efce8ee75ceeaa45785080",
+    "sha256": "0k290ynqw5q3zv4pylyzzll5ykf1cng53iy7j1cpk2zrw4rhaq46"
   },
   "gitignore": {
     "owner": "hercules-ci",
