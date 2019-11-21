@@ -30,14 +30,14 @@
 
   outputs = { self, nixpkgs
             , nur_dguibert
-	    , base16-nix
-	    , NUR
-	    , gitignore
-	    , home-manager
-	    , terranix
-	    , hydra
-	    , nix
-	    , nixops
+            , base16-nix
+            , NUR
+            , gitignore
+            , home-manager
+            , terranix
+            , hydra
+            , nix
+            , nixops
             }@flakes: let
       systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
 
@@ -76,11 +76,11 @@
         terranix_
         jq
 
-	      #my-terraform
+              #my-terraform
         terraform-landscape
         (writeShellScriptBin "terraform" ''
-	        set -x
-	        #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
+          set -x
+          #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
           #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
           #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
           #export TF_VAR_wireguard_deploy_nixos_vbox_57nvj72="`${pass}/bin/pass vbox-57nvj72/wireguard_key`"
@@ -120,7 +120,16 @@
       rpi31 = import ./config/rpi31.nix flakes;
     };
 
-    nixopsConfigurations.default = with nixpkgs.lib; {
+    nixopsConfigurations.default = with nixpkgs.lib; let
+      pass_ = key: if builtins ? extraBuiltins
+                   then
+                     if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
+                     else throw "extraBuiltins.pass undefined"
+                   else if builtins ? exec
+                     then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
+                     else "builtins.exec undefined"
+            ;
+    in {
       inherit nixpkgs;
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
@@ -196,6 +205,13 @@
             supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
           }
         ];
+        deployment.keys.id_buildfarm = {
+          text = pass_ "id_buildfarm";
+          destDir = "/etc/nix";
+          user = "hydra";
+          group = "hydra";
+          permissions = "0440";
+        };
 
         services.postgresql = {
           package = pkgs.postgresql_9_6;

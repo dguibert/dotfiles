@@ -4,7 +4,7 @@
   users.extraUsers.nixBuild = {
     name = "nixBuild";
     useDefaultShell = true;
-    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIHV7fF2Ne3Frd+EQlyKgI5XRfq33WfacGLtUSXU+Yrg nixBuild" ];
+    openssh.authorizedKeys.keyFiles = [ ../secrets/id_buildfarm.pub ];
   };
   # on the client machine
   programs.ssh.extraConfig = ''
@@ -19,7 +19,7 @@
     buildMachines = [{
       hostName = "rpi31";
       maxJobs = 4;
-      sshKey = "/root/.ssh/id_nixBuild";
+      sshKey = "/etc/nix/id_nixBuild";
       sshUser = "nixBuild";
       system = "aarch64-linux";
     #  supportedFeatures = [ "big-parallel" ];
