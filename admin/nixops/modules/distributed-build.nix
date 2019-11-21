@@ -13,7 +13,6 @@
       Port 22322
   '';
   nix = {
-    trustedUsers = [ "nixBuild" "dguibert" ];
     # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
     distributedBuilds = true;
     buildMachines = [{
