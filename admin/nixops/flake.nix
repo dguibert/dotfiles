@@ -205,6 +205,13 @@
             supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
           }
         ];
+        nix.extraOptions = ''
+          secret-key-files = /etc/nix/cache-priv-key.pem
+        '';
+        deployment.keys."cache-priv-key.pem" = {
+          text = pass_ "titan/cache-priv-key.pem";
+          destDir = "/etc/nix";
+        };
         deployment.keys.id_buildfarm = {
           text = pass_ "id_buildfarm";
           destDir = "/etc/nix";

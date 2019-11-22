@@ -24,4 +24,7 @@
     #  supportedFeatures = [ "big-parallel" ];
     }];
   };
+
+  nix.binaryCachePublicKeys = [ "titan:dkOH0pvwo9CQMDs/H/Rs4HYEePVmwPf0/uSQi9ZmjxE=" ];
+  nix.trustedBinaryCaches = [ "ssh-ng://titan" ];
 }
