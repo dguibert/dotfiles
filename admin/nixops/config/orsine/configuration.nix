@@ -78,7 +78,7 @@ rec {
 
   #networking.wireless.iwd.enable = true; # wifi usb dongle does show in device list
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.interfaces = [ "wlp0s29f7u1" "wlp0s26f7u1" ];
+  networking.wireless.interfaces = [ /*"wlp0s29f7u1"*/ "wlp0s26f7u1" ];
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
 
