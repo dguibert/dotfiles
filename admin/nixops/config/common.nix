@@ -55,7 +55,6 @@
 
   documentation.nixos.enable = false;
   programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
   programs.gnupg.agent.enableSSHSupport = true;
   #services.openssh.hostKeys = [
   #  { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
