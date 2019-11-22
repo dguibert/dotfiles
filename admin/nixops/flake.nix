@@ -127,7 +127,7 @@
                      else throw "extraBuiltins.pass undefined"
                    else if builtins ? exec
                      then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
-                     else "builtins.exec undefined"
+                     else throw "builtins.exec undefined"
             ;
     in {
       inherit nixpkgs;
