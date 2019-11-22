@@ -78,7 +78,7 @@ rec {
 
   #networking.wireless.iwd.enable = true; # wifi usb dongle does show in device list
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.interfaces = [ "wlp0s29f7u1" ];
+  networking.wireless.interfaces = [ "wlp0s29f7u1" "wlp0s26f7u1" ];
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
 
@@ -116,6 +116,10 @@ rec {
     networkConfig.Bond = "bond0";
     #networkConfig.ActiveSlave=false;
     networkConfig.IPv6PrivacyExtensions = "kernel";
+  };
+  systemd.network.networks."40-wlp0s26f7u1" = {
+    name = "wlp0s26f7u1";
+    DHCP = "both";
   };
   #{networking.bonds.bond0.interfaces = [ "enp0s25" /*"wlp0s26f7u1"*/ ];
   #{boot.extraModprobeConfig=''
