@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 rec {
   imports = [
-    <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix>
     ../../config/common.nix
     ../../config/users/dguibert
     ../../modules/yubikey-gpg.nix
@@ -126,7 +125,7 @@ rec {
     ];
     listenPort = 500;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -143,7 +142,7 @@ rec {
     ];
     listenPort = 501;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
@@ -160,7 +159,7 @@ rec {
   #  ];
   #  listenPort = 502;
   #  allowedIPsAsRoutes=false;
-  #  privateKeyFile = toString <secrets/wireguard_key>;
+  #  privateKeyFile = toString "/secrets/wireguard_key";
   #};
   # titan
   networking.wireguard.interfaces.titan = {
@@ -170,7 +169,7 @@ rec {
     ];
     listenPort = 503;
     allowedIPsAsRoutes=false;
-    privateKeyFile = toString <secrets/wireguard_key>;
+    privateKeyFile = toString "/secrets/wireguard_key";
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";

@@ -265,6 +265,18 @@
         #    "it cannot be cross compiled";
         #};
       };
+      vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
+        imports = [
+          (import "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix")
+          (import ./config/vbox-57nvj72/configuration.nix)
+        ];
+        deployment.keys."wireguard_key" = {
+          text = pass_ "vbox-57nvj72/wireguard_key";
+          destDir = "/secrets";
+          #user = "root";
+          #group = "root";
+        };
+      };
     };
   };
 }
