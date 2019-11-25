@@ -130,8 +130,8 @@ dguibert-%:
 	user=$${U:-dguibert}
 	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
-	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
+	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	hm=$$($$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-build ./release.nix $(args) --no-out-link -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
@@ -141,12 +141,13 @@ dguibert-%:
 	fi
 shell-genji: HOSTNAME=genji
 shell-aloy: HOSTNAME=aloy
+shell-spartan: HOSTNAME=spartan
 shell-%:
 	set -xeuf -o pipefail
 	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
-	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
+	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-shell ./shell.nix $(args)
 root-%:
 	set -xeuf -o pipefail
