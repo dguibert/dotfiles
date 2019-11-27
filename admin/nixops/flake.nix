@@ -115,9 +115,19 @@
     };
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-    nixosConfigurations = with nixpkgs.lib; {
-      titan = import ./config/titan.nix flakes;
-      rpi31 = import ./config/rpi31.nix flakes;
+    nixosConfigurations = let
+      nodes = (import ./eval-machine-info.nix {
+        system = "x86_64-linux";
+        networks = [ nixopsConfigurations.default ];
+        checkConfigurationOptions = true;
+        uuid = "fca2af7a-1911-11e7-b752-02422684ac68";
+        deploymentName = "deploy";
+        args = {};
+        pluginNixExprs = [];
+        inherit nixpkgs;
+      }).nodes;
+      in {
+        inherit (nodes) titan orsine;
     };
 
     nixopsConfigurations.default = with nixpkgs.lib; let
