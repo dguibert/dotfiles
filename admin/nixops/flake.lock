@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-cb7NCjSEqLLHeSMW6P8SW2O6Jsh3iyim5d7T5tFuACo=",
+            "narHash": "sha256-s3dENwdGdqYsDpyoYBop7N/uGc/+1YxYBiqcyRxEiLw=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/5e7c4d412821d72c75f1cadc9991f5390a338ce6"
+            "url": "github:nix-community/NUR/93262514a15068bd0e31cfce16b34561c0d2dbba"
         },
         "base16-nix": {
             "inputs": {},
@@ -90,9 +90,9 @@
         },
         "nixpkgs": {
             "inputs": {},
-            "narHash": "sha256-J37CDQCtxLkoptxlqTdSzhRFDQwDHHL8QXMOiFy36qI=",
+            "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
             "originalUrl": "/home/dguibert/code/nixpkgs",
-            "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=6144209b4b60f73fb8f0ce852e3b52cd55c8fb07"
+            "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=611a0a48fa420ea8be8c865f67bd30c30b154e14"
         },
         "nur_dguibert": {
             "inputs": {
@@ -111,14 +111,14 @@
                 },
                 "nixpkgs": {
                     "inputs": {},
-                    "narHash": "sha256-J37CDQCtxLkoptxlqTdSzhRFDQwDHHL8QXMOiFy36qI=",
+                    "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
                     "originalUrl": "/home/dguibert/code/nixpkgs",
-                    "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=6144209b4b60f73fb8f0ce852e3b52cd55c8fb07"
+                    "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=611a0a48fa420ea8be8c865f67bd30c30b154e14"
                 }
             },
             "narHash": "sha256-iQFzsmAP+7nnm0amKV1fqd1ocE8OUrQfvUBAphD8mqk=",
             "originalUrl": "/home/dguibert/nur-packages",
-            "url": "/home/dguibert/nur-packages?ref=HEAD&rev=d671cb0550d68d7615bfa71fb150a5e01fbde17b"
+            "url": "/home/dguibert/nur-packages?ref=HEAD&rev=f67c9382ebf4d6d4d05bf0f0cb276eba4ec4ff1c"
         },
         "terranix": {
             "inputs": {},
