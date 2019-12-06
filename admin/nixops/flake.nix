@@ -54,6 +54,8 @@
     #packages.hello = nixpkgs.provides.packages.hello;
     packages = forAllSystems (system: {
       inherit (pkgs."${system}") hello nix;
+
+      rpi31_sd = nixosConfigurations.rpi31.config.system.build.sdImage;
     });
 
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
@@ -127,7 +129,7 @@
         inherit nixpkgs;
       }).nodes;
       in {
-        inherit (nodes) titan orsine;
+        inherit (nodes) titan orsine rpi31;
     };
 
     nixopsConfigurations.default = with nixpkgs.lib; let
