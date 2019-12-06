@@ -265,6 +265,8 @@
         };
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
+        #deployment.targetPort = 443;
+        deployment.targetPort = 22322;
         imports = [
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
@@ -272,11 +274,33 @@
         ];
         nixpkgs.localSystem.system = "aarch64-linux";
         services.nixosManual.showManual = lib.mkForce false;
+        fileSystems = {
+          "/boot" = {
+            device = "/dev/disk/by-label/NIXOS_BOOT";
+            fsType = "vfat";
+            # Alternatively, this could be removed from the configuration.
+            # The filesystem is not needed at runtime, it could be treated
+            # as an opaque blob instead of a discrete FAT32 filesystem.
+            #options = [ "nofail" "noauto" ];
+          };
+        };
         #assertions = lib.singleton {
         #  assertion = pkgs.stdenv.system == "aarch64-linux";
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
         #    "it cannot be cross compiled";
         #};
+        deployment.keys."shadowsocks" = {
+          text = pass_ "rpi31/shadowsocks";
+          destDir = "/secrets";
+          #user = "root";
+          #group = "root";
+        };
+        deployment.keys."wireguard_key" = {
+          text = pass_ "rpi31/wireguard_key";
+          destDir = "/secrets";
+          #user = "root";
+          #group = "root";
+        };
       };
       vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
         imports = [

@@ -21,7 +21,7 @@ rec {
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
-  boot.loader.generic-extlinux-compatible.configurationLimit = 2;
+  boot.loader.generic-extlinux-compatible.configurationLimit = 10;
 
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
@@ -57,7 +57,10 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.ports = [ 443 ];
+  services.openssh.listenAddresses = [
+    { addr = "127.0.0.1"; port=22; }
+    { addr = "0.0.0.0"; port=22322; }
+  ];
 
   environment.systemPackages = [ pkgs.vim ];
 
@@ -92,8 +95,8 @@ rec {
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-	endpoint   = "192.168.1.32:500";
-	persistentKeepalive = 25;
+        endpoint   = "192.168.1.32:500";
+        persistentKeepalive = 25;
       }
     ];
   };
@@ -109,8 +112,8 @@ rec {
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-	#endpoint   = "orsin.freeboxos.fr:500";
-	persistentKeepalive = 25;
+        #endpoint   = "orsin.freeboxos.fr:500";
+        persistentKeepalive = 25;
       }
     ];
   };
@@ -126,7 +129,7 @@ rec {
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
-	endpoint   = "192.168.1.24:500";
+        endpoint   = "192.168.1.24:500";
       }
     ];
   };
@@ -142,7 +145,7 @@ rec {
     peers = [
       { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
         publicKey  = "MkVk/+vE2kNw8Pi5UljJifp0esCBxztPwQ7AFNMkkW4=";
-	persistentKeepalive = 25;
+        persistentKeepalive = 25;
       }
     ];
   };
@@ -176,4 +179,27 @@ rec {
 
   fonts.fontconfig.enable = false;
 
+  networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
+  services.sslh = {
+    enable=true;
+    #verbose=true;
+    #transparent=true;
+    ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
+    ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
+    ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
+    ##  { name: "ssl"; host: "localhost"; port: "443"; probe: "builtin"; },
+    appendConfig=''
+      protocols:
+      (
+        { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
+        { name: "anyprot"; host: "localhost"; port: "8388"; probe: "builtin"; }
+      );
+    '';
+  };
+  #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
+  services.shadowsocks = {
+    enable = true;
+    localAddress= [ "127.0.0.1" ];
+    passwordFile = "/secrets/shadowsocks";
+  };
 }
