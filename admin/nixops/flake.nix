@@ -271,6 +271,7 @@
           (import ./config/rpi31/configuration.nix)
         ];
         nixpkgs.localSystem.system = "aarch64-linux";
+        services.nixosManual.showManual = lib.mkForce false;
         #assertions = lib.singleton {
         #  assertion = pkgs.stdenv.system == "aarch64-linux";
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
