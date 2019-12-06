@@ -57,7 +57,7 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.ports = [22322 443 ];
+  services.openssh.ports = [ 443 ];
 
   environment.systemPackages = [ pkgs.vim ];
 
