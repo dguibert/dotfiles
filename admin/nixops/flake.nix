@@ -266,6 +266,7 @@
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetPort = 443;
+        deployment.targetHost = "192.168.1.13";
         deployment.targetPort = 22322;
         imports = [
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")

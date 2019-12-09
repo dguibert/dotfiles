@@ -182,7 +182,7 @@ rec {
   networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
   services.sslh = {
     enable=true;
-    #verbose=true;
+    verbose=true;
     #transparent=true;
     ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
     ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
@@ -200,6 +200,7 @@ rec {
   services.shadowsocks = {
     enable = true;
     localAddress= [ "127.0.0.1" ];
+    #port=443;
     passwordFile = "/secrets/shadowsocks";
   };
 }
