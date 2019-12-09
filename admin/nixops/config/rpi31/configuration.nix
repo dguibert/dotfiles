@@ -184,6 +184,7 @@ rec {
     enable=true;
     verbose=true;
     #transparent=true;
+    #port=443;
     ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
     ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
     ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
@@ -192,10 +193,25 @@ rec {
       protocols:
       (
         { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
+        { name: "ssl"; host: "localhost"; port: "4443"; probe: "builtin"; },
         { name: "anyprot"; host: "localhost"; port: "8388"; probe: "builtin"; }
       );
     '';
   };
+
+  services.stunnel = {
+    enable = true;
+    servers = {
+      ssh = {
+        accept = 4443;
+        connect = 22;
+        cert = "/secrets/stunnel.pem";
+      };
+    };
+  };
+# pid = /var/run/stunnel.pid
+#cert = /etc/letsencrypt/live/servername.com/fullchain.pem
+#key = /etc/letsencrypt/live/servername.com/privkey.pem
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
     enable = true;
