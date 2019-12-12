@@ -4,7 +4,7 @@
   users.extraUsers.nixBuild = {
     name = "nixBuild";
     useDefaultShell = true;
-    openssh.authorizedKeys.keyFiles = [ ../secrets/id_buildfarm.pub ];
+    openssh.authorizedKeys.keyFiles = [ ../id_buildfarm.pub ];
   };
   # on the client machine
   programs.ssh.extraConfig = ''
