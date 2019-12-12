@@ -56,7 +56,7 @@
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
     ##
     ## - checks: A non-nested set of derivations built by the nix flake check command, and by Hydra if a flake does not have a hydraJobs attribute.
-    checks.hello = packages.hello;
+    checks.x86_64-linux.hello = packages.x86_64-linux.hello;
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
