@@ -57,6 +57,13 @@
     ##
     ## - checks: A non-nested set of derivations built by the nix flake check command, and by Hydra if a flake does not have a hydraJobs attribute.
     checks.x86_64-linux.hello = packages.x86_64-linux.hello;
+
+    hydraJobs = {
+      orsine = nixosConfigurations.orsine.config.system.build.toplevel;
+      rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
+      titan = nixosConfigurations.titan.config.system.build.toplevel;
+      vbox-57nvj72 = nixosConfigurations.vbox-57nvj72.config.system.build.toplevel;
+    };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
