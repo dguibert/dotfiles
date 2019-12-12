@@ -131,7 +131,7 @@
         inherit nixpkgs;
       }).nodes;
       in {
-        inherit (nodes) titan orsine rpi31;
+        inherit (nodes) titan orsine rpi31 vbox-57nvj72;
     };
 
     nixopsConfigurations.default = with nixpkgs.lib; let
@@ -187,11 +187,13 @@
       };
 
       orsine = { config, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import ./config/orsine/configuration.nix)
         ];
       };
       titan = { config, lib, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           hydra.nixosModules.hydra
           (import ./config/titan/configuration.nix)
@@ -306,6 +308,7 @@
         };
       };
       vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix")
           (import ./config/vbox-57nvj72/configuration.nix)
