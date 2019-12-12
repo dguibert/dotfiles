@@ -280,7 +280,7 @@ eval "$(${pkgs.coreutils}/bin/dircolors)"
     "\e[F": end-of-line
   '';
 
-  fonts.fontconfig.enableProfileFonts = ! noXlibs;
+  fonts.fontconfig.enable = ! noXlibs;
 
   # mimeapps.list
   # https://github.com/bobvanderlinden/nix-home/blob/master/home.nix
@@ -402,7 +402,7 @@ eval "$(${pkgs.coreutils}/bin/dircolors)"
     # Note mail sent specifically to me (excluding bug mail)
     notmuch tag +to-me -- not tag:to-me and to:david.guibert@gmail.com
     notmuch tag +to-me -- not tag:to-me and to:david.guibert@atos.net
-    
+
     # And note all mail sent from me
     notmuch tag +sent -- not tag:sent and to:david.guibert@gmail.com
     notmuch tag +sent -- not tag:sent and to:david.guibert@atos.net
