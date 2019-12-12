@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-DTTroltdtzEGbnJkz39bAu+obUYdp8umkEoKNav9ZuI=",
+            "narHash": "sha256-RD94zzPPKpWyhAnqNGLE1dpby3XfD4l61tO6cvym51g=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/dac5501429c9329140dddf61d633c6f7c9681049"
+            "url": "github:nix-community/NUR/ce2de6dc879038f234d48cb9a76bbf3487b42fed"
         },
         "base16-nix": {
             "inputs": {},
@@ -21,8 +21,8 @@
         "home-manager": {
             "inputs": {},
             "narHash": "sha256-bmZv1NIV/t23u8kAkoHMCBVe0YuTdCMQktHgCs3DgA8=",
-            "originalUrl": "/home/dguibert/code/home-manager",
-            "url": "/home/dguibert/code/home-manager?ref=HEAD&rev=216f18a6c76c203c7e52303bd8a0be054293556d"
+            "originalUrl": "github:dguibert/home-manager/pu",
+            "url": "github:dguibert/home-manager/216f18a6c76c203c7e52303bd8a0be054293556d"
         },
         "hydra": {
             "inputs": {
@@ -35,9 +35,9 @@
                             "url": "github:edolstra/nixpkgs/d37927a77e70a2b3408ceaa2e763b6df1f4d941a"
                         }
                     },
-                    "narHash": "sha256-Voo92jCts388nflW5den+SevZpgqJoAduGrqlrVXR78=",
+                    "narHash": "sha256-6+Y2qwG+Y/qNnZc6crbyG6rOWwQgGHkp1dr0tP+zLQU=",
                     "originalUrl": "nix",
-                    "url": "github:NixOS/nix/ab88f4bbd4117db458a79f0a02a4de7bf7931f4c"
+                    "url": "github:NixOS/nix/a045f93396a676bf5510700c9ac19f5c16bd69e8"
                 },
                 "nixpkgs": {
                     "inputs": {},
@@ -47,8 +47,8 @@
                 }
             },
             "narHash": "sha256-WxRTGN+v0XNnGWaVnvDyaKXvPVjHUbA+2Rg5bSfyV2w=",
-            "originalUrl": "/home/dguibert/code/hydra",
-            "url": "/home/dguibert/code/hydra?ref=HEAD&rev=3be37bf9a6893598c9007f03758ddaf81ea38b3d"
+            "originalUrl": "github:dguibert/hydra/pu",
+            "url": "github:dguibert/hydra/3be37bf9a6893598c9007f03758ddaf81ea38b3d"
         },
         "nix": {
             "inputs": {
@@ -60,16 +60,16 @@
                 }
             },
             "narHash": "sha256-bxheKF4swRaAEjuiOx62dYztbkbpJH88V/P36OEEMuk=",
-            "originalUrl": "/home/dguibert/code/nix",
-            "url": "/home/dguibert/code/nix?ref=HEAD&rev=d076a18be58f0f42820630641bef2d68b1c4dc8f"
+            "originalUrl": "github:dguibert/nix/pu",
+            "url": "github:dguibert/nix/d076a18be58f0f42820630641bef2d68b1c4dc8f"
         },
         "nixops": {
             "inputs": {
                 "nixops-aws": {
                     "inputs": {},
-                    "narHash": "sha256-raoAiDVfExAuEpuTchBpOTj8Xi/UIXXx2bPnKKjqOhU=",
+                    "narHash": "sha256-52bD9sLWFjZxP9P2/2pjeoiqnN5Bic0o6mX/5B1IDKo=",
                     "originalUrl": "github:NixOS/nixops-aws",
-                    "url": "github:NixOS/nixops-aws/452674913bf0d25aca1c71f1e9bc9c2b1c9444c5"
+                    "url": "github:NixOS/nixops-aws/0da38bb5de82d7a118ac32ebefa7a2d5869ba5ab"
                 },
                 "nixops-hetzner": {
                     "inputs": {},
@@ -85,14 +85,14 @@
                 }
             },
             "narHash": "sha256-G0cFhg8wQ7pHzkKl8uUYhDRBvFKzfMqSFbj2cymnLGA=",
-            "originalUrl": "/home/dguibert/code/nixops",
-            "url": "/home/dguibert/code/nixops?ref=HEAD&rev=a7945a61b3f36e8a4e7b4c6906e5c3b5fa7bb7c4"
+            "originalUrl": "github:dguibert/nixops/pu",
+            "url": "github:dguibert/nixops/a7945a61b3f36e8a4e7b4c6906e5c3b5fa7bb7c4"
         },
         "nixpkgs": {
             "inputs": {},
-            "narHash": "sha256-/NVesF+u/ciX2e+ZxNqTZVlGNfR6W6zusDfXixFj6vw=",
-            "originalUrl": "/home/dguibert/code/nixpkgs",
-            "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=a22232c89d70b68b786f784024e8e7c39056dfce"
+            "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
+            "originalUrl": "github:dguibert/nixpkgs/pu",
+            "url": "github:dguibert/nixpkgs/611a0a48fa420ea8be8c865f67bd30c30b154e14"
         },
         "nur_dguibert": {
             "inputs": {
@@ -106,25 +106,25 @@
                         }
                     },
                     "narHash": "sha256-bxheKF4swRaAEjuiOx62dYztbkbpJH88V/P36OEEMuk=",
-                    "originalUrl": "/home/dguibert/code/nix",
-                    "url": "/home/dguibert/code/nix?ref=HEAD&rev=d076a18be58f0f42820630641bef2d68b1c4dc8f"
+                    "originalUrl": "github:dguibert/nix/pu",
+                    "url": "github:dguibert/nix/d076a18be58f0f42820630641bef2d68b1c4dc8f"
                 },
                 "nixpkgs": {
                     "inputs": {},
-                    "narHash": "sha256-/NVesF+u/ciX2e+ZxNqTZVlGNfR6W6zusDfXixFj6vw=",
-                    "originalUrl": "/home/dguibert/code/nixpkgs",
-                    "url": "/home/dguibert/code/nixpkgs?ref=HEAD&rev=a22232c89d70b68b786f784024e8e7c39056dfce"
+                    "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
+                    "originalUrl": "github:dguibert/nixpkgs/pu",
+                    "url": "github:dguibert/nixpkgs/611a0a48fa420ea8be8c865f67bd30c30b154e14"
                 }
             },
-            "narHash": "sha256-mTWUER0/10oJ+R78WLz/VqbzJIgEN56inLbxW/E+iow=",
-            "originalUrl": "/home/dguibert/nur-packages",
-            "url": "/home/dguibert/nur-packages?ref=HEAD&rev=96b5cecf0866c995de306b2a6c28c0326fae96aa"
+            "narHash": "sha256-IrNjzyPFIR0ug+2ByFV85IgesyfvFRKJd6/L4oP42CY=",
+            "originalUrl": "github:dguibert/nur-packages/dg-remote-urls",
+            "url": "github:dguibert/nur-packages/0879ac7de884d7feefaf900383a6247f0bc9b842"
         },
         "terranix": {
             "inputs": {},
             "narHash": "sha256-2mj/TXyOYdd0j/6FZ756uR7DAbxEonjn9zMQDrEeAak=",
-            "originalUrl": "/home/dguibert/code/terranix",
-            "url": "/home/dguibert/code/terranix?ref=HEAD&rev=6f486c594b91409c1a7084b9952dc43bca0f7bb3"
+            "originalUrl": "github:mrVanDalo/terranix",
+            "url": "github:mrVanDalo/terranix/6f486c594b91409c1a7084b9952dc43bca0f7bb3"
         }
     },
     "version": 3
