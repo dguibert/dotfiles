@@ -8,24 +8,19 @@
   # git+file:///home/my-user/some-repo/some-repo
   # ref, rev, dir
   inputs = {
-    #nix.uri = "/home/dguibert/code/nix";
-    #nixpkgs.uri = "github:dguibert/nixpkgs/pu";
-    nixops.uri = "/home/dguibert/code/nixops";
-    nixpkgs.uri = "/home/dguibert/code/nixpkgs";
-    nix.uri = "/home/dguibert/code/nix";
-    hydra.uri = "/home/dguibert/code/hydra";
-    #nur_dguibert.uri = "github:dguibert/nur-packages/pu";
-    nur_dguibert.uri = "/home/dguibert/nur-packages";
-    #"nixos-18.03".uri = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".uri = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".uri = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix = { uri  = "github:atpotts/base16-nix"; flake=false; };
-    NUR = { uri  = "github:nix-community/NUR"; flake=false; };
-    gitignore = { uri  = "github:hercules-ci/gitignore"; flake=false; };
-    home-manager = { uri = "/home/dguibert/code/home-manager"; flake=false; };
-
-    #terranix = { uri = "https://github.com/mrVanDalo/terranix"; flake=false; };
-    terranix = { uri = "/home/dguibert/code/terranix"; flake=false; };
+    home-manager         = { uri = "github:dguibert/home-manager/pu"; flake=false; };
+    hydra.uri            = "github:dguibert/hydra/pu";
+    nixops.uri           = "github:dguibert/nixops/pu";
+    nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
+    nix.uri              = "github:dguibert/nix";
+    nur_dguibert.uri     = "github:dguibert/nur-packages/pu";
+    terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
+    #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
+    #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
+    #"nixos-19.03".uri   = "github:nixos/nixpkgs-channels/nixos-19.03";
+    base16-nix           = { uri  = "github:atpotts/base16-nix"; flake=false; };
+    NUR                  = { uri  = "github:nix-community/NUR"; flake=false; };
+    gitignore            = { uri  = "github:hercules-ci/gitignore"; flake=false; };
   };
 
   outputs = { self, nixpkgs
