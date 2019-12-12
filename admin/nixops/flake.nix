@@ -138,10 +138,10 @@
       pass_ = key: if builtins ? extraBuiltins
                    then
                      if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
-                     else builtins.warn "extraBuiltins.pass undefined"
+                     else builtins.trace "extraBuiltins.pass undefined" "undefined"
                    else if builtins ? exec
                      then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
-                     else builtins.warn "builtins.exec undefined"
+                     else builtins.trace "builtins.exec undefined" "undefined"
             ;
     in {
       inherit nixpkgs;
