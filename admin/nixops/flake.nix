@@ -13,7 +13,7 @@
     nixops.uri           = "github:dguibert/nixops/pu";
     nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
     nix.uri              = "github:dguibert/nix/pu";
-    nur_dguibert.uri     = "github:dguibert/nur-packages/pu";
+    nur_dguibert.uri     = "github:dguibert/nur-packages/dg-remote-urls";
     terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
     #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
     #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
