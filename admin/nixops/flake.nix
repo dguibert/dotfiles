@@ -122,13 +122,13 @@
     nixosConfigurations = let
       nodes = (import ./eval-machine-info.nix {
         system = "x86_64-linux";
-        networks = [ nixopsConfigurations.default ];
+        networks = [ (nixopsConfigurations.default // { _file="flake.nix"; }) ];
         checkConfigurationOptions = true;
         uuid = "fca2af7a-1911-11e7-b752-02422684ac68";
         deploymentName = "deploy";
         args = {};
         pluginNixExprs = [];
-        inherit nixpkgs;
+        inherit nixpkgs nixops;
       }).nodes;
       in {
         inherit (nodes) titan orsine rpi31 vbox-57nvj72;
