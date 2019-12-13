@@ -193,25 +193,11 @@ rec {
       protocols:
       (
         { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-        { name: "ssl"; host: "localhost"; port: "4443"; probe: "builtin"; },
         { name: "anyprot"; host: "localhost"; port: "8388"; probe: "builtin"; }
       );
     '';
   };
 
-  services.stunnel = {
-    enable = true;
-    servers = {
-      ssh = {
-        accept = 4443;
-        connect = 22;
-        cert = "/secrets/stunnel.pem";
-      };
-    };
-  };
-# pid = /var/run/stunnel.pid
-#cert = /etc/letsencrypt/live/servername.com/fullchain.pem
-#key = /etc/letsencrypt/live/servername.com/privkey.pem
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
     enable = true;
