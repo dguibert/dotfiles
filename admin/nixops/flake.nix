@@ -203,6 +203,7 @@
           enable = true;
           hydraURL = "http://localhost:3000";
           notificationSender = "hydra@orsin.freeboxos.fr";
+          listenHost = "localhost";
           port = 3000;
           useSubstitutes = true;
           extraConfig = ''
@@ -210,17 +211,12 @@
 
             max_concurrent_evals = 1
           '';
-          #buildMachinesFiles = [ /*"/etc/nix/machines"*/ ];
+          buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
+            ++ [ "/etc/nix/machines-hydra" ];
         };
-        nix.buildMachines = [
-          {
-            hostName = "localhost";
-            systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-            maxJobs = 16;
-            # for building VirtualBox VMs as build artifacts, you might need other features depending on what you are doing
-            supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
-          }
-        ];
+        environment.etc."nix/machines-hydra".text = ''
+          localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
+        '';
         nix.extraOptions = ''
           secret-key-files = /etc/nix/cache-priv-key.pem
         '';
