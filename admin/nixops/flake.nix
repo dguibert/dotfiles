@@ -184,6 +184,8 @@
               skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
             }.${pkgs.hostPlatform.platform.gcc.arch} or []
         );
+
+        programs.gnupg.agent.pinentryFlavor = "gtk2";
       };
 
       orsine = { config, pkgs, resources, ... }: {
@@ -277,6 +279,7 @@
         services.nixosManual.showManual = lib.mkForce false;
         fileSystems."/".options = [ "defaults" "discard" ];
 
+        programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
         #assertions = lib.singleton {
         #  assertion = pkgs.stdenv.system == "aarch64-linux";
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
