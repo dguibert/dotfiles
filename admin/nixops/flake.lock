@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-o3r3D/R+Px1bNJPvg8TzhPhxu4jQwPooA8ZTJ31dXMs=",
+            "narHash": "sha256-Np6ZOdw2oVU7Ihbvio9I4PkyGEOLHNwDVVaso1O34MI=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/5e642f59d53c0401f792336e9a7749ccc961ed00"
+            "url": "github:nix-community/NUR/4192ad569378f8cc6b4bfe0693a9e5f07c36ef05"
         },
         "base16-nix": {
             "inputs": {},
@@ -35,9 +35,9 @@
                             "url": "github:edolstra/nixpkgs/03f3def66a104a221aac8b751eeb7075374848fd"
                         }
                     },
-                    "narHash": "sha256-6+Y2qwG+Y/qNnZc6crbyG6rOWwQgGHkp1dr0tP+zLQU=",
+                    "narHash": "sha256-csrkWC68TG8wlFrcjVDM3zqdwO44NpodO+5PXH/H0j4=",
                     "originalUrl": "nix",
-                    "url": "github:NixOS/nix/a045f93396a676bf5510700c9ac19f5c16bd69e8"
+                    "url": "github:NixOS/nix/4947e0a91aeefd898e5b976733e70f1fbc1c0ae7"
                 },
                 "nixpkgs": {
                     "inputs": {},
@@ -90,9 +90,9 @@
         },
         "nixpkgs": {
             "inputs": {},
-            "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
+            "narHash": "sha256-gDhWMM6EnCbje361kA+8GtiltcqmvEgNxhhAO5dSSzU=",
             "originalUrl": "github:dguibert/nixpkgs/pu",
-            "url": "github:dguibert/nixpkgs/611a0a48fa420ea8be8c865f67bd30c30b154e14"
+            "url": "github:dguibert/nixpkgs/0a0a1fb58dcad711b1f2d7c8fc410fe0141f1869"
         },
         "nur_dguibert": {
             "inputs": {
@@ -111,9 +111,9 @@
                 },
                 "nixpkgs": {
                     "inputs": {},
-                    "narHash": "sha256-FCUanJ6PZ/I0nGhL2mN31iJXfNbZohMuGNr8+yGhmog=",
+                    "narHash": "sha256-gDhWMM6EnCbje361kA+8GtiltcqmvEgNxhhAO5dSSzU=",
                     "originalUrl": "github:dguibert/nixpkgs/pu",
-                    "url": "github:dguibert/nixpkgs/611a0a48fa420ea8be8c865f67bd30c30b154e14"
+                    "url": "github:dguibert/nixpkgs/0a0a1fb58dcad711b1f2d7c8fc410fe0141f1869"
                 }
             },
             "narHash": "sha256-IrNjzyPFIR0ug+2ByFV85IgesyfvFRKJd6/L4oP42CY=",
