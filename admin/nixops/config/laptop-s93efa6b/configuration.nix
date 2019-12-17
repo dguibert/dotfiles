@@ -61,6 +61,7 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.ports = [22];
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -81,18 +82,12 @@ rec {
   services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
   #services.xserver.desktopManager.pantheon.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.jane = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  # };
 
   # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
   nesting.clone = [
