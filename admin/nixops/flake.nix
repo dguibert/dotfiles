@@ -59,6 +59,7 @@
     checks.x86_64-linux.hello = packages.x86_64-linux.hello;
 
     hydraJobs = {
+      laptop-s93efa6b = nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
       orsine = nixosConfigurations.orsine.config.system.build.toplevel;
       rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
       titan = nixosConfigurations.titan.config.system.build.toplevel;
@@ -109,6 +110,18 @@
         export PASSWORD_STORE_DIR=$PWD/secrets
         export SHELL=${bashInteractive}/bin/bash
 
+        NIX_PATH=nixpkgs=${nixpkgs}
+        NIX_PATH+=:nur_dguibert=${nur_dguibert}
+        NIX_PATH+=:base16-nix=${base16-nix}
+        NIX_PATH+=:NUR=${NUR}
+        NIX_PATH+=:gitignore=${gitignore}
+        NIX_PATH+=:home-manager=${home-manager}
+        NIX_PATH+=:terranix=${terranix}
+        NIX_PATH+=:hydra=${hydra}
+        NIX_PATH+=:nix=${nix}
+        NIX_PATH+=:nixops=${nixops}
+        export NIX_PATH
+
         NIX_OPTIONS=()
         NIX_OPTIONS+=("--option plugin-files ${(pkgs.x86_64-linux.nix-plugins.override { nix = pkgs.x86_64-linux.nix; }).overrideAttrs (o: {
             buildInputs = o.buildInputs ++ [ boehmgc ];
@@ -131,7 +144,9 @@
         inherit nixpkgs nixops;
       }).nodes;
       in {
-        inherit (nodes) titan orsine rpi31 vbox-57nvj72;
+        inherit (nodes) titan orsine rpi31
+         vbox-57nvj72
+         laptop-s93efa6b;
     };
 
     nixopsConfigurations.default = with nixpkgs.lib; let
@@ -296,6 +311,17 @@
           destDir = "/secrets";
           #user = "root";
           #group = "root";
+        };
+      };
+      laptop-s93efa6b = { config, lib, pkgs, resources, ... }: {
+        deployment.targetHost = "192.168.1.40";
+        nixpkgs.localSystem.system = "x86_64-linux";
+        imports = [
+          (import ./config/laptop-s93efa6b/configuration.nix)
+        ];
+        deployment.keys."wireguard_key" = {
+          text = pass_ "laptop-s93efa6b/wireguard_key";
+          destDir = "/secrets";
         };
       };
       vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
