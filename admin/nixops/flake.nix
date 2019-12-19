@@ -300,6 +300,14 @@
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
         #    "it cannot be cross compiled";
         #};
+        services.openssh.extraConfig = ''
+          Match Group sftponly
+          ChrootDirectory %h
+          ForceCommand internal-sftp
+          AllowTcpForwarding no
+          X11Forwarding no
+          PasswordAuthentication no
+        '';
         deployment.keys."shadowsocks" = {
           text = pass_ "rpi31/shadowsocks";
           destDir = "/secrets";
