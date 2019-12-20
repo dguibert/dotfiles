@@ -13,6 +13,8 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
   networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
+  boot.kernelParams = ["resume=/dev/zvol/rt580/swap" ];
+  swapDevices = [ { device = "/dev/zvol/rt580/swap"; } ];
 
   fileSystems."/" =
     { device = "rt580/nixos";
@@ -40,8 +42,6 @@
     { device = "rt580/tmp";
       fsType = "zfs";
     };
-
-  swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
