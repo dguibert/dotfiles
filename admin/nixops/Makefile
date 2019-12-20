@@ -75,11 +75,13 @@ secrets-%:
 
 dguibert-titan: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
+dguibert-laptop-s93efa6b: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
 
 root-titan: ATTR=hm_root.x86_64-linux
 root-vbox-57nvj72: ATTR=hm_root.x86_64-linux
+root-laptop-s93efa6b: ATTR=hm_root.x86_64-linux
 root-orsine: ATTR=hm_root.x86_64-linux
 root-rpi31: ATTR=hm_root.aarch64-linux
 
@@ -131,7 +133,7 @@ dguibert-%:
 	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
 	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
-	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	#export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	hm=$$($$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-build ./release.nix $(args) --no-out-link -A $$ATTR)
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
@@ -147,7 +149,7 @@ shell-%:
 	host=$*
 	export PATH=$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin:$$PATH
 	export XDG_CACHE_HOME=$$HOME/.cache/nix-$$host
-	export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
+	#export NIX_PATH=$$(nix-instantiate --eval ./versions.nix -A NIX_PATH | sed -e "s:\"::g")
 	$$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix-shell ./shell.nix $(args)
 root-%:
 	set -xeuf -o pipefail

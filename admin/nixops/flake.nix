@@ -8,24 +8,19 @@
   # git+file:///home/my-user/some-repo/some-repo
   # ref, rev, dir
   inputs = {
-    #nix.uri = "/home/dguibert/code/nix";
-    #nixpkgs.uri = "github:dguibert/nixpkgs/pu";
-    nixops.uri = "/home/dguibert/code/nixops";
-    nixpkgs.uri = "/home/dguibert/code/nixpkgs";
-    nix.uri = "/home/dguibert/code/nix";
-    hydra.uri = "/home/dguibert/code/hydra";
-    #nur_dguibert.uri = "github:dguibert/nur-packages/pu";
-    nur_dguibert.uri = "/home/dguibert/nur-packages";
-    #"nixos-18.03".uri = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".uri = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".uri = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix = { uri  = "github:atpotts/base16-nix"; flake=false; };
-    NUR = { uri  = "github:nix-community/NUR"; flake=false; };
-    gitignore = { uri  = "github:hercules-ci/gitignore"; flake=false; };
-    home-manager = { uri = "/home/dguibert/code/home-manager"; flake=false; };
-
-    #terranix = { uri = "https://github.com/mrVanDalo/terranix"; flake=false; };
-    terranix = { uri = "/home/dguibert/code/terranix"; flake=false; };
+    home-manager         = { uri = "github:dguibert/home-manager/pu"; flake=false; };
+    hydra.uri            = "github:dguibert/hydra/pu";
+    nixops.uri           = "github:dguibert/nixops/pu";
+    nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
+    nix.uri              = "github:dguibert/nix/pu";
+    nur_dguibert.uri     = "github:dguibert/nur-packages/dg-remote-urls";
+    terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
+    #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
+    #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
+    #"nixos-19.03".uri   = "github:nixos/nixpkgs-channels/nixos-19.03";
+    base16-nix           = { uri  = "github:atpotts/base16-nix"; flake=false; };
+    NUR                  = { uri  = "github:nix-community/NUR"; flake=false; };
+    gitignore            = { uri  = "github:hercules-ci/gitignore"; flake=false; };
   };
 
   outputs = { self, nixpkgs
@@ -61,7 +56,15 @@
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
     ##
     ## - checks: A non-nested set of derivations built by the nix flake check command, and by Hydra if a flake does not have a hydraJobs attribute.
-    checks.hello = packages.hello;
+    checks.x86_64-linux.hello = packages.x86_64-linux.hello;
+
+    hydraJobs = {
+      laptop-s93efa6b = nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
+      orsine = nixosConfigurations.orsine.config.system.build.toplevel;
+      rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
+      titan = nixosConfigurations.titan.config.system.build.toplevel;
+      vbox-57nvj72 = nixosConfigurations.vbox-57nvj72.config.system.build.toplevel;
+    };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
@@ -107,6 +110,18 @@
         export PASSWORD_STORE_DIR=$PWD/secrets
         export SHELL=${bashInteractive}/bin/bash
 
+        NIX_PATH=nixpkgs=${nixpkgs}
+        NIX_PATH+=:nur_dguibert=${nur_dguibert}
+        NIX_PATH+=:base16-nix=${base16-nix}
+        NIX_PATH+=:NUR=${NUR}
+        NIX_PATH+=:gitignore=${gitignore}
+        NIX_PATH+=:home-manager=${home-manager}
+        NIX_PATH+=:terranix=${terranix}
+        NIX_PATH+=:hydra=${hydra}
+        NIX_PATH+=:nix=${nix}
+        NIX_PATH+=:nixops=${nixops}
+        export NIX_PATH
+
         NIX_OPTIONS=()
         NIX_OPTIONS+=("--option plugin-files ${(pkgs.x86_64-linux.nix-plugins.override { nix = pkgs.x86_64-linux.nix; }).overrideAttrs (o: {
             buildInputs = o.buildInputs ++ [ boehmgc ];
@@ -120,26 +135,28 @@
     nixosConfigurations = let
       nodes = (import ./eval-machine-info.nix {
         system = "x86_64-linux";
-        networks = [ nixopsConfigurations.default ];
+        networks = [ (nixopsConfigurations.default // { _file="flake.nix"; }) ];
         checkConfigurationOptions = true;
         uuid = "fca2af7a-1911-11e7-b752-02422684ac68";
         deploymentName = "deploy";
         args = {};
         pluginNixExprs = [];
-        inherit nixpkgs;
+        inherit nixpkgs nixops;
       }).nodes;
       in {
-        inherit (nodes) titan orsine rpi31;
+        inherit (nodes) titan orsine rpi31
+         vbox-57nvj72
+         laptop-s93efa6b;
     };
 
     nixopsConfigurations.default = with nixpkgs.lib; let
       pass_ = key: if builtins ? extraBuiltins
                    then
                      if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
-                     else builtins.warn "extraBuiltins.pass undefined"
+                     else builtins.trace "extraBuiltins.pass undefined" "undefined"
                    else if builtins ? exec
                      then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
-                     else builtins.warn "builtins.exec undefined"
+                     else builtins.trace "builtins.exec undefined" "undefined"
             ;
     in {
       inherit nixpkgs;
@@ -182,14 +199,18 @@
               skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
             }.${pkgs.hostPlatform.platform.gcc.arch} or []
         );
+
+        programs.gnupg.agent.pinentryFlavor = "gtk2";
       };
 
       orsine = { config, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import ./config/orsine/configuration.nix)
         ];
       };
       titan = { config, lib, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           hydra.nixosModules.hydra
           (import ./config/titan/configuration.nix)
@@ -199,6 +220,7 @@
           enable = true;
           hydraURL = "http://localhost:3000";
           notificationSender = "hydra@orsin.freeboxos.fr";
+          listenHost = "localhost";
           port = 3000;
           useSubstitutes = true;
           extraConfig = ''
@@ -206,17 +228,12 @@
 
             max_concurrent_evals = 1
           '';
-          #buildMachinesFiles = [ /*"/etc/nix/machines"*/ ];
+          buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
+            ++ [ "/etc/nix/machines-hydra" ];
         };
-        nix.buildMachines = [
-          {
-            hostName = "localhost";
-            systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-            maxJobs = 16;
-            # for building VirtualBox VMs as build artifacts, you might need other features depending on what you are doing
-            supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark" "recursive-nix" ];
-          }
-        ];
+        environment.etc."nix/machines-hydra".text = ''
+          localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
+        '';
         nix.extraOptions = ''
           secret-key-files = /etc/nix/cache-priv-key.pem
         '';
@@ -275,21 +292,22 @@
         ];
         nixpkgs.localSystem.system = "aarch64-linux";
         services.nixosManual.showManual = lib.mkForce false;
-        fileSystems = {
-          "/boot" = {
-            device = "/dev/disk/by-label/NIXOS_BOOT";
-            fsType = "vfat";
-            # Alternatively, this could be removed from the configuration.
-            # The filesystem is not needed at runtime, it could be treated
-            # as an opaque blob instead of a discrete FAT32 filesystem.
-            #options = [ "nofail" "noauto" ];
-          };
-        };
+        fileSystems."/".options = [ "defaults" "discard" ];
+
+        programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
         #assertions = lib.singleton {
         #  assertion = pkgs.stdenv.system == "aarch64-linux";
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
         #    "it cannot be cross compiled";
         #};
+        services.openssh.extraConfig = ''
+          Match Group sftponly
+          ChrootDirectory %h
+          ForceCommand internal-sftp
+          AllowTcpForwarding no
+          X11Forwarding no
+          PasswordAuthentication no
+        '';
         deployment.keys."shadowsocks" = {
           text = pass_ "rpi31/shadowsocks";
           destDir = "/secrets";
@@ -303,7 +321,19 @@
           #group = "root";
         };
       };
+      laptop-s93efa6b = { config, lib, pkgs, resources, ... }: {
+        deployment.targetHost = "192.168.1.40";
+        nixpkgs.localSystem.system = "x86_64-linux";
+        imports = [
+          (import ./config/laptop-s93efa6b/configuration.nix)
+        ];
+        deployment.keys."wireguard_key" = {
+          text = pass_ "laptop-s93efa6b/wireguard_key";
+          destDir = "/secrets";
+        };
+      };
       vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
+        nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix")
           (import ./config/vbox-57nvj72/configuration.nix)

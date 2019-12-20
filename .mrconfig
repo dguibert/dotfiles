@@ -179,6 +179,10 @@ checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
 
 [code/nix]
 checkout = git clone 'https://github.com/NixOS/nix' 'nix'
+update = git remote update
+push = git push -v dguibert +pu
+       git push -v dguibert
+
 
 [code/makefile2graph]
 checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph'
@@ -332,13 +336,9 @@ checkout = git clone 'https://github.com/systemd/casync' 'casync'
 
 [code/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
-fixups = #git_add_remotes "
-	        #  github https://github.com/NixOS/nixpkgs
-	        #"
-
 update = git remote update
 push = git push -v dguibert +pu
-	             git push -v dguibert
+       git push -v dguibert
 
 [code/charliecloud]
 checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
@@ -401,6 +401,9 @@ checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks
 
 [code/nixops]
 checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
+update = git remote update
+push = git push -v dguibert +pu
+       git push -v dguibert
 
 [code/ssf]
 checkout = git clone 'https://github.com/securesocketfunneling/ssf' 'ssf'
@@ -562,6 +565,9 @@ checkout = git clone 'https://github.com/thelegy/yaner/' 'yaner'
 
 [code/hydra]
 checkout = git clone 'https://github.com/nixos/hydra' 'hydra'
+update = git remote update
+push = git push -v dguibert +pu
+       git push -v dguibert
 
 [code/nix-ccache]
 checkout = git clone 'https://github.com/edolstra/nix-ccache' 'nix-ccache'

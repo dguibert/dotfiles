@@ -1,7 +1,7 @@
 { versions ? import ./versions.nix
-, nixpkgs ? { outPath = versions.nixpkgs; revCount = 123456; shortRev = "gfedcba"; }
-, nur_dguibert ? { outPath = versions.nur_dguibert; revCount = 123456; shortRev = "gfedcba"; }
-, nixos-generators ? { outPath = versions.nixos-generators; revCount = 123456; shortRev = "gfedcba"; }
+, nixpkgs ? { outPath = <nixpkgs>; revCount = 123456; shortRev = "gfedcba"; }
+, nur_dguibert ? { outPath = <nur_dguibert>; revCount = 123456; shortRev = "gfedcba"; }
+, nixos-generators ? { outPath = <nixos-generators>; revCount = 123456; shortRev = "gfedcba"; }
 , overlays_ ? []
 #, overlays_ ? [ (import "${nur_dguibert}/overlays/local-aloy.nix") ]
 , system ? builtins.currentSystem

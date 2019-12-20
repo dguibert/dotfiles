@@ -7,6 +7,7 @@
 , args ? {}
 , pluginNixExprs ? []
 , nixpkgs
+, nixops
 }:
 
 with import nixpkgs { inherit system; };
@@ -60,7 +61,7 @@ rec {
             [ deploymentInfoModule ] ++
             [ { key = "nixops-stuff";
                 # Make NixOps's deployment.* options available.
-          imports = [ ./options.nix ./resource.nix pluginOptions ];
+          imports = [ "${nixops}/nix/options.nix" "${nixops}/nix/resource.nix" pluginOptions ];
                 # Provide a default hostname and deployment target equal
                 # to the attribute name of the machine in the model.
                 networking.hostName = mkOverride 900 machineName;
@@ -71,7 +72,7 @@ rec {
           extraArgs = { inherit nodes uuid deploymentName; name = machineName; };
         };
       }
-    ) (attrNames (removeAttrs network [ "network" "defaults" "require" "_file" ])));
+    ) (attrNames (removeAttrs network [ "network" "defaults" "resources" "require" "nixpkgs" "_file" ])));
 
   deploymentInfoModule = {
     deployment = {
