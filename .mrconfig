@@ -464,7 +464,7 @@ fixups = git_add_remotes "
 	          "
 	        #bluray_1 /run/media/dguibert/bluray_1/Documents/
 	               #git remote remove repo 2>/dev/null || true
-skip = ! on titan orsine vbox-57nvj72
+skip = ! on titan orsine vbox-57nvj72 laptop-s93efa6b
 
 [/run/media/dguibert/esiwace_key/Documents]
 checkout = git init "$MR_REPO"
