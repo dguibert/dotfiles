@@ -13,6 +13,7 @@ rec {
     ../../modules/distributed-build.nix
     ../../config/users/dguibert
     ../../config/users/rdolbeau
+    ../../config/users/fvigilant
   ];
 
   #sdImage.bootSize = 512;
