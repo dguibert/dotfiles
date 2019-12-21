@@ -182,6 +182,12 @@ checkout = git clone 'https://github.com/NixOS/nix' 'nix'
 update = git remote update
 push = git push -v dguibert +pu
        git push -v dguibert
+fixups = git_add_remotes "
+	origin git://github.com/NixOS/nix
+	edolstra git://github.com/edolstra/nix.git
+	dguibert git@github.com:dguibert/nix.git
+	"
+
 
 
 [code/makefile2graph]
