@@ -163,6 +163,7 @@
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
           nixpkgs.nixosModules.notDetected
+          modules/wireguard-mesh.nix
         ];
         nixpkgs.config = import "${nur_dguibert}/config.nix";
         nixpkgs.overlays = [
@@ -201,6 +202,42 @@
         );
 
         programs.gnupg.agent.pinentryFlavor = "gtk2";
+
+        networking.wireguard-mesh.enable = true;
+        networking.wireguard-mesh.peers = {
+          rpi31 = {
+            ipv4Address = "10.147.27.13/32";
+            listenPort = 500;
+            publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+            endpoint   = "orsin.freeboxos.fr:501";
+          };
+          orsine = {
+            ipv4Address = "10.147.27.128/32";
+            listenPort = 501;
+            publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+            endpoint   = "192.168.1.32:503";
+          };
+          vbox-54nvj72 = {
+            ipv4Address = "10.147.27.198/32";
+            listenPort = 502;
+            publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
+            #endpoint   = "orsin.freeboxos.fr:501";
+            #persistentKeepalive = 25;
+          };
+          titan = {
+            ipv4Address = "10.147.27.24/32";
+            listenPort = 503;
+            publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+            endpoint   = "192.168.1.24:501";
+          };
+          laptop-s93efa6b = {
+            ipv4Address = "10.147.27.36/32";
+            listenPort = 504;
+            publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
+            endpoint   = "orsin.freeboxos.fr:504";
+          };
+          };
+        networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
       };
 
       orsine = { config, pkgs, resources, ... }: {
