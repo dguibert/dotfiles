@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
+with lib;
 rec {
   imports =
     [ # Include the results of the hardware scan.
@@ -24,14 +24,37 @@ rec {
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp0s31f6.useDHCP = true;
-  networking.interfaces.wlp4s0.useDHCP = true;
+  #networking.useDHCP = false;
+  #networking.interfaces.enp0s31f6.useDHCP = true;
+  #networking.interfaces.wlp4s0.useDHCP = true;
   systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
     "" # clear old command
     "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore wlp4s0 --ignore enp0s31f6 --ignore vboxnet0"
   ];
 
+  networking.useNetworkd = lib.mkForce false;
+  networking.dhcpcd.enable = false;
+
+  systemd.network.netdevs."40-bond0" = {
+    netdevConfig.Name = "bond0";
+    netdevConfig.Kind = "bond";
+    bondConfig.Mode="active-backup";
+    bondConfig.MIIMonitorSec="100s";
+    bondConfig.PrimaryReselectPolicy="always";
+  };
+  systemd.network.networks = {
+    "40-bond0" = {
+      name = "bond0";
+      DHCP = "both";
+      networkConfig.BindCarrier = "enp0s31f6 wlp4s0";
+    };
+  } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" ] (bi:
+    nameValuePair "40-${bi}" {
+      name="${bi}";
+      DHCP = "no";
+      networkConfig.Bond = "bond0";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+    }));
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
