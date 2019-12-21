@@ -322,7 +322,6 @@
         };
       };
       laptop-s93efa6b = { config, lib, pkgs, resources, ... }: {
-        deployment.targetHost = "192.168.1.40";
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import ./config/laptop-s93efa6b/configuration.nix)
