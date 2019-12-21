@@ -328,7 +328,20 @@
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
           (import ./config/rpi31/configuration.nix)
         ];
+        #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+        #nixpkgs.localSystem.system = "x86_64-linux";
         nixpkgs.localSystem.system = "aarch64-linux";
+        nixpkgs.overlays = [
+          nix.overlay
+          nixops.overlay
+          nur_dguibert.overlays.default
+          (final: prev: {
+            # don't build qt5
+            # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+          })
+        ];
+
         services.nixosManual.showManual = lib.mkForce false;
         fileSystems."/".options = [ "defaults" "discard" ];
 
