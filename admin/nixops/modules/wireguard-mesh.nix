@@ -68,7 +68,7 @@ in {
         peer = builtins.getAttr n cfg.peers;
         in nameValuePair "${n}" {
         ips = [
-          cfg."${config.hostName}".ipv4Address
+          cfg.peers."${config.networking.hostName}".ipv4Address
           "${random-ipv6 "${config.networking.hostName}-${n}"}"
         ];
         listenPort = peer.listenPort;
