@@ -209,13 +209,14 @@
             ipv4Address = "10.147.27.13/32";
             listenPort = 500;
             publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
-            endpoint   = "orsin.freeboxos.fr:501";
+            endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+            persistentKeepalive = 25;
           };
           orsine = {
             ipv4Address = "10.147.27.128/32";
             listenPort = 501;
             publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-            endpoint   = "192.168.1.32:503";
+            endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           vbox-54nvj72 = {
             ipv4Address = "10.147.27.198/32";
@@ -228,15 +229,15 @@
             ipv4Address = "10.147.27.24/32";
             listenPort = 503;
             publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
-            endpoint   = "192.168.1.24:501";
+            endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           laptop-s93efa6b = {
             ipv4Address = "10.147.27.36/32";
             listenPort = 504;
             publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
-            endpoint   = "orsin.freeboxos.fr:504";
+            endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
-          };
+        };
         networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
       };
 
