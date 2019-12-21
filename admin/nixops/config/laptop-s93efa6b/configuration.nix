@@ -45,6 +45,7 @@ rec {
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim
+     pavucontrol
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -73,8 +74,11 @@ rec {
   # services.printing.enable = true;
 
   # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
+  # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
+  hardware.pulseaudio.daemon.config.default-fragments = "5";
+  hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -106,7 +110,7 @@ rec {
         #"proxy-americas.my-it-solutions.net:84"
       ];
       services.cntlm.extraConfig = ''
-    NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+        NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
       '';
 
     }
@@ -121,5 +125,14 @@ rec {
   # should.
   system.stateVersion = "20.03"; # Did you read the comment?
 
+  # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
+  services.udev.extraRules = with pkgs; ''
+    # set scheduler for NVMe
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+    # set scheduler for SSD and eMMC
+    ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+    # set scheduler for rotating disks
+    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
+  '';
 }
 
