@@ -4,7 +4,7 @@ with lib;
 
 let
   random-ipv6-script = pkgs.writeScript "ramdom-ipv6.py" ''
-    #!${pkgs.python}/bin/python
+    #!${pkgs.python3}/bin/python
     # https://blog.fugoes.xyz/2018/02/03/Run-Babeld-over-Wireguard.html
     import random
 
@@ -26,7 +26,7 @@ let
         return mac_to_ipv6(random_mac())
 
     if __name__ == "__main__":
-        print(random_ipv6())
+        print(random_ipv6(), end="")
   '';
   # runCommandNoCC name: env: buildCommand:
   random-ipv6 = name: builtins.readFile (toString (pkgs.runCommandNoCC "ipv6-${name}" {} ''
