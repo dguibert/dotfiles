@@ -10,8 +10,8 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm-intel" "acpi_call" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
   networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
   boot.kernelParams = ["resume=/dev/zd0" ];
   swapDevices = [ { device = "/dev/zd0"; } ];
@@ -44,5 +44,15 @@
     };
 
   nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  services.xserver.libinput.enable = lib.mkDefault true;
+  hardware.trackpoint.enable = lib.mkDefault true;
+  hardware.trackpoint.emulateWheel = lib.mkDefault config.hardware.trackpoint.enable;
+
+  # Disable governor set in hardware-configuration.nix,
+  # required when services.tlp.enable is true:
+  powerManagement.cpuFreqGovernor =
+    lib.mkIf config.services.tlp.enable (lib.mkForce null);
+
+  services.tlp.enable = lib.mkDefault true;
 }
