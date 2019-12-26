@@ -3,11 +3,9 @@
   boot.consoleLogLevel = 6; #KERN_INFO
   environment.systemPackages = [ pkgs.vim ];
   # Select internationalisation properties.
-  i18n = {
-     consoleFont = "Lat2-Terminus16";
-     consoleKeyMap = "fr";
-     defaultLocale = "en_US.UTF-8";
-   };
+  console.font = "Lat2-Terminus16";
+  console.keyMap = "fr";
+  i18n.defaultLocale = "en_US.UTF-8";
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";

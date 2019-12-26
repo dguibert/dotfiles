@@ -60,13 +60,6 @@ rec {
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  i18n = {
-     consoleFont = "Lat2-Terminus16";
-     consoleKeyMap = "fr";
-     defaultLocale = "en_US.UTF-8";
-   };
-
   # Set your time zone.
   time.timeZone = "Europe/Paris";
 
