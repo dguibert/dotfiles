@@ -218,7 +218,7 @@
             publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
             endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
-          vbox-54nvj72 = {
+          vbox-57nvj72 = {
             ipv4Address = "10.147.27.198/32";
             listenPort = 502;
             publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
