@@ -318,6 +318,14 @@
             fi
           '';
         };
+        services.openssh.extraConfig = ''
+          Match Group sftponly
+          ChrootDirectory %h
+          ForceCommand internal-sftp
+          AllowTcpForwarding no
+          X11Forwarding no
+          PasswordAuthentication no
+        '';
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetPort = 443;
