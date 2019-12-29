@@ -1,7 +1,7 @@
 {
   "secrets": "/secrets",
-  "krops": "/home/dguibert/code/krops",
-  "_krops": {
+  "_krops": "/home/dguibert/code/krops",
+  "krops": {
     "owner": "dguibert",
     "repo": "krops",
     "branch": "pu",
@@ -13,24 +13,24 @@
     "owner": "dguibert",
     "repo": "home-manager",
     "branch": "pu",
-    "rev": "0181c4ba20c6534b33dd5b84f3a6b00ed8978403",
-    "sha256": "0px0v37i2rram9z6a5j0ql4ny2adqgrghggrpxhv1gnib7faz4ph"
+    "rev": "216f18a6c76c203c7e52303bd8a0be054293556d",
+    "sha256": "03w0qg6hmq6ij8826x4kig8mw588rj0r4069pfvxvzhmsba6yrkf"
   },
-  "nixpkgs": "/home/dguibert/code/nixpkgs",
-  "_nixpkgs": {
+  "_nixpkgs": "/home/dguibert/code/nixpkgs",
+  "nixpkgs": {
     "owner": "dguibert",
     "repo": "nixpkgs",
     "branch": "pu",
-    "rev": "72f1d1bd512abffdce71e1b82143e6a9a4107e59",
-    "sha256": "0yz9w4nan1z5dm9x366m1p98zl42jynp0pnba44zy4fq2x6gw44z"
+    "rev": "dcf0d9c54d5f086fd47f6eac4ba0472c4dc567b4",
+    "sha256": "0yih8apgvz6svlk4gxr20y5smir8cdna924b9ynlq8xsicjxzy6f"
   },
-  "nur_dguibert": "/home/dguibert/nur-packages",
-  "_nur_dguibert": {
+  "_nur_dguibert": "/home/dguibert/nur-packages",
+  "nur_dguibert": {
     "owner": "dguibert",
     "repo": "nur-packages",
     "branch": "pu",
-    "rev": "7007d09db18620ec6f5cc83a063e0294fc3197e4",
-    "sha256": "0xd37hd1m7myga85z72bprn2dh4sl63c0bidg2ippyr5j2v4mzrz"
+    "rev": "f67c9382ebf4d6d4d05bf0f0cb276eba4ec4ff1c",
+    "sha256": "1mmwz7xanhh5aapdyxifq0ybkzgc0kx7qbh7m13rlvkq7pa1gg52"
   },
   "nixos-generators": "/home/dguibert/code/nixos-generators",
   "nixos-17.09": {
@@ -58,8 +58,8 @@
     "owner": "NixOS",
     "repo": "nixpkgs-channels",
     "branch": "nixos-19.03",
-    "rev": "6d448d7fbd69b0985e83c741d097c0742821a836",
-    "sha256": "0qym74ria7g5ar1v5c9fa4bhp3iil5rj1dxyz07pjcrpx7xqda9q"
+    "rev": "d1dff0bcd9f8cd5cf8fca1ab8f08d55dff5c9c57",
+    "sha256": "1niknqpb6yrlcvv28cylklf7kgkjslx87jqjcnbsnr89bsq618gn"
   },
   "nixops": {
     "owner": "NixOS",
@@ -79,8 +79,8 @@
     "owner": "nix-community",
     "repo": "NUR",
     "branch": "master",
-    "rev": "dac468d0a5ad374219efce8ee75ceeaa45785080",
-    "sha256": "0k290ynqw5q3zv4pylyzzll5ykf1cng53iy7j1cpk2zrw4rhaq46"
+    "rev": "9f4866850306098224356342ec0a798518aa9461",
+    "sha256": "058rl8l77pwq7nqxw9ikmi9ywj3hw88w85j57v6cchknckypxkl7"
   },
   "gitignore": {
     "owner": "hercules-ci",
