@@ -8,6 +8,7 @@ rec {
   imports =
     [ ../../config/common.nix
       ../../config/users/dguibert
+      ../../config/users/fvigilant
       ../../modules/yubikey-gpg.nix
       ../../modules/distributed-build.nix
       ../../modules/nix-conf.nix
