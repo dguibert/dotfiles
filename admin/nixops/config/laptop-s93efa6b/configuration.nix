@@ -140,6 +140,8 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
+  # https://github.com/NixOS/nixpkgs/issues/75878
+  systemd.services.libvirtd.environment.EBTABLES_PATH="${pkgs.ebtables}/bin/ebtables-legacy";
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

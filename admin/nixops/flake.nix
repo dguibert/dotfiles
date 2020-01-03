@@ -41,9 +41,18 @@
       pkgs = forAllSystems (system: import "${nur_dguibert}/pkgs.nix" {
         inherit nixpkgs;
         localSystem = { inherit system; };# FIXME hard coded for now
-        overlays = [ nix.overlay nixops.overlay nur_dguibert.overlay ];
+        overlays = [ nix.overlay nixops.overlay nur_dguibert.overlay self.overlay ];
       });
     in rec {
+    overlay = final: prev: {
+      # Patch libvirt to use ebtables-legacy
+      libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
+        then
+          prev.libvirt.overrideAttrs (oldAttrs: rec {
+            EBTABLES_PATH="${final.ebtables}/bin/ebtables-legacy";
+          })
+        else prev.libvirt;
+    };
 
     ## - packages: A set of derivations used as a default by most nix commands. For example, nix run nixpkgs:hello uses the packages.hello attribute of the nixpkgs flake. It cannot contain any non-derivation attributes. This also means it cannot be a nested set! (The rationale is that supporting nested sets requires Nix to evaluate each attribute in the set, just to discover which packages are provided.)
     #packages.hello = nixpkgs.provides.packages.hello;
@@ -170,6 +179,7 @@
           nix.overlay
           nixops.overlay
           nur_dguibert.overlays.default
+          self.overlay
         ];
         nix.autoOptimiseStore = true;
         nix.package = pkgs.nix;
