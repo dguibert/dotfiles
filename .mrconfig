@@ -583,3 +583,6 @@ checkout = git clone 'https://github.com/NixOS/hydra-provisioner' 'hydra-provisi
 
 [code/nix-on-droid-bootstrap]
 checkout = git clone 'https://github.com/t184256/nix-on-droid-bootstrap' 'nix-on-droid-bootstrap'
+
+[code/nixflk]
+checkout = git clone 'https://github.com/nrdxp/nixflk' 'nixflk'
