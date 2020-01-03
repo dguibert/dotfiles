@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -344,7 +344,11 @@ checkout = git clone 'https://github.com/systemd/casync' 'casync'
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
 update = git remote update
 push = git push -v dguibert +pu
-	      git push -v dguibert
+	git push -v dguibert
+fixups = git_add_remotes "
+	dguibert git@github.com:dguibert/home-manager.git
+	nrdxp https://github.com/nrdxp/home-manager
+	"
 
 [code/charliecloud]
 checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
