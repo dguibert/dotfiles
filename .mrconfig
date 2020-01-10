@@ -590,3 +590,11 @@ checkout = git clone 'https://github.com/t184256/nix-on-droid-bootstrap' 'nix-on
 
 [code/nixflk]
 checkout = git clone 'https://github.com/nrdxp/nixflk' 'nixflk'
+
+[code/nxsession]
+checkout = git clone 'https://github.com/jeff-dagenais/nxsession' 'nxsession'
+fixups = git_add_remotes "
+	dguibert git@github.com:dguibert/nxsession.git
+	origin https://github.com/jeff-dagenais/nxsession
+	"
+
