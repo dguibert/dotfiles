@@ -1,0 +1,20 @@
+{
+    "flakes": {
+        "home-manager": {
+         "url": "github:dguibert/home-manager/pu",
+	 "flake": "false"
+       	},
+    "hydra": { "url": "github:dguibert/hydra/pu" },
+    "nixops": { "url": "github:dguibert/nixops/pu" },
+    "nixpkgs": { "url": "github:dguibert/nixpkgs/pu" },
+    "nix": { "url": "github:dguibert/nix/pu" },
+    "nur_dguibert": { "url": "github:dguibert/nur-packages/dg-remote-urls" },
+    "nur_dguibert_spartan": { "url": "github:dguibert/nur-packages/dg-remote-urls?dir=machines/spartan" },
+    "terranix": { "url": "github:mrVanDalo/terranix" , "flake": "false" },
+    "base16-nix": { "url": "github:atpotts/base16-nix" , "flake": "false" },
+    "NUR": { "url": "github:nix-community/NUR" , "flake": "false" },
+    "gitignore": { "url": "github:hercules-ci/gitignore" , "flake": "false" }
+    },
+    "version": 1
+}
+

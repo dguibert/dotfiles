@@ -4,27 +4,18 @@
 
   description = "Configurations of my systems";
 
-  # git(+http|+https|+ssh|+git|+file|):(//<server>)?<path>(\?<params>)?
-  # git+file:///home/my-user/some-repo/some-repo
-  # ref, rev, dir
   inputs = {
     home-manager         = { uri = "github:dguibert/home-manager/pu"; flake=false; };
-    hydra.uri            = "github:dguibert/hydra/pu";
-    nixops.uri           = "github:dguibert/nixops/pu";
-    nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
-    nix.uri              = "github:dguibert/nix/pu";
-    nur_dguibert.uri     = "github:dguibert/nur-packages/dg-remote-urls";
     terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
-    #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".uri   = "github:nixos/nixpkgs-channels/nixos-19.03";
     base16-nix           = { uri  = "github:atpotts/base16-nix"; flake=false; };
     NUR                  = { uri  = "github:nix-community/NUR"; flake=false; };
     gitignore            = { uri  = "github:hercules-ci/gitignore"; flake=false; };
+    #nur_dguibert_spartan = { uri  = "github:dguibert/nur-packages/dg-remote-urls?dir=machines/spartan"; };
   };
 
   outputs = { self, nixpkgs
             , nur_dguibert
+            , nur_dguibert_spartan
             , base16-nix
             , NUR
             , gitignore
@@ -38,11 +29,21 @@
 
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
 
-      pkgs = forAllSystems (system: import "${nur_dguibert}/pkgs.nix" {
-        inherit nixpkgs;
-        localSystem = { inherit system; };# FIXME hard coded for now
-        overlays = [ nix.overlay nixops.overlay nur_dguibert.overlay self.overlay ];
-      });
+      # Memoize nixpkgs for different platforms for efficiency.
+      nixpkgsFor = forAllSystems (system:
+        import nixpkgs {
+          inherit system;
+          overlays =  [
+            nix.overlay
+            nixops.overlay
+            nur_dguibert.overlay
+            self.overlay
+          ];
+          config.allowUnfree = true;
+        }
+      );
+
+
     in rec {
     overlay = final: prev: {
       # Patch libvirt to use ebtables-legacy
@@ -57,7 +58,11 @@
     ## - packages: A set of derivations used as a default by most nix commands. For example, nix run nixpkgs:hello uses the packages.hello attribute of the nixpkgs flake. It cannot contain any non-derivation attributes. This also means it cannot be a nested set! (The rationale is that supporting nested sets requires Nix to evaluate each attribute in the set, just to discover which packages are provided.)
     #packages.hello = nixpkgs.provides.packages.hello;
     packages = forAllSystems (system: {
-      inherit (pkgs."${system}") hello nix;
+      inherit (nixpkgsFor."${system}") hello;
+
+      nix = nixpkgsFor.${system}.nix;
+      libuv = nixpkgsFor.${system}.libuv;
+      cmake = nixpkgsFor.${system}.cmake;
 
       rpi31_sd = nixosConfigurations.rpi31.config.system.build.sdImage;
     });
@@ -78,19 +83,22 @@
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
     ## - devShell: A derivation that defines the shell environment used by nix dev-shell if no specific attribute is given. If it does not exist, then nix dev-shell will use defaultPackage.
-    devShell.x86_64-linux = with pkgs.x86_64-linux; let
+    devShell.x86_64-linux = with nixpkgsFor.x86_64-linux; let
       my-terraform = terraform.withPlugins (p: with p; [
         libvirt
         p."null"
       ]);
       terranix_ = callPackages terranix {};
-    in mkEnv {
+    in mkEnv rec {
       name = "deploy";
-      buildInputs = [ nix jq
+      buildInputs = [
+        nixpkgsFor.x86_64-linux.nix
+        nixpkgsFor.x86_64-linux.nixops
+
         terranix_
         jq
 
-              #my-terraform
+        #my-terraform
         terraform-landscape
         (writeShellScriptBin "terraform" ''
           set -x
@@ -102,7 +110,6 @@
           ${my-terraform}/bin/terraform "$@"
         '')
 
-        pkgs.x86_64-linux.nixops
       ];
       shellHook = ''
         unset NIX_INDENT_MAKE
@@ -119,20 +126,16 @@
         export PASSWORD_STORE_DIR=$PWD/secrets
         export SHELL=${bashInteractive}/bin/bash
 
-        NIX_PATH=nixpkgs=${nixpkgs}
-        NIX_PATH+=:nur_dguibert=${nur_dguibert}
-        NIX_PATH+=:base16-nix=${base16-nix}
-        NIX_PATH+=:NUR=${NUR}
-        NIX_PATH+=:gitignore=${gitignore}
-        NIX_PATH+=:home-manager=${home-manager}
-        NIX_PATH+=:terranix=${terranix}
-        NIX_PATH+=:hydra=${hydra}
-        NIX_PATH+=:nix=${nix}
-        NIX_PATH+=:nixops=${nixops}
+        export XDG_CACHE_HOME=$HOME/.cache/${name}
+        unset NIX_STORE NIX_DAEMON
+        NIX_PATH=
+        ${lib.concatMapStrings (f: ''
+          NIX_PATH+=:${toString f}=${toString flakes.${f}}
+        '') (builtins.attrNames flakes) }
         export NIX_PATH
 
         NIX_OPTIONS=()
-        NIX_OPTIONS+=("--option plugin-files ${(pkgs.x86_64-linux.nix-plugins.override { nix = pkgs.x86_64-linux.nix; }).overrideAttrs (o: {
+        NIX_OPTIONS+=("--option plugin-files ${(nixpkgsFor.x86_64-linux.nix-plugins.override { nix = nixpkgsFor.x86_64-linux.nix; }).overrideAttrs (o: {
             buildInputs = o.buildInputs ++ [ boehmgc ];
           })}/lib/nix/plugins/libnix-extra-builtins.so")
         NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
