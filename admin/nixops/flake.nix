@@ -6,16 +6,22 @@
 
   inputs = {
     home-manager         = { uri = "github:dguibert/home-manager/pu"; flake=false; };
+    hydra.uri            = "github:dguibert/hydra/pu";
+    nixops.uri           = "github:dguibert/nixops/pu";
+    nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
+    nix.uri              = "github:dguibert/nix/pu";
+    nur_dguibert.uri     = "github:dguibert/nur-packages/dg-remote-urls";
     terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
+    #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
+    #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
+    #"nixos-19.03".uri   = "github:nixos/nixpkgs-channels/nixos-19.03";
     base16-nix           = { uri  = "github:atpotts/base16-nix"; flake=false; };
     NUR                  = { uri  = "github:nix-community/NUR"; flake=false; };
     gitignore            = { uri  = "github:hercules-ci/gitignore"; flake=false; };
-    #nur_dguibert_spartan = { uri  = "github:dguibert/nur-packages/dg-remote-urls?dir=machines/spartan"; };
   };
 
   outputs = { self, nixpkgs
             , nur_dguibert
-            , nur_dguibert_spartan
             , base16-nix
             , NUR
             , gitignore
