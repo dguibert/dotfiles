@@ -59,7 +59,7 @@ rec {
 
   services.openssh.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_3;
+  boot.kernelPackages = pkgs.linuxPackages_5_4;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
