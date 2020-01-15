@@ -157,6 +157,9 @@ rec {
     ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
     # set scheduler for rotating disks
     ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
+
+    # tpm 2 devices need to be world readable
+    SUBSYSTEM=="tpm", ACTION=="add", MODE="0666"
   '';
 
   programs.adb.enable = true;
