@@ -138,7 +138,7 @@ dguibert-%:
 	if [ "$$HOSTNAME" == "$$host" ]; then
 	  $$hm/activate
 	else
-	  $$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix copy --to ssh://$$host $$hm
+	  $$(nix-build ./release.nix --no-out-link $(args) -A nix)/bin/nix copy --to ssh://$$host?compress=true $$hm
 	  ssh $$user@$$host $$hm/activate
 	fi
 shell-genji: HOSTNAME=genji
