@@ -144,7 +144,7 @@ rec {
   systemd.services.libvirtd.environment.EBTABLES_PATH="${pkgs.ebtables}/bin/ebtables-legacy";
   # https://github.com/NixOS/nixpkgs/pull/35214#pullrequestreview-97783209
   security.wrappers.spice-client-glib-usb-acl-helper.source =
-    "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper.real";
+    "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper";
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
