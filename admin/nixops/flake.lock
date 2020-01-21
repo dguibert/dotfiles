@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-5y+k9s7W4gM43ucjjHqPkS7EbuwOvGiXDMDfu1C+G1U=",
+            "narHash": "sha256-V6oYATKRDMA5VNdSmR39L4/CbTPra3BkixTy0xIyGU0=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/37fe3768ecb34336ce0656bab08461e5b8212326"
+            "url": "github:nix-community/NUR/84b5d84fa2b42d37af7934df4e3e9331212f6a24"
         },
         "base16-nix": {
             "inputs": {},
@@ -20,9 +20,9 @@
         },
         "home-manager": {
             "inputs": {},
-            "narHash": "sha256-e/+LlCUzW8h4tLLhdWw+V+Dx0y7Px4BdbWfWa5U003Q=",
+            "narHash": "sha256-YUMkY3JfWwJsj5gRovaylpTiIuTd8jRhRiKwilZ+J8s=",
             "originalUrl": "github:dguibert/home-manager/pu",
-            "url": "github:dguibert/home-manager/cde992c64c78fea6f8d4135cb4632e6c3f153838"
+            "url": "github:dguibert/home-manager/d473231cde91f3746faa9e632cd64177fbd079d9"
         },
         "hydra": {
             "inputs": {
@@ -90,9 +90,9 @@
         },
         "nixpkgs": {
             "inputs": {},
-            "narHash": "sha256-bZD22y0W/N5LC4JV7gbU5GxtFWDr6llENZ9uQLO4Xz8=",
+            "narHash": "sha256-06QVSJvtTSC4BeSFrmW1f0IX9BpMzB7zfPRl/jcnGi8=",
             "originalUrl": "github:dguibert/nixpkgs/pu",
-            "url": "github:dguibert/nixpkgs/7c6096beb632fe0879342f7bedf72fc0f1729a41"
+            "url": "github:dguibert/nixpkgs/ca22f913e5f1cab6adff337d1420a199edb407c0"
         },
         "nur_dguibert": {
             "inputs": {
@@ -111,9 +111,9 @@
                 },
                 "nixpkgs": {
                     "inputs": {},
-                    "narHash": "sha256-bZD22y0W/N5LC4JV7gbU5GxtFWDr6llENZ9uQLO4Xz8=",
+                    "narHash": "sha256-06QVSJvtTSC4BeSFrmW1f0IX9BpMzB7zfPRl/jcnGi8=",
                     "originalUrl": "github:dguibert/nixpkgs/pu",
-                    "url": "github:dguibert/nixpkgs/7c6096beb632fe0879342f7bedf72fc0f1729a41"
+                    "url": "github:dguibert/nixpkgs/ca22f913e5f1cab6adff337d1420a199edb407c0"
                 }
             },
             "narHash": "sha256-+J6/HIBXE+KI6BLd7r8Ezd204+CinAtfcO5a48sACXI=",
