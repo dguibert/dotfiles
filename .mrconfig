@@ -581,6 +581,12 @@ push = git push -v dguibert +pu
 
 [code/nix-ccache]
 checkout = git clone 'https://github.com/edolstra/nix-ccache' 'nix-ccache'
+fixups = git_add_remotes "
+	dguibert git@github.com:dguibert/nix-ccache.git
+	origin https://github.com/edolstra/nix-ccache
+	"
+push = git push -v dguibert +pu
+	      git push -v dguibert
 
 [code/hydra-provisioner]
 checkout = git clone 'https://github.com/NixOS/hydra-provisioner' 'hydra-provisioner'
