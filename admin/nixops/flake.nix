@@ -71,6 +71,7 @@
       cmake = nixpkgsFor.${system}.cmake;
 
       rpi31_sd = nixosConfigurations.rpi31.config.system.build.sdImage;
+      rpi41_sd = nixosConfigurations.rpi41.config.system.build.sdImage;
     });
 
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
@@ -82,6 +83,7 @@
       laptop-s93efa6b = nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
       orsine = nixosConfigurations.orsine.config.system.build.toplevel;
       rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
+      rpi41 = nixosConfigurations.rpi41.config.system.build.toplevel;
       titan = nixosConfigurations.titan.config.system.build.toplevel;
       vbox-57nvj72 = nixosConfigurations.vbox-57nvj72.config.system.build.toplevel;
     };
@@ -163,6 +165,7 @@
       }).nodes;
       in {
         inherit (nodes) titan orsine rpi31
+         rpi41
          vbox-57nvj72
          laptop-s93efa6b;
     };
@@ -255,6 +258,13 @@
             listenPort = 504;
             publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+          };
+          rpi41 = {
+            ipv4Address = "10.147.27.14/32";
+            listenPort = 505;
+            publicKey  = "pyAuYQ5uZvNj9wSAMprAwfzRwV6SlbbNfjQJX18kigg=";
+            endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+            persistentKeepalive = 25;
           };
         };
         networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
@@ -395,6 +405,81 @@
         };
         deployment.keys."wireguard_key" = {
           text = pass_ "rpi31/wireguard_key";
+          destDir = "/secrets";
+          #user = "root";
+          #group = "root";
+        };
+      };
+      rpi41 = { config, lib, pkgs, resources, ... }: {
+        deployment.targetHost = "192.168.1.x";
+        deployment.targetPort = 22322;
+        imports = [
+          (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+          (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+          (import "${nixpkgs}/nixos/modules/profiles/base.nix")
+          (import ./config/rpi41/configuration.nix)
+        ];
+        boot.loader.grub.enable = false;
+        boot.loader.raspberryPi.enable = true;
+        boot.loader.raspberryPi.version = 4;
+        boot.kernelPackages = pkgs.linuxPackages_rpi4;
+
+        boot.consoleLogLevel = lib.mkDefault 7;
+
+	  sdImage = {
+	    firmwareSize = 128;
+	    # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
+	    populateFirmwareCommands =
+	      "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
+	    # As the boot process is done entirely in the firmware partition.
+	    populateRootCommands = "";
+	  };
+
+        #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+        #nixpkgs.localSystem.system = "x86_64-linux";
+        nixpkgs.localSystem.system = "aarch64-linux";
+        nixpkgs.overlays = [
+          nix.overlay
+          nixops.overlay
+          nur_dguibert.overlays.default
+          (final: prev: {
+            # don't build qt5
+            # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+          })
+        ];
+
+        sdImage.compressImage = false;
+        services.nixosManual.showManual = lib.mkForce false;
+        fileSystems."/".options = [ "defaults" "discard" ];
+
+        hardware.opengl = {
+          enable = true;
+          setLdLibraryPath = true;
+          package = pkgs.mesa_drivers;
+        };
+        hardware.deviceTree = {
+          base = pkgs.device-tree_rpi;
+          overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
+        };
+        #services.xserver = {
+        #  enable = true;
+        #  displayManager.slim.enable = true;
+        #  desktopManager.gnome3.enable = true;
+        #  videoDrivers = [ "modesetting" ];
+        #};
+
+        boot.loader.raspberryPi.firmwareConfig = ''
+          gpu_mem=192
+        '';
+        programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
+        #assertions = lib.singleton {
+        #  assertion = pkgs.stdenv.system == "aarch64-linux";
+        #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
+        #    "it cannot be cross compiled";
+        #};
+        deployment.keys."wireguard_key" = {
+          text = pass_ "rpi41/wireguard_key";
           destDir = "/secrets";
           #user = "root";
           #group = "root";
