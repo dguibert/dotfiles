@@ -422,6 +422,8 @@
         boot.loader.grub.enable = false;
         boot.loader.raspberryPi.enable = true;
         boot.loader.raspberryPi.version = 4;
+        boot.loader.raspberryPi.uboot.enable = true;
+        boot.loader.raspberryPi.uboot.configurationLimit = 10;
         boot.kernelPackages = pkgs.linuxPackages_rpi4;
 
         boot.consoleLogLevel = lib.mkDefault 7;
