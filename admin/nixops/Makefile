@@ -114,11 +114,11 @@ dguibert-login-arm: U=bguibertd
 export args=
 
 args_manny+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays).nix-home-nfs-bguibertd ]"
-args_genji+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-genji.nix) ]"
-args_aloy+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-aloy.nix) ]"
-args_spartan+=--arg overlays_ "[ (import $(HOME)/nur-packages/overlays/local-spartan.nix) ]"
-args_inti+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
-args_login-arm+=--arg overlays_  "[ (import $(HOME)/nur-packages/overlays/local-inti.nix) ]" --argstr system "aarch64-linux"
+args_genji+=--arg overlays_ "[ (import $(HOME)/nur-packages/hosts/genji/genji-overlay.nix) ]"
+args_aloy+=--arg overlays_ "[ (import $(HOME)/nur-packages/hosts/aloy/aloy-overlay.nix) ]"
+args_spartan+=--arg overlays_ "[ (import $(HOME)/nur-packages/hosts/spartan/spartan-overlay.nix) ]"
+args_inti+=--arg overlays_  "[ (import $(HOME)/nur-packages/hosts/inti/inti-overlay.nix) ]" --argstr system "aarch64-linux"
+args_login-arm+=--arg overlays_  "[ (import $(HOME)/nur-packages/hosts/inti/inti-overlay.nix) ]" --argstr system "aarch64-linux"
 args+=$(args_$(HOSTNAME))
 args+=$(A_)
 
