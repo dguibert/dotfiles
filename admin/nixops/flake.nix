@@ -422,20 +422,28 @@
         boot.loader.grub.enable = false;
         boot.loader.raspberryPi.enable = true;
         boot.loader.raspberryPi.version = 4;
-        boot.loader.raspberryPi.uboot.enable = true;
-        boot.loader.raspberryPi.uboot.configurationLimit = 10;
+	# error: U-Boot is not yet supported on the raspberry pi 4.
+	#boot.loader.raspberryPi.uboot.enable = true;
+	#boot.loader.raspberryPi.uboot.configurationLimit = 10;
         boot.kernelPackages = pkgs.linuxPackages_rpi4;
 
         boot.consoleLogLevel = lib.mkDefault 7;
 
-	  sdImage = {
-	    firmwareSize = 128;
-	    # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-	    populateFirmwareCommands =
-	      "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-	    # As the boot process is done entirely in the firmware partition.
-	    populateRootCommands = "";
-	  };
+	sdImage = {
+	  firmwareSize = 512;
+	  # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
+	  populateFirmwareCommands =
+	    "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
+	  # As the boot process is done entirely in the firmware partition.
+	  populateRootCommands = "";
+	};
+        fileSystems = {
+          "/boot" = {
+            device = "/dev/disk/by-label/FIRMWARE";
+            fsType = "vfat";
+          };
+        };
+
 
         #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
         #nixpkgs.localSystem.system = "x86_64-linux";
