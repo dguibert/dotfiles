@@ -411,8 +411,8 @@
         };
       };
       rpi41 = { config, lib, pkgs, resources, ... }: {
-        deployment.targetHost = "192.168.1.x";
-        deployment.targetPort = 22322;
+	#deployment.targetHost = "192.168.1.14";
+	deployment.targetPort = 22322;
         imports = [
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
