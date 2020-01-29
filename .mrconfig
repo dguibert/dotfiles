@@ -603,4 +603,5 @@ fixups = git_add_remotes "
 	dguibert git@github.com:dguibert/nxsession.git
 	origin https://github.com/jeff-dagenais/nxsession
 	"
+push = git push -v dguibert
 
