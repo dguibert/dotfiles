@@ -78,12 +78,14 @@ dguibert-vbox-57nvj72: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-laptop-s93efa6b: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-orsine: ATTR=hm_dguibert_x11.x86_64-linux
 dguibert-rpi31: ATTR=hm_dguibert_nox11.aarch64-linux
+dguibert-rpi41: ATTR=hm_dguibert_nox11.aarch64-linux
 
 root-titan: ATTR=hm_root.x86_64-linux
 root-vbox-57nvj72: ATTR=hm_root.x86_64-linux
 root-laptop-s93efa6b: ATTR=hm_root.x86_64-linux
 root-orsine: ATTR=hm_root.x86_64-linux
 root-rpi31: ATTR=hm_root.aarch64-linux
+root-rpi41: ATTR=hm_root.aarch64-linux
 
 dguibert-manny: ATTR=hm_dguibert_manny
 dguibert-manny: U=bguibertd
