@@ -22,7 +22,7 @@
     buildMachines = [
     (lib.mkIf (config.networking.hostName != "rpi31") {
       hostName = "rpi31";
-      maxJobs = 4;
+      maxJobs = 1;
       sshKey = "/etc/nix/id_nixBuild";
       sshUser = "nixBuild";
       system = "aarch64-linux";
@@ -34,7 +34,7 @@
       sshKey = "/etc/nix/id_nixBuild";
       sshUser = "nixBuild";
       system = "aarch64-linux";
-    #  supportedFeatures = [ "big-parallel" ];
+      supportedFeatures = [ "big-parallel" ];
     })
     ];
   };
