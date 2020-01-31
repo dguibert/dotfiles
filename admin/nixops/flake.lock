@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-FZ9UAZS61XgmHbCtwQWRSXdnHFj6VP2kjUp3FYMTSaE=",
+            "narHash": "sha256-BsG4kr5d1I8t7vwKrZqNWoOdh2BE4hp3qpr8wuJilAQ=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/6580a4b615719f2793881909cde943f019674712"
+            "url": "github:nix-community/NUR/35f0689af1853e88ac7d677b3e28104450606d2a"
         },
         "base16-nix": {
             "inputs": {},
@@ -35,9 +35,9 @@
                             "url": "github:edolstra/nixpkgs/dd45a16733f4469a0dded6ad0bf9a662ea39bdea"
                         }
                     },
-                    "narHash": "sha256-5W3QCIWB653BIY2zJTNI2idNik5I6DZ71OjvfjYAf/M=",
+                    "narHash": "sha256-Xx+WyE78jdpEASFlsSUQfEwnDhIl84QSpVA0Tq7YwTM=",
                     "originalUrl": "nix",
-                    "url": "github:NixOS/nix/68e0ca608fa55d209a9d9c3b74a987ab496e0284"
+                    "url": "github:NixOS/nix/ebfbfe95158fd074fa057930e1e0fb858059e358"
                 },
                 "nixpkgs": {
                     "inputs": {},
