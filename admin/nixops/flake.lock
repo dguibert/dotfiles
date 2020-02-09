@@ -2,9 +2,9 @@
     "inputs": {
         "NUR": {
             "inputs": {},
-            "narHash": "sha256-28YWbgnl7zA0gfqmFBTmFHkD4tDkp59ab0OLPAxtPUk=",
+            "narHash": "sha256-aR4epN3XzMTaEWtQoK3a4VJ488r8T89xbyeZR26TA3M=",
             "originalUrl": "github:nix-community/NUR",
-            "url": "github:nix-community/NUR/c8f8da51920515b942a6720b04b1f0d29da41736"
+            "url": "github:nix-community/NUR/8b899516101a1af7657aacf15f52fe0e540e4a31"
         },
         "base16-nix": {
             "inputs": {},
@@ -59,9 +59,9 @@
                     "url": "github:edolstra/nixpkgs/a0c944ab93dc380cc2c5590e00d2c0925ee855e9"
                 }
             },
-            "narHash": "sha256-uDpjHAIVNq4J3WlkoHCyHDTOqxGgcvLL/dJxHx0+6AA=",
+            "narHash": "sha256-d8TntVF8bNaSrxv5ozPpJeQAPOc0/LQjBTTuKJIXt6U=",
             "originalUrl": "github:dguibert/nix/pu",
-            "url": "github:dguibert/nix/2c123fff39655c172bb1c55607a5f0a3ad708ff6"
+            "url": "github:dguibert/nix/1132c8d9ff4032f0a57435ba5f004fb21891d064"
         },
         "nixops": {
             "inputs": {
@@ -105,9 +105,9 @@
                             "url": "github:edolstra/nixpkgs/a0c944ab93dc380cc2c5590e00d2c0925ee855e9"
                         }
                     },
-                    "narHash": "sha256-uDpjHAIVNq4J3WlkoHCyHDTOqxGgcvLL/dJxHx0+6AA=",
+                    "narHash": "sha256-d8TntVF8bNaSrxv5ozPpJeQAPOc0/LQjBTTuKJIXt6U=",
                     "originalUrl": "github:dguibert/nix/pu",
-                    "url": "github:dguibert/nix/2c123fff39655c172bb1c55607a5f0a3ad708ff6"
+                    "url": "github:dguibert/nix/1132c8d9ff4032f0a57435ba5f004fb21891d064"
                 },
                 "nixpkgs": {
                     "inputs": {},
