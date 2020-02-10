@@ -59,11 +59,22 @@
             EBTABLES_PATH="${final.ebtables}/bin/ebtables-legacy";
           })
         else prev.libvirt;
+
+      install-script = drv: with final; writeScript "install-${drv.name}"
+      ''#!/usr/bin/env bash
+        set -x
+
+        nixos-install --system ${drv} $@
+
+	umount -R /mnt
+        zfs set mountpoint=legacy bt580/nixos
+        zfs set mountpoint=legacy rt580/tmp
+      '';
     };
 
     ## - packages: A set of derivations used as a default by most nix commands. For example, nix run nixpkgs:hello uses the packages.hello attribute of the nixpkgs flake. It cannot contain any non-derivation attributes. This also means it cannot be a nested set! (The rationale is that supporting nested sets requires Nix to evaluate each attribute in the set, just to discover which packages are provided.)
     #packages.hello = nixpkgs.provides.packages.hello;
-    packages = forAllSystems (system: {
+    packages = forAllSystems (system: with nixpkgsFor.${system}; {
       inherit (nixpkgsFor."${system}") hello;
 
       nix = nixpkgsFor.${system}.nix;
@@ -91,7 +102,7 @@
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
     ## - devShell: A derivation that defines the shell environment used by nix dev-shell if no specific attribute is given. If it does not exist, then nix dev-shell will use defaultPackage.
-    devShell.x86_64-linux = with nixpkgsFor.x86_64-linux; let
+    devShell = forAllSystems (system: with nixpkgsFor.${system}; let
       my-terraform = terraform.withPlugins (p: with p; [
         libvirt
         p."null"
@@ -149,7 +160,7 @@
         NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
         export NIX_OPTIONS
       '';
-    };
+    });
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosConfigurations = let
@@ -411,8 +422,8 @@
         };
       };
       rpi41 = { config, lib, pkgs, resources, ... }: {
-	#deployment.targetHost = "192.168.1.14";
-	deployment.targetPort = 22322;
+        #deployment.targetHost = "192.168.1.14";
+        deployment.targetPort = 22322;
         imports = [
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
@@ -422,21 +433,21 @@
         boot.loader.grub.enable = false;
         boot.loader.raspberryPi.enable = true;
         boot.loader.raspberryPi.version = 4;
-	# error: U-Boot is not yet supported on the raspberry pi 4.
-	#boot.loader.raspberryPi.uboot.enable = true;
-	#boot.loader.raspberryPi.uboot.configurationLimit = 10;
+        # error: U-Boot is not yet supported on the raspberry pi 4.
+        #boot.loader.raspberryPi.uboot.enable = true;
+        #boot.loader.raspberryPi.uboot.configurationLimit = 10;
         boot.kernelPackages = pkgs.linuxPackages_rpi4;
 
         boot.consoleLogLevel = lib.mkDefault 7;
 
-	sdImage = {
-	  firmwareSize = 512;
-	  # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-	  populateFirmwareCommands =
-	    "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-	  # As the boot process is done entirely in the firmware partition.
-	  populateRootCommands = "";
-	};
+        sdImage = {
+          firmwareSize = 512;
+          # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
+          populateFirmwareCommands =
+            "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
+          # As the boot process is done entirely in the firmware partition.
+          populateRootCommands = "";
+        };
         fileSystems = {
           "/boot" = {
             device = "/dev/disk/by-label/FIRMWARE";
