@@ -12,7 +12,8 @@ rec {
   zramSwap.algorithm = "lzo";
 
   nix.useSandbox = "relaxed";
-  nix.autoOptimiseStore = true;
+  nix.autoOptimiseStore = lib.mkForce false;
+  nix.optimise.automatic=true;
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-references
   '';
