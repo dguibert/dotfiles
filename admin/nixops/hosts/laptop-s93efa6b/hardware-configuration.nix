@@ -13,8 +13,8 @@
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
   networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
-  boot.kernelParams = ["resume=/dev/zd0" "acpi_backlight=vendor" ];
-  swapDevices = [ { device = "/dev/zd0"; } ];
+  boot.kernelParams = [ "acpi_backlight=vendor" ];
+  #swapDevices = [ { device = "/dev/zd0"; } ];
 
   fileSystems."/" =
     { device = "rt580/nixos";
