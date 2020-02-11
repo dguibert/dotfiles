@@ -60,6 +60,11 @@
           })
         else prev.libvirt;
 
+      nixops = prev.nixops.overrideAttrs (o: {
+	doCheck = false;
+	doInstallCheck = false;
+      });
+
       install-script = drv: with final; writeScript "install-${drv.name}"
       ''#!/usr/bin/env bash
         set -x
