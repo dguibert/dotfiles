@@ -8,12 +8,12 @@ with lib;
 rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
-    ../../config/common.nix
+    ../common.nix
     ../../modules/nix-conf.nix
     ../../modules/distributed-build.nix
-    ../../config/users/dguibert
-    ../../config/users/rdolbeau
-    ../../config/users/fvigilant
+    ../../users/dguibert
+    ../../users/rdolbeau
+    ../../users/fvigilant
   ];
 
   #sdImage.bootSize = 512;

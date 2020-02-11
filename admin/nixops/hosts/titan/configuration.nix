@@ -5,10 +5,10 @@
 { config, pkgs, lib, ... }:
 
 rec {
-  imports =
-    [ ../../config/common.nix
-      ../../config/users/dguibert
-      ../../config/users/fvigilant
+  imports = [
+      ../common.nix
+      ../../users/dguibert
+      ../../users/fvigilant
       ../../modules/yubikey-gpg.nix
       ../../modules/distributed-build.nix
       ../../modules/nix-conf.nix

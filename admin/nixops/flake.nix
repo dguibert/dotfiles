@@ -284,14 +284,14 @@
       orsine = { config, pkgs, resources, ... }: {
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
-          (import ./config/orsine/configuration.nix)
+          (import ./hosts/orsine/configuration.nix)
         ];
       };
       titan = { config, lib, pkgs, resources, ... }: {
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           hydra.nixosModules.hydra
-          (import ./config/titan/configuration.nix)
+          (import ./hosts/titan/configuration.nix)
         ];
 
         services.hydra-dev = {
@@ -374,7 +374,7 @@
         imports = [
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-          (import ./config/rpi31/configuration.nix)
+          (import ./hosts/rpi31/configuration.nix)
         ];
         #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
         #nixpkgs.localSystem.system = "x86_64-linux";
@@ -428,7 +428,7 @@
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
           (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
           (import "${nixpkgs}/nixos/modules/profiles/base.nix")
-          (import ./config/rpi41/configuration.nix)
+          (import ./hosts/rpi41/configuration.nix)
         ];
         boot.loader.grub.enable = false;
         boot.loader.raspberryPi.enable = true;
@@ -509,7 +509,7 @@
       laptop-s93efa6b = { config, lib, pkgs, resources, ... }: {
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
-          (import ./config/laptop-s93efa6b/configuration.nix)
+          (import ./hosts/laptop-s93efa6b/configuration.nix)
         ];
         deployment.keys."wireguard_key" = {
           text = pass_ "laptop-s93efa6b/wireguard_key";
@@ -520,7 +520,7 @@
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix")
-          (import ./config/vbox-57nvj72/configuration.nix)
+          (import ./hosts/vbox-57nvj72/configuration.nix)
         ];
         deployment.keys."wireguard_key" = {
           text = pass_ "vbox-57nvj72/wireguard_key";

@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 rec {
   imports = [
-    ../../config/common.nix
-    ../../config/users/dguibert
+    ../common.nix
+    ../../users/dguibert
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
