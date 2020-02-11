@@ -30,14 +30,4 @@ rec {
     "arm.cachix.org-1:fGqEJIhp5zM7hxe/Dzt9l9Ene9SY27PUyx3hT9Vvei0="
     "dguibert.cachix.org-1:vb2EHDaV82f6qqfxmapK3AQOPsVfJFO6/g7pbHSEMjY="
   ];
-
-  # Needed by RPi firmware
-  # TODO restore system/localSystem for rpi31
-  #nixpkgs.overlays = [ (import <config/pkgs-pinned-overlay.nix> { })
-  #  (import <nixpkgs-overlays/qemu-user/qemu-user.nix>)
-  #];
-  #nixpkgs.config = {pkgs}: (import <config/nixpkgs/config.nix> { inherit pkgs; }) // {
-  #  allowUnfree = true;
-  ###  #packageOverrides.linuxPackages = boot.kernelPackages;
-  #};
 }
