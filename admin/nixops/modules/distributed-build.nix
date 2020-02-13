@@ -20,21 +20,22 @@
     # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
     distributedBuilds = true;
     buildMachines = [
-    (lib.mkIf (config.networking.hostName != "rpi31") {
-      hostName = "rpi31";
-      maxJobs = 1;
-      sshKey = "/etc/nix/id_nixBuild";
-      sshUser = "nixBuild";
-      system = "aarch64-linux";
-    #  supportedFeatures = [ "big-parallel" ];
-    })
+    #(lib.mkIf (config.networking.hostName != "rpi31") {
+    #  hostName = "rpi31";
+    #  maxJobs = 1;
+    #  sshKey = "/etc/nix/id_nixBuild";
+    #  sshUser = "nixBuild";
+    #  system = "aarch64-linux";
+    ##  supportedFeatures = [ "big-parallel" ];
+    #})
     (lib.mkIf (config.networking.hostName != "rpi41") {
       hostName = "rpi41";
       maxJobs = 4;
-      sshKey = "/etc/nix/id_nixBuild";
+      #speedFactor = 2;
+      sshKey = "/etc/nix/id_buildfarm";
       sshUser = "nixBuild";
       system = "aarch64-linux";
-      supportedFeatures = [ "big-parallel" ];
+      #supportedFeatures = [ "big-parallel" ];
     })
     ];
   };

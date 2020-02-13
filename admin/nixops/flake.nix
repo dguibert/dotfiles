@@ -284,6 +284,13 @@
           };
         };
         networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
+
+        deployment.keys."id_buildfarm" = {
+          text = pass_ "id_buildfarm";
+          destDir = "/etc/nix";
+          #user = "root";
+          #group = "root";
+        };
       };
 
       orsine = { config, pkgs, resources, ... }: {
