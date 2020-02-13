@@ -101,7 +101,6 @@
       rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
       rpi41 = nixosConfigurations.rpi41.config.system.build.toplevel;
       titan = nixosConfigurations.titan.config.system.build.toplevel;
-      vbox-57nvj72 = nixosConfigurations.vbox-57nvj72.config.system.build.toplevel;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -129,7 +128,6 @@
           #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
           #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
           #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_vbox_57nvj72="`${pass}/bin/pass vbox-57nvj72/wireguard_key`"
           set +x
           ${my-terraform}/bin/terraform "$@"
         '')
@@ -182,7 +180,6 @@
       in {
         inherit (nodes) titan orsine rpi31
          rpi41
-         vbox-57nvj72
          laptop-s93efa6b;
     };
 
@@ -255,13 +252,6 @@
             listenPort = 501;
             publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
             endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
-          };
-          vbox-57nvj72 = {
-            ipv4Address = "10.147.27.198/32";
-            listenPort = 502;
-            publicKey  = "rbYanMKQBY/dteQYQsg807neESjgMP/oo+dkDsC5PWU=";
-            #endpoint   = "orsin.freeboxos.fr:501";
-            #persistentKeepalive = 25;
           };
           titan = {
             ipv4Address = "10.147.27.24/32";
@@ -526,19 +516,6 @@
         deployment.keys."wireguard_key" = {
           text = pass_ "laptop-s93efa6b/wireguard_key";
           destDir = "/secrets";
-        };
-      };
-      vbox-57nvj72 = { config, lib, pkgs, resources, ... }: {
-        nixpkgs.localSystem.system = "x86_64-linux";
-        imports = [
-          (import "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix")
-          (import ./hosts/vbox-57nvj72/configuration.nix)
-        ];
-        deployment.keys."wireguard_key" = {
-          text = pass_ "vbox-57nvj72/wireguard_key";
-          destDir = "/secrets";
-          #user = "root";
-          #group = "root";
         };
       };
     };
