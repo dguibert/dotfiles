@@ -50,12 +50,12 @@ let
   };
 
   mkHome = system: home_config: confAttr: overlays: (import <home-manager/home-manager/home-manager.nix> {
+      nixpkgs = <nixpkgs>;
       pkgs = import <nixpkgs> {
         overlays = [ ];
 	config = { };
       };
-      confPath = (import home_config { inherit system overlays; }).${confAttr};
-      confAttr = "";
+      configuration = (import home_config { inherit system overlays; }).${confAttr};
       check = true;
       newsReadIdsFile = null;
       }).activationPackage;
@@ -94,46 +94,44 @@ let
   jobs = {
     nix = pkgs.nix;
 
-    vbox-57nvj72  = (mkHost "vbox-57nvj72"  "x86_64-linux" ./config/vbox-57nvj72/configuration.nix).system;
-
-    titan         = (mkHost "titan"  "x86_64-linux" ./config/titan/configuration.nix).system;
-    orsine        = (mkHost "orsine" "x86_64-linux" ./config/orsine/configuration.nix).system;
-    rpi31         = (mkHost "rpi31"  "aarch64-linux" ./config/rpi31/configuration.nix).system;
-    rpi31_cross   = (mkHost "rpi31"  builtins.currentSystem (./config/rpi31_cross/configuration.nix)).system;
-    rpi31_sd      = (mkHost "rpi31"  "aarch64-linux" ./config/rpi31/configuration.nix).config.system.build.sdImage;
+    titan         = (mkHost "titan"  "x86_64-linux" ./hosts/titan/configuration.nix).system;
+    orsine        = (mkHost "orsine" "x86_64-linux" ./hosts/orsine/configuration.nix).system;
+    rpi31         = (mkHost "rpi31"  "aarch64-linux" ./hosts/rpi31/configuration.nix).system;
+    rpi31_cross   = (mkHost "rpi31"  builtins.currentSystem (./hosts/rpi31_cross/configuration.nix)).system;
+    rpi31_sd      = (mkHost "rpi31"  "aarch64-linux" ./hosts/rpi31/configuration.nix).config.system.build.sdImage;
 
     iso = (mkIso "iso" "x86_64-linux" {}).config.system.build.isoImage;
 
     #dt2-64g_iso = (import "${nixos-generators}/nixos-generate.nix" { inherit nixpkgs;
-    #  configuration = ./config/dt2-64g/configuration.nix;
+    #  configuration = ./hosts/dt2-64g/configuration.nix;
     #  format-config = "${nixos-generators}/formats/iso.nix";
     #}).config.system.build.isoImage;
 
-    #dt2-64g_sd = (mkHost "dt2-64g" "x86_64-linux" ./config/dt2-64g/configuration.nix).config.system.build.sdImage;
+    #dt2-64g_sd = (mkHost "dt2-64g" "x86_64-linux" ./hosts/dt2-64g/configuration.nix).config.system.build.sdImage;
 
     #netboot = makeNetboot "x86_64-linux" ./netboot.nix;
     #netboot_iso = (mkIso "iso" "x86_64-linux" ./netboot.nix).config.system.build.isoImage;
 
-    hm_root   = genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system ./config/users/root/home.nix "home" []);
-    hm_dguibert_nox11 = genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system ./config/users/dguibert/home.nix "withoutX11" []);
-    hm_dguibert_x11   = genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system ./config/users/dguibert/home.nix "withX11" []);
+    hm_root   = genAttrs ["x86_64-linux" "aarch64-linux" ] (system: mkHome system ./users/root/home.nix "home" []);
+    hm_dguibert_nox11 = genAttrs ["x86_64-linux" "aarch64-linux"     ] (system: mkHome system ./users/dguibert/home.nix "withoutX11" [ ]);
+    hm_dguibert_x11   = genAttrs ["x86_64-linux" /*"aarch64-linux"*/ ] (system: mkHome system ./users/dguibert/home.nix "withX11" [ ]);
 
-    hm_dguibert_aloy = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "cluster" [
+    hm_dguibert_aloy = mkHome "x86_64-linux" ./users/dguibert/home.nix "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-aloy.nix>)
     ];
-    hm_dguibert_spartan = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "cluster" [
+    hm_dguibert_spartan = mkHome "x86_64-linux" ./users/dguibert/home.nix "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-spartan.nix>)
     ];
-    hm_dguibert_genji = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "cluster" [
+    hm_dguibert_genji = mkHome "x86_64-linux" ./users/dguibert/home.nix "cluster" [
       (import <nur_dguibert/overlays>).nix-home-nfs-robin-ib-bguibertd
       (import <nur_dguibert/overlays/local-genji.nix>)
     ];
-    hm_dguibert_manny = mkHome "x86_64-linux" ./config/users/dguibert/home.nix "manny" [
+    hm_dguibert_manny = mkHome "x86_64-linux" ./users/dguibert/home.nix "manny" [
       (import <nur_dguibert/overlays>).nix-home-nfs-bguibertd
     ];
-    hm_dguibert_inti = mkHome "aarch64-linux" ./config/users/dguibert/home.nix "inti" [
+    hm_dguibert_inti = mkHome "aarch64-linux" ./users/dguibert/home.nix "inti" [
       (import <nur_dguibert/overlays>).nix-ccc-guibertd
       (import <nur_dguibert/overlays/local-inti.nix>)
     ];

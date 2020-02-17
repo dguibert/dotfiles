@@ -5,7 +5,7 @@
   description = "Configurations of my systems";
 
   inputs = {
-    home-manager         = { uri = "github:dguibert/home-manager/pu"; flake=false; };
+    home-manager. uri    = "github:dguibert/home-manager/pu";
     hydra.uri            = "github:dguibert/hydra/pu";
     nixops.uri           = "github:dguibert/nixops/pu";
     nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
@@ -101,6 +101,10 @@
       rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
       rpi41 = nixosConfigurations.rpi41.config.system.build.toplevel;
       titan = nixosConfigurations.titan.config.system.build.toplevel;
+
+      hm_dguibert_nox11 = homeConfigurations.dguibert.no-x11.activationPackage;
+      hm_dguibert_x11 = homeConfigurations.dguibert.x11.activationPackage;
+      hm_root = homeConfigurations.root.activationPackage;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -519,5 +523,20 @@
         };
       };
     };
+    homeConfigurations.root = home-manager.lib.mkHome "x86_64-linux" (args: {
+      imports = [ (import "${base16-nix}/base16.nix")
+                  (import ./users/root/home.nix { system = "x86_64-linux"; }).home ];
+      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
+    });
+    homeConfigurations.dguibert.no-x11 = home-manager.lib.mkHome "x86_64-linux" (args: {
+      imports = [ (import "${base16-nix}/base16.nix")
+                  (import ./users/dguibert/home.nix { system = "x86_64-linux"; }).withoutX11 ];
+      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
+    });
+    homeConfigurations.dguibert.x11 = home-manager.lib.mkHome "x86_64-linux" (args: {
+      imports = [ (import "${base16-nix}/base16.nix")
+                  (import ./users/dguibert/home.nix { system = "x86_64-linux"; }).withX11 ];
+      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
+    });
   };
 }

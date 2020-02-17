@@ -9,14 +9,7 @@ let
       home.username = lib.mkForce "root";
       home.homeDirectory = lib.mkForce "/root";
 
-      nixpkgs.system = system;
-      nixpkgs.pkgs = import <nixpkgs> {
-        config = import <nur_dguibert/config.nix>;
-        inherit system;
-      };
-      nixpkgs.overlays = [
-        ( import <nur_dguibert/overlays>).default
-      ] ++ overlays;
+      nixpkgs.overlays = overlays;
       programs.bash.shellAliases.ls="ls --color";
 
       programs.bash.initExtra = ''
