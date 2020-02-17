@@ -15,7 +15,7 @@ rec {
   nix.autoOptimiseStore = lib.mkForce false;
   nix.optimise.automatic=true;
   nix.extraOptions = ''
-    experimental-features = nix-command flakes ca-references
+    experimental-features = nix-command flakes ca-references recursive-nix
   '';
 #     plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
 #   '';
