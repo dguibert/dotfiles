@@ -88,6 +88,10 @@
 
       rpi31_sd = nixosConfigurations.rpi31.config.system.build.sdImage;
       rpi41_sd = nixosConfigurations.rpi41.config.system.build.sdImage;
+
+      rpi41_cross_sd = nixosConfigurations.rpi41_cross.config.system.build.sdImage;
+
+      install-laptop = install-script nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
     });
 
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
@@ -121,6 +125,7 @@
       buildInputs = [
         nixpkgsFor.x86_64-linux.nix
         nixpkgsFor.x86_64-linux.nixops
+	nix-diff
 
         terranix_
         jq
@@ -184,6 +189,7 @@
       in {
         inherit (nodes) titan orsine rpi31
          rpi41
+         rpi41_cross
          laptop-s93efa6b;
     };
 
@@ -196,7 +202,7 @@
                      then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
                      else builtins.trace "builtins.exec undefined" "undefined"
             ;
-    in {
+    in rec {
       inherit nixpkgs;
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
@@ -426,6 +432,14 @@
           #user = "root";
           #group = "root";
         };
+      };
+      rpi41_cross = { config, lib, pkgs, resources, ...}: {
+        imports = [ rpi41 ];
+	nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+        nixpkgs.localSystem.system = builtins.currentSystem or "x86_64-linux";
+	networking.hostName = "rpi41";
+        # error: Package ‘raspberrypi-firmware-1.20190925’ in /nix/store/v6yxfmgriax99l3hq0lmmqfg0fvj5874-source/pkgs/os-specific/linux/firmware/raspberrypi/default.nix:20 is not supported on ‘x86_64-linux’, refusing to evaluate.
+	nixpkgs.config.allowUnsupportedSystem = true;
       };
       rpi41 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetHost = "192.168.1.14";
