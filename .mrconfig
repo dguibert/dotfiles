@@ -354,7 +354,7 @@ fixups = git_add_remotes "
 checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
 
 [code/WireGuard]
-checkout = git clone 'https://git.zx2c4.com/WireGuard' 'WireGuard'
+deleted = true
 
 [nixpkgs-overlays]
 checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
@@ -608,3 +608,12 @@ push = git push -v dguibert
 
 [code/bluebanquise]
 checkout = git clone 'https://github.com/oxedions/bluebanquise' 'bluebanquise'
+
+[code/nix-batch-submit]
+checkout = git clone 'https://gitlab.com/veprbl/nix-batch-submit' 'nix-batch-submit'
+
+[code/wireguard-linux]
+checkout = git clone 'https://git.zx2c4.com/wireguard-linux/' 'wireguard-linux'
+
+[code/setup.nix]
+checkout = git clone 'https://github.com/nix-community/setup.nix' 'setup.nix'
