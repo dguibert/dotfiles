@@ -10,6 +10,7 @@
     nixops.uri           = "github:dguibert/nixops/pu";
     nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
     nix.uri              = "github:dguibert/nix/pu";
+    hydra.inputs.nix.follows = "nix";
     nur_dguibert.uri     = "github:dguibert/nur-packages/dg-remote-urls";
     terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
     #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
