@@ -62,8 +62,8 @@
         else prev.libvirt;
 
       nixops = prev.nixops.overrideAttrs (o: {
-	doCheck = false;
-	doInstallCheck = false;
+        doCheck = false;
+        doInstallCheck = false;
       });
 
       install-script = drv: with final; writeScript "install-${drv.name}"
@@ -72,7 +72,7 @@
 
         nixos-install --system ${drv} $@
 
-	umount -R /mnt
+        umount -R /mnt
         zfs set mountpoint=legacy bt580/nixos
         zfs set mountpoint=legacy rt580/tmp
       '';
@@ -126,7 +126,7 @@
       buildInputs = [
         nixpkgsFor.x86_64-linux.nix
         nixpkgsFor.x86_64-linux.nixops
-	nix-diff
+        nix-diff
 
         terranix_
         jq
@@ -436,11 +436,11 @@
       };
       rpi41_cross = { config, lib, pkgs, resources, ...}: {
         imports = [ rpi41 ];
-	nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+        nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
         nixpkgs.localSystem.system = builtins.currentSystem or "x86_64-linux";
-	networking.hostName = "rpi41";
+        networking.hostName = "rpi41";
         # error: Package ‘raspberrypi-firmware-1.20190925’ in /nix/store/v6yxfmgriax99l3hq0lmmqfg0fvj5874-source/pkgs/os-specific/linux/firmware/raspberrypi/default.nix:20 is not supported on ‘x86_64-linux’, refusing to evaluate.
-	nixpkgs.config.allowUnsupportedSystem = true;
+        nixpkgs.config.allowUnsupportedSystem = true;
       };
       rpi41 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetHost = "192.168.1.14";
