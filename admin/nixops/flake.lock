@@ -2,14 +2,14 @@
   "inputs": {
     "NUR": {
       "info": {
-        "lastModified": 1582365449,
-        "narHash": "sha256-JBxHpmW26h0+2RN0zG6cwYQTV3yv+8tLU75wPrgjMK8="
+        "lastModified": 1582454688,
+        "narHash": "sha256-+C/XAfG/cp1N9ygxrlshC6ZodeQFivkyMwF4SG0LELs="
       },
       "inputs": {},
       "locked": {
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8c53cd895ca13c0bc708c0fc30d7f5cc1670e80e",
+        "rev": "8278c51de5ce5b835f23c332ad55bf751837b2f9",
         "type": "github"
       },
       "original": {
@@ -246,14 +246,14 @@
         },
         "nixpkgs": {
           "info": {
-            "lastModified": 1581348815,
-            "narHash": "sha256-ZYGphR59gsdFhtZYDoeuCtULm8ym/qJSHIslih9b1s8="
+            "lastModified": 1582398521,
+            "narHash": "sha256-IDCGqxxpb3g1HSoAlX4g+ZTrVNje6J2rR7IFU/RqaWI="
           },
           "inputs": {},
           "locked": {
             "owner": "edolstra",
             "repo": "nixpkgs",
-            "rev": "d959778e0934c4c93896d509a65de798909c7cdd",
+            "rev": "581caef4f5d58573c96ab6e9dbf1160209372029",
             "type": "github"
           },
           "original": {
@@ -278,14 +278,14 @@
     },
     "nixpkgs": {
       "info": {
-        "lastModified": 1582272126,
-        "narHash": "sha256-cjDAfcmf0aFYMcJ0W4MVzebJ519p0qUaex+452mDR6c="
+        "lastModified": 1582459581,
+        "narHash": "sha256-tCC0VcCQlcdZ5rtdzpknA0ZSDb/7m5xLie71H5DZmts="
       },
       "inputs": {},
       "locked": {
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "c3ec5da89b61aa85ec969f93c03098fe38ccf427",
+        "rev": "6678452de7ecdfbf49ec1d05668fff7ac708ad4f",
         "type": "github"
       },
       "original": {
@@ -340,14 +340,14 @@
         },
         "nixpkgs": {
           "info": {
-            "lastModified": 1582272126,
-            "narHash": "sha256-cjDAfcmf0aFYMcJ0W4MVzebJ519p0qUaex+452mDR6c="
+            "lastModified": 1582459581,
+            "narHash": "sha256-tCC0VcCQlcdZ5rtdzpknA0ZSDb/7m5xLie71H5DZmts="
           },
           "inputs": {},
           "locked": {
             "owner": "dguibert",
             "repo": "nixpkgs",
-            "rev": "c3ec5da89b61aa85ec969f93c03098fe38ccf427",
+            "rev": "6678452de7ecdfbf49ec1d05668fff7ac708ad4f",
             "type": "github"
           },
           "original": {
