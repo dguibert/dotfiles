@@ -34,8 +34,8 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = ["resume=/dev/zvol/icybox1/swap" "console=tty0" "console=ttyS2,115200n8" ];
-  swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
+  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8" ];
+  #swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
   nix.buildCores = lib.mkDefault 16;
