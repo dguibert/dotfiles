@@ -151,6 +151,10 @@ rec {
 
   # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
   services.udev.extraRules = with pkgs; ''
+    # set scheduler for ZFS member
+    # udevadm info --query=all --name=/dev/sda
+    ACTION=="add[change", KERNEL=="sd[a-z]", ATTR{ID_FS_TYPE}=="zfs_member", ATTR{queue/scheduler}="none"
+
     # set scheduler for NVMe
     ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
     # set scheduler for SSD and eMMC
