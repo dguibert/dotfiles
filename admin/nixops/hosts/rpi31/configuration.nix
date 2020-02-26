@@ -106,4 +106,12 @@ rec {
     #port=443;
     passwordFile = "/secrets/shadowsocks";
   };
+
+  # https://nixos.org/nixos/manual/index.html#module-services-weechat
+  services.weechat.enable = true;
+  # screen -x weechat/weechat-screen
+  programs.screen.screenrc = ''
+    multiuser on
+    acladd normal_user
+  '';
 }
