@@ -107,9 +107,9 @@
       rpi41 = nixosConfigurations.rpi41.config.system.build.toplevel;
       titan = nixosConfigurations.titan.config.system.build.toplevel;
 
-      hm_dguibert_nox11 = homeConfigurations.dguibert.no-x11.activationPackage;
-      hm_dguibert_x11 = homeConfigurations.dguibert.x11.activationPackage;
-      hm_root = homeConfigurations.root.activationPackage;
+      hm_dguibert_nox11 = homeConfigurations.dguibert.no-x11.x86_64-linux.activationPackage;
+      hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      hm_root = homeConfigurations.root.x86_64-linux.activationPackage;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -538,20 +538,20 @@
         };
       };
     };
-    homeConfigurations.root = home-manager.lib.mkHome "x86_64-linux" (args: {
+    homeConfigurations.root = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/root/home.nix { system = "x86_64-linux"; }).home ];
-      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
-    });
-    homeConfigurations.dguibert.no-x11 = home-manager.lib.mkHome "x86_64-linux" (args: {
+                  (import ./users/root/home.nix { system = system; }).home ];
+      nixpkgs.pkgs = nixpkgsFor.${system};
+    }));
+    homeConfigurations.dguibert.no-x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = "x86_64-linux"; }).withoutX11 ];
-      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
-    });
-    homeConfigurations.dguibert.x11 = home-manager.lib.mkHome "x86_64-linux" (args: {
+                  (import ./users/dguibert/home.nix { system = system; }).withoutX11 ];
+      nixpkgs.pkgs = nixpkgsFor.${system};
+    }));
+    homeConfigurations.dguibert.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = "x86_64-linux"; }).withX11 ];
-      nixpkgs.pkgs = nixpkgsFor.x86_64-linux;
-    });
+                  (import ./users/dguibert/home.nix { system = system; }).withX11 ];
+      nixpkgs.pkgs = nixpkgsFor.${system};
+    }));
   };
 }
