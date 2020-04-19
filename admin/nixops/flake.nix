@@ -123,6 +123,8 @@
       hm_dguibert_nox11 = homeConfigurations.dguibert.no-x11.x86_64-linux.activationPackage;
       hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
       hm_root = homeConfigurations.root.x86_64-linux.activationPackage;
+
+      hm_dguibert_spartan = homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -574,6 +576,11 @@
       imports = [ (import "${base16-nix}/base16.nix")
                   (import ./users/dguibert/home.nix { system = system; }).withX11 ];
       nixpkgs.pkgs = nixpkgsFor.${system};
+    }));
+    homeConfigurations.dguibert_spartan.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
+      imports = [ (import "${base16-nix}/base16.nix")
+                  (import ./users/dguibert/home.nix { system = system; }).spartan ];
+      nixpkgs.pkgs = nixpkgsFor.${system}.spartan.pkgs;
     }));
   };
 }
