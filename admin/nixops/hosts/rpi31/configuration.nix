@@ -112,6 +112,6 @@ rec {
   # screen -x weechat/weechat-screen
   programs.screen.screenrc = ''
     multiuser on
-    acladd normal_user
+    acladd dguibert
   '';
 }
