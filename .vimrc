@@ -5,6 +5,8 @@ filetype off                  " required
 
 syntax on
 set hidden
+set hlsearch
+set nospell
 
 "" https://github.com/chriskempson/base16-vim
 let base16colorspace=256  " Access colors present in 256 colorspace
@@ -54,6 +56,7 @@ Plugin 'edkolev/tmuxline.vim'
 " Plugin 'guyzmo/notmuch-abook' " requires to be patched for nix
 Plugin 'jamessan/vim-gnupg'
 Plugin 'cmhamill/vim-jrnl'
+Plugin 'vim-scripts/AnsiEsc.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " vim +PluginInstall! +PluginClean!
@@ -92,7 +95,7 @@ set wildmenu
 " Tweaks for browsing
 let g:netrw_banner=0        " disable annoying banner
 let g:netrw_browse_split=4  " open in prior window
-let g:netrw_altv=1          " open splits to the right
+"let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
 let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'

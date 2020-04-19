@@ -444,7 +444,12 @@ checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
 fixups = git_add_remotes "
 	          origin https://github.com/samueldr/mobile-nixos
 	          nixos https://github.com/nixos/mobile-nixos
+	          dguibert https://github.com/dguibert/mobile-nixos
 	        "
+update = git remote update
+push = git push -v dguibert +pu
+	      git push -v dguibert
+
 
 [code/NUR]
 checkout = git clone 'https://github.com/nix-community/NUR' 'NUR'
@@ -617,3 +622,6 @@ checkout = git clone 'https://git.zx2c4.com/wireguard-linux/' 'wireguard-linux'
 
 [code/setup.nix]
 checkout = git clone 'https://github.com/nix-community/setup.nix' 'setup.nix'
+
+[code/bup]
+checkout = git clone 'https://github.com/bup/bup' 'bup'
