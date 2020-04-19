@@ -23,7 +23,7 @@
   # Prevent networkd from managing unconfigured links.
   #systemd.network.networks."99-main".enable = false;
   #networking.resolvconf.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
-  services.nscd.enable = false; # no real gain (?) on workstations
+  #services.nscd.enable = false; # no real gain (?) on workstations
   # unreachable DNS entries from home
   networking.hosts = {
     "209.51.188.200" = [ "ftpmirror.gnu.org" ];

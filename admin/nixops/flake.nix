@@ -176,6 +176,7 @@
     });
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
+    nixosModules.mopidy-server = import ./roles/mopidy.nix;
     nixosConfigurations = let
       nodes = (import ./eval-machine-info.nix {
         system = "x86_64-linux";
@@ -305,7 +306,15 @@
         imports = [
           hydra.nixosModules.hydra
           (import ./hosts/titan/configuration.nix)
+	  self.nixosModules.mopidy-server
         ];
+	systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
+
+	roles.mopidy-server.enable = true;
+	roles.mopidy-server.listenAddress = "192.168.1.24";
+	roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music";
+	roles.mopidy-server.configuration.iris.country = "FR";
+	roles.mopidy-server.configuration.iris.locale = "FR";
 
         services.hydra-dev = {
           enable = true;
