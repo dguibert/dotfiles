@@ -71,7 +71,7 @@ rec {
   networking.dhcpcd.enable = false;
   systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
     "" # clear old command
-    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore eno1 --ignore eno2"
+    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore eno1 --ignore eno2 --ignore enp0s29u1u1u3i5"
   ];
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
