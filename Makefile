@@ -112,6 +112,30 @@ new_bluray:
 	#read "are you sure?"
 	echo mkfs.udf --utf8 --udfrev=2.01 --label bluray_$(BLURAY_ID) --vsid=$(BLURAY_UUID) --lvid=bluray_$(BLURAY_ID) --vid=bluray_$(BLURAY_ID) --fsid=bluray_$(BLURAY_ID) --fullvsid=bluray_$(BLURAY_ID) /dev/sdb
 
+.PHONY: backup-files.lst
+backup-files.lst:
+	set -x
+	echo > backup-files.lst
+	rule=()
+	rule+=(--and --not --in bd_17)
+	rule+=(--and --not --in c5dcd424-09d3-44b1-aaa0-17eb0ad827f6) # bd_18
+	rule+=(--and --not --in 2c1c66ff-7d5f-4787-8799-3503240d75f5) # bd_19
+	rule+=(--and --not --in d5066f45-7514-484a-94a0-a46d753d4f09) # bd_20
+	rule+=(--and --not --in cd6c7c3e-d994-459a-a6e9-198a9737f597) # bd_21
+	rule+=(--and --not --in 44995e74-effb-4a78-9278-d717ca213fb7) # bd_22
+	#echo "$$(( 22673114*1024 ))        /media/bd_18" >> backup-files.lst
+	echo "$$(( 13354016*1024 ))        /media/bd_22" >> backup-files.lst
+	for repo in archives Documents Music work Videos; do
+	(cd $$repo; git annex find --format '$${bytesize}  '$$repo' $${file}\n' --include '*' $${rule[@]}) >> $@
+	done
+	cat backup-files.lst backup-files.lst.size_unknown | grep  "^unknown" | sponge backup-files.lst.size_unknown || true
+	grep  -v "^unknown" backup-files.lst | sponge backup-files.lst || true
+	grep  -v " adb-oneplusone/" backup-files.lst | sponge backup-files.lst || true
+	grep  -v " removable-greenkey16/" backup-files.lst | sponge backup-files.lst || true
+	bd_size=$$(( (12219392*2-128*1024)*1024 ))
+	bd_size=$$(echo "scale=0; $$bd_size*94/100" | bc -l)
+	mkdir -p backups/
+	fpart -i backup-files.lst -a -s $$bd_size -o backups/bluray |& tee backups/bluray-parts.log
 
 # 	--lvid=            Logical Volume Identifier (default: LinuxUDF)
 #	--vid=             Volume Identifier (default: LinuxUDF)
