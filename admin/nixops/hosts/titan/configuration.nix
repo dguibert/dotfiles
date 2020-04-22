@@ -134,6 +134,8 @@ rec {
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
+  programs.singularity.enable = true;
+
   networking.firewall.checkReversePath = false;
   systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
