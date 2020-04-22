@@ -33,7 +33,7 @@
 
   outputs = { self, nixpkgs
             , nur_dguibert
-	    #, nur_dguibert_envs
+            #, nur_dguibert_envs
             , base16-nix
             , NUR
             , gitignore
@@ -63,7 +63,7 @@
 
 
     in rec {
-    overlay = final: prev: {
+    overlay = final: prev: with final; {
       # Patch libvirt to use ebtables-legacy
       libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
         then
@@ -87,6 +87,31 @@
         zfs set mountpoint=legacy bt580/nixos
         zfs set mountpoint=legacy rt580/tmp
       '';
+
+      deploy = remote: mode: drv: let
+          activateCommand = {
+            system = ''
+              profile=/nix/var/nix/profiles/system
+              onRemote sudo -E nix-env -p $profile --set ${drv}
+              onRemote sudo -E ${drv}/bin/switch-to-configuration switch
+            '';
+            home-manager = ''
+              onRemote ${drv}/activate
+            '';
+          }.${mode} or (throw "Unknown deploy mode (${mode})");
+        in writeScript "deploy-host-${builtins.replaceStrings ["@"] ["-"] remote}" ''
+          #!/usr/bin/env bash
+          set -xeuf -o pipefail
+
+          ${lib.optionalString (remote != "") "nix copy --to ssh://${remote}?compress=true ${drv}"}
+
+          onRemote() {
+            ${lib.optionalString (remote != "") "ssh ${remote}"} $@
+          }
+
+          ${activateCommand}
+
+        '';
     };
 
     ## - packages: A set of derivations used as a default by most nix commands. For example, nix run nixpkgs:hello uses the packages.hello attribute of the nixpkgs flake. It cannot contain any non-derivation attributes. This also means it cannot be a nested set! (The rationale is that supporting nested sets requires Nix to evaluate each attribute in the set, just to discover which packages are provided.)
@@ -104,6 +129,7 @@
       rpi41_cross_sd = nixosConfigurations.rpi41_cross.config.system.build.sdImage;
 
       install-laptop = install-script nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
+
     });
 
     ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
@@ -112,17 +138,25 @@
     checks.x86_64-linux.hello = packages.x86_64-linux.hello;
 
     hydraJobs = {
-      laptop-s93efa6b = nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
-      orsine = nixosConfigurations.orsine.config.system.build.toplevel;
-      rpi31 = nixosConfigurations.rpi31.config.system.build.toplevel;
-      rpi41 = nixosConfigurations.rpi41.config.system.build.toplevel;
-      titan = nixosConfigurations.titan.config.system.build.toplevel;
+      deploy-rpi41-system   = nixpkgsFor.aarch64-linux.deploy "root@rpi41" "system" nixosConfigurations.rpi41.config.system.build.toplevel;
 
-      hm_dguibert_nox11 = homeConfigurations.dguibert.no-x11.x86_64-linux.activationPackage;
-      hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
-      hm_root = homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-titan-system   = nixpkgsFor.x86_64-linux.deploy "root@titan"     "system"       nixosConfigurations.titan.config.system.build.toplevel;
+      deploy-t580-system    = nixpkgsFor.x86_64-linux.deploy "root@laptop-s93efa6b" "system" nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
+      deploy-orsine-system  = nixpkgsFor.x86_64-linux.deploy "root@orsine"    "system"       nixosConfigurations.orsine.config.system.build.toplevel;
 
-      hm_dguibert_spartan = homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
+      deploy-titan-dguibert = nixpkgsFor.x86_64-linux.deploy "dguibert@titan"  "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      deploy-t580-dguibert  = nixpkgsFor.x86_64-linux.deploy "dguibert@laptop-s93efa6b" "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      deploy-orsine-dguibert= nixpkgsFor.x86_64-linux.deploy "dguibert@orsine" "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+
+      deploy-rpi31-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
+      deploy-rpi41-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
+
+      deploy-titan-root  = nixpkgsFor.x86_64-linux.deploy "root@titan" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-t580-root   = nixpkgsFor.x86_64-linux.deploy "root@laptop-s93efa6b" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-orsine-root = nixpkgsFor.x86_64-linux.deploy "root@orsine" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
+
+      #hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      #hm_dguibert_spartan = homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -139,7 +173,7 @@
       buildInputs = [
         nixpkgsFor.x86_64-linux.nix
         nixpkgsFor.x86_64-linux.nixops
-	#nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
+        #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
         terranix_
         jq
@@ -202,7 +236,8 @@
         inherit nixpkgs nixops;
       }).nodes;
       in {
-        inherit (nodes) titan orsine rpi31
+      inherit (nodes) titan orsine
+         rpi31
          rpi41
          rpi41_cross
          laptop-s93efa6b;
@@ -319,15 +354,15 @@
         imports = [
           hydra.nixosModules.hydra
           (import ./hosts/titan/configuration.nix)
-	  self.nixosModules.mopidy-server
+          self.nixosModules.mopidy-server
         ];
-	systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
+        systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-	roles.mopidy-server.enable = true;
-	roles.mopidy-server.listenAddress = "192.168.1.24";
-	roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music";
-	roles.mopidy-server.configuration.iris.country = "FR";
-	roles.mopidy-server.configuration.iris.locale = "FR";
+        roles.mopidy-server.enable = true;
+        roles.mopidy-server.listenAddress = "192.168.1.24";
+        roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music";
+        roles.mopidy-server.configuration.iris.country = "FR";
+        roles.mopidy-server.configuration.iris.locale = "FR";
 
         services.hydra-dev = {
           enable = true;

@@ -56,8 +56,8 @@
     },
     "home-manager": {
       "info": {
-        "lastModified": 1585724473,
-        "narHash": "sha256-LGKkhbPVXkUUcQa/3Dfb7jisMnJG96JIpkTuzcpWR6I="
+        "lastModified": 1587559737,
+        "narHash": "sha256-WfcGfs2htfo9yDPz6b/TR8jH0aOmmYWZyToNueitLb0="
       },
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -65,7 +65,7 @@
       "locked": {
         "owner": "dguibert",
         "repo": "home-manager",
-        "rev": "749ee993c26e3be7c14379ce12a341b3e743d6e6",
+        "rev": "ca338896c6507244272723d6f2cde0729fb3ea2c",
         "type": "github"
       },
       "original": {
