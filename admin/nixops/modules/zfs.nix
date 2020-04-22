@@ -1,7 +1,8 @@
 { config, lib, pkgs, utils, ... }:
 {
-  services.zfs.autoSnapshot.enable = true;
+  services.zfs.autoSnapshot.enable = false;
   services.zfs.autoSnapshot.flags = "-k -p --utc";
+
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";
   services.zfs.trim.enable = false;

@@ -162,4 +162,55 @@ rec {
     # set scheduler for rotating disks
     ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
   '';
+
+  services.sanoid = {
+    enable = true;
+    interval = "*:00,15,30,45"; #every 15minutes
+    templates.prod = {
+      frequently = 8;
+      hourly = 24;
+      daily = 7;
+      monthly = 3;
+      yearly = 0;
+
+      autosnap = true;
+    };
+    templates.media = {
+      hourly = 4;
+      daily = 2;
+      monthly = 2;
+      yearly = 0;
+
+      autosnap = true;
+    };
+    datasets."icybox1/home".useTemplate = [ "prod" ];
+    datasets."icybox1/home".recursive = true;
+    datasets."icybox1/home/dguibert/Videos".useTemplate = [ "media" ];
+    datasets."icybox1/home/dguibert/Videos".recursive = true;
+
+    templates.backup = {
+      autoprune = true;
+      ### don't take new snapshots - snapshots on backup
+      ### datasets are replicated in from source, not
+      ### generated locally
+      autosnap = false;
+
+      frequently = 0;
+      hourly = 36;
+      daily = 30;
+      monthly = 12;
+    };
+    datasets."st4000dm004-1/backup/icybox1".useTemplate = [ "prod" ];
+    datasets."st4000dm004-1/backup/icybox1".recursive = true;
+  };
+
+  services.syncoid = {
+    enable = true;
+    #sshKey = "/root/.ssh/id_ecdsa";
+    commonArgs = [ "--no-sync-snap" "--create-bookmark" ];
+    #commands."pool/test".target = "root@target:pool/test";
+    commands."icybox1/home".target = "st4000dm004-1/backup/icybox1/home";
+    commands."icybox1/home".recursive = true;
+  };
+
 }
