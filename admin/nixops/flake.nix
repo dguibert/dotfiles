@@ -2,8 +2,6 @@
 {
   description = "Configurations of my systems";
 
-  edition = 201909;
-
   inputs = {
     home-manager. uri    = "github:dguibert/home-manager/pu";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
