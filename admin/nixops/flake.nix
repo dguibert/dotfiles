@@ -138,6 +138,9 @@
     checks.x86_64-linux.hello = packages.x86_64-linux.hello;
 
     hydraJobs = {
+      rpi01_sd = nixosConfigurations.rpi01.config.system.build.sdImage;
+
+      deploy-rpi31-system   = nixpkgsFor.aarch64-linux.deploy "root@rpi31" "system" nixosConfigurations.rpi31.config.system.build.toplevel;
       deploy-rpi41-system   = nixpkgsFor.aarch64-linux.deploy "root@rpi41" "system" nixosConfigurations.rpi41.config.system.build.toplevel;
 
       deploy-titan-system   = nixpkgsFor.x86_64-linux.deploy "root@titan"     "system"       nixosConfigurations.titan.config.system.build.toplevel;
@@ -332,6 +335,11 @@
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
             persistentKeepalive = 25;
           };
+          rpi01 = {
+            ipv4Address = "10.147.27.10/32";
+            listenPort = 506;
+            publicKey  = "wBBjx8LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+          };
         };
         networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
 
@@ -436,6 +444,70 @@
           X11Forwarding no
           PasswordAuthentication no
         '';
+      };
+      rpi01 = { config, lib, pkgs, resources, ... }: {
+        #deployment.targetPort = 443;
+        #deployment.targetHost = "192.168.1.13";
+        #deployment.targetPort = 22322;
+        imports = [
+          (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+          #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+          #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
+          (import ./hosts/rpi01/configuration.nix)
+        ];
+        boot.loader.grub.enable = false;
+        boot.loader.raspberryPi.enable = true;
+        boot.loader.raspberryPi.version = 0;
+        boot.loader.raspberryPi.uboot.enable = true;
+        boot.loader.raspberryPi.uboot.configurationLimit = 10;
+        boot.loader.raspberryPi.firmwareConfig = ''
+          disable_splash=1
+        '';
+        #  dtparam=audio=on
+        #  gpu_mem=${toString gpu-mem}
+        #  dtoverlay=${gpu-overlay}
+        #'';
+        boot.kernelPackages = pkgs.linuxPackages_rpi1;
+
+        boot.consoleLogLevel = lib.mkDefault 7;
+
+        sdImage = {
+          firmwareSize = 512;
+          # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
+          populateFirmwareCommands =
+            "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
+          # As the boot process is done entirely in the firmware partition.
+          populateRootCommands = "";
+        };
+        fileSystems = {
+          "/boot" = {
+            device = "/dev/disk/by-label/FIRMWARE";
+            fsType = "vfat";
+          };
+        };
+
+        #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+        nixpkgs.localSystem.system = "x86_64-linux";
+        nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
+        #nixpkgs.localSystem.system = "armv6l-linux";
+        nixpkgs.overlays = [
+          nix.overlay
+          nixops.overlay
+          nur_dguibert.overlays.default
+          (final: prev: {
+            # don't build qt5
+            # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+          })
+        ];
+
+        services.nixosManual.showManual = lib.mkForce false;
+        fileSystems."/".options = [ "defaults" "discard" ];
+
+        #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
+        deployment.keys."wireguard_key" = {
+          text = pass_ "rpi01/wireguard_key";
+        };
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetPort = 443;
