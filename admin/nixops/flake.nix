@@ -238,13 +238,7 @@
         pluginNixExprs = [];
         inherit nixpkgs nixops;
       }).nodes;
-      in {
-      inherit (nodes) titan orsine
-         rpi31
-         rpi41
-         rpi41_cross
-         laptop-s93efa6b;
-    };
+    in nodes;
 
     nixopsConfigurations.default = with nixpkgs.lib; let
       pass_ = key: if builtins ? extraBuiltins

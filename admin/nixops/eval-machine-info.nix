@@ -61,7 +61,7 @@ rec {
             [ deploymentInfoModule ] ++
             [ { key = "nixops-stuff";
                 # Make NixOps's deployment.* options available.
-          imports = [ "${nixops}/nix/options.nix" "${nixops}/nix/resource.nix" pluginOptions ];
+                imports = [ "${nixops}/nix/options.nix" "${nixops}/nix/resource.nix" pluginOptions ];
                 # Provide a default hostname and deployment target equal
                 # to the attribute name of the machine in the model.
                 networking.hostName = mkOverride 900 machineName;
