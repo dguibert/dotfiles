@@ -16,14 +16,6 @@ nix:
 	export NIX_PATH=nixpkgs=$$HOME/code/nixpkgs
 	proot-x86_64 -b ~/pkgs/nix-mnt:/nix bash
 
-_SHELL:=$(shell echo $$SHELL)
-export SHELL=$(_SHELL)
-atos_proxy:
-	export http_proxy=http://a629925:$$(pass show bull/das | head -n1)@localhost:3128
-	export https_proxy=$$http_proxy
-	export ENVRC=$${ENVRC}+atos_proxy
-	$(SHELL)
-
 bup-save:
 	export ANNEX_DIR=/backupwd/annex
 	export BUP_DIR=$$ANNEX_DIR/bup
