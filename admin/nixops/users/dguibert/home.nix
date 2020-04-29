@@ -232,15 +232,57 @@ in let
         #Control-o: ">&sortie"
         "\e[A": history-search-backward
         "\e[B": history-search-forward
+        "\e[1;5A": history-search-backward
+        "\e[1;5B": history-search-forward
 
+        # Arrow keys in keypad mode
+        "\C-[OA": history-search-backward
+        "\C-[OB": history-search-forward
+        "\C-[OC": forward-char
+        "\C-[OD": backward-char
+
+        # Arrow keys in ANSI mode
+        "\C-[[A": history-search-backward
+        "\C-[[B": history-search-forward
+        "\C-[[C": forward-char
+        "\C-[[D": backward-char
+
+        # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
+        "\e[1;5C": forward-word
+        "\e[1;5D": backward-word
+        #"\e[5C": forward-word
+        #"\e[5D": backward-word
+        "\e\e[C": forward-word
+        "\e\e[D": backward-word
+
+        $if mode=emacs
+
+        # for linux console and RH/Debian xterm
         "\e[1~": beginning-of-line
         "\e[4~": end-of-line
+        "\e[5~": beginning-of-history
+        "\e[6~": end-of-history
         "\e[7~": beginning-of-line
+        "\e[3~": delete-char
+        "\e[2~": quoted-insert
+        "\e[5C": forward-word
+        "\e[5D": backward-word
+        "\e\e[C": forward-word
+        "\e\e[D": backward-word
+        "\e[1;5C": forward-word
+        "\e[1;5D": backward-word
+
+        # for rxvt
         "\e[8~": end-of-line
+
+        # for non RH/Debian xterm, can't hurt for RH/DEbian xterm
         "\eOH": beginning-of-line
         "\eOF": end-of-line
+
+        # for freebsd console
         "\e[H": beginning-of-line
         "\e[F": end-of-line
+        $endif
       '';
 
       # mimeapps.list
