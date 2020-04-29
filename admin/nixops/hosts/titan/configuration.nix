@@ -31,11 +31,12 @@ rec {
 
   fileSystems."/"         = { device = "icybox1/root/nixos"; fsType = "zfs"; };
   fileSystems."/home"     = { device = "icybox1/home"; fsType = "zfs"; };
+  fileSystems."/home/dguibert/Videos" = { device = "icybox1/home/dguibert/Videos"; fsType = "zfs"; };
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8" ];
-  #swapDevices = [ { device="/dev/zvol/icybox1/swap"; } ];
+  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8" "resume=LABEL=swap-nvmpe1" ];
+  swapDevices = [ { label="swap-nvmpe1"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
   nix.buildCores = lib.mkDefault 16;
