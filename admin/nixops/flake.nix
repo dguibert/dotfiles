@@ -658,7 +658,7 @@
     };
     homeConfigurations.root = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/root/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).home ];
+                  (import ./users/root/home.nix { system = system; }).home ];
       nixpkgs.pkgs = nixpkgsFor.${system};
     }));
     homeConfigurations.dguibert.no-x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
