@@ -61,6 +61,10 @@
         }
       );
 
+      inherit (import ./extra-builtins.nix { pkgs = nixpkgsFor.x86_64-linux; })
+        pass_
+        isGitDecrypted_
+        extra_builtins_file;
 
     in rec {
     overlay = final: prev: with final; {
@@ -220,7 +224,7 @@
         NIX_OPTIONS+=("--option plugin-files ${(nixpkgsFor.x86_64-linux.nix-plugins.override { nix = nixpkgsFor.x86_64-linux.nix; }).overrideAttrs (o: {
             buildInputs = o.buildInputs ++ [ boehmgc ];
           })}/lib/nix/plugins/libnix-extra-builtins.so")
-        NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
+        NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file nixpkgsFor.${system}}")
         export NIX_OPTIONS
       '';
     });
@@ -240,16 +244,7 @@
       }).nodes;
     in nodes;
 
-    nixopsConfigurations.default = with nixpkgs.lib; let
-      pass_ = key: if builtins ? extraBuiltins
-                   then
-                     if builtins.extraBuiltins ? pass then builtins.extraBuiltins.pass key
-                     else builtins.trace "extraBuiltins.pass undefined" "undefined"
-                   else if builtins ? exec
-                     then builtins.exec [ "${toString ./nix-pass.sh}" "${key}" ]
-                     else builtins.trace "builtins.exec undefined" "undefined"
-            ;
-    in rec {
+    nixopsConfigurations.default = with nixpkgs.lib; rec {
       inherit nixpkgs;
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
@@ -276,7 +271,7 @@
           NIX_OPTIONS+=("--option plugin-files ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
               buildInputs = o.buildInputs ++ [ pkgs.boehmgc ];
             })}/lib/nix/plugins/libnix-extra-builtins.so")
-          NIX_OPTIONS+=("--option extra-builtins-file $(pwd)/extra-builtins.nix")
+          NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")
           export NIX_OPTIONS
         '';
         nix.systemFeatures = [ "recursive-nix" ] ++ # default
@@ -663,22 +658,22 @@
     };
     homeConfigurations.root = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/root/home.nix { system = system; }).home ];
+                  (import ./users/root/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).home ];
       nixpkgs.pkgs = nixpkgsFor.${system};
     }));
     homeConfigurations.dguibert.no-x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; }).withoutX11 ];
+                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).withoutX11 ];
       nixpkgs.pkgs = nixpkgsFor.${system};
     }));
     homeConfigurations.dguibert.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; }).withX11 ];
+                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).withX11 ];
       nixpkgs.pkgs = nixpkgsFor.${system};
     }));
     homeConfigurations.dguibert_spartan.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
       imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; }).spartan ];
+                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).spartan ];
       nixpkgs.pkgs = nixpkgsFor.${system}.spartan.pkgs;
     }));
   };
