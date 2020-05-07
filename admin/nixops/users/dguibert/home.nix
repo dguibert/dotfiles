@@ -1,11 +1,16 @@
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-{ system ? builtins.currentSystem, overlays ? [] }:
+{ system ? builtins.currentSystem, overlays ? [], pkgs ? import <nixpkgs> {} }:
 
 let
+  inherit (import ../../extra-builtins.nix { inherit pkgs;})
+    pass_
+    isGitDecrypted_
+    extra_builtins_file;
+
   home-secret = let
-      loaded = builtins.tryEval (import ./home-secret.nix);
-    in if (builtins.trace "hm dguibert loading secret: ${toString loaded.success}" ) loaded.success
-       then loaded.value { inherit system overlays; }
+      loaded = isGitDecrypted_ ./home-secret.nix;
+    in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
+       then import ./home-secret.nix { inherit system overlays; }
        else { withoutX11 = { ... }: {};
               withX11 = { ... }: {};
             };
