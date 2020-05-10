@@ -64,6 +64,7 @@
       inherit (import ./extra-builtins.nix { pkgs = nixpkgsFor.x86_64-linux; })
         pass_
         isGitDecrypted_
+        sshSignHost_
         extra_builtins_file;
 
     in rec {
@@ -203,7 +204,6 @@
         unset TMP TMPDIR
 
         # https://blog.wearewizards.io/how-to-use-nixops-in-a-team
-        export GIT_DIR=$HOME/.mgit/dotfiles/.git
         export NIXOPS_STATE=secrets/deploy.nixops
 
         export DISNIXOS_USE_NIXOPS=1
@@ -246,11 +246,28 @@
 
     nixopsConfigurations.default = with nixpkgs.lib; rec {
       inherit nixpkgs;
-      defaults = { config, lib, pkgs, resources, ...}: {
+      defaults = { config, lib, pkgs, resources, ...}: let
+        ssh_keys = {
+          ssh_host_ed25519_key = sshSignHost_ "ssh-ca/home"
+                                  config.networking.hostName
+                                  "${config.networking.hostName}"
+                                  "ed25519";
+          ssh_host_rsa_key = sshSignHost_ "ssh-ca/home"
+                                  config.networking.hostName
+                                  "${config.networking.hostName}"
+                                  "rsa";
+        };
+        upload_key = name: attr: {
+          text = ssh_keys.${name}.${attr};
+          destDir = "/persist/etc/ssh";
+        };
+
+      in {
         imports = [
           nixpkgs.nixosModules.notDetected
           modules/wireguard-mesh.nix
         ];
+
         nixpkgs.config = import "${nur_dguibert}/config.nix";
         nixpkgs.overlays = [
           nix.overlay
@@ -312,7 +329,7 @@
             endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           laptop-s93efa6b = {
-            ipv4Address = "10.147.27.36/32";
+            ipv4Address = "10.147.27.17/32";
             listenPort = 504;
             publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
@@ -331,6 +348,34 @@
           };
         };
         networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
+
+        services.openssh.extraConfig = lib.mkOrder 100 ''
+          TrustedUserCAKeys /persist/etc/ssh/ssh-ca-home.pub
+          HostCertificate /persist/etc/ssh/ssh_host_ed25519_key-cert.pub
+          HostCertificate /persist/etc/ssh/ssh_host_rsa_key-cert.pub
+        '';
+        services.openssh.hostKeys = [
+          {
+            path = "/persist/etc/ssh/ssh_host_ed25519_key";
+            type = "ed25519";
+          }
+          {
+            path = "/persist/etc/ssh/ssh_host_rsa_key";
+            type = "rsa";
+            bits = 4096;
+          }
+        ];
+        deployment.keys."ssh_host_rsa_key"     = upload_key "ssh_host_rsa_key" "host_key";
+        deployment.keys."ssh_host_rsa_key.pub" = upload_key "ssh_host_rsa_key" "host_key_pub";
+        deployment.keys."ssh_host_rsa_key-cert.pub" = upload_key "ssh_host_rsa_key" "host_key_cert_pub";
+        deployment.keys."ssh_host_ed25519_key"     = upload_key "ssh_host_ed25519_key" "host_key";
+        deployment.keys."ssh_host_ed25519_key.pub" = upload_key "ssh_host_ed25519_key" "host_key_pub";
+        deployment.keys."ssh_host_ed25519_key-cert.pub" = upload_key "ssh_host_ed25519_key" "host_key_cert_pub";
+
+        programs.ssh.knownHosts.ca-home = {
+          certAuthority=true;
+          publicKey = pass_ "ssh-ca/home.pub";
+        };
 
         deployment.keys."id_buildfarm" = {
           text = pass_ "id_buildfarm";
@@ -439,6 +484,7 @@
         #deployment.targetHost = "192.168.1.13";
         #deployment.targetPort = 22322;
         imports = [
+          #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
           (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
           #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
           #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
@@ -456,18 +502,35 @@
         #  gpu_mem=${toString gpu-mem}
         #  dtoverlay=${gpu-overlay}
         #'';
-        boot.kernelPackages = pkgs.linuxPackages_rpi1;
+
 
         boot.consoleLogLevel = lib.mkDefault 7;
+        boot.kernelPackages = pkgs.linuxPackages_rpi1;
 
         sdImage = {
           firmwareSize = 512;
-          # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-          populateFirmwareCommands =
-            "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-          # As the boot process is done entirely in the firmware partition.
-          populateRootCommands = "";
+          populateFirmwareCommands = let
+            configTxt = pkgs.writeText "config.txt" ''
+              # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+              # when attempting to show low-voltage or overtemperature warnings.
+              avoid_warnings=1
+
+              [pi0]
+              kernel=u-boot-rpi0.bin
+
+              [pi1]
+              kernel=u-boot-rpi1.bin
+            '';
+            in ''
+              (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+              cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
+              cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
+              cp ${configTxt} firmware/config.txt
+            '';
+          populateRootCommands = ''
+          '';
         };
+
         fileSystems = {
           "/boot" = {
             device = "/dev/disk/by-label/FIRMWARE";
@@ -487,6 +550,7 @@
             # don't build qt5
             # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
             pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+            git = prev.git.override { perlSupport = false; };
           })
         ];
 

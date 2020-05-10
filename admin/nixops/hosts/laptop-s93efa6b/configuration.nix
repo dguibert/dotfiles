@@ -9,7 +9,6 @@ rec {
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
-    ../../modules/zfs.nix
     ../../modules/x11.nix
     ];
 
@@ -18,8 +17,18 @@ rec {
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "laptop-s93efa6b"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.wireless.userControlled.enable = true;
+  networking.supplicant.wlp4s0 = {
+    configFile.path = "/persist/etc/wpa_supplicant.conf";
+    userControlled.group = "network";
+    extraConf = ''
+      ap_scan=1
+      p2p_disabled=1
+    '';
+    extraCmdArgs = "-u -W";
+  };
+  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.userControlled.enable = true;
+  #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -85,7 +94,6 @@ rec {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.ports = [22];
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -153,19 +161,6 @@ rec {
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "20.03"; # Did you read the comment?
-
-  # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
-  services.udev.extraRules = with pkgs; ''
-    # set scheduler for NVMe
-    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
-    # set scheduler for SSD and eMMC
-    ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="kyber"
-    # set scheduler for rotating disks
-    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="mq-deadline"
-
-    # tpm 2 devices need to be world readable
-    SUBSYSTEM=="tpm", ACTION=="add", MODE="0666"
-  '';
 
   programs.adb.enable = true;
 

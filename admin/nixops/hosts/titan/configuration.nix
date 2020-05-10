@@ -29,9 +29,11 @@ rec {
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
 
+  boot.zfs.extraPools = [ "st4000dm004-1" ];
   fileSystems."/"         = { device = "icybox1/root/nixos"; fsType = "zfs"; };
   fileSystems."/home"     = { device = "icybox1/home"; fsType = "zfs"; };
   fileSystems."/home/dguibert/Videos" = { device = "icybox1/home/dguibert/Videos"; fsType = "zfs"; };
+  fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; };
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
@@ -205,6 +207,8 @@ rec {
     };
     datasets."st4000dm004-1/backup/icybox1".useTemplate = [ "prod" ];
     datasets."st4000dm004-1/backup/icybox1".recursive = true;
+
+    extraArgs = [ "--verbose" ];
   };
 
   services.syncoid = {

@@ -41,6 +41,11 @@ rec {
 
   defaults = network.defaults or [];
 
+  evalConfig =
+      if network ? nixpkgs
+      then (head (network.nixpkgs)).lib.nixosSystem
+      else throw "NixOps network must have a 'nixpkgs' attribute";
+
   # Compute the definitions of the machines.
   nodes =
     listToAttrs (map (machineName:
@@ -54,7 +59,7 @@ rec {
           networks;
       in
       { name = machineName;
-        value = import"${nixpkgs}/nixos/lib/eval-config.nix" {
+        value = evalConfig {
           modules =
             modules ++
             defaults ++

@@ -13,35 +13,84 @@
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
   networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
-  boot.kernelParams = [ "acpi_backlight=vendor" ];
-  #swapDevices = [ { device = "/dev/zd0"; } ];
+  boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" ];
+  swapDevices = [ { label = "nvme-swap"; } ];
 
   fileSystems."/" =
-    { device = "rt580/nixos";
+      { device = "rt580/local/root";
       fsType = "zfs";
+      };
+
+      fileSystems."/boot" =
+      { device = "/dev/disk/by-uuid/FE98-E8BD";
+      fsType = "vfat";
+      };
+
+      fileSystems."/nix" =
+        { device = "rt580/local/nix";
+        fsType = "zfs";
+      };
+
+      fileSystems."/home" =
+        { device = "rt580/safe/home";
+        fsType = "zfs";
+      };
+
+      fileSystems."/root" =
+        { device = "rt580/safe/home/root";
+        fsType = "zfs";
+      };
+
+      fileSystems."/persist" =
+        { device = "rt580/safe/persist";
+        fsType = "zfs";
+      };
+
+  # https://grahamc.com/blog/erase-your-darlings
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r rt580/local/root@blank
+  '';
+
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.interval = "monthly";
+  services.zfs.trim.enable = true;
+  # https://grahamc.com/blog/nixos-on-zfs
+  # rt580/
+  # ├── local
+  # │   ├── nix
+  # │   └── root
+  # └── safe
+  #     └── home
+  #         ├── dguibert
+  #         └── root
+  services.sanoid = {
+    enable = true;
+    interval = "*:00,15,30,45"; #every 15minutes
+    templates.user = {
+      frequently = 8;
+      hourly = 24;
+      daily = 7;
+      monthly = 3;
+      yearly = 0;
+
+      autosnap = true;
     };
+    templates.root = {
+      frequently = 8;
+      hourly = 4;
+      daily = 2;
+      monthly = 2;
+      yearly = 0;
 
-  #fileSystems."/boot" =
-  #  { device = "bt580/nixos";
-  #    fsType = "zfs";
-  #  };
-
-  fileSystems."/boot".device = "/dev/nvme0n1p1";
-
-  fileSystems."/home" =
-    { device = "rt580/home";
-      fsType = "zfs";
+      autosnap = true;
     };
+    datasets."rt580/user".useTemplate = [ "user" ];
+    datasets."rt580/user".recursive = true;
+    datasets."rt580/local/root".useTemplate = [ "root" ];
+    datasets."rt580/local/root".recursive = true;
 
-  fileSystems."/root" =
-    { device = "rt580/home/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/tmp" =
-    { device = "rt580/tmp";
-      fsType = "zfs";
-    };
+    extraArgs = [ "--verbose" ];
+  };
 
   nix.maxJobs = lib.mkDefault 8;
 

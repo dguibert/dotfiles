@@ -58,7 +58,7 @@ in {
         zeroconf = mkIf config.services.avahi.enable "Music ${config.services.avahi.hostName}";
       };
       file.enabled = false;
-      logging.verbosity = 4;
+      #logging.verbosity = 4;
 
       spotify.enabled = false; # TODO define extraConfigFiles=[ "/etc/mopidy/spotify.conf" ];
       # with your username, password, client_id, client_secret
@@ -119,9 +119,18 @@ in {
         "/etc/mopidy/spotify.conf"
       ];
     };
-    networking.firewall.interfaces.bond0.allowedTCPPorts = [ 6600 6680
+    networking.firewall.interfaces.bond0.allowedUDPPorts = [
+      1900
+    ];
+    networking.firewall.interfaces.bond0.allowedTCPPorts = [
+      1900
+      config.roles.mopidy-server.configuration.mpd.port
+      config.roles.mopidy-server.configuration.http.port
       8000 /* stream */
       4317 /* module-native-protocol-tcp will use 4317/tcp port to handle connections */
+      #config.services.upmpdcli.configuration.upnpport
+      #(config.services.upmpdcli.configuration.upnpport + 1)
+      #9090
     ];
 
     services.snapserver.enable = true;
@@ -166,6 +175,18 @@ in {
       #  ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
       #};
       nssmdns = true;
+    };
+
+    services.upmpdcli.enable = true;
+    services.upmpdcli.configuration = {
+      upnpip = "${cfg.listenAddress}";
+      mpdhost = "${cfg.listenAddress}";
+      upnpport = 49152;
+      friendlyname = "UpMpd ${config.services.avahi.hostName}";
+      #uprcluser = "enable"; # Bogus user name variable. Used for consistency with other Media Server plugins to decide if the service should be started (so, do set it if you want a Media Server).
+      #uprcltitle = "UpMpd ${config.services.avahi.hostName} server";
+      #uprclhostport = "${cfg.listenAddress}:9090";
+      #uprclmediadirs = mkIf (cfg.configuration.local?media_dir) cfg.configuration.local.media_dir;
     };
 
     # output = lamemp3enc ! shout2send mount=/mopidy ip=192.168.1.24 port=8000 username=source password=hackme
