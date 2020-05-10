@@ -625,3 +625,9 @@ checkout = git clone 'https://github.com/nix-community/setup.nix' 'setup.nix'
 
 [code/bup]
 checkout = git clone 'https://github.com/bup/bup' 'bup'
+
+[code/nix-project-template]
+checkout = git clone 'https://github.com/ngi-nix/project-template' 'nix-project-template'
+
+[code/lustre-release]
+checkout = git clone 'git://git.whamcloud.com/fs/lustre-release.git' 'lustre-release'
