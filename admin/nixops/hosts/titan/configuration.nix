@@ -26,7 +26,7 @@ rec {
   #  }
   #];
 
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
 
   boot.zfs.extraPools = [ "st4000dm004-1" ];
@@ -37,7 +37,9 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8" "resume=LABEL=swap-nvmpe1" ];
+  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8"
+    "resume=LABEL=swap-nvmpe1"
+  ];
   swapDevices = [ { label="swap-nvmpe1"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
@@ -49,6 +51,8 @@ rec {
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.device = "nodev";
+  console.earlySetup = true;
+  console.useXkbConfig = true;
 
   networking.hostId="8425e349";
   networking.hostName = "titan";
@@ -87,10 +91,8 @@ rec {
     #MIIMonitorSec=1s
     #LACPTransmitRate=fast
 
-    bondConfig.Mode="active-backup";
+    bondConfig.Mode="802.3ad";
     #bondConfig.PrimarySlave="eno1";
-    bondConfig.MIIMonitorSec="100s";
-    bondConfig.PrimaryReselectPolicy="always";
   };
   systemd.network.networks."40-bond0" = {
     name = "bond0";
@@ -99,13 +101,13 @@ rec {
   };
   systemd.network.networks."40-eno1" = {
     name = "eno1";
-    DHCP = "none";
+    DHCP = "no";
     networkConfig.Bond = "bond0";
     networkConfig.IPv6PrivacyExtensions = "kernel";
   };
   systemd.network.networks."40-eno2" = {
     name = "eno2";
-    DHCP = "none";
+    DHCP = "no";
     networkConfig.Bond = "bond0";
     networkConfig.IPv6PrivacyExtensions = "kernel";
   };

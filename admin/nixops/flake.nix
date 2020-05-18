@@ -1,6 +1,4 @@
-
 {
-  edition = 201909;
   description = "Configurations of my systems";
 
   inputs = {
@@ -106,7 +104,7 @@
               onRemote ${drv}/activate
             '';
           }.${mode} or (throw "Unknown deploy mode (${mode})");
-        in writeScript "deploy-host-${builtins.replaceStrings ["@"] ["-"] remote}" ''
+        in writeScript "deploy-${mode}-${builtins.replaceStrings ["@"] ["-"] remote}" ''
           #!/usr/bin/env bash
           set -xeuf -o pipefail
 
@@ -186,6 +184,26 @@
 
       #hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
       #hm_dguibert_spartan = homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
+      iso = (nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+          nixopsConfigurations.default.defaults
+          { key = "nixops-stuff";
+            # Make NixOps's deployment.* options available.
+            imports = [ "${nixops}/nix/options.nix" "${nixops}/nix/resource.nix" ];
+            # Provide a default hostname and deployment target equal
+            # to the attribute name of the machine in the model.
+            networking.hostName = "iso";
+            deployment.targetHost = "iso";
+            environment.checkConfigurationOptions = true;
+          }
+	  ({ pkgs, lib, ...}: {
+            users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";
+            networking.wireguard-mesh.enable = lib.mkForce false;
+	  })
+        ];
+      }).config.system.build.isoImage;
     };
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.

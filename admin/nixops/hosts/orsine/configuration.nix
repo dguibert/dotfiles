@@ -181,7 +181,7 @@ rec {
   services.xserver.videoDrivers = [ "intel" ];
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
-  programs.sysdig.enable = true;
+#  programs.sysdig.enable = true;
 
   programs.bash.enableCompletion = true;
   # List services that you want to enable:
