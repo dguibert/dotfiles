@@ -8,7 +8,6 @@
 # nixops deploy -d my-deployment --option extra-builtins-file $(pwd)/extra-builtins.nix
 { exec ? builtins.exec or null, pkgs, ... }: let
   makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
     isExecutable = true;
   });
 
@@ -38,6 +37,12 @@
 
   ssh_sign_user = "";
 
+  wg_keys = makeProg {
+    name = "wg-keys";
+    src = ./extra-builtins/wg-keys.sh;
+    wireguardtools = pkgs.wireguard-tools;
+  };
+
   # user
   #* System wide:
   #  echo "AuthorizedPrincipalsFile %h/.ssh/authorized_principals" >>/etc/ssh/sshd_config
@@ -61,6 +66,11 @@ in {
                else if exec != null
                then exec [ nix_pass name ]
                else "undefined";
+  wgKeys_ = name: if builtins ? extraBuiltins && builtins.extraBuiltins ? wgKeys
+               then builtins.extraBuiltins.wgKeys name
+               else if exec != null
+               then exec [ wg_keys name ]
+               else { privateKey = ""; publicKey = ""; };
   isGitDecrypted_ = name: if builtins ? extraBuiltins && builtins.extraBuiltins ? isGitDecrypted
                then builtins.trace "isGitDecrypted_ => isGitDecrypted" builtins.extraBuiltins.isGitDecrypted name
                else if exec != null
@@ -76,6 +86,8 @@ in {
   extra_builtins_file = pkgs: pkgs.writeScript "extra-builtins-file.nix" ''
     {exec, ...}: {
       pass = name: exec [ ${nix_pass} name ];
+
+      wgKeys = name: exec [ ${wg_keys} name ];
 
       isGitDecrypted = name: exec [ ${is_git_decrypted} name ];
 

@@ -1,5 +1,6 @@
 
 {
+  edition = 201909;
   description = "Configurations of my systems";
 
   inputs = {
@@ -65,6 +66,7 @@
         pass_
         isGitDecrypted_
         sshSignHost_
+	wgKeys_
         extra_builtins_file;
 
     in rec {
@@ -142,7 +144,26 @@
     ## - checks: A non-nested set of derivations built by the nix flake check command, and by Hydra if a flake does not have a hydraJobs attribute.
     checks.x86_64-linux.hello = packages.x86_64-linux.hello;
 
-    hydraJobs = {
+    hydraJobs = rec {
+      all = nixpkgsFor.x86_64-linux.writeText "all" ''
+        #{deploy-rpi31-system  }
+        #{deploy-rpi41-system  }
+
+        ${deploy-titan-system  }
+        ${deploy-t580-system   }
+        ${deploy-orsine-system }
+
+        ${deploy-titan-dguibert}
+        ${deploy-t580-dguibert }
+        ${deploy-orsine-dguibert}
+
+        #{deploy-rpi31-dguibert}
+        #{deploy-rpi41-dguibert}
+
+        ${deploy-titan-root }
+        ${deploy-t580-root  }
+        ${deploy-orsine-root}
+      '';
       rpi01_sd = nixosConfigurations.rpi01.config.system.build.sdImage;
 
       deploy-rpi31-system   = nixpkgsFor.aarch64-linux.deploy "root@rpi31" "system" nixosConfigurations.rpi31.config.system.build.toplevel;
@@ -312,42 +333,49 @@
           rpi31 = {
             ipv4Address = "10.147.27.13/32";
             listenPort = 500;
-            publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+            publicKey  = (wgKeys_ "rpi31/wireguard_key").publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
             persistentKeepalive = 25;
           };
           orsine = {
             ipv4Address = "10.147.27.128/32";
             listenPort = 501;
-            publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+            publicKey  = (wgKeys_ "orsine/wireguard_key").publicKey;
             endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           titan = {
             ipv4Address = "10.147.27.24/32";
             listenPort = 503;
-            publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+            publicKey  = (wgKeys_ "titan/wireguard_key").publicKey;
             endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           laptop-s93efa6b = {
             ipv4Address = "10.147.27.17/32";
             listenPort = 504;
-            publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
+            publicKey  = (wgKeys_ "laptop-s93efa6b/wireguard_key").publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           rpi41 = {
             ipv4Address = "10.147.27.14/32";
             listenPort = 505;
-            publicKey  = "pyAuYQ5uZvNj9wSAMprAwfzRwV6SlbbNfjQJX18kigg=";
+            publicKey  = (wgKeys_ "rpi41/wireguard_key").publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
             persistentKeepalive = 25;
           };
           rpi01 = {
             ipv4Address = "10.147.27.10/32";
             listenPort = 506;
-            publicKey  = "wBBjx8LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+            publicKey  = (wgKeys_ "rpi01/wireguard_key").publicKey;
           };
         };
-        networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 6696 ];
+        deployment.keys."wireguard_key" = {
+          text = (wgKeys_ "${config.networking.hostName}/wireguard_key").privateKey;
+          destDir = "/secrets";
+        };
+
+	networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 505 506
+          6696 /* babeld */
+        ];
 
         services.openssh.extraConfig = lib.mkOrder 100 ''
           TrustedUserCAKeys /persist/etc/ssh/ssh-ca-home.pub
@@ -372,6 +400,7 @@
         deployment.keys."ssh_host_ed25519_key.pub" = upload_key "ssh_host_ed25519_key" "host_key_pub";
         deployment.keys."ssh_host_ed25519_key-cert.pub" = upload_key "ssh_host_ed25519_key" "host_key_cert_pub";
 
+        # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
         programs.ssh.knownHosts.ca-home = {
           certAuthority=true;
           publicKey = pass_ "ssh-ca/home.pub";
@@ -558,9 +587,6 @@
         fileSystems."/".options = [ "defaults" "discard" ];
 
         #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
-        deployment.keys."wireguard_key" = {
-          text = pass_ "rpi01/wireguard_key";
-        };
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetPort = 443;
@@ -605,12 +631,6 @@
         #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(pass rpi31/shadowsocks)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
         deployment.keys."shadowsocks" = {
           text = pass_ "rpi31/shadowsocks";
-          destDir = "/secrets";
-          #user = "root";
-          #group = "root";
-        };
-        deployment.keys."wireguard_key" = {
-          text = pass_ "rpi31/wireguard_key";
           destDir = "/secrets";
           #user = "root";
           #group = "root";
@@ -702,22 +722,12 @@
         #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
         #    "it cannot be cross compiled";
         #};
-        deployment.keys."wireguard_key" = {
-          text = pass_ "rpi41/wireguard_key";
-          destDir = "/secrets";
-          #user = "root";
-          #group = "root";
-        };
       };
       laptop-s93efa6b = { config, lib, pkgs, resources, ... }: {
         nixpkgs.localSystem.system = "x86_64-linux";
         imports = [
           (import ./hosts/laptop-s93efa6b/configuration.nix)
         ];
-        deployment.keys."wireguard_key" = {
-          text = pass_ "laptop-s93efa6b/wireguard_key";
-          destDir = "/secrets";
-        };
       };
     };
     homeConfigurations.root = forAllSystems (system: home-manager.lib.mkHome system (args: {
