@@ -159,7 +159,7 @@ rec {
     git
     gnuplot graphviz imagemagick
     diffstat diffutils binutils zip unzip
-    unrar cabextract cpio p7zip lzma which file
+    unrar cabextract cpio lzma which file
     acpitool iputils
     fuse sshfsFuse
     manpages gnupg tree
