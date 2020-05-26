@@ -3,13 +3,13 @@
     "NUR": {
       "flake": false,
       "info": {
-        "lastModified": 1588998011,
-        "narHash": "sha256-Y3vfOYcwYDtDVLQ/T0sK0NiKhN5ilIXsqbca1dvGUCo="
+        "lastModified": 1590355327,
+        "narHash": "sha256-9t+A+IQUedFtPcE5wRKICf2BT91Q1h8HxKYlQjcTiFc="
       },
       "locked": {
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "01973604caf0a41750e17e1d4fc47df0463fe6c0",
+        "rev": "2cb9d46ec9eb7fa8366bb1521132e7b941461bcc",
         "type": "github"
       },
       "original": {
@@ -39,13 +39,13 @@
     "gitignore": {
       "flake": false,
       "info": {
-        "lastModified": 1583272203,
-        "narHash": "sha256-X8xHVRr8N6SzI8Ju87V+A75r3ZwF+CEuXcx5nfZbhTk="
+        "lastModified": 1589314779,
+        "narHash": "sha256-3g+tRj46v1dAXHkMCIc28Wz4+ZfMH4ZqRS264sPd16A="
       },
       "locked": {
         "owner": "hercules-ci",
         "repo": "gitignore",
-        "rev": "2ced4519f865341adcb143c5d668f955a2cb997f",
+        "rev": "00b237fb1813c48e20ee2021deb6f3f03843e9e4",
         "type": "github"
       },
       "original": {
@@ -181,13 +181,13 @@
     },
     "nixpkgs": {
       "info": {
-        "lastModified": 1588609991,
-        "narHash": "sha256-S6p5UzZfZ8IfrvxrJK3KgqQreLR5OiKn0FW15wc5mho="
+        "lastModified": 1590340426,
+        "narHash": "sha256-q0Ab+We1atJsUCGVBlS2qAu5VWifFRfWPoMeYmmw+3U="
       },
       "locked": {
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "124fc065fbf91edabe485cbf9571bdc3cf18d5d6",
+        "rev": "477dd403f2fa9687ddbcbef92348f607bda69261",
         "type": "github"
       },
       "original": {
