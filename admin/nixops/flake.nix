@@ -281,7 +281,92 @@
         pluginNixExprs = [];
         inherit nixpkgs nixops;
       }).nodes;
-    in nodes;
+    in nodes // {
+      rpi01 = nixpkgs.lib.nixosSystem {
+        modules = [
+          ({ config, lib, pkgs, resources, ... }: {
+            #deployment.targetPort = 443;
+            #deployment.targetHost = "192.168.1.13";
+            #deployment.targetPort = 22322;
+            imports = [
+              #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
+              (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+              #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+              #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
+              (import ./hosts/rpi01/configuration.nix)
+            ];
+            boot.loader.grub.enable = false;
+            boot.loader.raspberryPi.enable = true;
+            boot.loader.raspberryPi.version = 0;
+            boot.loader.raspberryPi.uboot.enable = true;
+            boot.loader.raspberryPi.uboot.configurationLimit = 10;
+            boot.loader.raspberryPi.firmwareConfig = ''
+              disable_splash=1
+            '';
+            #  dtparam=audio=on
+            #  gpu_mem=${toString gpu-mem}
+            #  dtoverlay=${gpu-overlay}
+            #'';
+
+
+            boot.consoleLogLevel = lib.mkDefault 7;
+            boot.kernelPackages = pkgs.linuxPackages_rpi1;
+
+            sdImage = {
+              firmwareSize = 512;
+              populateFirmwareCommands = let
+                configTxt = pkgs.writeText "config.txt" ''
+                  # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+                  # when attempting to show low-voltage or overtemperature warnings.
+                  avoid_warnings=1
+
+                  [pi0]
+                  kernel=u-boot-rpi0.bin
+
+                  [pi1]
+                  kernel=u-boot-rpi1.bin
+                '';
+                in ''
+                  (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+                  cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
+                  cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
+                  cp ${configTxt} firmware/config.txt
+                '';
+              populateRootCommands = ''
+              '';
+            };
+
+            fileSystems = {
+              "/boot" = {
+                device = "/dev/disk/by-label/FIRMWARE";
+                fsType = "vfat";
+              };
+            };
+
+            #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+            nixpkgs.localSystem.system = "x86_64-linux";
+            nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
+            #nixpkgs.localSystem.system = "armv6l-linux";
+            nixpkgs.overlays = [
+              nix.overlay
+              nixops.overlay
+              nur_dguibert.overlays.default
+              (final: prev: {
+                # don't build qt5
+                # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+                pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+                git = prev.git.override { perlSupport = false; };
+              })
+            ];
+
+            services.nixosManual.showManual = lib.mkForce false;
+            fileSystems."/".options = [ "defaults" "discard" ];
+
+            #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
+          })
+        ];
+      };
+    };
 
     nixopsConfigurations.default = with nixpkgs.lib; rec {
       inherit nixpkgs;
@@ -525,86 +610,6 @@
           X11Forwarding no
           PasswordAuthentication no
         '';
-      };
-      rpi01 = { config, lib, pkgs, resources, ... }: {
-        #deployment.targetPort = 443;
-        #deployment.targetHost = "192.168.1.13";
-        #deployment.targetPort = 22322;
-        imports = [
-          #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
-          (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
-          #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-          #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
-          (import ./hosts/rpi01/configuration.nix)
-        ];
-        boot.loader.grub.enable = false;
-        boot.loader.raspberryPi.enable = true;
-        boot.loader.raspberryPi.version = 0;
-        boot.loader.raspberryPi.uboot.enable = true;
-        boot.loader.raspberryPi.uboot.configurationLimit = 10;
-        boot.loader.raspberryPi.firmwareConfig = ''
-          disable_splash=1
-        '';
-        #  dtparam=audio=on
-        #  gpu_mem=${toString gpu-mem}
-        #  dtoverlay=${gpu-overlay}
-        #'';
-
-
-        boot.consoleLogLevel = lib.mkDefault 7;
-        boot.kernelPackages = pkgs.linuxPackages_rpi1;
-
-        sdImage = {
-          firmwareSize = 512;
-          populateFirmwareCommands = let
-            configTxt = pkgs.writeText "config.txt" ''
-              # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-              # when attempting to show low-voltage or overtemperature warnings.
-              avoid_warnings=1
-
-              [pi0]
-              kernel=u-boot-rpi0.bin
-
-              [pi1]
-              kernel=u-boot-rpi1.bin
-            '';
-            in ''
-              (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
-              cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
-              cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
-              cp ${configTxt} firmware/config.txt
-            '';
-          populateRootCommands = ''
-          '';
-        };
-
-        fileSystems = {
-          "/boot" = {
-            device = "/dev/disk/by-label/FIRMWARE";
-            fsType = "vfat";
-          };
-        };
-
-        #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-        nixpkgs.localSystem.system = "x86_64-linux";
-        nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
-        #nixpkgs.localSystem.system = "armv6l-linux";
-        nixpkgs.overlays = [
-          nix.overlay
-          nixops.overlay
-          nur_dguibert.overlays.default
-          (final: prev: {
-            # don't build qt5
-            # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
-            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-            git = prev.git.override { perlSupport = false; };
-          })
-        ];
-
-        services.nixosManual.showManual = lib.mkForce false;
-        fileSystems."/".options = [ "defaults" "discard" ];
-
-        #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
       };
       rpi31 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetPort = 443;
