@@ -22,15 +22,18 @@ uuid=${uuids[$bluray_id]}
 
 bd_size=$((12219392*2-128*1024))
 
-if ! test -e bd_${bluray_id}.img; then
-    truncate -s ${bd_size}KB bd_${bluray_id}.img
+#sudo zfs create -o mount=legacy -o quota=25G icybox1/bd_22
 
-    mkfs.ext4 -L bd_${bluray_id} bd_${bluray_id}.img
-
+#if ! test -e bd_${bluray_id}.img; then
+#    truncate -s ${bd_size}KB bd_${bluray_id}.img
+#
+#    mkfs.ext4 -L bd_${bluray_id} bd_${bluray_id}.img
+#
     sudo mkdir -p /media/bd_${bluray_id}
-    sudo mount -o loop,rw bd_${bluray_id}.img /media/bd_${bluray_id} || true
-
-    sudo chown dguibert:dguibert /media/bd_${bluray_id}
+#    sudo mount -o loop,rw bd_${bluray_id}.img /media/bd_${bluray_id} || true
+#
+#    sudo mount -t zfs icybox1/bd_22 /media/bd_${bluray_id}
+#    sudo chown dguibert:dguibert /media/bd_${bluray_id}
 	for repo in archives Documents Music work Videos; do
         (
         cd ~/$repo
@@ -39,35 +42,36 @@ if ! test -e bd_${bluray_id}.img; then
         git annex fsck --from bd_${bluray_id} || true
         )
     done
-else
-#
-#if ! test -e bd_${bluray_id}.udf; then
-#    truncate -s ${bd_size}KB bd_${bluray_id}.udf
-#    #--lvid=            Logical Volume Identifier (default: LinuxUDF)
-#    #--vid=             Volume Identifier (default: LinuxUDF)
-#    #--vsid=            17.-127. character of Volume Set Identifier (default: LinuxUDF)
-#    #--fsid=            File Set Identifier (default: LinuxUDF)
-#    mkudffs --media-type=dvdram --spartable=2  --lvid="BD_${bluray_id}" --vid="BD_${bluray_id}" --vsid="BD_${bluray_id}" --fsid="BD_${bluray_id}"   bd_${bluray_id}.udf
-#
-#    sudo mkdir -p /media/bd_${bluray_id}
-#    sudo mount -t udf -o loop,rw bd_${bluray_id}.udf /media/bd_${bluray_id} || true
-#
-#    sudo chown dguibert:dguibert /media/bd_${bluray_id}
-#    for repo in Videos archives work Documents Music; do
-#        (
-#        cd ~/$repo
-#        git annex enableremote bd_${bluray_id} type=bup encryption=none buprepo=/media/bd_${bluray_id} || \
-#            git annex initremote bd_${bluray_id} uuid=$uuid type=bup encryption=none buprepo=/media/bd_${bluray_id}
-#        git annex fsck --from bd_${bluray_id} || true
-#        )
-#    done
 #else
-
-    sudo mkdir -p /media/bd_${bluray_id}
-    sudo mount -t udf -o loop,rw bd_${bluray_id}.udf /media/bd_${bluray_id} || true
-    sudo chown dguibert:dguibert /media/bd_${bluray_id}
-
-fi
+##
+##if ! test -e bd_${bluray_id}.udf; then
+##    truncate -s ${bd_size}KB bd_${bluray_id}.udf
+##    #--lvid=            Logical Volume Identifier (default: LinuxUDF)
+##    #--vid=             Volume Identifier (default: LinuxUDF)
+##    #--vsid=            17.-127. character of Volume Set Identifier (default: LinuxUDF)
+##    #--fsid=            File Set Identifier (default: LinuxUDF)
+##    mkudffs --media-type=dvdram --spartable=2  --lvid="BD_${bluray_id}" --vid="BD_${bluray_id}" --vsid="BD_${bluray_id}" --fsid="BD_${bluray_id}"   bd_${bluray_id}.udf
+##
+##    sudo mkdir -p /media/bd_${bluray_id}
+##    sudo mount -t udf -o loop,rw bd_${bluray_id}.udf /media/bd_${bluray_id} || true
+##
+##    sudo chown dguibert:dguibert /media/bd_${bluray_id}
+##    for repo in Videos archives work Documents Music; do
+##        (
+##        cd ~/$repo
+##        git annex enableremote bd_${bluray_id} type=bup encryption=none buprepo=/media/bd_${bluray_id} || \
+##            git annex initremote bd_${bluray_id} uuid=$uuid type=bup encryption=none buprepo=/media/bd_${bluray_id}
+##        git annex fsck --from bd_${bluray_id} || true
+##        )
+##    done
+##else
+##
+#    sudo mkdir -p /media/bd_${bluray_id}
+#    sudo mount -t zfs icybox1/bd_22 /media/bd_${bluray_id}
+##    sudo mount -o loop,rw bd_${bluray_id}.udf /media/bd_${bluray_id} || true
+#    sudo chown dguibert:dguibert /media/bd_${bluray_id}
+##
+##fi
 
 #for repo in archives Documents Music work Videos; do
 for repo in archives ; do
