@@ -2,32 +2,32 @@
   description = "Configurations of my systems";
 
   inputs = {
-    home-manager. uri    = "github:dguibert/home-manager/pu";
+    home-manager. url    = "github:dguibert/home-manager/pu";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    hydra.uri            = "github:dguibert/hydra/pu";
+    hydra.url            = "github:dguibert/hydra/pu";
     hydra.inputs.nix.follows = "nix";
     hydra.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixops.uri           = "github:dguibert/nixops/pu";
+    nixops.url           = "github:dguibert/nixops/pu";
     nixops.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.uri          = "github:dguibert/nixpkgs/pu";
+    nixpkgs.url          = "github:dguibert/nixpkgs/pu";
 
-    nix.uri              = "github:dguibert/nix/pu";
+    nix.url              = "github:dguibert/nix/pu";
     nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur_dguibert.uri     = "github:dguibert/nur-packages/pu";
+    nur_dguibert.url     = "github:dguibert/nur-packages/pu";
     nur_dguibert.inputs.nix.follows = "nix";
-    #nur_dguibert_envs.uri= "github:dguibert/nur-packages/pu?dir=envs";
-    #nur_dguibert_envs.uri= "/home/dguibert/nur-packages?dir=envs";
-    terranix             = { uri = "github:mrVanDalo/terranix"; flake=false; };
-    #"nixos-18.03".uri   = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".uri   = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".uri   = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix           = { uri  = "github:atpotts/base16-nix"; flake=false; };
-    NUR                  = { uri  = "github:nix-community/NUR"; flake=false; };
-    gitignore            = { uri  = "github:hercules-ci/gitignore"; flake=false; };
+    #nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
+    #nur_dguibert_envs.url= "/home/dguibert/nur-packages?dir=envs";
+    terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
+    #"nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
+    #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
+    #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
+    base16-nix           = { url  = "github:atpotts/base16-nix"; flake=false; };
+    NUR                  = { url  = "github:nix-community/NUR"; flake=false; };
+    gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
   };
 
   outputs = { self, nixpkgs
@@ -52,7 +52,9 @@
           inherit system;
           overlays =  [
             nix.overlay
-            nixops.overlay
+            (final: prev: {
+              nixops = nixops.defaultPackage."${system}";
+            })
             nur_dguibert.overlay
             self.overlay
           ] /*++ nur_dguibert_envs.overlays*/;
@@ -553,6 +555,9 @@
           buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
             ++ [ "/etc/nix/machines-hydra" ];
         };
+	# clean cache directory (nar cache)
+	systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
+
         environment.etc."nix/machines-hydra".text = ''
           localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
         '';

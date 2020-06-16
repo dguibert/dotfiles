@@ -475,7 +475,7 @@ in let
           python3Packages.weboob
 
           mpv
-          pythonPackages.subliminal
+          python3Packages.subliminal
           python3
 
           baobab
