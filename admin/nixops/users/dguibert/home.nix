@@ -8,7 +8,7 @@ let
     extra_builtins_file;
 
   home-secret = let
-      loaded = isGitDecrypted_ ./home-secret.nix;
+      loaded = (isGitDecrypted_ ./home-secret.nix).success;
     in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
        then import ./home-secret.nix { inherit system overlays; }
        else { withoutX11 = { ... }: {};

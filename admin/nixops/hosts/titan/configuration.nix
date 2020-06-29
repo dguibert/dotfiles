@@ -37,7 +37,7 @@ rec {
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = [ "console=tty0" "console=ttyS2,115200n8"
+  boot.kernelParams = [ "console=tty0" "console=ttyS1,115200n8"
     "resume=LABEL=swap-nvmpe1"
   ];
   swapDevices = [ { label="swap-nvmpe1"; } ];

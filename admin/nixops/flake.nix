@@ -6,7 +6,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hydra.url            = "github:dguibert/hydra/pu";
-    hydra.inputs.nix.follows = "nix";
+    #hydra.inputs.nix.follows = "nix";
     hydra.inputs.nixpkgs.follows = "nixpkgs";
 
     nixops.url           = "github:dguibert/nixops/pu";
@@ -66,7 +66,7 @@
         pass_
         isGitDecrypted_
         sshSignHost_
-	wgKeys_
+        wgKeys_
         extra_builtins_file;
 
     in rec {
@@ -200,10 +200,10 @@
             deployment.targetHost = "iso";
             environment.checkConfigurationOptions = true;
           }
-	  ({ pkgs, lib, ...}: {
+          ({ pkgs, lib, ...}: {
             users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";
             networking.wireguard-mesh.enable = lib.mkForce false;
-	  })
+          })
         ];
       }).config.system.build.isoImage;
     };
@@ -267,11 +267,14 @@
           })}/lib/nix/plugins/libnix-extra-builtins.so")
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file nixpkgsFor.${system}}")
         export NIX_OPTIONS
+
+        export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
       '';
     });
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosModules.mopidy-server = import ./roles/mopidy.nix;
+
     nixosConfigurations = let
       nodes = (import ./eval-machine-info.nix {
         system = "x86_64-linux";
@@ -351,7 +354,6 @@
             #nixpkgs.localSystem.system = "armv6l-linux";
             nixpkgs.overlays = [
               nix.overlay
-              nixops.overlay
               nur_dguibert.overlays.default
               (final: prev: {
                 # don't build qt5
@@ -374,14 +376,14 @@
       inherit nixpkgs;
       defaults = { config, lib, pkgs, resources, ...}: let
         ssh_keys = {
-          ssh_host_ed25519_key = sshSignHost_ "ssh-ca/home"
+          ssh_host_ed25519_key = (sshSignHost_ "ssh-ca/home"
                                   config.networking.hostName
                                   "${config.networking.hostName}"
-                                  "ed25519";
-          ssh_host_rsa_key = sshSignHost_ "ssh-ca/home"
+                                  "ed25519").value;
+          ssh_host_rsa_key = (sshSignHost_ "ssh-ca/home"
                                   config.networking.hostName
                                   "${config.networking.hostName}"
-                                  "rsa";
+                                  "rsa").value;
         };
         upload_key = name: attr: {
           text = ssh_keys.${name}.${attr};
@@ -397,7 +399,9 @@
         nixpkgs.config = import "${nur_dguibert}/config.nix";
         nixpkgs.overlays = [
           nix.overlay
-          nixops.overlay
+          (final: prev: {
+                  nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
+          })
           nur_dguibert.overlays.default
           self.overlay
         ];
@@ -438,47 +442,47 @@
           rpi31 = {
             ipv4Address = "10.147.27.13/32";
             listenPort = 500;
-            publicKey  = (wgKeys_ "rpi31/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "rpi31/wireguard_key").value.publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
             persistentKeepalive = 25;
           };
           orsine = {
             ipv4Address = "10.147.27.128/32";
             listenPort = 501;
-            publicKey  = (wgKeys_ "orsine/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "orsine/wireguard_key").value.publicKey;
             endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           titan = {
             ipv4Address = "10.147.27.24/32";
             listenPort = 503;
-            publicKey  = (wgKeys_ "titan/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "titan/wireguard_key").value.publicKey;
             endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           laptop-s93efa6b = {
             ipv4Address = "10.147.27.17/32";
             listenPort = 504;
-            publicKey  = (wgKeys_ "laptop-s93efa6b/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "laptop-s93efa6b/wireguard_key").value.publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
           };
           rpi41 = {
             ipv4Address = "10.147.27.14/32";
             listenPort = 505;
-            publicKey  = (wgKeys_ "rpi41/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "rpi41/wireguard_key").value.publicKey;
             endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
             persistentKeepalive = 25;
           };
           rpi01 = {
             ipv4Address = "10.147.27.10/32";
             listenPort = 506;
-            publicKey  = (wgKeys_ "rpi01/wireguard_key").publicKey;
+            publicKey  = (wgKeys_ "rpi01/wireguard_key").value.publicKey;
           };
         };
         deployment.keys."wireguard_key" = {
-          text = (wgKeys_ "${config.networking.hostName}/wireguard_key").privateKey;
+          text = (wgKeys_ "${config.networking.hostName}/wireguard_key").value.privateKey;
           destDir = "/secrets";
         };
 
-	networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 505 506
+        networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 505 506
           6696 /* babeld */
         ];
 
@@ -506,13 +510,15 @@
         deployment.keys."ssh_host_ed25519_key-cert.pub" = upload_key "ssh_host_ed25519_key" "host_key_cert_pub";
 
         # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-        programs.ssh.knownHosts.ca-home = {
+        programs.ssh.knownHosts.ca-home = let
+          ca = pass_ "ssh-ca/home.pub";
+        in mkIf ca.success {
           certAuthority=true;
-          publicKey = pass_ "ssh-ca/home.pub";
+          publicKey = ca.value;
         };
 
-        deployment.keys."id_buildfarm" = {
-          text = pass_ "id_buildfarm";
+        deployment.keys."id_buildfarm" = let key = pass_ "id_buildfarm"; in mkIf key.success {
+          text = key.value;
           destDir = "/etc/nix";
           #user = "root";
           #group = "root";
@@ -555,8 +561,8 @@
           buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
             ++ [ "/etc/nix/machines-hydra" ];
         };
-	# clean cache directory (nar cache)
-	systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
+        # clean cache directory (nar cache)
+        systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
 
         environment.etc."nix/machines-hydra".text = ''
           localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
@@ -564,12 +570,16 @@
         nix.extraOptions = ''
           secret-key-files = /etc/nix/cache-priv-key.pem
         '';
-        deployment.keys."cache-priv-key.pem" = {
-          text = pass_ "titan/cache-priv-key.pem";
+        deployment.keys."cache-priv-key.pem" = let
+          key = pass_ "titan/cache-priv-key.pem";
+        in mkIf key.success {
+          text = key.value;
           destDir = "/etc/nix";
         };
-        deployment.keys.id_buildfarm = {
-          text = pass_ "id_buildfarm";
+        deployment.keys.id_buildfarm = let
+          key = pass_ "id_buildfarm";
+               in mkIf key.success {
+          text = key.value;
           destDir = "/etc/nix";
           user = "hydra";
           group = "hydra";
@@ -630,7 +640,9 @@
         nixpkgs.localSystem.system = "aarch64-linux";
         nixpkgs.overlays = [
           nix.overlay
-          nixops.overlay
+          (final: prev: {
+                  nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
+          })
           nur_dguibert.overlays.default
           (final: prev: {
             # don't build qt5
@@ -657,8 +669,10 @@
           PasswordAuthentication no
         '';
         #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(pass rpi31/shadowsocks)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
-        deployment.keys."shadowsocks" = {
-          text = pass_ "rpi31/shadowsocks";
+        deployment.keys."shadowsocks" = let
+          key = pass_ "rpi31/shadowsocks";
+               in mkIf key.success {
+          text = key.value;
           destDir = "/secrets";
           #user = "root";
           #group = "root";
@@ -712,7 +726,9 @@
         nixpkgs.localSystem.system = "aarch64-linux";
         nixpkgs.overlays = [
           nix.overlay
-          nixops.overlay
+          (final: prev: {
+                  nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
+          })
           nur_dguibert.overlays.default
           (final: prev: {
             # don't build qt5
@@ -778,5 +794,43 @@
                   (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).spartan ];
       nixpkgs.pkgs = nixpkgsFor.${system}.spartan.pkgs;
     }));
+
+    #deploy.nodes.titan = {
+    #  hostname = "titan";
+    #  profiles = {
+    #    system = {
+    #      sshUser = "dguibert";
+    #      activate = "$PROFILE/bin/switch-to-configuration switch";
+    #      path = self.nixosConfigurations.titan.config.system.build.toplevel;
+    #      user = "root";
+    #    };
+    #    dguibert-hm = {
+    #      sshUser = "dguibert";
+    #      activate = "$PROFILE/activate";
+    #      path = self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+    #      profilePath = "/nix/var/nix/profiles/per-user/dguibert/home-manager";
+    #    };
+    #  };
+    #};
+    deploy = {
+      sshUser = "dguibert";
+      user = "root";
+      nodes = (builtins.mapAttrs (_: conf: {
+        hostname = conf.config.networking.hostName;
+        profiles.system.path = conf.config.system.build.toplevel;
+        profiles.system.activate = "$PROFILE/bin/switch-to-configuration switch";
+}) self.nixosConfigurations) // {
+      };
+    };
+
+    #deploy.nodes.spartan = {
+    #  sshUser = "bguibertd";
+    #  hostname = "spartan";
+    #  dguibert-hm = {
+    #    activate = "$PROFILE/activate";
+    #    path = self.homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
+    #  };
+    #};
+
   };
 }
