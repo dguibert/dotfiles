@@ -53,5 +53,5 @@ else
   pass show ${key_name}.pub > $f.pub
 fi
 cat $pubfile >&2
-nix-instantiate --strict --eval -E "{ host_key = builtins.readFile $f; host_key_pub = builtins.readFile $f.pub; host_key_cert_pub = builtins.readFile $pubfile; }"
+nix-instantiate --strict --eval -E "{ success=true; value={ host_key = builtins.readFile $f; host_key_pub = builtins.readFile $f.pub; host_key_cert_pub = builtins.readFile $pubfile; }; }"
 

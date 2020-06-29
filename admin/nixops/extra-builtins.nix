@@ -65,23 +65,23 @@ in {
                then builtins.extraBuiltins.pass name
                else if exec != null
                then exec [ nix_pass name ]
-               else "undefined";
+               else { success=false; value="undefined"; };
   wgKeys_ = name: if builtins ? extraBuiltins && builtins.extraBuiltins ? wgKeys
                then builtins.extraBuiltins.wgKeys name
                else if exec != null
                then exec [ wg_keys name ]
-               else { privateKey = ""; publicKey = ""; };
+               else { success=false; value={ privateKey = ""; publicKey = ""; }; };
   isGitDecrypted_ = name: if builtins ? extraBuiltins && builtins.extraBuiltins ? isGitDecrypted
                then builtins.trace "isGitDecrypted_ => isGitDecrypted" builtins.extraBuiltins.isGitDecrypted name
                else if exec != null
                then builtins.trace "isGitDecrypted_ => exec" exec [ is_git_decrypted name ]
-               else builtins.trace "isGitDecrypted_ => false" false;
+               else builtins.trace "isGitDecrypted_ => false" { success=false; value=false; };
 
   sshSignHost_ = ca: hostname: realms: type: if builtins ? extraBuiltins && builtins.extraBuiltins ? sshSignHost
                then builtins.trace "sshSignHost_ => sshSignHost" builtins.extraBuiltins.sshSignHost ca hostname realms type
                else if exec != null
                then builtins.trace "sshSignHost_ => exec" exec [ ssh_sign_host ca hostname realms type ]
-               else builtins.trace "sshSignHost_ => ''" { host_key=""; host_key_pub=""; host_key_cert_pub=""; };
+               else builtins.trace "sshSignHost_ => ''" { success=false; value={ host_key=""; host_key_pub=""; host_key_cert_pub=""; }; };
 
   extra_builtins_file = pkgs: pkgs.writeScript "extra-builtins-file.nix" ''
     {exec, ...}: {

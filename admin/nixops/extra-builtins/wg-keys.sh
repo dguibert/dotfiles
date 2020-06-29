@@ -15,4 +15,4 @@ fi
 
 pass show $key_name > $f
 cat "$f" | @wireguardtools@/bin/wg pubkey | head -c -1 > $pubfile
-nix-instantiate --strict --eval -E "{ privateKey = builtins.readFile $f; publicKey = builtins.readFile $pubfile; }"
+nix-instantiate --strict --eval -E "{ success=true; value={ privateKey = builtins.readFile $f; publicKey = builtins.readFile $pubfile; }; }"
