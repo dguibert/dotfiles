@@ -540,7 +540,39 @@
           hydra.nixosModules.hydra
           (import ./hosts/titan/configuration.nix)
           self.nixosModules.mopidy-server
+          ./users/fvigilant
+          ./modules/yubikey-gpg.nix
+          ./modules/distributed-build.nix
+          ./modules/x11.nix
         ];
+        hardware.opengl.enable = true;
+        hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+        
+        hardware.pulseaudio.enable = true;
+        # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
+        hardware.pulseaudio.daemon.config.default-fragments = "5";
+        hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
+        environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
+        
+        # https://nixos.org/nixops/manual/#idm140737318329504
+        virtualisation.libvirtd.enable = true;
+        #virtualisation.anbox.enable = true;
+        #services.nfs.server.enable = true;
+        virtualisation.docker.enable = true;
+        virtualisation.docker.storageDriver = "zfs";
+        
+        programs.singularity.enable = true;
+        
+        networking.firewall.checkReversePath = false;
+        systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
+        
+        services.disnix.enable = true;
+        
+        programs.adb.enable = true;
+        
+        services.jellyfin.enable = true;
+        networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
+
         systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
         roles.mopidy-server.enable = true;
@@ -549,23 +581,23 @@
         roles.mopidy-server.configuration.iris.country = "FR";
         roles.mopidy-server.configuration.iris.locale = "FR";
 
-        services.hydra-dev = {
-          enable = true;
-          hydraURL = "http://localhost:3000";
-          notificationSender = "hydra@orsin.freeboxos.fr";
-          listenHost = "localhost";
-          port = 3000;
-          useSubstitutes = true;
-          extraConfig = ''
-            store_uri = file:///var/lib/hydra/cache?secret-key=/etc/nix/hydra.orsin.freeboxos.fr-1/secret
+        #services.hydra-dev = {
+        #  enable = true;
+        #  hydraURL = "http://localhost:3000";
+        #  notificationSender = "hydra@orsin.freeboxos.fr";
+        #  listenHost = "localhost";
+        #  port = 3000;
+        #  useSubstitutes = true;
+        #  extraConfig = ''
+        #    store_uri = file:///var/lib/hydra/cache?secret-key=/etc/nix/hydra.orsin.freeboxos.fr-1/secret
 
-            max_concurrent_evals = 1
-          '';
-          buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
-            ++ [ "/etc/nix/machines-hydra" ];
-        };
-        # clean cache directory (nar cache)
-        systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
+        #    max_concurrent_evals = 1
+        #  '';
+        #  buildMachinesFiles = (lib.optional (config.nix.buildMachines !=[]) "/etc/nix/machines")
+        #    ++ [ "/etc/nix/machines-hydra" ];
+        #};
+        ## clean cache directory (nar cache)
+        #systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
 
         environment.etc."nix/machines-hydra".text = ''
           localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
@@ -589,37 +621,37 @@
           permissions = "0440";
         };
 
-        services.postgresql = {
-          package = pkgs.postgresql_9_6;
-          dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
-        };
+        #services.postgresql = {
+        #  package = pkgs.postgresql_9_6;
+        #  dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
+        #};
 
-        systemd.services.hydra-manual-setup = {
-          description = "Create Admin User for Hydra";
-          serviceConfig.Type = "oneshot";
-          serviceConfig.RemainAfterExit = true;
-          wantedBy = [ "multi-user.target" ];
-          requires = [ "hydra-init.service" ];
-          after = [ "hydra-init.service" ];
-          environment = lib.mkForce config.systemd.services.hydra-init.environment;
-          script = ''
-            if [ ! -e ~hydra/.setup-is-complete ]; then
-              # create admin user
-              /run/current-system/sw/bin/hydra-create-user dguibert --full-name 'David G. User' --email-address 'dguibert@orsin.freeboxos.fr' --password foobar --role admin
-              # create signing keys
-              /run/current-system/sw/bin/install -d -m 551 /etc/nix/hydra.orsin.freeboxos.fr-1
-              /run/current-system/sw/bin/nix-store --generate-binary-cache-key hydra.orsin.freeboxos.fr-1 /etc/nix/hydra.orsin.freeboxos.fr-1/secret /etc/nix/hydra.orsin.freeboxos.fr-1/public
-              /run/current-system/sw/bin/chown -R hydra:hydra /etc/nix/hydra.orsin.freeboxos.fr-1
-              /run/current-system/sw/bin/chmod 440 /etc/nix/hydra.orsin.freeboxos.fr-1/secret
-              /run/current-system/sw/bin/chmod 444 /etc/nix/hydra.orsin.freeboxos.fr-1/public
-              # create cache (https://qfpl.io/posts/nix/starting-simple-hydra/)
-              /run/current-system/sw/bin/install -d -m 755 /var/lib/hydra/cache
-              /run/current-system/sw/bin/chown -R hydra-queue-runner:hydra /var/lib/hydra/cache
-              # done
-              touch ~hydra/.setup-is-complete
-            fi
-          '';
-        };
+        #systemd.services.hydra-manual-setup = {
+        #  description = "Create Admin User for Hydra";
+        #  serviceConfig.Type = "oneshot";
+        #  serviceConfig.RemainAfterExit = true;
+        #  wantedBy = [ "multi-user.target" ];
+        #  requires = [ "hydra-init.service" ];
+        #  after = [ "hydra-init.service" ];
+        #  environment = lib.mkForce config.systemd.services.hydra-init.environment;
+        #  script = ''
+        #    if [ ! -e ~hydra/.setup-is-complete ]; then
+        #      # create admin user
+        #      /run/current-system/sw/bin/hydra-create-user dguibert --full-name 'David G. User' --email-address 'dguibert@orsin.freeboxos.fr' --password foobar --role admin
+        #      # create signing keys
+        #      /run/current-system/sw/bin/install -d -m 551 /etc/nix/hydra.orsin.freeboxos.fr-1
+        #      /run/current-system/sw/bin/nix-store --generate-binary-cache-key hydra.orsin.freeboxos.fr-1 /etc/nix/hydra.orsin.freeboxos.fr-1/secret /etc/nix/hydra.orsin.freeboxos.fr-1/public
+        #      /run/current-system/sw/bin/chown -R hydra:hydra /etc/nix/hydra.orsin.freeboxos.fr-1
+        #      /run/current-system/sw/bin/chmod 440 /etc/nix/hydra.orsin.freeboxos.fr-1/secret
+        #      /run/current-system/sw/bin/chmod 444 /etc/nix/hydra.orsin.freeboxos.fr-1/public
+        #      # create cache (https://qfpl.io/posts/nix/starting-simple-hydra/)
+        #      /run/current-system/sw/bin/install -d -m 755 /var/lib/hydra/cache
+        #      /run/current-system/sw/bin/chown -R hydra-queue-runner:hydra /var/lib/hydra/cache
+        #      # done
+        #      touch ~hydra/.setup-is-complete
+        #    fi
+        #  '';
+        #};
         services.openssh.extraConfig = ''
           Match Group sftponly
           ChrootDirectory %h

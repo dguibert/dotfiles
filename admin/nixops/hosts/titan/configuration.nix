@@ -8,11 +8,7 @@ rec {
   imports = [
       ../common.nix
       ../../users/dguibert
-      ../../users/fvigilant
-      ../../modules/yubikey-gpg.nix
-      ../../modules/distributed-build.nix
       ../../modules/nix-conf.nix
-      ../../modules/x11.nix
       ../../modules/zfs.nix
       #(import <nur_dguibert/modules>).qemu-user
       #../../modules/wayland-nvidia.nix
@@ -30,17 +26,20 @@ rec {
   boot.kernelModules = [ "kvm-intel" ];
 
   #boot.zfs.extraPools = [ "st4000dm004-1" ];
-  fileSystems."/"         = { device = "icybox1/root/nixos"; fsType = "zfs"; };
-  fileSystems."/home"     = { device = "icybox1/home"; fsType = "zfs"; };
-  fileSystems."/home/dguibert/Videos" = { device = "icybox1/home/dguibert/Videos"; fsType = "zfs"; };
+  fileSystems."/"         = { device = "icybox1/local/root"; fsType = "zfs"; };
+  fileSystems."/nix"      = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/root"     = { device = "icybox1/safe/home/root"; fsType = "zfs"; };
+  fileSystems."/home/dguibert" = { device = "icybox1/safe/home/dguibert"; fsType = "zfs"; };
+  fileSystems."/home/dguibert/Videos" = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; };
   fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; };
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
-  boot.kernelParams = [ "console=tty0" "console=ttyS1,115200n8"
-    "resume=LABEL=swap-nvmpe1"
+  boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
+    "elevator=none"
+    "resume=/dev/nvme0n1p1"
   ];
-  swapDevices = [ { label="swap-nvmpe1"; } ];
+  swapDevices = [ { device="/dev/nvme0n1p1"; } ];
 
   nix.maxJobs = lib.mkDefault 8;
   nix.buildCores = lib.mkDefault 24;
@@ -66,8 +65,9 @@ rec {
 
   services.openssh.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_4;
+  boot.kernelPackages = pkgs.linuxPackages_5_8;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
+  boot.zfs.enableUnstable = true;
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -122,34 +122,6 @@ rec {
   hardware.nvidia.modesetting.enable = true;
   services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
   #nixpkgs.config.xorg.abiCompat = "1.18";
-
-  hardware.opengl.enable = true;
-  hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
-
-  hardware.pulseaudio.enable = true;
-  # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
-  hardware.pulseaudio.daemon.config.default-fragments = "5";
-  hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
-  environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
-
-  # https://nixos.org/nixops/manual/#idm140737318329504
-  virtualisation.libvirtd.enable = true;
-  #virtualisation.anbox.enable = true;
-  #services.nfs.server.enable = true;
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
-
-  programs.singularity.enable = true;
-
-  networking.firewall.checkReversePath = false;
-  systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
-
-  services.disnix.enable = true;
-
-  programs.adb.enable = true;
-
-  services.jellyfin.enable = true;
-  networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
 
   # https://nixos.org/nixos/manual/index.html#sec-container-networking
   networking.nat.enable = true;

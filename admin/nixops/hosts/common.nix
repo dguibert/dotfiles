@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 {
   boot.consoleLogLevel = 6; #KERN_INFO
-  environment.systemPackages = [ pkgs.vim ];
+  environment.systemPackages = [ pkgs.vim pkgs.git ];
   # Select internationalisation properties.
   console.font = "Lat2-Terminus16";
   console.keyMap = lib.mkDefault "fr";
@@ -31,8 +31,8 @@
   };
 
   # disnix target
-  dysnomia.properties.mem = "$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')";
-  dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
+  #dysnomia.properties.mem = "$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')";
+  #dysnomia.properties.disks = "$(ls /dev/disk/by-id/ | grep -v -- '-part.*' | tr '\\\\n' ' ')";
   # https://hydra.nixos.org/job/disnix/disnix-trunk/tarball/latest/download-by-type/doc/manual/#chap-packages
   environment.variables.PATH = [ "/nix/var/nix/profiles/disnix/default/bin" ];
 
