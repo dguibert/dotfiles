@@ -212,11 +212,11 @@
     ##
     ## - devShell: A derivation that defines the shell environment used by nix dev-shell if no specific attribute is given. If it does not exist, then nix dev-shell will use defaultPackage.
     devShell = forAllSystems (system: with nixpkgsFor.${system}; let
-      my-terraform = terraform.withPlugins (p: with p; [
-        libvirt
-        p."null"
-      ]);
-      terranix_ = callPackage terranix {};
+      #my-terraform = terraform.withPlugins (p: with p; [
+      #  libvirt
+      #  p."null"
+      #]);
+      #terranix_ = callPackage terranix {};
     in mkEnv rec {
       name = "deploy";
       buildInputs = [
@@ -224,19 +224,19 @@
         nixpkgsFor.x86_64-linux.nixops
         #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
-        terranix_
+        #terranix_
         jq
 
         #my-terraform
-        terraform-landscape
-        (writeShellScriptBin "terraform" ''
-          set -x
-          #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
-          #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
-          set +x
-          ${my-terraform}/bin/terraform "$@"
-        '')
+        #terraform-landscape
+        #(writeShellScriptBin "terraform" ''
+        #  set -x
+        #  #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
+        #  #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
+        #  #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
+        #  set +x
+        #  ${my-terraform}/bin/terraform "$@"
+        #'')
 
       ];
       shellHook = ''
@@ -263,7 +263,10 @@
 
         NIX_OPTIONS=()
         NIX_OPTIONS+=("--option plugin-files ${(nixpkgsFor.x86_64-linux.nix-plugins.override { nix = nixpkgsFor.x86_64-linux.nix; }).overrideAttrs (o: {
-            buildInputs = o.buildInputs ++ [ boehmgc ];
+            buildInputs = o.buildInputs ++ [ boehmgc nlohmann_json ];
+            patches = (o.patches or []) ++ [
+              ./nix-plugins-PrimOp.patch
+            ];
           })}/lib/nix/plugins/libnix-extra-builtins.so")
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file nixpkgsFor.${system}}")
         export NIX_OPTIONS
@@ -416,7 +419,7 @@
           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
           NIX_OPTIONS=()
           NIX_OPTIONS+=("--option plugin-files ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
-              buildInputs = o.buildInputs ++ [ pkgs.boehmgc ];
+              buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
             })}/lib/nix/plugins/libnix-extra-builtins.so")
           NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")
           export NIX_OPTIONS
