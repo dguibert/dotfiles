@@ -550,29 +550,29 @@
         ];
         hardware.opengl.enable = true;
         hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
-        
+
         hardware.pulseaudio.enable = true;
         # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
         hardware.pulseaudio.daemon.config.default-fragments = "5";
         hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
         environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
-        
+
         # https://nixos.org/nixops/manual/#idm140737318329504
         virtualisation.libvirtd.enable = true;
         #virtualisation.anbox.enable = true;
         #services.nfs.server.enable = true;
         virtualisation.docker.enable = true;
         virtualisation.docker.storageDriver = "zfs";
-        
+
         programs.singularity.enable = true;
-        
+
         networking.firewall.checkReversePath = false;
         systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
-        
+
         services.disnix.enable = true;
-        
+
         programs.adb.enable = true;
-        
+
         services.jellyfin.enable = true;
         networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
 

@@ -10,7 +10,7 @@ trap "rm -r $d" EXIT
 key_name="$1"
 if ! pass show "$key_name" > $f; then
   rm $f
-  @wireguardtools@/bin/wg genkey | head -c -1 | pass insert -m -f $f >&2
+  @wireguardtools@/bin/wg genkey | head -c -1 | pass insert -m -f $key_name >&2
 fi
 
 pass show $key_name > $f
