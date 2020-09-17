@@ -12,7 +12,7 @@
     #options zfs zfs_arc_max=16777216
     # https://github.com/archzfs/archzfs/issues/187
     # in 4.13.x noop was renamed to none
-    #options zfs zfs_vdev_scheduler="none"
+    options zfs zfs_vdev_scheduler="none"
 
     # https://www.svennd.be/tuning-of-zfs-module/
     # increase them so scrub/resilver is more quickly at the cost of other work
@@ -38,8 +38,8 @@
     # use the prefetch method
     #options zfs zfs_prefetch_disable=0
 
-    #options zfs zfs_dirty_data_max_percent=40
-    #options zfs zfs_txg_timeout=15
+    options zfs zfs_dirty_data_max_percent=40
+    options zfs zfs_txg_timeout=15
   '';
 }
 
