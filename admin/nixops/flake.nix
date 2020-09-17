@@ -30,6 +30,8 @@
     gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
   };
 
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+
   outputs = { self, nixpkgs
             , nur_dguibert
             #, nur_dguibert_envs
@@ -41,13 +43,10 @@
             , hydra
             , nix
             , nixops
+            , flake-utils
             }@flakes: let
-      systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
-
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
-
       # Memoize nixpkgs for different platforms for efficiency.
-      nixpkgsFor = forAllSystems (system:
+      nixpkgsFor = system:
         import nixpkgs {
           inherit system;
           overlays =  [
@@ -59,17 +58,46 @@
             self.overlay
           ] /*++ nur_dguibert_envs.overlays*/;
           config.allowUnfree = true;
-        }
-      );
+        };
 
-      inherit (import ./extra-builtins.nix { pkgs = nixpkgsFor.x86_64-linux; })
+      inherit (import ./extra-builtins.nix { pkgs = nixpkgsFor "x86_64-linux"; })
         pass_
         isGitDecrypted_
         sshSignHost_
         wgKeys_
         extra_builtins_file;
 
-    in rec {
+  in (flake-utils.lib.eachDefaultSystem (system:
+       let pkgs = nixpkgsFor system; in rec {
+
+    devShell = import ./shell.nix { inherit pkgs flakes; };
+    legacyPackages = pkgs;
+
+    homeConfigurations = /*flake-utils.lib.flattenTree*/ {
+      root = home-manager.lib.mkHome system (args: {
+        imports = [ (import "${base16-nix}/base16.nix")
+                    (import ./users/root/home.nix { system = system; }).home ];
+        nixpkgs.pkgs = pkgs;
+      });
+      dguibert.no-x11 = home-manager.lib.mkHome system (args: {
+        imports = [ (import "${base16-nix}/base16.nix")
+                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withoutX11 ];
+        nixpkgs.pkgs = pkgs;
+      });
+      dguibert.x11 = home-manager.lib.mkHome system (args: {
+        imports = [ (import "${base16-nix}/base16.nix")
+                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withX11 ];
+        nixpkgs.pkgs = pkgs;
+      });
+      dguibert_spartan.x11 = home-manager.lib.mkHome system (args: {
+        imports = [ (import "${base16-nix}/base16.nix")
+                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).spartan ];
+        nixpkgs.pkgs = pkgs.spartan;
+      });
+    };
+
+
+  })) // (rec {
     overlay = final: prev: with final; {
       # Patch libvirt to use ebtables-legacy
       libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
@@ -121,29 +149,6 @@
         '';
     };
 
-    ## - packages: A set of derivations used as a default by most nix commands. For example, nix run nixpkgs:hello uses the packages.hello attribute of the nixpkgs flake. It cannot contain any non-derivation attributes. This also means it cannot be a nested set! (The rationale is that supporting nested sets requires Nix to evaluate each attribute in the set, just to discover which packages are provided.)
-    #packages.hello = nixpkgs.provides.packages.hello;
-    packages = forAllSystems (system: with nixpkgsFor.${system}; {
-      inherit (nixpkgsFor."${system}") hello;
-
-      nix = nixpkgsFor.${system}.nix;
-      libuv = nixpkgsFor.${system}.libuv;
-      cmake = nixpkgsFor.${system}.cmake;
-
-      rpi31_sd = nixosConfigurations.rpi31.config.system.build.sdImage;
-      rpi41_sd = nixosConfigurations.rpi41.config.system.build.sdImage;
-
-      rpi41_cross_sd = nixosConfigurations.rpi41_cross.config.system.build.sdImage;
-
-      install-laptop = install-script nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
-
-    });
-
-    ## - defaultPackage: A derivation used as a default by most nix commands if no attribute is specified. For example, nix run dwarffs uses the defaultPackage attribute of the dwarffs flake.
-    ##
-    ## - checks: A non-nested set of derivations built by the nix flake check command, and by Hydra if a flake does not have a hydraJobs attribute.
-    checks.x86_64-linux.hello = packages.x86_64-linux.hello;
-
     hydraJobs = rec {
       all = nixpkgsFor.x86_64-linux.writeText "all" ''
         #{deploy-rpi31-system  }
@@ -173,19 +178,19 @@
       deploy-t580-system    = nixpkgsFor.x86_64-linux.deploy "root@laptop-s93efa6b" "system" nixosConfigurations.laptop-s93efa6b.config.system.build.toplevel;
       deploy-orsine-system  = nixpkgsFor.x86_64-linux.deploy "root@orsine"    "system"       nixosConfigurations.orsine.config.system.build.toplevel;
 
-      deploy-titan-dguibert = nixpkgsFor.x86_64-linux.deploy "dguibert@titan"  "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
-      deploy-t580-dguibert  = nixpkgsFor.x86_64-linux.deploy "dguibert@laptop-s93efa6b" "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
-      deploy-orsine-dguibert= nixpkgsFor.x86_64-linux.deploy "dguibert@orsine" "home-manager" homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      deploy-titan-dguibert = nixpkgsFor.x86_64-linux.deploy "dguibert@titan"  "home-manager" self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      deploy-t580-dguibert  = nixpkgsFor.x86_64-linux.deploy "dguibert@laptop-s93efa6b" "home-manager" self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      deploy-orsine-dguibert= nixpkgsFor.x86_64-linux.deploy "dguibert@orsine" "home-manager" self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
 
-      deploy-rpi31-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
-      deploy-rpi41-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
+      deploy-rpi31-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" self.homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
+      deploy-rpi41-dguibert = nixpkgsFor.aarch64-linux.deploy "dguibert@rpi31" "home-manager" self.homeConfigurations.dguibert.no-x11.aarch64-linux.activationPackage;
 
-      deploy-titan-root  = nixpkgsFor.x86_64-linux.deploy "root@titan" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
-      deploy-t580-root   = nixpkgsFor.x86_64-linux.deploy "root@laptop-s93efa6b" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
-      deploy-orsine-root = nixpkgsFor.x86_64-linux.deploy "root@orsine" "home-manager" homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-titan-root  = nixpkgsFor.x86_64-linux.deploy "root@titan" "home-manager" self.homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-t580-root   = nixpkgsFor.x86_64-linux.deploy "root@laptop-s93efa6b" "home-manager" self.homeConfigurations.root.x86_64-linux.activationPackage;
+      deploy-orsine-root = nixpkgsFor.x86_64-linux.deploy "root@orsine" "home-manager" self.homeConfigurations.root.x86_64-linux.activationPackage;
 
-      #hm_dguibert_x11 = homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
-      #hm_dguibert_spartan = homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
+      #hm_dguibert_x11 = self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
+      #hm_dguibert_spartan = self.homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
       iso = (nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -210,70 +215,6 @@
     ##
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
-    ## - devShell: A derivation that defines the shell environment used by nix dev-shell if no specific attribute is given. If it does not exist, then nix dev-shell will use defaultPackage.
-    devShell = forAllSystems (system: with nixpkgsFor.${system}; let
-      #my-terraform = terraform.withPlugins (p: with p; [
-      #  libvirt
-      #  p."null"
-      #]);
-      #terranix_ = callPackage terranix {};
-    in mkEnv rec {
-      name = "deploy";
-      buildInputs = [
-        nixpkgsFor.x86_64-linux.nix
-        nixpkgsFor.x86_64-linux.nixops
-        #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
-
-        #terranix_
-        jq
-
-        #my-terraform
-        #terraform-landscape
-        #(writeShellScriptBin "terraform" ''
-        #  set -x
-        #  #export TF_VAR_wireguard_deploy_nixos_orsine="`${pass}/bin/pass orsine/wireguard_key`"
-        #  #export TF_VAR_wireguard_deploy_nixos_rpi31="`${pass}/bin/pass rpi31/wireguard_key`"
-        #  #export TF_VAR_wireguard_deploy_nixos_titan="`${pass}/bin/pass titan/wireguard_key`"
-        #  set +x
-        #  ${my-terraform}/bin/terraform "$@"
-        #'')
-
-      ];
-      shellHook = ''
-        unset NIX_INDENT_MAKE
-        unset IN_NIX_SHELL NIX_REMOTE
-        unset TMP TMPDIR
-
-        # https://blog.wearewizards.io/how-to-use-nixops-in-a-team
-        export NIXOPS_STATE=secrets/deploy.nixops
-
-        export DISNIXOS_USE_NIXOPS=1
-        export DISNIX_TARGET_PROPERTY=target
-
-        export PASSWORD_STORE_DIR=$PWD/secrets
-        export SHELL=${bashInteractive}/bin/bash
-
-        export XDG_CACHE_HOME=$HOME/.cache/${name}
-        unset NIX_STORE NIX_DAEMON
-        NIX_PATH=
-        ${lib.concatMapStrings (f: ''
-          NIX_PATH+=:${toString f}=${toString flakes.${f}}
-        '') (builtins.attrNames flakes) }
-        export NIX_PATH
-
-        NIX_OPTIONS=()
-        NIX_OPTIONS+=("--option plugin-files ${(nixpkgsFor.x86_64-linux.nix-plugins.override { nix = nixpkgsFor.x86_64-linux.nix; }).overrideAttrs (o: {
-            buildInputs = o.buildInputs ++ [ boehmgc nlohmann_json ];
-            patches = (o.patches or []) ++ [
-              ./nix-plugins-PrimOp.patch
-            ];
-          })}/lib/nix/plugins/libnix-extra-builtins.so")
-        NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file nixpkgsFor.${system}}")
-        export NIX_OPTIONS
-
-        export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
-      '';
-    });
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosModules.mopidy-server = import ./roles/mopidy.nix;
@@ -812,27 +753,6 @@
         ];
       };
     };
-    homeConfigurations.root = forAllSystems (system: home-manager.lib.mkHome system (args: {
-      imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/root/home.nix { system = system; }).home ];
-      nixpkgs.pkgs = nixpkgsFor.${system};
-    }));
-    homeConfigurations.dguibert.no-x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
-      imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).withoutX11 ];
-      nixpkgs.pkgs = nixpkgsFor.${system};
-    }));
-    homeConfigurations.dguibert.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
-      imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).withX11 ];
-      nixpkgs.pkgs = nixpkgsFor.${system};
-    }));
-    homeConfigurations.dguibert_spartan.x11 = forAllSystems (system: home-manager.lib.mkHome system (args: {
-      imports = [ (import "${base16-nix}/base16.nix")
-                  (import ./users/dguibert/home.nix { system = system; pkgs = nixpkgsFor.${system}; }).spartan ];
-      nixpkgs.pkgs = nixpkgsFor.${system}.spartan.pkgs;
-    }));
-
     #deploy.nodes.titan = {
     #  hostname = "titan";
     #  profiles = {
@@ -870,5 +790,5 @@
     #  };
     #};
 
-  };
+  });
 }
