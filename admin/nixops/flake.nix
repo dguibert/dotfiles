@@ -555,15 +555,15 @@
           text = key.value;
           destDir = "/etc/nix";
         };
-        deployment.keys.id_buildfarm = let
-          key = pass_ "id_buildfarm";
-               in mkIf key.success {
-          text = key.value;
-          destDir = "/etc/nix";
-          user = "hydra";
-          group = "hydra";
-          permissions = "0440";
-        };
+        #deployment.keys.id_buildfarm = let
+        #  key = pass_ "id_buildfarm";
+        #       in mkIf key.success {
+        #  text = key.value;
+        #  destDir = "/etc/nix";
+        #  user = "hydra";
+        #  group = "hydra";
+        #  permissions = "0440";
+        #};
 
         #services.postgresql = {
         #  package = pkgs.postgresql_9_6;
