@@ -162,10 +162,10 @@ rec {
 
       autosnap = true;
     };
-    datasets."icybox1/home".useTemplate = [ "prod" ];
-    datasets."icybox1/home".recursive = true;
-    datasets."icybox1/home/dguibert/Videos".useTemplate = [ "media" ];
-    datasets."icybox1/home/dguibert/Videos".recursive = true;
+    datasets."icybox1/safe".useTemplate = [ "prod" ];
+    datasets."icybox1/safe".recursive = true;
+    datasets."icybox1/safe/home/dguibert/Videos".useTemplate = [ "media" ];
+    datasets."icybox1/safe/home/dguibert/Videos".recursive = true;
 
     templates.backup = {
       autoprune = true;

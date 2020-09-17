@@ -419,7 +419,10 @@
           export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
           NIX_OPTIONS=()
           NIX_OPTIONS+=("--option plugin-files ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
-              buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
+            buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
+            patches = (o.patches or []) ++ [
+              ./nix-plugins-PrimOp.patch
+            ];
             })}/lib/nix/plugins/libnix-extra-builtins.so")
           NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")
           export NIX_OPTIONS

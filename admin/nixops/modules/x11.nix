@@ -12,13 +12,13 @@
 #  services.xserver.desktopManager.gnome3.enable = true;
 #  networking.wireless.enable = mkForce false; # - You can not use networking.networkmanager with services.networking.wireless
 # TODO check incompatibilities with home-manager xsession
-  services.xserver.displayManager.lightdm.autoLogin.enable = true;
-  services.xserver.displayManager.lightdm.autoLogin.user = "dguibert";
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "dguibert";
   services.xserver.desktopManager.xterm.enable = true;
 
   fonts.enableFontDir = true;
   fonts.enableGhostscriptFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts corefonts ];
+  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts /*corefonts*/ ];
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;

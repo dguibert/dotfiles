@@ -417,7 +417,7 @@ in let
 
     withX11 = { config, pkgs, lib
             , ...}@args: let
-      davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre8; };
+      #davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre8; };
     in with lib;
         lib.recursiveUpdate
         (lib.recursiveUpdate
@@ -464,7 +464,7 @@ in let
           corkscrew
           autossh
 
-          davmail_
+          #davmail_
           neomutt
           urlscan
 
@@ -488,7 +488,7 @@ in let
           thunderbird-bin
           #firefox-bin
 
-          terminus_font powerline-fonts corefonts
+          terminus_font powerline-fonts #corefonts
           fira-code
           fira-code-symbols
         ];
@@ -506,7 +506,7 @@ in let
             # processes (shells etc) to also run in the session
             ${pkgs.rxvt_unicode}/bin/urxvtd -q -o -f &
             sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-            sleep 10 && ${davmail_}/bin/davmail &
+            #sleep 10 && #{davmail_}/bin/davmail &
             ${pkgs.autorandr}/bin/autorandr -c
 
             conky -c ~/.conkyrc | while read line; do
