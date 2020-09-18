@@ -1,30 +1,10 @@
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-{ system ? builtins.currentSystem, overlays ? [], pkgs ? import <nixpkgs> {} }:
-
 let
-  inherit (import ../../extra-builtins.nix { inherit pkgs;})
-    pass_
-    isGitDecrypted_
-    extra_builtins_file;
-
-  home-secret = let
-      loaded = (isGitDecrypted_ ./home-secret.nix).success;
-    in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-       then import ./home-secret.nix { inherit system overlays; }
-       else { withoutX11 = { ... }: {};
-              withX11 = { ... }: {};
-            };
-
-in let
   homes = {
     withoutX11 = { config, pkgs, lib
         , ...}@args:
         with lib;
-        lib.recursiveUpdate
-    (home-secret.withoutX11 args)
     ({
-      home.username = "dguibert";
-      home.homeDirectory = "/home/dguibert";
       # Choose your themee
       themes.base16 = {
         enable = true;
@@ -42,7 +22,7 @@ in let
           '';
         };
       };
-      nixpkgs.overlays = overlays ++ (lib.singleton (const (super: {
+      nixpkgs.overlays = (lib.singleton (const (super: {
         dbus = super.dbus.override { x11Support = false; };
         networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
         networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
@@ -413,6 +393,7 @@ in let
       home.file.".tmux/tmux.remote.conf".source = ./tmux/tmux.remote.conf;
       home.file.".tmux/status.conf".source = ./tmux/status.conf;
 
+      home.stateVersion = "20.09";
     });
 
     withX11 = { config, pkgs, lib
@@ -420,11 +401,8 @@ in let
       #davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre8; };
     in with lib;
         lib.recursiveUpdate
-        (lib.recursiveUpdate
       (homes.withoutX11 args)
-      (home-secret.withX11 args))
       ({
-        nixpkgs.overlays = overlays;
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
           jrnl
           pandoc
@@ -534,7 +512,7 @@ in let
         programs.browserpass.enable = true;
 
         programs.firefox.enable = true;
-        programs.firefox.package = pkgs.firefox-bin-unwrapped // { browserName="firefox"; };
+        programs.firefox.package = pkgs.firefox-bin;
         #programs.firefox.extensions =
         #  with (import <NUR> { inherit pkgs; }).repos.rycee.firefox-addons; [
         #    ublock-origin
@@ -651,8 +629,6 @@ in let
         lib.recursiveUpdate
       (homes.withoutX11 args)
       ({
-        home.username = "bguibertd";
-        home.homeDirectory = "/home_nfs_robin_ib/bguibertd";
         programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
           if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
             source $HOME/.nix-profile/etc/profile.d/nix.sh
@@ -662,7 +638,7 @@ in let
           export PATH=$HOME/bin:$PATH
         '';
 
-        nixpkgs.overlays = overlays ++ [ (final: prev: {
+        nixpkgs.overlays = [ (final: prev: {
           pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
         })];
         services.gpg-agent.pinentryFlavor = lib.mkForce "curses";
@@ -699,8 +675,6 @@ in let
         lib.recursiveUpdate
       (homes.cluster args)
       ({
-        home.username = "bguibertd";
-        home.homeDirectory = "/home_nfs/bguibertd";
       });
 
     inti = { pkgs, lib
@@ -708,8 +682,6 @@ in let
         lib.recursiveUpdate
       (homes.cluster args)
       ({
-        home.username = "guibertd";
-        home.homeDirectory = "/ccc/home/cont003/bull/guibertd";
       });
 
   };

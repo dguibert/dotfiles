@@ -89,11 +89,27 @@
       #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withoutX11 ];
       #  nixpkgs.pkgs = pkgs;
       #});
-      #dguibert.x11 = home-manager.lib.mkHome system (args: {
-      #  imports = [ (import "${base16-nix}/base16.nix")
-      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withX11 ];
-      #  nixpkgs.pkgs = pkgs;
-      #});
+      dguibert.x11 = let
+          home-secret = let
+              loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
+            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
+               then import ./users/dguibert/home-secret.nix
+               else { withoutX11 = { ... }: {};
+                      withX11 = { ... }: {};
+                    };
+
+        in home-manager.lib.homeManagerConfiguration {
+        username = "dguibert";
+        homeDirectory = "/home/dguibert";
+        inherit system pkgs;
+        configuration = { lib, ... }: {
+          imports = [ (import "${base16-nix}/base16.nix")
+            (import ./users/dguibert/home.nix).withX11
+            home-secret.withX11
+          ];
+          _module.args.pkgs = lib.mkForce pkgs;
+        };
+      };
       #dguibert_spartan.x11 = home-manager.lib.mkHome system (args: {
       #  imports = [ (import "${base16-nix}/base16.nix")
       #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).spartan ];
