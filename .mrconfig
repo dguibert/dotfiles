@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -209,7 +209,7 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 checkout = git init '.password-store'
 fixups = git_add_remotes "
 	          genji gcrypt::ssh://genji/~/public_git/password-store
-	          manny gcrypt::ssh://manny/~/public_git/password-store
+	          spartan gcrypt::ssh://spartan/~/public_git/password-store
 	          "
 update = git remote update
 push = git remote -v | grep push | awk '{print $1}' | xargs --verbose -i git push --all {}
@@ -232,7 +232,7 @@ fixups = git_add_remotes "
 	                 orsine-backupwd orsine:/backupwd/work
 	                 vbox-57nvj72 vbox-57nvj72:work
 	                 genji genji:work
-	                 manny manny:work
+	                 spartan spartan:work
 	                 genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
 	          "
 	               git remote remove manny_lustre_na 2>/dev/null || true
