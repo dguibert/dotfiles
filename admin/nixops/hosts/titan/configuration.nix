@@ -7,7 +7,6 @@
 rec {
   imports = [
       ../common.nix
-      ../../users/dguibert
       ../../modules/nix-conf.nix
       ../../modules/zfs.nix
       #(import <nur_dguibert/modules>).qemu-user
