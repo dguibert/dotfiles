@@ -74,26 +74,31 @@
     legacyPackages = pkgs;
 
     homeConfigurations = /*flake-utils.lib.flattenTree*/ {
-      root = home-manager.lib.mkHome system (args: {
-        imports = [ (import "${base16-nix}/base16.nix")
-                    (import ./users/root/home.nix { system = system; }).home ];
-        nixpkgs.pkgs = pkgs;
-      });
-      dguibert.no-x11 = home-manager.lib.mkHome system (args: {
-        imports = [ (import "${base16-nix}/base16.nix")
-                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withoutX11 ];
-        nixpkgs.pkgs = pkgs;
-      });
-      dguibert.x11 = home-manager.lib.mkHome system (args: {
-        imports = [ (import "${base16-nix}/base16.nix")
-                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withX11 ];
-        nixpkgs.pkgs = pkgs;
-      });
-      dguibert_spartan.x11 = home-manager.lib.mkHome system (args: {
-        imports = [ (import "${base16-nix}/base16.nix")
-                    (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).spartan ];
-        nixpkgs.pkgs = pkgs.spartan;
-      });
+      root = home-manager.lib.homeManagerConfiguration {
+        username = "root";
+        homeDirectory = "/root";
+        inherit system pkgs;
+        configuration = { ... }: {
+          imports = [ (import "${base16-nix}/base16.nix")
+                      (import ./users/root/home.nix).home ];
+
+        };
+      };
+      #dguibert.no-x11 = home-manager.lib.mkHome system (args: {
+      #  imports = [ (import "${base16-nix}/base16.nix")
+      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withoutX11 ];
+      #  nixpkgs.pkgs = pkgs;
+      #});
+      #dguibert.x11 = home-manager.lib.mkHome system (args: {
+      #  imports = [ (import "${base16-nix}/base16.nix")
+      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withX11 ];
+      #  nixpkgs.pkgs = pkgs;
+      #});
+      #dguibert_spartan.x11 = home-manager.lib.mkHome system (args: {
+      #  imports = [ (import "${base16-nix}/base16.nix")
+      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).spartan ];
+      #  nixpkgs.pkgs = pkgs.spartan;
+      #});
     };
 
 
@@ -337,7 +342,9 @@
       in {
         imports = [
           nixpkgs.nixosModules.notDetected
-          modules/wireguard-mesh.nix
+          home-manager.nixosModules.home-manager
+          ./modules/wireguard-mesh.nix
+          ./users/default.nix
         ];
 
         nixpkgs.config = import "${nur_dguibert}/config.nix";

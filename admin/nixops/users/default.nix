@@ -1,0 +1,5 @@
+{ ... }: {
+  imports = [
+    ./root/default.nix
+  ];
+}

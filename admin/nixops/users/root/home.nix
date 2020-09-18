@@ -1,15 +1,10 @@
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-{ system ? builtins.currentSystem, overlays ? [] }:
 let
   homes = {
     home = { pkgs, lib
            , ...}:
            with lib;
     {
-      home.username = lib.mkForce "root";
-      home.homeDirectory = lib.mkForce "/root";
-
-      nixpkgs.overlays = overlays;
       programs.bash.shellAliases.ls="ls --color";
 
       programs.bash.initExtra = ''
@@ -87,6 +82,7 @@ let
       # https://github.com/bobvanderlinden/nix-home/blob/master/home.nix
       home.keyboard.layout = "fr";
 
+      home.stateVersion = "20.09";
     };
   };
 in homes
