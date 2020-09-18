@@ -227,10 +227,10 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1600413455,
-        "narHash": "sha256-SsS2Sp+g0jIuS47+9qUG43+GXnG4grdOxCjdobyMs6E=",
+        "lastModified": 1600414552,
+        "narHash": "sha256-hUvY1KN2hQTiFIZOQJCP9D1PrKzC7FMHHRXMmYFDT5U=",
         "ref": "pu",
-        "rev": "9cdaf7613a61e0e3fd6f12cf5b2f11e575710611",
+        "rev": "60d355882b45026c3943a6c7379bb6bd4790d907",
         "revCount": 393,
         "type": "git",
         "url": "file:///home/dguibert/nur-packages"
