@@ -16,40 +16,20 @@
   boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" ];
   swapDevices = [ { label = "nvme-swap"; } ];
 
-  fileSystems."/" =
-      { device = "rt580/local/root";
-      fsType = "zfs";
-      };
-
-      fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/FE98-E8BD";
-      fsType = "vfat";
-      };
-
-      fileSystems."/nix" =
-        { device = "rt580/local/nix";
-        fsType = "zfs";
-      };
-
-      fileSystems."/home" =
-        { device = "rt580/safe/home";
-        fsType = "zfs";
-      };
-
-      fileSystems."/root" =
-        { device = "rt580/safe/home/root";
-        fsType = "zfs";
-      };
-
-      fileSystems."/persist" =
-        { device = "rt580/safe/persist";
-        fsType = "zfs";
-      };
+  fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
+  fileSystems."/boot" = { device = "/dev/disk/by-uuid/FE98-E8BD"; fsType = "vfat"; };
+  fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/home" = { device = "rt580/safe/home"; fsType = "zfs"; };
+  fileSystems."/root" = { device = "rt580/safe/home/root"; fsType = "zfs"; };
+  fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; };
 
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     zfs rollback -r rt580/local/root@blank
   '';
+
+  boot.kernelPackages = pkgs.linuxPackages_5_8;
+  boot.zfs.enableUnstable = true;
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";

@@ -5,7 +5,6 @@ rec {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ../common.nix
-    ../../users/dguibert
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix
     ../../modules/nix-conf.nix
@@ -54,7 +53,7 @@ rec {
   systemd.network.networks = {
     "40-bond0" = {
       name = "bond0";
-      DHCP = "both";
+      DHCP = "yes";
       networkConfig.BindCarrier = "enp0s31f6 wlp4s0";
     };
   } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" ] (bi:
@@ -114,7 +113,7 @@ rec {
   services.xserver.enable = true;
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.videoDrivers = [ "intel" "displaylink" ];
+  services.xserver.videoDrivers = [ "intel" /*"displaylink"*/ ];
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
