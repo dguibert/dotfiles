@@ -9,10 +9,12 @@
 
   boot.kernelParams = [ "elevator=none" ];
   boot.extraModprobeConfig = ''
-    #options zfs zfs_arc_max=16777216
+    # 24G
+    options zfs zfs_arc_max=25165824
     # https://github.com/archzfs/archzfs/issues/187
     # in 4.13.x noop was renamed to none
-    options zfs zfs_vdev_scheduler="none"
+    # https://github.com/openzfs/zfs/commit/9e17e6f2541c69a7a5e0ed814a7f5e71cbf8b90a
+    #options zfs zfs_vdev_scheduler="none"
 
     # https://www.svennd.be/tuning-of-zfs-module/
     # increase them so scrub/resilver is more quickly at the cost of other work
@@ -36,7 +38,7 @@
     #options zfs zfs_vdev_async_write_max_active=32
 
     # use the prefetch method
-    #options zfs zfs_prefetch_disable=0
+    options zfs zfs_prefetch_disable=0
 
     options zfs zfs_dirty_data_max_percent=40
     options zfs zfs_txg_timeout=15

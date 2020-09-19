@@ -35,6 +35,7 @@ rec {
   fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
+    "elevator=none" "loglevel=6"
     "resume=/dev/nvme0n1p1"
   ];
   swapDevices = [ { device="/dev/nvme0n1p1"; } ];
@@ -127,18 +128,26 @@ rec {
   networking.nat.externalInterface = "bond0";
 
   # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers
-  #services.udev.extraRules = with pkgs; ''
-  #  # set scheduler for ZFS member
-  #  # udevadm info --query=all --name=/dev/sda
-  #  ACTION=="add[change", KERNEL=="sd[a-z]", ATTR{ID_FS_TYPE}=="zfs_member", ATTR{queue/scheduler}="none"
+  services.udev.extraRules = with pkgs; ''
+    # set scheduler for NVMe
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+    # set scheduler for SSD and eMMC
+    ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+    # set scheduler for rotating disks
+    #ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
 
-  #  # set scheduler for NVMe
-  #  ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
-  #  # set scheduler for SSD and eMMC
-  #  ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
-  #  # set scheduler for rotating disks
-  #  #ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="kyber"
-  #'';
+    # set scheduler for ZFS member
+    # udevadm info --query=all --name=/dev/sda
+    # https://github.com/openzfs/zfs/pull/9609
+    ACTION=="add[change", KERNEL=="sd[a-z]", ATTR{ID_FS_TYPE}=="zfs_member", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS3EP4M", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS20WK1", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS25XFD", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS38E3P", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS20WGY", ATTR{queue/scheduler}="none"
+    ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS1T415", ATTR{queue/scheduler}="none"
+
+  '';
 
   services.sanoid = {
     enable = true;
