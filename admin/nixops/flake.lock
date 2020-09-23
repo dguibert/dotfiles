@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "NUR": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1592389354,
-        "narHash": "sha256-nXxwx5OdFWklnnPvb6nogOTs4HDUKowDg2iQtZQ/p0w=",
-        "owner": "nix-community",
-        "repo": "NUR",
-        "rev": "df6c739413aa45be251be4e892b000fc9fd30675",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "NUR",
-        "type": "github"
-      }
-    },
     "base16-nix": {
       "flake": false,
       "locked": {
@@ -33,6 +17,21 @@
       }
     },
     "flake-utils": {
+      "locked": {
+        "lastModified": 1600209923,
+        "narHash": "sha256-zoOWauTliFEjI++esk6Jzk7QO5EKpddWXQm9yQK24iM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "3cd06d3c1df6879c9e41cb2c33113df10566c760",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
       "locked": {
         "lastModified": 1600209923,
         "narHash": "sha256-zoOWauTliFEjI++esk6Jzk7QO5EKpddWXQm9yQK24iM=",
@@ -219,19 +218,46 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1596792298,
+        "narHash": "sha256-DM1fPvyRKneMihzALrguof78FxzBfRw243EFggkpog0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "585aa266d36fc6cc5f300d6f0696f89168f38c3c",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nur": {
+      "locked": {
+        "lastModified": 1600613860,
+        "narHash": "sha256-izsnhj55Iu29xzILIxtDIp6MXAS0oRYTrLkTsk2ShXA=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "79a5d66c9c85b9119f00254eb6733c383d0e7f82",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "nur_dguibert": {
       "inputs": {
+        "flake-utils": "flake-utils_2",
         "nix": [
           "nix"
         ],
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1600414552,
-        "narHash": "sha256-hUvY1KN2hQTiFIZOQJCP9D1PrKzC7FMHHRXMmYFDT5U=",
-        "ref": "pu",
-        "rev": "60d355882b45026c3943a6c7379bb6bd4790d907",
-        "revCount": 393,
+        "lastModified": 1600874482,
+        "narHash": "sha256-G94TmcfTde9ZfFVmfk/R4bEt/H2f62G/2F7RBkZnz1M=",
         "type": "git",
         "url": "file:///home/dguibert/nur-packages"
       },
@@ -244,7 +270,6 @@
     },
     "root": {
       "inputs": {
-        "NUR": "NUR",
         "base16-nix": "base16-nix",
         "flake-utils": "flake-utils",
         "gitignore": "gitignore",
@@ -253,8 +278,28 @@
         "nix": "nix_2",
         "nixops": "nixops",
         "nixpkgs": "nixpkgs",
+        "nur": "nur",
         "nur_dguibert": "nur_dguibert",
+        "sops-nix": "sops-nix",
         "terranix": "terranix"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1598620579,
+        "narHash": "sha256-t4ImALU9Kx2Ayzgcq/AmoYJ0NcRCH0YaCKsHFC88BvY=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "412ba17f0d21043fa30fc2d9db4cd9bd5e1da440",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "type": "github"
       }
     },
     "terranix": {
