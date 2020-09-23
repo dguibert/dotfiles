@@ -1,6 +1,9 @@
 {
   description = "Configurations of my systems";
 
+
+  # To update all inputs:
+  # $ nix flake update --recreate-lock-file
   inputs = {
     home-manager. url    = "github:dguibert/home-manager/pu";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -17,6 +20,9 @@
     nix.url              = "github:dguibert/nix/pu";
     nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    nur.url = "github:nix-community/NUR";
+    sops-nix.url = "github:Mic92/sops-nix";
+
     nur_dguibert.url     = "github:dguibert/nur-packages/pu";
     nur_dguibert.inputs.nix.follows = "nix";
     #nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
@@ -26,7 +32,6 @@
     #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
     #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
     base16-nix           = { url  = "github:atpotts/base16-nix"; flake=false; };
-    NUR                  = { url  = "github:nix-community/NUR"; flake=false; };
     gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
   };
 
@@ -36,7 +41,8 @@
             , nur_dguibert
             #, nur_dguibert_envs
             , base16-nix
-            , NUR
+            , nur
+            , sops-nix
             , gitignore
             , home-manager
             , terranix
@@ -55,12 +61,13 @@
               nixops = nixops.defaultPackage."${system}";
             })
             nur_dguibert.overlay
+            nur_dguibert.overlays.extra_builtins
             self.overlay
           ] /*++ nur_dguibert_envs.overlays*/;
           config.allowUnfree = true;
         };
 
-      inherit (import ./extra-builtins.nix { pkgs = nixpkgsFor "x86_64-linux"; })
+      inherit (nixpkgsFor "x86_64-linux")
         pass_
         isGitDecrypted_
         sshSignHost_
@@ -70,7 +77,9 @@
   in (flake-utils.lib.eachDefaultSystem (system:
        let pkgs = nixpkgsFor system; in rec {
 
-    devShell = import ./shell.nix { inherit pkgs flakes; };
+    devShell = pkgs.callPackage ./shell.nix { inherit flakes;
+      inherit (sops-nix.packages.${system}) sops-pgp-hook;
+    };
     legacyPackages = pkgs;
 
     homeConfigurations = /*flake-utils.lib.flattenTree*/ {

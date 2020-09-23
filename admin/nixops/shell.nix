@@ -1,20 +1,34 @@
 { pkgs ? import <nixpkgs> { }
 , flakes ? {}
+, sops
+, sops-pgp-hook
 }:
 with pkgs;
-let
-  inherit (import ./extra-builtins.nix { inherit pkgs; })
-    extra_builtins_file;
 
-in mkEnv rec {
+mkEnv rec {
   name = "deploy";
+
+  # imports all files ending in .asc/.gpg and sets $SOPS_PGP_FP.
+  sopsPGPKeyDirs = [
+  #  #"./keys/hosts"
+  #  #"./keys/users"
+  ];
+  # Also single files can be imported.
+  sopsPGPKeys = [
+    "./keys/hosts/titan.asc"
+    "./keys/users/dguibert.asc"
+  #  "./keys/users/mic92.asc"
+  #  "./keys/hosts/server01.asc"
+  ];
   buildInputs = [
     nix
     nixops
+    sops-pgp-hook
     #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
     jq
   ];
+  SOPS_PGP_FP = "";
   shellHook = ''
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL NIX_REMOTE
@@ -48,5 +62,6 @@ in mkEnv rec {
     export NIX_OPTIONS
 
     export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
+    sopsPGPHook
   '';
 }
