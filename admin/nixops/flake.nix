@@ -758,7 +758,7 @@
           package = pkgs.mesa_drivers;
         };
         hardware.deviceTree = {
-          base = pkgs.device-tree_rpi;
+          kernelPackage = pkgs.device-tree_rpi;
           overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
         };
         #services.xserver = {
