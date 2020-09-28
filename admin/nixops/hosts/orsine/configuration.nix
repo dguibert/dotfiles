@@ -105,14 +105,14 @@ rec {
   #systemd.network.networks."99-main".name = "!zt0 wlp2s0";
   systemd.network.networks."40-enp0s25" = {
     name = "enp0s25";
-    DHCP = "none";
+    DHCP = "no";
     networkConfig.Bond = "bond0";
     #networkConfig.PrimarySlave=true;
     networkConfig.IPv6PrivacyExtensions = "kernel";
   };
   systemd.network.networks."40-wlp0s29f7u1" = {
     name = "wlp0s29f7u1";
-    DHCP = "none";
+    DHCP = "no";
     networkConfig.Bond = "bond0";
     #networkConfig.ActiveSlave=false;
     networkConfig.IPv6PrivacyExtensions = "kernel";
