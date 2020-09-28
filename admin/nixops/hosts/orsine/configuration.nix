@@ -15,7 +15,6 @@ rec {
 
   imports = [
     ../common.nix
-    ../../users/dguibert
     ../../modules/nix-conf.nix
     ../../modules/yubikey-gpg.nix
     ../../modules/distributed-build.nix

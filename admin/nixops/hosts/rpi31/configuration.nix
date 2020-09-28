@@ -11,7 +11,6 @@ rec {
     ../common.nix
     ../../modules/nix-conf.nix
     ../../modules/distributed-build.nix
-    ../../users/dguibert
     ../../users/rdolbeau
     ../../users/fvigilant
   ];
