@@ -93,7 +93,7 @@ rec {
   };
   systemd.network.networks."40-bond0" = {
     name = "bond0";
-    DHCP = "both";
+    DHCP = "yes";
     networkConfig.BindCarrier = "enp0s25 wlp0s29f7u1";
   };
 #  systemd.network.networks = listToAttrs (flip map [ "enp0s25" "wlp0s26f7u1" ] (bi:
@@ -119,7 +119,7 @@ rec {
   };
   systemd.network.networks."40-wlp0s26f7u1" = {
     name = "wlp0s26f7u1";
-    DHCP = "both";
+    DHCP = "yes";
   };
   #{networking.bonds.bond0.interfaces = [ "enp0s25" /*"wlp0s26f7u1"*/ ];
   #{boot.extraModprobeConfig=''

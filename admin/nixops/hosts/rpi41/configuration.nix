@@ -57,7 +57,7 @@ rec {
   networking.dhcpcd.enable = false;
   systemd.network.networks."eth0" = {
     name = "eth0";
-    DHCP = "both";
+    DHCP = "yes";
   };
 
   environment.noXlibs = true;
