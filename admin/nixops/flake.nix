@@ -337,7 +337,7 @@
               })
             ];
 
-            services.nixosManual.showManual = lib.mkForce false;
+            documentation.nixos.enable = false;
             fileSystems."/".options = [ "defaults" "discard" ];
 
             #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
@@ -662,7 +662,7 @@
           })
         ];
 
-        services.nixosManual.showManual = lib.mkForce false;
+        documentation.nixos.enable = false;
         fileSystems."/".options = [ "defaults" "discard" ];
 
         programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
@@ -749,7 +749,7 @@
         ];
 
         sdImage.compressImage = false;
-        services.nixosManual.showManual = lib.mkForce false;
+        documentation.nixos.enable = false;
         fileSystems."/".options = [ "defaults" "discard" ];
 
         hardware.opengl = {
