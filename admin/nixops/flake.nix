@@ -689,14 +689,14 @@
           #group = "root";
         };
       };
-      rpi41_cross = { config, lib, pkgs, resources, ...}: {
-        imports = [ rpi41 ];
-        nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-        nixpkgs.localSystem.system = builtins.currentSystem or "x86_64-linux";
-        networking.hostName = "rpi41";
-        # error: Package ‘raspberrypi-firmware-1.20190925’ in /nix/store/v6yxfmgriax99l3hq0lmmqfg0fvj5874-source/pkgs/os-specific/linux/firmware/raspberrypi/default.nix:20 is not supported on ‘x86_64-linux’, refusing to evaluate.
-        nixpkgs.config.allowUnsupportedSystem = true;
-      };
+      #rpi41_cross = { config, lib, pkgs, resources, ...}: {
+      #  imports = [ rpi41 ];
+      #  nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+      #  nixpkgs.localSystem.system = builtins.currentSystem or "x86_64-linux";
+      #  networking.hostName = "rpi41";
+      #  # error: Package ‘raspberrypi-firmware-1.20190925’ in /nix/store/v6yxfmgriax99l3hq0lmmqfg0fvj5874-source/pkgs/os-specific/linux/firmware/raspberrypi/default.nix:20 is not supported on ‘x86_64-linux’, refusing to evaluate.
+      #  nixpkgs.config.allowUnsupportedSystem = true;
+      #};
       rpi41 = { config, lib, pkgs, resources, ... }: {
         #deployment.targetHost = "192.168.1.14";
         deployment.targetPort = 22322;
