@@ -466,7 +466,6 @@
         ];
 
         services.openssh.extraConfig = lib.mkOrder 100 ''
-          TrustedUserCAKeys /persist/etc/ssh/ssh-ca-home.pub
           HostCertificate /persist/etc/ssh/ssh_host_ed25519_key-cert.pub
           HostCertificate /persist/etc/ssh/ssh_host_rsa_key-cert.pub
         '';
@@ -489,7 +488,7 @@
         deployment.keys."ssh_host_ed25519_key-cert.pub" = upload_key "ssh_host_ed25519_key" "host_key_cert_pub";
 
         # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-        programs.ssh.knownHosts.ca-home = let
+        programs.ssh.knownHosts."*" = let
           ca = pass_ "ssh-ca/home.pub";
         in mkIf ca.success {
           certAuthority=true;
@@ -758,7 +757,6 @@
           package = pkgs.mesa_drivers;
         };
         hardware.deviceTree = {
-          kernelPackage = pkgs.device-tree_rpi;
           overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
         };
         #services.xserver = {
