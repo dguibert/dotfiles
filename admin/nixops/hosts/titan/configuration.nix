@@ -24,7 +24,6 @@ rec {
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
 
-  #boot.zfs.extraPools = [ "st4000dm004-1" ];
   fileSystems."/"         = { device = "icybox1/local/root"; fsType = "zfs"; };
   fileSystems."/nix"      = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
   fileSystems."/root"     = { device = "icybox1/safe/home/root"; fsType = "zfs"; };
@@ -186,19 +185,21 @@ rec {
       daily = 30;
       monthly = 12;
     };
-    #datasets."st4000dm004-1/backup/icybox1".useTemplate = [ "prod" ];
-    #datasets."st4000dm004-1/backup/icybox1".recursive = true;
+    datasets."st4000dm004-1/backup/icybox1".useTemplate = [ "backup" ];
+    datasets."st4000dm004-1/backup/icybox1".recursive = true;
 
     extraArgs = [ "--verbose" ];
   };
 
-  #services.syncoid = {
-  #  enable = true;
-  #  #sshKey = "/root/.ssh/id_ecdsa";
-  #  commonArgs = [ "--no-sync-snap" "--create-bookmark" ];
-  #  #commands."pool/test".target = "root@target:pool/test";
-  #  commands."icybox1/home".target = "st4000dm004-1/backup/icybox1/home";
-  #  commands."icybox1/home".recursive = true;
-  #};
+  boot.zfs.extraPools = [ "st4000dm004-1" ];
+
+  services.syncoid = {
+    enable = true;
+    #sshKey = "/root/.ssh/id_ecdsa";
+    commonArgs = [ "--no-sync-snap" "--create-bookmark" ];
+    #commands."pool/test".target = "root@target:pool/test";
+    commands."icybox1/safe".target = "st4000dm004-1/backup/icybox1/safe";
+    commands."icybox1/safe".recursive = true;
+  };
 
 }
