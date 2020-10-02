@@ -712,8 +712,29 @@
         #boot.loader.raspberryPi.uboot.enable = true;
         #boot.loader.raspberryPi.uboot.configurationLimit = 10;
         boot.kernelPackages = pkgs.linuxPackages_rpi4;
+        boot.kernelParams = [
+          # appparently this avoids some common bug in Raspberry Pi.
+          "dwc_otg.lpm_enable=0"
+
+          "plymouth.ignore-serial-consoles"
+        ]
+          ++ lib.optionals false /*ubootEnabled*/ [
+            # avoids https://github.com/raspberrypi/linux/issues/3331
+            "initcall_blacklist=bcm2708_fb_init"
+
+            # avoids https://github.com/raspberrypi/firmware/issues/1247
+            "cma=512M"
+        ];
+        boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" "bcm2835_rng" ];
 
         boot.consoleLogLevel = lib.mkDefault 7;
+
+        boot.loader.raspberryPi.firmwareConfig = ''
+          dtoverlay=vc4-fkms-v3d
+          #gpu_mem=192
+        '' + pkgs.stdenv.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
+          arm_64bit=1
+        '';
 
         sdImage = {
           firmwareSize = 512;
@@ -745,6 +766,30 @@
             # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
             pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
           })
+          (self: super: lib.optionalAttrs (super.stdenv.hostPlatform != super.stdenv.buildPlatform) {
+            # Restrict drivers built by mesa to just the ones we need This
+            # reduces the install size a bit.
+            mesa = (super.mesa.override {
+              vulkanDrivers = [];
+              driDrivers = [];
+              galliumDrivers = ["vc4" "swrast"];
+              enableRadv = false;
+              withValgrind = false;
+              enableOSMesa = false;
+              enableGalliumNine = false;
+            }).overrideAttrs (o: {
+              mesonFlags = (o.mesonFlags or []) ++ ["-Dglx=disabled"];
+            });
+
+            libcec = super.libcec.override { inherit (super) libraspberrypi; };
+
+            kodiPlain = (super.kodiPlain.override {
+              vdpauSupport = false;
+              libva = null;
+              raspberryPiSupport = true;
+            });
+          })
+
         ];
 
         sdImage.compressImage = false;
@@ -756,9 +801,23 @@
           setLdLibraryPath = true;
           package = pkgs.mesa_drivers;
         };
-        hardware.deviceTree = {
-          overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
-        };
+        #hardware.deviceTree = {
+        #  overlays = [ "${pkgs.raspberrypifw}/share/raspberrypi/boot/overlays/vc4-fkms-v3d.dtbo" ];
+        #  #firmware = [
+        #  #  pkgs.wireless-regdb
+        #  #  pkgs.raspberrypiWirelessFirmware
+        #  ##]
+        #  ### early raspberry pis don’t all have builtin wifi, so got to
+        #  ### include tons of firmware in case something is plugged into USB
+        #  ##++ lib.optionals config.nixiosk.raspberryPi.enableExtraFirmware [
+        #  ##  pkgs.firmwareLinuxNonfree
+        #  ##  pkgs.intel2200BGFirmware
+        #  ##  pkgs.rtl8192su-firmware
+        #  ##  pkgs.rtl8723bs-firmware
+        #  ##  pkgs.rtlwifi_new-firmware
+        #  ##  pkgs.zd1211fw
+        #  #];
+        #};
         #services.xserver = {
         #  enable = true;
         #  displayManager.slim.enable = true;
@@ -766,9 +825,6 @@
         #  videoDrivers = [ "modesetting" ];
         #};
 
-        boot.loader.raspberryPi.firmwareConfig = ''
-          gpu_mem=192
-        '';
         programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
         #assertions = lib.singleton {
         #  assertion = pkgs.stdenv.system == "aarch64-linux";
