@@ -640,3 +640,6 @@ checkout = git clone 'https://github.com/Infinisil/nixus' 'nixus'
 
 [code/flake-utils]
 checkout = git clone 'https://github.com/numtide/flake-utils' 'flake-utils'
+
+[code/datalad]
+checkout = git clone 'https://github.com/datalad/datalad' 'datalad'
