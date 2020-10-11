@@ -11,7 +11,7 @@ rec {
   zramSwap.enable = true;
   zramSwap.algorithm = "lzo";
 
-  nix.useSandbox = "relaxed";
+  nix.useSandbox = true; #"relaxed";
   nix.autoOptimiseStore = true; #lib.mkForce false;
   #nix.optimise.automatic=true;
   nix.extraOptions = ''
