@@ -69,7 +69,7 @@ in {
         in nameValuePair "${n}" {
         ips = [
           cfg.peers."${config.networking.hostName}".ipv4Address
-          "${random-ipv6 "${config.networking.hostName}-${n}"}"
+          cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
         ];
         listenPort = peer.listenPort;
         allowedIPsAsRoutes=false;
