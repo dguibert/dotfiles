@@ -1,0 +1,30 @@
+From 65e09295eb79e10ced94c52762b403e9c2f46589 Mon Sep 17 00:00:00 2001
+From: David Guibert <david.guibert@gmail.com>
+Date: Mon, 12 Oct 2020 11:58:22 +0200
+Subject: [PATCH 2/2] avoid toJSON template
+
+without this patch, the code instantiate
+_ZN3nix11BaseSettingINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE12toJS
+ONObjectEv
+
+which is not found when calling nix.
+---
+ extra-builtins.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/extra-builtins.cc b/extra-builtins.cc
+index 1af288e..01f4a2f 100644
+--- a/extra-builtins.cc
++++ b/extra-builtins.cc
+@@ -18,7 +18,7 @@ using namespace nix;
+ 
+ struct ExtraBuiltinsSettings : Config {
+     Setting<Path> extraBuiltinsFile{this,
+-        settings.nixConfDir + "/extra-builtins.nix",
++        fmt("%s/%s", settings.nixConfDir, "extra-builtins.nix"),
+             "extra-builtins-file",
+             "The path to a nix expression defining extra expression-language level builtins."};
+ };
+-- 
+2.28.0
+

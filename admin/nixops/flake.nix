@@ -394,7 +394,8 @@
           NIX_OPTIONS+=("--option plugin-files ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
             buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
             patches = (o.patches or []) ++ [
-              ./nix-plugins-PrimOp.patch
+              ./0001-compile-with-new-PrimOp-struct.patch
+              ./0002-avoid-toJSON-template.patch
             ];
             })}/lib/nix/plugins/libnix-extra-builtins.so")
           NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")

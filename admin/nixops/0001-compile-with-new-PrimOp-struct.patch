@@ -1,3 +1,12 @@
+From a4cdab467df1a2c16dc5a3c07126f2a03521b7be Mon Sep 17 00:00:00 2001
+From: David Guibert <david.guibert@gmail.com>
+Date: Mon, 12 Oct 2020 11:57:14 +0200
+Subject: [PATCH 1/2] compile with new PrimOp struct
+
+---
+ extra-builtins.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/extra-builtins.cc b/extra-builtins.cc
 index 862fe9b..1af288e 100644
 --- a/extra-builtins.cc
@@ -17,3 +26,6 @@ index 862fe9b..1af288e 100644
  
              arg->attrs->sort();
          }
+-- 
+2.28.0
+

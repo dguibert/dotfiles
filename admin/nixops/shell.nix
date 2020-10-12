@@ -55,7 +55,8 @@ mkEnv rec {
     NIX_OPTIONS+=("--option plugin-files ${(nix-plugins.override { nix = nix; }).overrideAttrs (o: {
         buildInputs = o.buildInputs ++ [ boehmgc nlohmann_json ];
         patches = (o.patches or []) ++ [
-          ./nix-plugins-PrimOp.patch
+          ./0001-compile-with-new-PrimOp-struct.patch
+          ./0002-avoid-toJSON-template.patch
         ];
       })}/lib/nix/plugins/libnix-extra-builtins.so")
     NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")
