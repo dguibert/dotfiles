@@ -17,7 +17,7 @@ rec {
   nix.extraOptions = ''
     keep-outputs = true       # Nice for developers
     keep-derivations = true   # Idem
-    extra-sandbox-paths = /opt/intel/licenses=$HOME/nur-packages/secrets?
+    extra-sandbox-paths = /opt/intel/licenses=home/dguibert/nur-packages/secrets?
     experimental-features = nix-command flakes ca-references recursive-nix
   '';
 #     plugin-files = ${pkgs.nix-plugins.override { nix = config.nix.package; }}/lib/nix/plugins/libnix-extra-builtins.so
