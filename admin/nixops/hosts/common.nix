@@ -17,8 +17,9 @@
   services.zerotierone.joinNetworks = [ "e5cd7a9e1cd44c48" ];
 
   networking.useNetworkd = true;
-  services.resolved.extraConfig="DNS=8.8.8.8 8.8.4.4";
   systemd.network.enable = true;
+  services.resolved.extraConfig="DNS=8.8.8.8 8.8.4.4";
+  services.resolved.dnssec="false";
   # https://github.com/NixOS/nixpkgs/issues/18962
   # Prevent networkd from managing unconfigured links.
   #systemd.network.networks."99-main".enable = false;
