@@ -643,3 +643,6 @@ checkout = git clone 'https://github.com/numtide/flake-utils' 'flake-utils'
 
 [code/datalad]
 checkout = git clone 'https://github.com/datalad/datalad' 'datalad'
+
+[code/robotnix]
+checkout = git clone 'https://github.com/danielfullmer/robotnix' 'robotnix'
