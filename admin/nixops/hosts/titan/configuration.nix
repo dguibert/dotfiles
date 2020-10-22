@@ -31,7 +31,8 @@ rec {
   fileSystems."/home/dguibert/Videos" = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; };
   fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; };
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
-  fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
+  #fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
+  fileSystems."/tmp"      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
