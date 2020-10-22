@@ -39,6 +39,10 @@
     #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
     base16-nix           = { url  = "github:atpotts/base16-nix"; flake=false; };
     gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
+
+    nxsession.url           = "github:dguibert/nxsession";
+    nxsession.inputs.nixpkgs.follows = "nixpkgs";
+    nxsession.inputs.flake-utils.follows = "flake-utils";
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -56,6 +60,7 @@
             , nix
             , nixops
             , flake-utils
+            , nxsession
             }@flakes: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -70,6 +75,7 @@
             nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
             self.overlay
+            nxsession.overlay
           ];
           config.allowUnfree = true;
         };

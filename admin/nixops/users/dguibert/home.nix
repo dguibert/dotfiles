@@ -475,6 +475,8 @@ let
           terminus_font powerline-fonts #corefonts
           fira-code
           fira-code-symbols
+
+	  nxsession
         ];
 
         xsession = {

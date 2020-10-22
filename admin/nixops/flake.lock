@@ -214,6 +214,29 @@
         "type": "github"
       }
     },
+    "nxsession": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1600700272,
+        "narHash": "sha256-2ZRcoO/ukZrC+Xvi/h1dYONwVOHR286/8BmhmuDp2sk=",
+        "owner": "dguibert",
+        "repo": "nxsession",
+        "rev": "c4df9bcc1df5de6ad7b855d2c892a833ebc897b2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dguibert",
+        "repo": "nxsession",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "base16-nix": "base16-nix",
@@ -226,6 +249,7 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
+        "nxsession": "nxsession",
         "sops-nix": "sops-nix",
         "terranix": "terranix"
       }
