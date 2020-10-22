@@ -411,7 +411,7 @@
               ./0002-avoid-toJSON-template.patch
             ];
             })}/lib/nix/plugins/libnix-extra-builtins.so")
-          NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file pkgs}")
+          NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
           export NIX_OPTIONS
         '';
         nix.systemFeatures = [ "recursive-nix" ] ++ # default
