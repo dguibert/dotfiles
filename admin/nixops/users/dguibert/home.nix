@@ -425,6 +425,7 @@ let
           '')
           bup par2cmdline fpart # ~/Makefile ~/bin/prepare-bd.sh
           rclone
+          python3Packages.datalad
 
           exiftool
           udftools
@@ -665,6 +666,7 @@ let
             LANG=C ${pkgs.difftools}/bin/diff -u "$1" "$2"
             exit 0
           '')
+          python3Packages.datalad
           subversion
           tig
           jq
