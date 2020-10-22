@@ -16,7 +16,7 @@
   services.xserver.displayManager.autoLogin.user = "dguibert";
   services.xserver.desktopManager.xterm.enable = true;
 
-  fonts.enableFontDir = true;
+  fonts.fontDir.enable = true;
   fonts.enableGhostscriptFonts = true;
   fonts.fonts = with pkgs ; [ terminus_font powerline-fonts /*corefonts*/ ];
 
