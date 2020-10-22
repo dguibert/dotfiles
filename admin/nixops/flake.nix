@@ -9,11 +9,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     hydra.url            = "github:dguibert/hydra/pu";
-    #hydra.inputs.nix.follows = "nix";
+    hydra.inputs.nix.follows = "nix";
     hydra.inputs.nixpkgs.follows = "nixpkgs";
 
     nixops.url           = "github:dguibert/nixops/pu";
     nixops.inputs.nixpkgs.follows = "nixpkgs";
+    nixops.inputs.utils.follows = "flake-utils";
 
     nixpkgs.url          = "github:dguibert/nixpkgs/pu";
 
@@ -22,11 +23,16 @@
 
     nur.url = "github:nix-community/NUR";
     sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nur_dguibert.url     = "github:dguibert/nur-packages/pu";
+    nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
     nur_dguibert.inputs.nix.follows = "nix";
+    nur_dguibert.inputs.flake-utils.follows = "flake-utils";
     #nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
-    #nur_dguibert_envs.url= "/home/dguibert/nur-packages?dir=envs";
+    #nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
+    #nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
+    #nur_dguibert_envs.inputs.nix.follows     = "nix";
     terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
     #"nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
     #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
@@ -61,9 +67,10 @@
               nixops = nixops.defaultPackage."${system}";
             })
             nur_dguibert.overlay
-            nur_dguibert.overlays.extra_builtins
+            nur_dguibert.overlays.extra-builtins
+            #nur_dguibert_envs.overlay
             self.overlay
-          ] /*++ nur_dguibert_envs.overlays*/;
+          ];
           config.allowUnfree = true;
         };
 
