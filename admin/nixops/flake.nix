@@ -91,7 +91,7 @@
        let pkgs = nixpkgsFor system; in rec {
 
     devShell = pkgs.callPackage ./shell.nix { inherit flakes;
-      inherit (sops-nix.packages.${system}) sops-pgp-hook;
+      inherit (sops-nix.packages.${system}) sops-pgp-hook ssh-to-pgp;
     };
     legacyPackages = pkgs;
 

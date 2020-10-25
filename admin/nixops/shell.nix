@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> { }
 , flakes ? {}
-, sops
+, ssh-to-pgp
 , sops-pgp-hook
 }:
 with pkgs;
@@ -16,14 +16,16 @@ mkEnv rec {
   # Also single files can be imported.
   sopsPGPKeys = [
     "./keys/hosts/titan.asc"
+    "./keys/hosts/rpi41.asc"
+    "./keys/hosts/rpi31.asc"
+    "./keys/hosts/laptop-s93efa6b.asc"
     "./keys/users/dguibert.asc"
-  #  "./keys/users/mic92.asc"
-  #  "./keys/hosts/server01.asc"
   ];
   buildInputs = [
     nix
     nixops
     sops-pgp-hook
+    ssh-to-pgp
     #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
     jq
