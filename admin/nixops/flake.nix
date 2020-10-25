@@ -172,26 +172,11 @@
     ##
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-    nixosModules.defaults = { config, lib, pkgs, resources, ...}: let
-      ssh_keys = {
-        ssh_host_ed25519_key = (sshSignHost_ "ssh-ca/home"
-                                config.networking.hostName
-                                "${config.networking.hostName}"
-                                "ed25519").value;
-        ssh_host_rsa_key = (sshSignHost_ "ssh-ca/home"
-                                config.networking.hostName
-                                "${config.networking.hostName}"
-                                "rsa").value;
-      };
-      upload_key = name: attr: {
-        text = ssh_keys.${name}.${attr};
-        destDir = "/persist/etc/ssh";
-      };
-
-    in {
+    nixosModules.defaults = { config, lib, pkgs, resources, ...}: {
       imports = [
         nixpkgs.nixosModules.notDetected
         home-manager.nixosModules.home-manager
+        sops-nix.nixosModules.sops
 
         ./modules/wireguard-mesh.nix
 
@@ -243,13 +228,6 @@
 
       roles.wireguard-mesh.enable = true;
 
-      #deployment.keys."ssh_host_rsa_key"     = upload_key "ssh_host_rsa_key" "host_key";
-      #deployment.keys."ssh_host_rsa_key.pub" = upload_key "ssh_host_rsa_key" "host_key_pub";
-      #deployment.keys."ssh_host_rsa_key-cert.pub" = upload_key "ssh_host_rsa_key" "host_key_cert_pub";
-      #deployment.keys."ssh_host_ed25519_key"     = upload_key "ssh_host_ed25519_key" "host_key";
-      #deployment.keys."ssh_host_ed25519_key.pub" = upload_key "ssh_host_ed25519_key" "host_key_pub";
-      #deployment.keys."ssh_host_ed25519_key-cert.pub" = upload_key "ssh_host_ed25519_key" "host_key_cert_pub";
-
       # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
       programs.ssh.knownHosts."*" = let
         ca = pass_ "ssh-ca/home.pub";
@@ -258,19 +236,27 @@
         publicKey = ca.value;
       };
 
-      #deployment.keys."id_buildfarm" = let key = pass_ "id_buildfarm"; in lib.mkIf key.success {
-      #  text = key.value;
-      #  destDir = "/etc/nix";
-      #  #user = "root";
-      #  #group = "root";
-      #};
+      sops.secrets.id_buildfarm = {
+        sopsFile = ./secrets/defaults.yaml;
+        owner = "root";
+        path = "/etc/nix/id_buildfarm";
+      };
+
+      # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
+      #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
+      sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
+      sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
+      sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
+      sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
+      sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
+
       services.openssh.extraConfig = lib.mkOrder 100 ''
-        HostCertificate /persist/etc/ssh/ssh_host_ed25519_key-cert.pub
-        HostCertificate /persist/etc/ssh/ssh_host_rsa_key-cert.pub
+        HostCertificate ${config.sops.secrets."ssh_host_ed25519_key.pub".path}
+        HostCertificate ${config.sops.secrets."ssh_host_rsa_key.pub".path}
       '';
       services.openssh.hostKeys = [
         {
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
+          path = config.sops.secrets."ssh_host_ed25519_key".path;
           type = "ed25519";
         }
         {
@@ -399,22 +385,10 @@
           nix.extraOptions = ''
             secret-key-files = /etc/nix/cache-priv-key.pem
           '';
-          #deployment.keys."cache-priv-key.pem" = let
-          #  key = pass_ "titan/cache-priv-key.pem";
-          #in lib.mkIf key.success {
-          #  text = key.value;
-          #  destDir = "/etc/nix";
-          #};
-          #deployment.keys.id_buildfarm = let
-          #  key = pass_ "id_buildfarm";
-          #       in lib.mkIf key.success {
-          #  text = key.value;
-          #  destDir = "/etc/nix";
-          #  user = "hydra";
-          #  group = "hydra";
-          #  permissions = "0440";
-          #};
-
+          sops.defaultSopsFile = ./hosts/titan/secrets/secrets.yaml;
+          sops.secrets."cache-priv-key.pem" = {
+            path = "/etc/nix/cache-priv-key.pem";
+          };
           #services.postgresql = {
           #  package = pkgs.postgresql_9_6;
           #  dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
@@ -497,6 +471,7 @@
           #  #user = "root";
           #  #group = "root";
           #};
+          sops.defaultSopsFile = ./hosts/rpi31/secrets/secrets.yaml;
         })
       ];
     };
@@ -644,6 +619,8 @@
           #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
           #    "it cannot be cross compiled";
           #};
+
+          sops.defaultSopsFile = ./hosts/rpi41/secrets/secrets.yaml;
         })
       ];
     };
@@ -653,8 +630,9 @@
           nixpkgs.localSystem.system = "x86_64-linux";
           imports = [
             (import ./hosts/laptop-s93efa6b/configuration.nix)
-            self.nixosConfigurations.defaults
+            self.nixosModules.defaults
           ];
+          sops.defaultSopsFile = ./hosts/laptop-s93efa6b/secrets/secrets.yaml;
         })
       ];
     };
