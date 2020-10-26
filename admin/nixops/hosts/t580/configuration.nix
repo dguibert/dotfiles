@@ -23,7 +23,7 @@ rec {
       ap_scan=1
       p2p_disabled=1
     '';
-    extraCmdArgs = "-u -W";
+    extraCmdArgs = "-u";
   };
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   #networking.wireless.userControlled.enable = true;
