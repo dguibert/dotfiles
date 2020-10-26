@@ -1,4 +1,3 @@
-{ wgKeys_ }:
 { config, lib, pkgs, ... }:
 let
   cfg = config.roles.wireguard-mesh;
@@ -27,7 +26,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 500;
-        publicKey  = (wgKeys_ "rpi31/wireguard_key").value.publicKey;
+        publicKey  = " wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
@@ -41,7 +40,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 501;
-        publicKey  = (wgKeys_ "orsine/wireguard_key").value.publicKey;
+        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
         endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       titan = {
@@ -54,7 +53,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 503;
-        publicKey  = (wgKeys_ "titan/wireguard_key").value.publicKey;
+        publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
         endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       laptop-s93efa6b = {
@@ -67,7 +66,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 504;
-        publicKey  = (wgKeys_ "laptop-s93efa6b/wireguard_key").value.publicKey;
+        publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       rpi41 = {
@@ -80,7 +79,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 505;
-        publicKey  = (wgKeys_ "rpi41/wireguard_key").value.publicKey;
+        publicKey  = "pyAuYQ5uZvNj9wSAMprAwfzRwV6SlbbNfjQJX18kigg=";
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
@@ -94,7 +93,7 @@ in {
           rpi41 = "fe80::216:3eff:fe3d:dd2f/64";
         };
         listenPort = 506;
-        publicKey  = (wgKeys_ "rpi01/wireguard_key").value.publicKey;
+        publicKey  = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
       };
     };
     #deployment.keys."wireguard_key" = {

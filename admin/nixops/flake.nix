@@ -181,7 +181,7 @@
         ./modules/wireguard-mesh.nix
 
         ./roles/mopidy.nix
-        (import ./roles/wireguard-mesh.nix { inherit wgKeys_; })
+        ./roles/wireguard-mesh.nix
 
         ./users/default.nix
       ];
