@@ -21,7 +21,7 @@ in {
         ipv6Addresses = {
           orsine = "fe80::216:3eff:fe3f:386d/64";
           titan = "fe80::216:3eff:fe20:26f1/64";
-          laptop-s93efa6b = "fe80::216:3eff:fe57:81ce/64";
+          t580 = "fe80::216:3eff:fe57:81ce/64";
           rpi41 = "fe80::216:3eff:fe3d:dd2f/64";
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
@@ -35,7 +35,7 @@ in {
         ipv6Addresses = {
           rpi31 = "fe80::216:3eff:fe3f:386d/64";
           titan = "fe80::216:3eff:fe20:26f1/64";
-          laptop-s93efa6b = "fe80::216:3eff:fe57:81ce/64";
+          t580 = "fe80::216:3eff:fe57:81ce/64";
           rpi41 = "fe80::216:3eff:fe3d:dd2f/64";
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
@@ -48,7 +48,7 @@ in {
         ipv6Addresses = {
           rpi31 = "fe80::216:3eff:fe3f:386d/64";
           orsine = "fe80::216:3eff:fe20:26f1/64";
-          laptop-s93efa6b = "fe80::216:3eff:fe57:81ce/64";
+          t580 = "fe80::216:3eff:fe57:81ce/64";
           rpi41 = "fe80::216:3eff:fe3d:dd2f/64";
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
@@ -56,7 +56,7 @@ in {
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
         endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
-      laptop-s93efa6b = {
+      t580 = {
         ipv4Address = "10.147.27.17/32";
         ipv6Addresses = {
           rpi31 = "fe80::216:3eff:fe57:81ce/64";
@@ -75,7 +75,7 @@ in {
           rpi31 = "fe80::216:3eff:fe3d:dd2f/64";
           orsine = "fe80::216:3eff:fe3f:386d/64";
           titan = "fe80::216:3eff:fe20:26f1/64";
-          laptop-s93efa6b = "fe80::216:3eff:fe57:81ce/64";
+          t580 = "fe80::216:3eff:fe57:81ce/64";
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 505;
@@ -89,7 +89,7 @@ in {
           rpi31 = "fe80::216:3eff:fe6c:435c/64";
           orsine = "fe80::216:3eff:fe3f:386d/64";
           titan = "fe80::216:3eff:fe20:26f1/64";
-          laptop-s93efa6b = "fe80::216:3eff:fe57:81ce/64";
+          t580 = "fe80::216:3eff:fe57:81ce/64";
           rpi41 = "fe80::216:3eff:fe3d:dd2f/64";
         };
         listenPort = 506;

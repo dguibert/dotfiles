@@ -15,7 +15,7 @@ rec {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "laptop-s93efa6b"; # Define your hostname.
+  networking.hostName = "t580"; # Define your hostname.
   networking.supplicant.wlp4s0 = {
     configFile.path = "/persist/etc/wpa_supplicant.conf";
     userControlled.group = "network";

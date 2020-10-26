@@ -18,7 +18,7 @@ mkEnv rec {
     "./keys/hosts/titan.asc"
     "./keys/hosts/rpi41.asc"
     "./keys/hosts/rpi31.asc"
-    "./keys/hosts/laptop-s93efa6b.asc"
+    "./keys/hosts/t580.asc"
     "./keys/users/dguibert.asc"
   ];
   buildInputs = [

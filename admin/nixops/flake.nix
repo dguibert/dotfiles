@@ -629,15 +629,15 @@
         })
       ];
     };
-    nixosConfigurations.laptop-s93efa6b = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.t580 = nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
           imports = [
-            (import ./hosts/laptop-s93efa6b/configuration.nix)
+            (import ./hosts/t580/configuration.nix)
             self.nixosModules.defaults
           ];
-          sops.defaultSopsFile = ./hosts/laptop-s93efa6b/secrets/secrets.yaml;
+          sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
       ];
     };
