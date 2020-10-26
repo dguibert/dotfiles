@@ -251,8 +251,8 @@
       sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
 
       services.openssh.extraConfig = lib.mkOrder 100 ''
-        HostCertificate ${config.sops.secrets."ssh_host_ed25519_key.pub".path}
-        HostCertificate ${config.sops.secrets."ssh_host_rsa_key.pub".path}
+        HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
+        HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
       '';
       services.openssh.hostKeys = [
         {
@@ -439,10 +439,22 @@
           #nixpkgs.localSystem.system = "x86_64-linux";
           nixpkgs.localSystem.system = "aarch64-linux";
           imports = [
-            (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")
+            (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
             (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import ./hosts/rpi31/configuration.nix)
             self.nixosModules.defaults
+          ];
+          nixpkgs.overlays = [
+            nix.overlay
+            (final: prev: {
+                    nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
+            })
+            nur_dguibert.overlays.default
+            (final: prev: {
+              # don't build qt5
+              # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+              pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+            })
           ];
 
           documentation.nixos.enable = false;
@@ -463,14 +475,7 @@
             PasswordAuthentication no
           '';
           #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(pass rpi31/shadowsocks)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
-          #deployment.keys."shadowsocks" = let
-          #  key = pass_ "rpi31/shadowsocks";
-          #       in lib.mkIf key.success {
-          #  text = key.value;
-          #  destDir = "/secrets";
-          #  #user = "root";
-          #  #group = "root";
-          #};
+          sops.secrets.shadowsocks = {};
           sops.defaultSopsFile = ./hosts/rpi31/secrets/secrets.yaml;
         })
       ];
