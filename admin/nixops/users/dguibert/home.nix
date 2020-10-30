@@ -440,6 +440,7 @@ let
           xpra
           aria2
           qtpass
+          qrencode
 
           go-mtpfs
 
