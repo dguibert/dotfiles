@@ -166,6 +166,7 @@ let
         sshfsFuse
 
         moreutils
+        jq
       ];
 
       services.gpg-agent.enable = true;
