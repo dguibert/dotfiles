@@ -132,12 +132,8 @@
     },
     "nixops": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "utils": [
-          "flake-utils"
-        ]
+        "nixpkgs": "nixpkgs",
+        "utils": "utils"
       },
       "locked": {
         "lastModified": 1599913552,
@@ -156,13 +152,28 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1604226828,
-        "narHash": "sha256-UZ2j0Z8a2vorXiSHps/fHJFD5vkvtCKfJ5pQN+rbi/Q=",
-        "ref": "pu",
-        "rev": "50faa2a746e3c82a9a4263d64db1aae3d1196b20",
-        "revCount": 249910,
-        "type": "git",
-        "url": "file:///home/dguibert/code/nixpkgs"
+        "lastModified": 1593886469,
+        "narHash": "sha256-it7gY5BmUcDr09dUsE6VPnUsSCeBUtU/GfUwqs6twDc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "dc80d7bc4a244120b3d766746c41c0d9c5f81dfa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1603562907,
+        "narHash": "sha256-ibx5m+fraxuAvNFt95DKDZG4dx6G6+IoGjUHK1NyvPU=",
+        "owner": "dguibert",
+        "repo": "nixpkgs",
+        "rev": "ece667e8e69c5026202b40cb2307de911ed78281",
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
@@ -199,11 +210,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1603271235,
-        "narHash": "sha256-g7TZMVAEXHqMVVNjmgjvjOZCKTyV92/AB08bmntMtI8=",
+        "lastModified": 1604065828,
+        "narHash": "sha256-sF65rpTs0cWxsznl9XURBMHmOj+p/8VNcnNetqK7zvc=",
         "ref": "pu",
-        "rev": "e8827d2065088a0576f99e059e5cb917a7f784a7",
-        "revCount": 445,
+        "rev": "b09d37da9228533b6064cd3017efdfcc36524fb8",
+        "revCount": 466,
         "type": "git",
         "url": "file:///home/dguibert/nur-packages"
       },
@@ -246,7 +257,7 @@
         "hydra": "hydra",
         "nix": "nix",
         "nixops": "nixops",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
         "nxsession": "nxsession",
@@ -287,6 +298,21 @@
       "original": {
         "owner": "mrVanDalo",
         "repo": "terranix",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1594123299,
+        "narHash": "sha256-zxjtMmOV93pIVG242RpEXu14w/13XYDo3ygMoRIJg4c=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "590d6d1badea1956a31480a0cba1d8d029cf45d3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
         "type": "github"
       }
     }
