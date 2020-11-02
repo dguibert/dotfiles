@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "dwm-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1604314714,
+        "narHash": "sha256-ddUqdGxYeDctEvjL8srW982iiLzVxHgyjcecqPdYPdg=",
+        "ref": "master",
+        "rev": "4dc9a192f802f111465b711ef79e7ca65a619b46",
+        "revCount": 1700,
+        "type": "git",
+        "url": "file:///home/dguibert/code/dwm"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/dguibert/code/dwm"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1601282935,
@@ -130,50 +146,15 @@
         "type": "github"
       }
     },
-    "nixops": {
-      "inputs": {
-        "nixpkgs": "nixpkgs",
-        "utils": "utils"
-      },
-      "locked": {
-        "lastModified": 1599913552,
-        "narHash": "sha256-mL3JxeW988BN7BYaxGjVY8NTIKavhHpP0gdcDEgxgIQ=",
-        "owner": "dguibert",
-        "repo": "nixops",
-        "rev": "d5baedfa79c32327e23d34813a7e75f5979f7560",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dguibert",
-        "ref": "pu",
-        "repo": "nixops",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1593886469,
-        "narHash": "sha256-it7gY5BmUcDr09dUsE6VPnUsSCeBUtU/GfUwqs6twDc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "dc80d7bc4a244120b3d766746c41c0d9c5f81dfa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
       "locked": {
         "lastModified": 1604226828,
         "narHash": "sha256-UZ2j0Z8a2vorXiSHps/fHJFD5vkvtCKfJ5pQN+rbi/Q=",
-        "owner": "dguibert",
-        "repo": "nixpkgs",
+        "ref": "pu",
         "rev": "50faa2a746e3c82a9a4263d64db1aae3d1196b20",
-        "type": "github"
+        "revCount": 249910,
+        "type": "git",
+        "url": "file:///home/dguibert/code/nixpkgs"
       },
       "original": {
         "owner": "dguibert",
@@ -184,11 +165,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1603340594,
-        "narHash": "sha256-yt9ram8Yk4qLDNWDzte4I8vtTk9SfTlRGfjpD6CMnoU=",
+        "lastModified": 1604230076,
+        "narHash": "sha256-0QZYcc63j3LZUjdjr3AbshvhXDEHi905OSop5cHITJM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "9646132923fcbc02b3e25c0f8ba400bdaa59aac9",
+        "rev": "b4c3444bd62c64def3d887084fc6a0f43aff9bde",
         "type": "github"
       },
       "original": {
@@ -211,10 +192,7 @@
       },
       "locked": {
         "lastModified": 1604065828,
-        "narHash": "sha256-sF65rpTs0cWxsznl9XURBMHmOj+p/8VNcnNetqK7zvc=",
-        "ref": "pu",
-        "rev": "b09d37da9228533b6064cd3017efdfcc36524fb8",
-        "revCount": 466,
+        "narHash": "sha256-wNiLtkIK4E14QHkJts438m0pPq+u78wMQYhL+L3Mx2w=",
         "type": "git",
         "url": "file:///home/dguibert/nur-packages"
       },
@@ -251,13 +229,13 @@
     "root": {
       "inputs": {
         "base16-nix": "base16-nix",
+        "dwm-src": "dwm-src",
         "flake-utils": "flake-utils",
         "gitignore": "gitignore",
         "home-manager": "home-manager",
         "hydra": "hydra",
         "nix": "nix",
-        "nixops": "nixops",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
         "nxsession": "nxsession",
@@ -298,21 +276,6 @@
       "original": {
         "owner": "mrVanDalo",
         "repo": "terranix",
-        "type": "github"
-      }
-    },
-    "utils": {
-      "locked": {
-        "lastModified": 1594123299,
-        "narHash": "sha256-zxjtMmOV93pIVG242RpEXu14w/13XYDo3ygMoRIJg4c=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "590d6d1badea1956a31480a0cba1d8d029cf45d3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
         "type": "github"
       }
     }

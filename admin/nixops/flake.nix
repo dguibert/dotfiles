@@ -12,10 +12,6 @@
     hydra.inputs.nix.follows = "nix";
     hydra.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixops.url           = "github:dguibert/nixops/pu";
-    #nixops.inputs.nixpkgs.follows = "nixpkgs";
-    #nixops.inputs.utils.follows = "flake-utils";
-
     nixpkgs.url          = "github:dguibert/nixpkgs/pu";
 
     nix.url              = "github:dguibert/nix/pu";
@@ -43,6 +39,9 @@
     nxsession.url           = "github:dguibert/nxsession";
     nxsession.inputs.nixpkgs.follows = "nixpkgs";
     nxsession.inputs.flake-utils.follows = "flake-utils";
+
+    dwm-src.url = "git+file:///home/dguibert/code/dwm";
+    dwm-src.flake = false;
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -58,9 +57,9 @@
             , terranix
             , hydra
             , nix
-            , nixops
             , flake-utils
             , nxsession
+            , dwm-src
             }@flakes: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -68,14 +67,17 @@
           inherit system;
           overlays =  [
             nix.overlay
-            (final: prev: {
-              nixops = nixops.defaultPackage."${system}";
-            })
             nur_dguibert.overlay
             nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
             self.overlay
             nxsession.overlay
+            (final: prev: {
+     	        dwm = prev.dwm.overrideAttrs (o: {
+                src = dwm-src;
+                patches = [];
+              });
+            })
           ];
           config.allowUnfree = true;
         };
@@ -83,6 +85,7 @@
       inherit (nixpkgsFor "x86_64-linux")
         pass_
         isGitDecrypted_
+        sopsDecrypt_
         sshSignHost_
         wgKeys_
         extra_builtins_file;
@@ -113,9 +116,11 @@
       #});
       dguibert.x11 = let
           home-secret = let
-              loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
+              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
+              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix;
+              loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-               then import ./users/dguibert/home-secret.nix
+               then home_sec
                else { withoutX11 = { ... }: {};
                       withX11 = { ... }: {};
                     };
@@ -149,11 +154,6 @@
             EBTABLES_PATH="${final.ebtables}/bin/ebtables-legacy";
           })
         else prev.libvirt;
-
-      nixops = prev.nixops.overrideAttrs (o: {
-        doCheck = false;
-        doInstallCheck = false;
-      });
 
       install-script = drv: with final; writeScript "install-${drv.name}"
       ''#!/usr/bin/env bash
@@ -189,11 +189,11 @@
       nixpkgs.config = import "${nur_dguibert}/config.nix";
       nixpkgs.overlays = [
         nix.overlay
-        (final: prev: {
-           nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
-        })
         nur_dguibert.overlays.default
         self.overlay
+        (final: prev: {
+          inherit dwm-src;
+        })
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = nix.defaultPackage."${config.nixpkgs.localSystem.system}";
@@ -446,9 +446,6 @@
           ];
           nixpkgs.overlays = [
             nix.overlay
-            (final: prev: {
-                    nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
-            })
             nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
@@ -550,9 +547,6 @@
 
           nixpkgs.overlays = [
             nix.overlay
-            (final: prev: {
-                    nixops = nixops.defaultPackage."${config.nixpkgs.localSystem.system}";
-            })
             nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5

@@ -9,7 +9,7 @@ let
       themes.base16 = {
         enable = true;
         scheme = "solarized";
-        variant = "solarized-light";
+        variant = "solarized-dark";
 
         # Add extra variables for inclusion in custom templates
         extraParams = {
@@ -432,7 +432,8 @@ let
           udftools
           gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
 
-          dwm dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+	  dwm
+	  dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
           xsel
           (conky.override { x11Support = false; })
           gnuplot
