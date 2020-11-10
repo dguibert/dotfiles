@@ -29,7 +29,7 @@ rec {
   fileSystems."/root"     = { device = "icybox1/safe/home/root"; fsType = "zfs"; };
   fileSystems."/home/dguibert" = { device = "icybox1/safe/home/dguibert"; fsType = "zfs"; };
   fileSystems."/home/dguibert/Videos" = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; };
-  fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; };
+  fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; neededForBoot=true; };
   fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
   #fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
   fileSystems."/tmp"      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
