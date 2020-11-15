@@ -113,7 +113,7 @@ rec {
   services.xserver.enable = true;
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.videoDrivers = [ "intel" /*"displaylink"*/ ];
+  services.xserver.videoDrivers = [ "intel" "displaylink" ];
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
@@ -163,6 +163,7 @@ rec {
   system.stateVersion = "20.03"; # Did you read the comment?
 
   programs.adb.enable = true;
+  programs.light.enable = true;
 
 }
 
