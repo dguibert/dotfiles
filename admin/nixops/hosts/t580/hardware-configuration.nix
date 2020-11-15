@@ -21,7 +21,7 @@
   fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot=true; };
   fileSystems."/home" = { device = "rt580/safe/home"; fsType = "zfs"; };
   fileSystems."/root" = { device = "rt580/safe/home/root"; fsType = "zfs"; };
-  fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; };
+  fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; neededForBoot=true; };
 
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter ''
