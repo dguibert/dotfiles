@@ -26,7 +26,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 500;
-        publicKey  = " wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
@@ -96,10 +96,9 @@ in {
         publicKey  = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
       };
     };
-    #deployment.keys."wireguard_key" = {
-    #  text = (wgKeys_ "${config.networking.hostName}/wireguard_key").value.privateKey;
-    #  destDir = "/secrets";
-    #};
+
+    sops.secrets."wireguard_key"          .path = "/persist/etc/wireguard_key";
+    networking.wireguard-mesh.privateKeyFile = "${config.sops.secrets."wireguard_key".path}";
 
     networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 505 506
       6696 /* babeld */
