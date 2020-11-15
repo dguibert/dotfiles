@@ -109,15 +109,43 @@
 
         };
       };
-      #dguibert.no-x11 = home-manager.lib.mkHome system (args: {
-      #  imports = [ (import "${base16-nix}/base16.nix")
-      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).withoutX11 ];
-      #  nixpkgs.pkgs = pkgs;
-      #});
+      dguibert.no-x11 = let
+          home-secret = let
+              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
+              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
+              loaded = home_sec.success or true;
+            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
+               then home_sec
+               else { withoutX11 = { ... }: {};
+                      withX11 = { ... }: {};
+                    };
+
+        in home-manager.lib.homeManagerConfiguration {
+        username = "dguibert";
+        homeDirectory = "/home/dguibert";
+        inherit system pkgs;
+        configuration = { lib, ... }: {
+          imports = [ (import "${base16-nix}/base16.nix")
+            (import ./users/dguibert/home.nix).withoutX11
+            home-secret.withoutX11
+          ];
+	  _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
+            dbus = prev.dbus.override { x11Support = false; };
+            networkmanager-fortisslvpn = prev.networkmanager-fortisslvpn.override { withGnome = false; };
+            networkmanager-l2tp = prev.networkmanager-l2tp.override { withGnome = false; };
+            networkmanager-openconnect = prev.networkmanager-openconnect.override { withGnome = false; };
+            networkmanager-openvpn = prev.networkmanager-openvpn.override { withGnome = false; };
+            networkmanager-vpnc = prev.networkmanager-vpnc.override { withGnome = false; };
+            networkmanager-iodine = prev.networkmanager-iodine.override { withGnome = false; };
+            gobject-introspection = prev.gobject-introspection.override { x11Support = false; };
+            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+	  }));
+        };
+      };
       dguibert.x11 = let
           home-secret = let
               #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
-              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix;
+              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
               loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
                then home_sec
@@ -137,11 +165,6 @@
           _module.args.pkgs = lib.mkForce pkgs;
         };
       };
-      #dguibert_spartan.x11 = home-manager.lib.mkHome system (args: {
-      #  imports = [ (import "${base16-nix}/base16.nix")
-      #              (import ./users/dguibert/home.nix { system = system; inherit pkgs; }).spartan ];
-      #  nixpkgs.pkgs = pkgs.spartan;
-      #});
     };
 
 
@@ -227,7 +250,6 @@
       programs.gnupg.agent.pinentryFlavor = "gtk2";
 
       roles.wireguard-mesh.enable = true;
-
       # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
       programs.ssh.knownHosts."*" = let
         ca = pass_ "ssh-ca/home.pub";

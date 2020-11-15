@@ -22,19 +22,19 @@ let
           '';
         };
       };
-      nixpkgs.overlays = (lib.singleton (const (super: {
-        dbus = super.dbus.override { x11Support = false; };
-        networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
-        networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
-        networkmanager-openconnect = super.networkmanager-openconnect.override { withGnome = false; };
-        networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
-        networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
-        networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
-        gobject-introspection = super.gobject-introspection.override { x11Support = false; };
-      })))
-      ++ [ (final: prev: {
-          pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-        })];
+      #nixpkgs.overlays = (lib.singleton (const (super: {
+      #  dbus = super.dbus.override { x11Support = false; };
+      #  networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
+      #  networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
+      #  networkmanager-openconnect = super.networkmanager-openconnect.override { withGnome = false; };
+      #  networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
+      #  networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
+      #  networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
+      #  gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      #})))
+      #++ [ (final: prev: {
+      #    pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+      #  })];
       services.gpg-agent.pinentryFlavor = lib.mkForce "curses";
 
       programs.home-manager.enable = true;
@@ -625,6 +625,28 @@ let
               enable = true;
               position = "1280x0";
               mode = "1440x900";
+            };
+          };
+        };
+
+        programs.autorandr.profiles.t580-thinkvision = {
+          fingerprint = {
+            "DVI-I-1-1"="00ffffffffffff0030aeb461010101010c1d0104a53420783e5595a9544c9e240d5054bdcf00d1c0714f818c81008180950f9500b300283c80a070b023403020360006442100001a000000ff0056354747323030350a20202020000000fd00324b1e5311000a202020202020000000fc004c454e20543234642d31300a200121020318f14b010203040514111213901f230907078301000028190050500016300820880006442100001e662156aa51001e30468f330006442100001e483f403062b0324040c0130006442100001800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9";
+            "eDP1"="00ffffffffffff0030aeba4000000000001c0104a5221378e238d5975e598e271c505400000001010101010101010101010101010101243680a070381f403020350058c210000019502b80a070381f403020350058c2100000190000000f00d10930d10930190a0030e4e705000000fe004c503135365746432d535044420094";
+          };
+          config = {
+            "DVI-I-1-1" = {
+              enable = true;
+              primary = true;
+              position = "0x0";
+	      crtc = 4;
+              mode = "1920x1200";
+            };
+
+            "eDP1" = {
+              enable = true;
+              position = "1920x0";
+              mode = "1920x1080";
             };
           };
         };
