@@ -19,7 +19,7 @@
 
     nur.url = "github:nix-community/NUR";
     sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    #sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nur_dguibert.url     = "github:dguibert/nur-packages/pu";
     nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
@@ -204,6 +204,7 @@
         ./modules/wireguard-mesh.nix
 
         ./roles/mopidy.nix
+        ./roles/sshguard.nix
         ./roles/wireguard-mesh.nix
 
         ./users/default.nix
