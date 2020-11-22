@@ -21,7 +21,7 @@ in
 
     # to prevent multiple authentication attempts during a single connection
     services.openssh.extraConfig = ''
-      MaxAuthTries 2
+      MaxAuthTries 5
     '';
   };
 }
