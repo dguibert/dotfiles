@@ -369,8 +369,6 @@
           networking.firewall.checkReversePath = false;
           systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
-          services.disnix.enable = true;
-
           programs.adb.enable = true;
 
           services.jellyfin.enable = true;
