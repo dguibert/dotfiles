@@ -254,5 +254,4 @@ rec {
     };
   };
 
-  services.disnix.enable = true;
 }
