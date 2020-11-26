@@ -79,7 +79,7 @@ in {
           rpi01 = "fe80::216:3eff:fe6c:435c/64";
         };
         listenPort = 505;
-        publicKey  = "pyAuYQ5uZvNj9wSAMprAwfzRwV6SlbbNfjQJX18kigg=";
+        publicKey  = "LF3Dgj29b7GVH/klZhwTAqfo2t6PQnpmTaY8IiQARkA=";
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
