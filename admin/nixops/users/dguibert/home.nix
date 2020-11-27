@@ -395,6 +395,71 @@ let
       home.file.".tmux/status.conf".source = ./tmux/status.conf;
 
       home.stateVersion = "20.09";
+
+      # ssh -F ssh_config $host -o PubkeyAuthentication=yes -Nf
+      # ssh -F ssh_config $host -O check
+      # ssh -F ssh_config $host -O exit
+      #
+      # ssh -F ssh_config $host -O forward -L ....
+      # ssh -F ssh_config $host -O cancel -L ....
+      programs.ssh = let
+        matchexec_host = host: ip: port: {
+          inherit host port;
+          exec = "nc -w 1 -z ${ip} ${toString port} 1>&2 >/dev/null";
+          hostname = ip;
+          proxyCommand="none";
+          extraOptions.HostKeyAlias=host;
+        };
+      in {
+        enable = true;
+        compression = true;
+        controlMaster = "auto";
+        controlPath = "~/.ssh/socket-%C";
+        controlPersist = "4h";
+
+        #extraOptionOverrides = ''
+        #'';
+        extraConfig = ''
+          IdentitiesOnly yes
+          #IdentityFile id_dsa
+          PasswordAuthentication no
+          PubkeyAuthentication yes
+          TCPKeepAlive yes
+        '';
+
+        matchBlocks = {
+          "127.0.0.1 | localhost" = {
+            forwardAgent=true;
+            forwardX11=true;
+            forwardX11Trusted=true;
+            extraOptions.NoHostAuthenticationForLocalhost="yes";
+          };
+
+          rpi31_0 =                                    matchexec_host "rpi31" "192.168.1.13" 22322;
+          rpi31_1 = lib.hm.dag.entryAfter ["rpi31_0"] (matchexec_host "rpi31" "10.147.27.13" 443);
+          rpi31_3 = lib.hm.dag.entryAfter ["rpi31_1" "rpi31_2"] (matchexec_host "rpi31" "82.64.121.168" 443);
+
+          rpi41_0 =                                    matchexec_host "rpi41" "192.168.1.14" 22322;
+          rpi41_1 = lib.hm.dag.entryAfter ["rpi41_0"] (matchexec_host "rpi41" "10.147.27.14" 443);
+          rpi41   = lib.hm.dag.entryAfter ["rpi41_1"] {
+            hostname = "192.168.1.24";
+            port = 22322;
+            proxyJump = "rpi31";
+          };
+
+          titan_0 =                                    matchexec_host "titan" "192.168.1.24" 22;
+          titan_1 = lib.hm.dag.entryAfter ["titan_0"] (matchexec_host "titan" "10.147.27.24" 22);
+          titan   = lib.hm.dag.entryAfter ["titan_1"] {
+            hostname = "192.168.1.24";
+            port = 22;
+            proxyJump = "rpi31";
+          };
+          "t580" = {
+            hostname="192.168.1.36";
+            extraOptions.HostKeyAlias="t580";
+          };
+        };
+      };
     });
 
     withX11 = { config, pkgs, lib
@@ -432,8 +497,8 @@ let
           udftools
           gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
 
-	  dwm
-	  dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+          dwm
+          dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
           xsel
           (conky.override { x11Support = false; })
           gnuplot
@@ -479,7 +544,7 @@ let
           fira-code
           fira-code-symbols
 
-	  nxsession
+          nxsession
         ];
 
         xsession = {
@@ -639,7 +704,7 @@ let
               enable = true;
               primary = true;
               position = "0x0";
-	      crtc = 4;
+              crtc = 4;
               mode = "1920x1200";
             };
 
