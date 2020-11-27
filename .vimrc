@@ -50,6 +50,7 @@ Plugin 'vim-pandoc/vim-pandoc'
 "Plugin 'ledger/vim-ledger'
 "
 " Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 " Plugin 'kalafut/vim-taskjuggler'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'edkolev/tmuxline.vim'
