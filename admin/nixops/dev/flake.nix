@@ -18,7 +18,7 @@
 
     nixpkgs.url          = "git+file:///home/dguibert/code/nixpkgs";
 
-    nix.url              = "github:dguibert/nix/pu";
+    nix.url          = "git+file:///home/dguibert/code/nix";
     nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nur.url = "github:nix-community/NUR";
