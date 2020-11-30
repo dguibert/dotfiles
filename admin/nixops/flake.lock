@@ -24,12 +24,13 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1606281216,
-        "narHash": "sha256-PtWSeXNjtghdKQR+BLf83Zt6K/IzwMqNHLaI4GbjaR4=",
-        "owner": "serokell",
-        "repo": "deploy-rs",
-        "rev": "3da8c6d048be03ecaf5caa54d945740ab88be465",
-        "type": "github"
+        "lastModified": 1606766421,
+        "narHash": "sha256-y992f9zzTgfOMMjntkcYUAfITeifN6SX4ZFaPc1R2cE=",
+        "ref": "pu",
+        "rev": "4cb5fc9fd1280e912bd09a5eca22223f5b4f8333",
+        "revCount": 116,
+        "type": "git",
+        "url": "file:///home/dguibert/code/deploy-rs"
       },
       "original": {
         "owner": "serokell",
@@ -305,11 +306,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1605732107,
-        "narHash": "sha256-rlamIOtYTc8meSr0kBLTHGFQwJaoUwql8NAVbWGJRGI=",
+        "lastModified": 1606742671,
+        "narHash": "sha256-n4OeCfA6AgocFDj7nJagShihBuDYj7Ljx8C5meLEj1Q=",
         "owner": "dguibert",
         "repo": "nxsession",
-        "rev": "df5abb7852bbb38366374461dc0932beaaca1095",
+        "rev": "f41152646473d78a3b47636806fb3de1218da327",
         "type": "github"
       },
       "original": {
