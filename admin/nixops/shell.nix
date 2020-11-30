@@ -2,6 +2,7 @@
 , flakes ? {}
 , ssh-to-pgp
 , sops-pgp-hook
+, deploy-rs
 }:
 with pkgs;
 
@@ -25,6 +26,7 @@ mkEnv rec {
     nix
     sops-pgp-hook
     ssh-to-pgp
+    deploy-rs
     #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
     jq

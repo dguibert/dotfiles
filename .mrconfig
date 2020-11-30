@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib =
+lib = 
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push =
+push = 
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -413,7 +413,7 @@ checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks
 checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
 update = git remote update
 push = git push -v dguibert +pu
-       git push -v dguibert
+	      git push -v dguibert
 
 [code/ssf]
 checkout = git clone 'https://github.com/securesocketfunneling/ssf' 'ssf'
@@ -646,3 +646,6 @@ checkout = git clone 'https://github.com/datalad/datalad' 'datalad'
 
 [code/robotnix]
 checkout = git clone 'https://github.com/danielfullmer/robotnix' 'robotnix'
+
+[code/deploy-rs]
+checkout = git clone 'https://github.com/serokell/deploy-rs' 'deploy-rs'

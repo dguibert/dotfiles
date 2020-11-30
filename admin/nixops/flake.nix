@@ -42,6 +42,9 @@
 
     dwm-src.url = "git+file:///home/dguibert/code/dwm";
     dwm-src.flake = false;
+
+    # For accessing `deploy-rs`'s utility Nix functions
+    deploy-rs.url = "github:serokell/deploy-rs";
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -60,6 +63,7 @@
             , flake-utils
             , nxsession
             , dwm-src
+	    , deploy-rs
             }@flakes: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -95,6 +99,7 @@
 
     devShell = pkgs.callPackage ./shell.nix { inherit flakes;
       inherit (sops-nix.packages.${system}) sops-pgp-hook ssh-to-pgp;
+      deploy-rs = deploy-rs.packages.${system}.deploy-rs;
     };
     legacyPackages = pkgs;
 
@@ -290,50 +295,50 @@
       ];
     };
 
-    nixosConfigurations.rpi01 = nixpkgs.lib.nixosSystem {
-      modules = [
-        ({ config, lib, pkgs, resources, ... }: {
-          imports = [
-            #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
-            (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
-            #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-            #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
-            (import ./hosts/rpi01/configuration.nix)
-          ];
-         #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-          nixpkgs.localSystem.system = "x86_64-linux";
-          nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
-          #nixpkgs.localSystem.system = "armv6l-linux";
-          nixpkgs.overlays = [
-            nix.overlay
-            nur_dguibert.overlays.default
-            (final: prev: {
-              # don't build qt5
-              # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
-              pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-              git = prev.git.override { perlSupport = false; };
-            })
-          ];
+    #nixosConfigurations.rpi01 = nixpkgs.lib.nixosSystem {
+    #  modules = [
+    #    ({ config, lib, pkgs, resources, ... }: {
+    #      imports = [
+    #        #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
+    #        (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+    #        #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+    #        #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
+    #        (import ./hosts/rpi01/configuration.nix)
+    #      ];
+    #     #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+    #      nixpkgs.localSystem.system = "x86_64-linux";
+    #      nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
+    #      #nixpkgs.localSystem.system = "armv6l-linux";
+    #      nixpkgs.overlays = [
+    #        nix.overlay
+    #        nur_dguibert.overlays.default
+    #        (final: prev: {
+    #          # don't build qt5
+    #          # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+    #          pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+    #          git = prev.git.override { perlSupport = false; };
+    #        })
+    #      ];
 
-          documentation.nixos.enable = false;
-          fileSystems."/".options = [ "defaults" "discard" ];
+    #      documentation.nixos.enable = false;
+    #      fileSystems."/".options = [ "defaults" "discard" ];
 
-          #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
-        })
-      ];
-    };
+    #      #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
+    #    })
+    #  ];
+    #};
 
-    nixosConfigurations.orsine = nixpkgs.lib.nixosSystem {
-      modules = [
-        ({ config, lib, pkgs, resources, ... }: {
-          nixpkgs.localSystem.system = "x86_64-linux";
-          imports = [
-            self.nixosModules.defaults
-            (import ./hosts/orsine/configuration.nix)
-          ];
-        })
-      ];
-    };
+    #nixosConfigurations.orsine = nixpkgs.lib.nixosSystem {
+    #  modules = [
+    #    ({ config, lib, pkgs, resources, ... }: {
+    #      nixpkgs.localSystem.system = "x86_64-linux";
+    #      imports = [
+    #        self.nixosModules.defaults
+    #        (import ./hosts/orsine/configuration.nix)
+    #      ];
+    #    })
+    #  ];
+    #};
 
     nixosConfigurations.titan = nixpkgs.lib.nixosSystem {
       modules = [
@@ -657,23 +662,34 @@
       ];
     };
 
-    #deploy.nodes.titan = {
-    #  hostname = "titan";
-    #  profiles = {
-    #    system = {
-    #      sshUser = "dguibert";
-    #      activate = "$PROFILE/bin/switch-to-configuration switch";
-    #      path = self.nixosConfigurations.titan.config.system.build.toplevel;
-    #      user = "root";
-    #    };
-    #    dguibert-hm = {
-    #      sshUser = "dguibert";
-    #      activate = "$PROFILE/activate";
-    #      path = self.homeConfigurations.dguibert.x11.x86_64-linux.activationPackage;
-    #      profilePath = "/nix/var/nix/profiles/per-user/dguibert/home-manager";
-    #    };
-    #  };
+    #deploy.nodes.titan.hostname = "titan";
+    #deploy.nodes.titan.profiles.system = {
+    #  user ="root";
+    #  path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.titan;
     #};
+    deploy.nodes = nixpkgs.lib.recursiveUpdate (nixpkgs.lib.mapAttrs (_: nixosConfig: {
+      hostname = "${nixosConfig.config.networking.hostName}";
+      profiles.system.path = deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
+      profiles.system.user = "root";
+    }) self.nixosConfigurations)
+    ({
+      titan.profiles.dguibert-hm = {
+        user = "dguibert";
+        path = deploy-rs.lib.x86_64-linux.activate.custom self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
+      };
+      t580.profiles.dguibert-hm = {
+        user = "dguibert";
+        path = deploy-rs.lib.x86_64-linux.activate.custom self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
+      };
+      rpi31.profiles.dguibert-hm = {
+        user = "dguibert";
+        path = deploy-rs.lib.aarch64-linux.activate.custom self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
+      };
+      rpi41.profiles.dguibert-hm = {
+        user = "dguibert";
+        path = deploy-rs.lib.aarch64-linux.activate.custom self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
+      };
+    });
     #deploy = {
     #  sshUser = "dguibert";
     #  user = "root";
@@ -684,14 +700,8 @@
     #  };
     #};
 
-    #deploy.nodes.spartan = {
-    #  sshUser = "bguibertd";
-    #  hostname = "spartan";
-    #  dguibert-hm = {
-    #    activate = "$PROFILE/activate";
-    #    path = self.homeConfigurations.dguibert_spartan.x11.x86_64-linux.activationPackage;
-    #  };
-    #};
+    # This is highly advised, and will prevent many possible mistakes
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
   });
 }
