@@ -45,10 +45,13 @@ rec {
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 20;
+  boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.timeout = 10;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.device = "nodev";
+  #boot.loader.grub.efiSupport = true;
+  #boot.loader.grub.device = "nodev";
   console.earlySetup = true;
   console.useXkbConfig = true;
 
@@ -64,7 +67,7 @@ rec {
 
   services.openssh.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_8;
+  boot.kernelPackages = pkgs.linuxPackages_5_9;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   boot.zfs.enableUnstable = true;
   # This value determines the NixOS release with which your system is to be
