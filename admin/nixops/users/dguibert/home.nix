@@ -460,6 +460,34 @@ let
           };
         };
       };
+
+      programs.htop.enable = true;
+      # fields=0 48 17 18 38 39 40 2 46 47 49 109 110 1
+      programs.htop.fields = [
+        "PID" #= "0;" #
+        "USER" #= "48;" #
+        "PRIORITY" #= "17;" #
+        "NICE" #= "18;" #
+        "M_SIZE" #= "38;" #
+        "M_RESIDENT" #= "39;" #
+        "M_SHARE" #= "40;" #
+        "STATE" #= "2;" #
+        "PERCENT_CPU" #= "46;" #
+        "PERCENT_MEM" #= "47;" #
+        "TIME" #= "49;" #
+        "IO_READ_RATE" #= "109;" #
+        "IO_WRITE_RATE" #= "110;" #
+        "COMM"
+      ];
+      programs.htop.hideThreads=true;
+      programs.htop.hideUserlandThreads=true;
+      programs.htop.treeView=true;
+      programs.htop.headerMargin=false;
+      programs.htop.cpuCountFromZero=true;
+      programs.htop.showCpuUsage=true;
+      programs.htop.colorScheme=6;
+      programs.htop.meters.left = [ { kind="CPU"; mode=1; } { kind="Memory"; mode=1; } { kind="Swap"; mode=1; } ];
+      programs.htop.meters.right = [ { kind="Tasks"; mode=2; } { kind="LoadAverage"; mode=2; } { kind="Uptime"; mode=2; } ];
     });
 
     withX11 = { config, pkgs, lib
