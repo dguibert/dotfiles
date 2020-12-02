@@ -24,15 +24,16 @@ rec {
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
 
-  fileSystems."/"         = { device = "icybox1/local/root"; fsType = "zfs"; };
-  fileSystems."/nix"      = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
-  fileSystems."/root"     = { device = "icybox1/safe/home/root"; fsType = "zfs"; };
-  fileSystems."/home/dguibert" = { device = "icybox1/safe/home/dguibert"; fsType = "zfs"; };
-  fileSystems."/home/dguibert/Videos" = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; };
-  fileSystems."/persist" = { device = "icybox1/safe/persist"; fsType = "zfs"; neededForBoot=true; };
-  fileSystems."/boot/efi" = { label = "EFI1"; fsType = "vfat"; };
-  #fileSystems."/tmp"      = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
-  fileSystems."/tmp"      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
+  fileSystems."/"                         = { device = "icybox1/local/root"; fsType = "zfs"; };
+  fileSystems."/nix"                      = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/root"                     = { device = "icybox1/safe/home/root"; fsType = "zfs"; };
+  fileSystems."/home/dguibert"            = { device = "icybox1/safe/home/dguibert"; fsType = "zfs"; };
+  fileSystems."/home/dguibert/Videos"     = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; };
+  fileSystems."/persist"                  = { device = "icybox1/safe/persist"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/boot/efi"                 = { label = "EFI1"; fsType = "vfat"; };
+  #fileSystems."/tmp"                     = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
+  fileSystems."/tmp"                      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
+  fileSystems."/home_nfs/bguibertd/nix"  = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
