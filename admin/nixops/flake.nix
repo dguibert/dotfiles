@@ -215,6 +215,9 @@
         ./users/default.nix
       ];
 
+      system.nixos.versionSuffix = lib.mkForce
+        ".${lib.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+      system.nixos.revision = lib.mkIf (self ? rev) (lib.mkForce self.rev);
       nixpkgs.config = import "${nur_dguibert}/config.nix";
       nixpkgs.overlays = [
         nix.overlay
