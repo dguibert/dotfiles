@@ -34,6 +34,7 @@ rec {
   #fileSystems."/tmp"                     = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=15G" ]; neededForBoot=true; };
   fileSystems."/tmp"                      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
   fileSystems."/home_nfs/bguibertd/nix"  = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; };
+  fileSystems."/home_nfs_robin_ib/bguibertd/nix"  = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
