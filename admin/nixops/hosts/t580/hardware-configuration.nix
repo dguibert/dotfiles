@@ -28,7 +28,7 @@
     zfs rollback -r rt580/local/root@blank
   '';
 
-  boot.kernelPackages = pkgs.linuxPackages_5_8;
+  boot.kernelPackages = pkgs.linuxPackages_5_9;
   boot.zfs.enableUnstable = true;
 
   services.zfs.autoScrub.enable = true;
