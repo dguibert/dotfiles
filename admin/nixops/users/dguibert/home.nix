@@ -455,7 +455,7 @@ let
             proxyJump = "rpi31";
           };
           "t580" = {
-            hostname="192.168.1.36";
+            hostname="192.168.1.17";
             extraOptions.HostKeyAlias="t580";
           };
         };

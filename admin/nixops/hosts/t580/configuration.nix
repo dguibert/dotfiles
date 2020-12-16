@@ -55,6 +55,7 @@ rec {
       name = "bond0";
       DHCP = "yes";
       networkConfig.BindCarrier = "enp0s31f6 wlp4s0";
+      linkConfig.MACAddress="d2:b6:17:1d:b8:97";
     };
   } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" ] (bi:
     nameValuePair "40-${bi}" {
@@ -62,6 +63,7 @@ rec {
       DHCP = "no";
       networkConfig.Bond = "bond0";
       networkConfig.IPv6PrivacyExtensions = "kernel";
+      linkConfig.MACAddress="d2:b6:17:1d:b8:97";
     }));
 
   # Configure network proxy if necessary
