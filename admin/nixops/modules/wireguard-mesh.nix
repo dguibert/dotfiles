@@ -96,6 +96,7 @@ in {
       ${concatMapStrings (n: ''
         interface ${n}
       '') peerNames}
+      skip-kernel-setup true
       # mesh IPv4
       redistribute local ip 10.147.27.0/24 metric 128
       redistribute ip 10.147.27.0/24 ge 13 metric 128
@@ -103,6 +104,13 @@ in {
       redistribute local deny
       redistribute deny
     '';
+    systemd.services.babeld = {
+      serviceConfig = {
+        #IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" "10.147.27.0/24" ];
+        IPAddressAllow = [ "10.147.27.0/24" ];
+        RestrictAddressFamilies=[ "AF_INET" "AF_UNIX" ];
+      };
+    };
 
     networking.firewall.allowedUDPPorts = [ 6696 ];
   };
