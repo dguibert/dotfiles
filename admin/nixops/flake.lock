@@ -108,10 +108,12 @@
         ]
       },
       "locked": {
-        "lastModified": 1606057081,
-        "narHash": "sha256-JQlmnYQqqbkx0wXMzmWz+I8U4W4bpOatUW+/5BYHWAA=",
-        "type": "git",
-        "url": "file:///home/dguibert/code/home-manager"
+        "lastModified": 1608221574,
+        "narHash": "sha256-kps+Nvf329Xo0uPDa41FJu9ZKOL8uMENEz7/quYlwAA=",
+        "owner": "dguibert",
+        "repo": "home-manager",
+        "rev": "3443f94d1acdec107d77c7cdee809c8a52a4b2a0",
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
