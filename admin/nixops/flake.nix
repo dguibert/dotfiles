@@ -552,7 +552,8 @@
           boot.consoleLogLevel = lib.mkDefault 7;
 
           boot.loader.raspberryPi.firmwareConfig = ''
-            dtoverlay=vc4-fkms-v3d
+	    dtoverlay=vc4-fkms-v3d
+            dtparam=sd_poll_once
             #gpu_mem=192
           '' + pkgs.stdenv.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
             arm_64bit=1
