@@ -52,7 +52,7 @@ if ! sops  --extract $cert_name -d $sops_file > $pubfile; then
     sops --set '["ssh_host_'${type}'_key"] "'"$(cat $f)"'"' $sops_file
   fi
   if ! sops --extract ${pub_name} -d $sops_file > $f.pub; then
-    ssh-keygen -y -f <(sops --extract $key_name -d $sops_file) > $f.pub
+    ssh-keygen -y -f <(sops --extract $key_name -d $sops_file) -C $hostname > $f.pub
     sops --set '["ssh_host_'${type}'_key.pub"] "'"$(cat $f.pub)"'"' $sops_file
   fi
   pass show ${ca} > $d/ssh-ca
