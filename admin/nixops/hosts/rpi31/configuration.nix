@@ -137,6 +137,29 @@ rec {
       );
     '';
   };
+  ##services.haproxy.enable = true;
+  ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
+  ##services.haproxy.config = ''
+  ##  frontend ssl
+  ##    mode tcp
+  ##    bind 0.0.0.0:443
+  ##    tcp-request inspect-delay 3s
+  ##    tcp-request content accept if { req.ssl_hello_type 1 }
+
+  ##    acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
+
+  ##    use_backend openssh            if ssh_payload
+  ##    use_backend openssh            if !{ req.ssl_hello_type 1 } { req.len 0 }
+  ##    use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
+
+  ##  backend openssh
+  ##    mode tcp
+  ##    timeout server 3h
+  ##    server openssh 127.0.0.1:22
+  ##  backend shadowsocks
+  ##    mode tcp
+  ##    server socks 127.0.0.1:8388
+  ##'';
 
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
