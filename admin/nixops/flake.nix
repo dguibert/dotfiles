@@ -63,7 +63,7 @@
             , flake-utils
             , nxsession
             , dwm-src
-	    , deploy-rs
+            , deploy-rs
             }@flakes: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -77,7 +77,7 @@
             self.overlay
             nxsession.overlay
             (final: prev: {
-     	        dwm = prev.dwm.overrideAttrs (o: {
+                     dwm = prev.dwm.overrideAttrs (o: {
                 src = dwm-src;
                 patches = [];
               });
@@ -134,7 +134,7 @@
             (import ./users/dguibert/home.nix).withoutX11
             home-secret.withoutX11
           ];
-	  _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
+          _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
             dbus = prev.dbus.override { x11Support = false; };
             networkmanager-fortisslvpn = prev.networkmanager-fortisslvpn.override { withGnome = false; };
             networkmanager-l2tp = prev.networkmanager-l2tp.override { withGnome = false; };
@@ -144,7 +144,7 @@
             networkmanager-iodine = prev.networkmanager-iodine.override { withGnome = false; };
             gobject-introspection = prev.gobject-introspection.override { x11Support = false; };
             pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-	  }));
+          }));
         };
       };
       dguibert.x11 = let
@@ -527,51 +527,72 @@
             (import ./hosts/rpi41/configuration.nix)
             self.nixosModules.defaults
           ];
-          boot.loader.grub.enable = false;
-          boot.loader.raspberryPi.enable = true;
-          boot.loader.raspberryPi.version = 4;
-          # error: U-Boot is not yet supported on the raspberry pi 4.
-          #boot.loader.raspberryPi.uboot.enable = true;
-          #boot.loader.raspberryPi.uboot.configurationLimit = 10;
           boot.kernelPackages = pkgs.linuxPackages_rpi4;
-          boot.kernelParams = [
-            # appparently this avoids some common bug in Raspberry Pi.
-            "dwc_otg.lpm_enable=0"
+          fileSystems."/".options = [ "defaults" "discard" ];
 
-            "plymouth.ignore-serial-consoles"
-          ]
-            ++ lib.optionals false /*ubootEnabled*/ [
-              # avoids https://github.com/raspberrypi/linux/issues/3331
-              "initcall_blacklist=bcm2708_fb_init"
-
-              # avoids https://github.com/raspberrypi/firmware/issues/1247
-              "cma=512M"
-          ];
-          boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" "bcm2835_rng" ];
+          boot.loader.grub.enable = false;
+          boot.loader.generic-extlinux-compatible.enable = true;
 
           boot.consoleLogLevel = lib.mkDefault 7;
 
-          boot.loader.raspberryPi.firmwareConfig = ''
-	    dtoverlay=vc4-fkms-v3d
-            dtparam=sd_poll_once
-            #gpu_mem=192
-          '' + pkgs.stdenv.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
-            arm_64bit=1
-          '';
+          # The serial ports listed here are:
+          # - ttyS0: for Tegra (Jetson TX1)
+          # - ttyAMA0: for QEMU's -machine virt
+          boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+
+          boot.initrd.availableKernelModules = [
+            # Allows early (earlier) modesetting for the Raspberry Pi
+            "vc4" "bcm2835_dma" "i2c_bcm2835"
+            # Allows early (earlier) modesetting for Allwinner SoCs
+            "sun4i_drm" "sun8i_drm_hdmi" "sun8i_mixer"
+          ];
 
           sdImage = {
-            firmwareSize = 512;
-            # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-            populateFirmwareCommands =
-              "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-            # As the boot process is done entirely in the firmware partition.
-            populateRootCommands = "";
-          };
-          fileSystems = {
-            "/boot" = {
-              device = "/dev/disk/by-label/FIRMWARE";
-              fsType = "vfat";
-            };
+            populateFirmwareCommands = let
+              configTxt = pkgs.writeText "config.txt" ''
+                [pi3]
+                kernel=u-boot-rpi3.bin
+
+                [pi4]
+                kernel=u-boot-rpi4.bin
+                enable_gic=1
+                armstub=armstub8-gic.bin
+
+                # Otherwise the resolution will be weird in most cases, compared to
+                # what the pi3 firmware does by default.
+                disable_overscan=1
+
+                [all]
+                # Boot in 64-bit mode.
+                arm_64bit=1
+
+                # U-Boot needs this to work, regardless of whether UART is actually used or not.
+                # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
+                # a requirement in the future.
+                enable_uart=1
+
+                # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+                # when attempting to show low-voltage or overtemperature warnings.
+                avoid_warnings=1
+              '';
+              in ''
+                (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+
+                # Add the config
+                cp ${configTxt} firmware/config.txt
+
+                # Add pi3 specific files
+                cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+
+                # Add pi4 specific files
+                cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
+                cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
+                cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+              '';
+            populateRootCommands = ''
+              mkdir -p ./files/boot
+              ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
+            '';
           };
 
 
@@ -611,43 +632,13 @@
 
           sdImage.compressImage = false;
           documentation.nixos.enable = false;
-          fileSystems."/".options = [ "defaults" "discard" ];
 
           hardware.opengl = {
             enable = true;
             setLdLibraryPath = true;
             package = pkgs.mesa_drivers;
           };
-          #hardware.deviceTree = {
-          #  overlays = [ "${pkgs.raspberrypifw}/share/raspberrypi/boot/overlays/vc4-fkms-v3d.dtbo" ];
-          #  #firmware = [
-          #  #  pkgs.wireless-regdb
-          #  #  pkgs.raspberrypiWirelessFirmware
-          #  ##]
-          #  ### early raspberry pis don’t all have builtin wifi, so got to
-          #  ### include tons of firmware in case something is plugged into USB
-          #  ##++ lib.optionals config.nixiosk.raspberryPi.enableExtraFirmware [
-          #  ##  pkgs.firmwareLinuxNonfree
-          #  ##  pkgs.intel2200BGFirmware
-          #  ##  pkgs.rtl8192su-firmware
-          #  ##  pkgs.rtl8723bs-firmware
-          #  ##  pkgs.rtlwifi_new-firmware
-          #  ##  pkgs.zd1211fw
-          #  #];
-          #};
-          #services.xserver = {
-          #  enable = true;
-          #  displayManager.slim.enable = true;
-          #  desktopManager.gnome3.enable = true;
-          #  videoDrivers = [ "modesetting" ];
-          #};
-
           programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
-          #assertions = lib.singleton {
-          #  assertion = pkgs.stdenv.system == "aarch64-linux";
-          #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
-          #    "it cannot be cross compiled";
-          #};
 
           sops.defaultSopsFile = ./hosts/rpi41/secrets/secrets.yaml;
         })
