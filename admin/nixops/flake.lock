@@ -191,11 +191,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1606992849,
-        "narHash": "sha256-+nUm7BqTPx5F2DnEaEeT4btsGTJtimz1SWnP5y4bB3k=",
+        "lastModified": 1609689018,
+        "narHash": "sha256-IlKZQItWQZabFDYI6L529TkJUmZkvMLIQYERNM1Xgv0=",
         "ref": "pu",
-        "rev": "92db1005e4c8bb109657e7b31245946788aed81b",
-        "revCount": 9700,
+        "rev": "71425bbd4febc2c25513687839726563791c59da",
+        "revCount": 9862,
         "type": "git",
         "url": "file:///home/dguibert/code/nix"
       },
