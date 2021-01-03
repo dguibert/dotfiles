@@ -60,6 +60,8 @@ mkEnv rec {
         patches = (o.patches or []) ++ [
           ./0001-compile-with-new-PrimOp-struct.patch
           ./0002-avoid-toJSON-template.patch
+          ./0003-value-mkPrimOp.patch
+          ./0004-mkStringNoCopy-mkString.patch
         ];
       })}/lib/nix/plugins/libnix-extra-builtins.so")
     NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
