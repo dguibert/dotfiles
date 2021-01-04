@@ -40,7 +40,7 @@
     nxsession.inputs.nixpkgs.follows = "nixpkgs";
     nxsession.inputs.flake-utils.follows = "flake-utils";
 
-    dwm-src.url = "git+file:///home/dguibert/code/dwm";
+    dwm-src.url = "github:dguibert/dwm";
     dwm-src.flake = false;
 
     # For accessing `deploy-rs`'s utility Nix functions
@@ -87,11 +87,7 @@
         };
 
       inherit (nixpkgsFor "x86_64-linux")
-        pass_
-        isGitDecrypted_
         sopsDecrypt_
-        sshSignHost_
-        wgKeys_
         extra_builtins_file;
 
   in (flake-utils.lib.eachDefaultSystem (system:
@@ -116,7 +112,6 @@
       };
       dguibert.no-x11 = let
           home-secret = let
-              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
               home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
               loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
@@ -149,7 +144,6 @@
       };
       dguibert.x11 = let
           home-secret = let
-              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
               home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
               loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
@@ -262,11 +256,9 @@
 
       roles.wireguard-mesh.enable = true;
       # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-      programs.ssh.knownHosts."*" = let
-        ca = pass_ "ssh-ca/home.pub";
-      in lib.mkIf ca.success {
+      programs.ssh.knownHosts."*" = {
         certAuthority=true;
-        publicKey = ca.value;
+        publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
       };
 
       sops.secrets.id_buildfarm = {

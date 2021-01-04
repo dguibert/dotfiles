@@ -24,13 +24,12 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1606766421,
-        "narHash": "sha256-y992f9zzTgfOMMjntkcYUAfITeifN6SX4ZFaPc1R2cE=",
-        "ref": "pu",
-        "rev": "4cb5fc9fd1280e912bd09a5eca22223f5b4f8333",
-        "revCount": 116,
-        "type": "git",
-        "url": "file:///home/dguibert/code/deploy-rs"
+        "lastModified": 1609096534,
+        "narHash": "sha256-jTmkR1EbgqoyqT/6era2lyUq2QpyDwjxBpdDLFaCmZY=",
+        "owner": "serokell",
+        "repo": "deploy-rs",
+        "rev": "4ba83f14ceb7136794e7676b71688b903d2c60ab",
+        "type": "github"
       },
       "original": {
         "owner": "serokell",
@@ -41,17 +40,17 @@
     "dwm-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1604314714,
+        "lastModified": 1604314477,
         "narHash": "sha256-ddUqdGxYeDctEvjL8srW982iiLzVxHgyjcecqPdYPdg=",
-        "ref": "master",
-        "rev": "4dc9a192f802f111465b711ef79e7ca65a619b46",
-        "revCount": 1700,
-        "type": "git",
-        "url": "file:///home/dguibert/code/dwm"
+        "owner": "dguibert",
+        "repo": "dwm",
+        "rev": "28491a989d662868bf5831c95078c3ec02ccdc29",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/dguibert/code/dwm"
+        "owner": "dguibert",
+        "repo": "dwm",
+        "type": "github"
       }
     },
     "flake-compat": {
@@ -193,11 +192,10 @@
       "locked": {
         "lastModified": 1609689018,
         "narHash": "sha256-IlKZQItWQZabFDYI6L529TkJUmZkvMLIQYERNM1Xgv0=",
-        "ref": "pu",
+        "owner": "dguibert",
+        "repo": "nix",
         "rev": "71425bbd4febc2c25513687839726563791c59da",
-        "revCount": 9862,
-        "type": "git",
-        "url": "file:///home/dguibert/code/nix"
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
@@ -226,11 +224,10 @@
       "locked": {
         "lastModified": 1609673469,
         "narHash": "sha256-ggYtlRQ4kqEmvMAtCjkaUmv9LcPfhctTGQc2VlMnwvA=",
-        "ref": "pu",
+        "owner": "dguibert",
+        "repo": "nixpkgs",
         "rev": "4acff85b48fadaeb208cb348026c01dc08d02489",
-        "revCount": 261299,
-        "type": "git",
-        "url": "file:///home/dguibert/code/nixpkgs"
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
@@ -283,13 +280,12 @@
         ]
       },
       "locked": {
-        "lastModified": 1605199050,
-        "narHash": "sha256-ellkjrqy+iQ7SZuiNWwlKzzKoefaUMtjoC3FdC+/IdM=",
-        "ref": "pu",
-        "rev": "438931d0e1681a51c5edcfcfd9f5fadb648a7735",
-        "revCount": 469,
-        "type": "git",
-        "url": "file:///home/dguibert/nur-packages"
+        "lastModified": 1606854373,
+        "narHash": "sha256-8YjxDka5oxTygy3liDCoVYm3pzT+Ty/+Qr1baBehfsg=",
+        "owner": "dguibert",
+        "repo": "nur-packages",
+        "rev": "2c52203916f4e753554d7d3e25861d568439eec5",
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
