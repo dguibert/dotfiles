@@ -262,11 +262,9 @@
 
       roles.wireguard-mesh.enable = true;
       # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-      programs.ssh.knownHosts."*" = let
-        ca = pass_ "ssh-ca/home.pub";
-      in lib.mkIf ca.success {
+      programs.ssh.knownHosts."*" = {
         certAuthority=true;
-        publicKey = ca.value;
+        publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
       };
 
       sops.secrets.id_buildfarm = {
