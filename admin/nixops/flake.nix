@@ -87,11 +87,7 @@
         };
 
       inherit (nixpkgsFor "x86_64-linux")
-        pass_
-        isGitDecrypted_
         sopsDecrypt_
-        sshSignHost_
-        wgKeys_
         extra_builtins_file;
 
   in (flake-utils.lib.eachDefaultSystem (system:
@@ -116,7 +112,6 @@
       };
       dguibert.no-x11 = let
           home-secret = let
-              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
               home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
               loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
@@ -149,7 +144,6 @@
       };
       dguibert.x11 = let
           home-secret = let
-              #loaded = (isGitDecrypted_ ./users/dguibert/home-secret.nix).success;
               home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
               loaded = home_sec.success or true;
             in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
