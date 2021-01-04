@@ -110,11 +110,10 @@
       "locked": {
         "lastModified": 1609766698,
         "narHash": "sha256-N+JmVG9xHg5T5JKA352ZIlximJWYjtYzqv17vGeO8kw=",
-        "ref": "pu",
+        "owner": "dguibert",
+        "repo": "home-manager",
         "rev": "defa19373568a2a74bcf5afef167f9252213ffa3",
-        "revCount": 1237,
-        "type": "git",
-        "url": "file:///home/dguibert/code/home-manager"
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
