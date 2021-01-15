@@ -66,6 +66,40 @@ let
                -o com.sun:auto-snapshot=false ${pool_name}/swap
   '';
 
+  # T580
+  # zpool create -o ashift=12 -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD -O xattr=sa -O mountpoint=/ -R /mnt -f rt580 /dev/nvme0n1p6
+  # fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
+  # fileSystems."/boot" = { device = "/dev/disk/by-uuid/FE98-E8BD"; fsType = "vfat"; };
+  # fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot=true; };
+  # fileSystems."/home" = { device = "rt580/safe/home"; fsType = "zfs"; };
+  # fileSystems."/root" = { device = "rt580/safe/home/root"; fsType = "zfs"; };
+  # fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; neededForBoot=true; };
+
+  # zfs create -p -o mountpoint=legacy rt580/local/root
+  # zfs snapshot rt580/local/root@blank
+  # mount -t zfs rt580/local/root /mnt
+  # mkdir /mnt/boot
+  # mount /dev/disk/by-uuid/FE98-E8BD /mnt/boot
+  # zfs create -p -o mountpoint=legacy rt580/local/nix
+  # mkdir /mnt/nix
+  # mount -t zfs rt580/local/nix /mnt/nix
+  # zfs create -p -o mountpoint=legacy rt580/safe/home
+  # mkdir /mnt/home
+  # mount -t zfs rt580/safe/home /mnt/home
+  # zfs create -p -o mountpoint=legacy rt580/safe/home/root
+  # mkdir /mnt/home/root
+  # mount -t zfs rt580/safe/home/root /mnt/home/root
+  # zfs create -p -o mountpoint=legacy rt580/safe/persist
+  # mkdir /mnt/persist
+  # mount -t zfs rt580/safe/persist /mnt/persist
+
+  # nixos-install --system /nix/store/87wcv7a9zg06jf7yih2n3s9xvw60l2al-nixos-system-t580-21.03.20210107.d92c727
+
+  ## https://grahamc.com/blog/erase-your-darlings
+  #boot.initrd.postDeviceCommands = lib.mkAfter ''
+  #  zfs rollback -r rt580/local/root@blank
+  #''
+
 in {
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.supportedFilesystems = [ "zfs" ];
