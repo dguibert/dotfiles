@@ -71,6 +71,7 @@
           inherit system;
           overlays =  [
             nix.overlay
+            nur.overlay
             nur_dguibert.overlay
             nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
