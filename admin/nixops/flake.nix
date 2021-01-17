@@ -71,6 +71,7 @@
           inherit system;
           overlays =  [
             nix.overlay
+            nur.overlay
             nur_dguibert.overlay
             nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
@@ -336,6 +337,19 @@
     #    })
     #  ];
     #};
+
+
+    ## nix build .#nixosConfigurations.iso.config.system.build.isoImage
+    nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
+      modules = [
+        (import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+        ./modules/zfs.nix
+	./hosts/iso.nix
+        ({ config, lib, pkgs, resources, ... }: {
+          nixpkgs.localSystem.system = "x86_64-linux";
+	})
+      ];
+    };
 
     nixosConfigurations.titan = nixpkgs.lib.nixosSystem {
       modules = [

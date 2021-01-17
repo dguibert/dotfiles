@@ -617,12 +617,13 @@ let
 
         programs.firefox.enable = true;
         programs.firefox.package = pkgs.firefox-bin;
-        #programs.firefox.extensions =
-        #  with (import <NUR> { inherit pkgs; }).repos.rycee.firefox-addons; [
-        #    ublock-origin
-        #    browserpass-ce
-        #    switchyomega
-        #];
+        programs.firefox.extensions =
+          with pkgs.nur.repos.rycee.firefox-addons; [
+            browserpass
+            browserpass-otp
+	    #switchyomega
+	    ublock-origin
+        ];
 
         programs.google-chrome.enable = true;
         programs.google-chrome.extensions = [

@@ -57,7 +57,7 @@ rec {
       networkConfig.BindCarrier = "enp0s31f6 wlp4s0";
       linkConfig.MACAddress="d2:b6:17:1d:b8:97";
     };
-  } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" ] (bi:
+  } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" "enp0s20f0u4u1" ] (bi:
     nameValuePair "40-${bi}" {
       name="${bi}";
       DHCP = "no";
