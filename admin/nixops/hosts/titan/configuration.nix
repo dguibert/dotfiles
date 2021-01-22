@@ -69,9 +69,9 @@ rec {
 
   services.openssh.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_9;
+  boot.kernelPackages = pkgs.linuxPackages_5_10;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
-  boot.zfs.enableUnstable = true;
+  #boot.zfs.enableUnstable = true;
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

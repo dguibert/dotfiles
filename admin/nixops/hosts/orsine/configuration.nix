@@ -36,7 +36,7 @@ rec {
 #    packageOverrides.linuxPackages = boot.kernelPackages;
 #  };
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
+  #boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/cc74b0e1-c5fb-4bf2-870a-e23363cd7849";
