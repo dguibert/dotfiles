@@ -11,8 +11,6 @@ rec {
     ../common.nix
     ../../modules/nix-conf.nix
     ../../modules/distributed-build.nix
-    ../../users/rdolbeau
-    ../../users/fvigilant
   ];
 
   #sdImage.bootSize = 512;

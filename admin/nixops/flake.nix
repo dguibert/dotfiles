@@ -353,7 +353,6 @@
             hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
             self.nixosModules.defaults
-            ./users/fvigilant
             ./modules/yubikey-gpg.nix
             ./modules/distributed-build.nix
             ./modules/x11.nix
