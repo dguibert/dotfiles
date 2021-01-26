@@ -410,7 +410,7 @@
           #systemd.tmpfiles.rules = [ "d /var/lib/hydra/cache     0775 hydra hydra 1d -" ];
 
           environment.etc."nix/machines-hydra".text = ''
-            localhost x86_64-linux,i686-linux,aarch64-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
+            localhost x86_64-linux,i686-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
           '';
           nix.extraOptions = ''
             secret-key-files = /etc/nix/cache-priv-key.pem

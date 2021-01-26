@@ -60,12 +60,12 @@ rec {
   networking.hostId="8425e349";
   networking.hostName = "titan";
 
-  #qemu-user.aarch64 = true;
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
-  #boot.binfmt.registrations."aarch64-linux".preserveArgvZero=true;
-  boot.binfmt.registrations."aarch64-linux".fixBinary=true;
-  #boot.binfmt.registrations."armv7l-linux".preserveArgvZero=true;
-  boot.binfmt.registrations."armv7l-linux".fixBinary=true;
+  ##qemu-user.aarch64 = true;
+  #boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
+  ##boot.binfmt.registrations."aarch64-linux".preserveArgvZero=true;
+  #boot.binfmt.registrations."aarch64-linux".fixBinary=true;
+  ##boot.binfmt.registrations."armv7l-linux".preserveArgvZero=true;
+  #boot.binfmt.registrations."armv7l-linux".fixBinary=true;
 
   services.openssh.enable = true;
 
