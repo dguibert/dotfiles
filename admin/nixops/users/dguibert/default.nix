@@ -20,6 +20,7 @@ in {
       hashedPassword = "$6$h1H22Nd9YDRVlAt$YqlyCmQXuFiVAtecebSjvlmJM0WoZmLaaTLF52PuMH6Wz3mYKtWioNcWe2pQJOOoEq68Im7ZJZo9TsZnvcG5h1";
       group = "dguibert";
       extraGroups = [ "dguibert" "wheel" "users" "disk" "video" "audio" "adm"
+        ] ++ lib.optionals (config.users.groups ? cdrom) [ "cdrom"
         ] ++ lib.optionals (config.users.groups ? pulse) [ "pulse"
         ] ++ lib.optionals (config.users.groups ? vboxusers) [ "vboxusers"
         ] ++ lib.optionals (config.users.groups ? adbusers) [ "adbusers"
