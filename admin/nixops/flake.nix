@@ -45,6 +45,7 @@
 
     # For accessing `deploy-rs`'s utility Nix functions
     deploy-rs.url = "github:serokell/deploy-rs";
+    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
