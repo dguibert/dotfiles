@@ -534,6 +534,7 @@
 
           boot.loader.grub.enable = false;
           boot.loader.generic-extlinux-compatible.enable = true;
+          boot.loader.generic-extlinux-compatible.configurationLimit = 10;
 
           boot.consoleLogLevel = lib.mkDefault 7;
 
