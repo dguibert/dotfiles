@@ -668,6 +668,7 @@
       hostname = "${nixosConfig.config.networking.hostName}";
       profiles.system.path = deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
       profiles.system.user = "root";
+      fastConnection = true;
     }) self.nixosConfigurations)
     ({
       titan.profiles.dguibert-hm = {
