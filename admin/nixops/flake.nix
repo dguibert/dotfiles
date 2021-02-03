@@ -534,6 +534,7 @@
 
           boot.loader.grub.enable = false;
           boot.loader.generic-extlinux-compatible.enable = true;
+          boot.loader.generic-extlinux-compatible.configurationLimit = 10;
 
           boot.consoleLogLevel = lib.mkDefault 7;
 
@@ -668,6 +669,7 @@
       hostname = "${nixosConfig.config.networking.hostName}";
       profiles.system.path = deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
       profiles.system.user = "root";
+      fastConnection = true;
     }) self.nixosConfigurations)
     ({
       titan.profiles.dguibert-hm = {
