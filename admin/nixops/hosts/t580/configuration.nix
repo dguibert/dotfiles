@@ -116,6 +116,10 @@ rec {
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
   services.xserver.videoDrivers = [ "modesetting" "displaylink" ];
+  # https://support.displaylink.com/knowledgebase/articles/1181623
+  services.xserver.deviceSection = ''
+    Option "PageFlip" "false"
+  '';
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
