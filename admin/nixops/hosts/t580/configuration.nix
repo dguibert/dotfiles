@@ -115,7 +115,7 @@ rec {
   services.xserver.enable = true;
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.videoDrivers = [ "intel" "displaylink" ];
+  services.xserver.videoDrivers = [ "modesetting" "displaylink" ];
 
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
