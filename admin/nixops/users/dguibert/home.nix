@@ -80,8 +80,6 @@ let
         esac
 
         eval "$(${pkgs.coreutils}/bin/dircolors)"
-        export BASE16_SHELL_SET_BACKGROUND=false
-        source ${config.lib.base16.base16template "shell"}
 
         export TODOTXT_DEFAULT_ACTION=ls
         alias t='todo.sh'
