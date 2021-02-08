@@ -115,7 +115,7 @@ rec {
   services.xserver.enable = true;
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.videoDrivers = [ "modesetting" "displaylink" ];
+  services.xserver.videoDrivers = [ "modesetting" ];
   # https://support.displaylink.com/knowledgebase/articles/1181623
   services.xserver.deviceSection = ''
     Option "PageFlip" "false"
