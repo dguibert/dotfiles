@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "cachix": {
+      "locked": {
+        "lastModified": 1612653566,
+        "narHash": "sha256-7qjA9OgOJ97wzEsgElnFnIIrWJ57Wy8p2IuG85fJDZ0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8e78c2cfbae71720869c35b6710d652bf28b37cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-20.09",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -222,6 +238,28 @@
         "type": "github"
       }
     },
+    "nixpkgs-wayland": {
+      "inputs": {
+        "cachix": "cachix",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "unstableSmall": "unstableSmall"
+      },
+      "locked": {
+        "lastModified": 1612785904,
+        "narHash": "sha256-zegRO+ZJvnN3ph+Q87Gor5E4QZV3EaRm0APvoyoDrw0=",
+        "owner": "colemickens",
+        "repo": "nixpkgs-wayland",
+        "rev": "3ac5f9154a25b099d2f61856c49698caca3cf0c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "repo": "nixpkgs-wayland",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1609214493,
@@ -314,6 +352,7 @@
         "hydra": "hydra",
         "nix": "nix",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
         "nxsession": "nxsession",
@@ -352,6 +391,22 @@
       "original": {
         "owner": "mrVanDalo",
         "repo": "terranix",
+        "type": "github"
+      }
+    },
+    "unstableSmall": {
+      "locked": {
+        "lastModified": 1612724341,
+        "narHash": "sha256-MphQHTTKwAhrQNDVRvEV1FR6xTN8jvfT9YXRgj+fHtc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "279e66e1067067416eb3e65602ed83efb55966bb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
