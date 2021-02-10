@@ -670,7 +670,7 @@
                   "https://nixpkgs-wayland.cachix.org"
                 ];
               };
-              specialisation.wayland = { inheritParentConfig = true; configuration = {
+	      #specialisation.wayland = { inheritParentConfig = true; configuration = {
                   services.xserver.enable = lib.mkForce false;
                   # use it as an overlay
                   nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
@@ -686,8 +686,8 @@
                       dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
                     ];
                   };
-                };
-              };
+	      #  };
+	      #};
             })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
