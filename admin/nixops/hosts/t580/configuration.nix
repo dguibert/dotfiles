@@ -14,6 +14,7 @@ rec {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 6;
 
   networking.hostName = "t580"; # Define your hostname.
   networking.supplicant.wlp4s0 = {
