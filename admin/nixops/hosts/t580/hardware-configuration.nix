@@ -13,7 +13,7 @@
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
   networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
-  boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" ];
+  boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" "i915.enable_fbc=0" ];
   swapDevices = [ { label = "nvme-swap"; } ];
 
   fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
@@ -28,7 +28,9 @@
     zfs rollback -r rt580/local/root@blank
   '';
 
-  boot.kernelPackages = pkgs.linuxPackages_5_10;
+  #boot.kernelPackages = pkgs.linuxPackages_5_10;
+  # https://lists.ubuntu.com/archives/kernel-team/2020-November/114986.html
+  boot.kernelPackages = pkgs.linuxPackages_testing;
   #boot.zfs.enableUnstable = true;
 
   services.zfs.autoScrub.enable = true;

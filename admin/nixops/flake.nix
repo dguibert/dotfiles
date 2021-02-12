@@ -46,6 +46,11 @@
     # For accessing `deploy-rs`'s utility Nix functions
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
+    # only needed if you use as a package set:
+    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    #nixpkgs-wayland.inputs.master.follows = "master";
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -65,6 +70,7 @@
             , nxsession
             , dwm-src
             , deploy-rs
+      , nixpkgs-wayland
             }@flakes: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -233,8 +239,8 @@
           patches = (o.patches or []) ++ [
             ./0001-compile-with-new-PrimOp-struct.patch
             ./0002-avoid-toJSON-template.patch
-	    ./0003-value-mkPrimOp.patch
-	    ./0004-mkStringNoCopy-mkString.patch
+      ./0003-value-mkPrimOp.patch
+      ./0004-mkStringNoCopy-mkString.patch
           ];
           })}/lib/nix/plugins/libnix-extra-builtins.so")
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
@@ -339,10 +345,10 @@
       modules = [
         (import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
         ./modules/zfs.nix
-	./hosts/iso.nix
+        ./hosts/iso.nix
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
-	})
+        })
       ];
     };
 
@@ -547,7 +553,7 @@
             # Allows early (earlier) modesetting for the Raspberry Pi
             "vc4" "bcm2835_dma" "i2c_bcm2835"
             # Allows early (earlier) modesetting for Allwinner SoCs
-	    #"sun4i_drm" "sun8i_drm_hdmi" "sun8i_mixer"
+      #"sun4i_drm" "sun8i_drm_hdmi" "sun8i_mixer"
           ];
 
           sdImage = {
@@ -654,6 +660,35 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             self.nixosModules.defaults
+            ({ ... }: {
+              nix = {
+                # add binary caches
+                binaryCachePublicKeys = [
+                  "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+                ];
+                binaryCaches = [
+                  "https://nixpkgs-wayland.cachix.org"
+                ];
+              };
+	      #specialisation.wayland = { inheritParentConfig = true; configuration = {
+                  services.xserver.enable = lib.mkForce false;
+                  # use it as an overlay
+                  nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
+                  programs.sway = {
+                    enable = true;
+                    wrapperFeatures.gtk = true; # so that gtk works properly
+                    extraPackages = with pkgs; [
+                      swaylock
+                      swayidle
+                      wl-clipboard
+                      mako # notification daemon
+                      alacritty # Alacritty is the default terminal in the config
+                      dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+                    ];
+                  };
+	      #  };
+	      #};
+            })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
