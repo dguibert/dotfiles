@@ -124,7 +124,7 @@ rec {
   ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
   ##                NVRM:  this GPU.  Continuing probe...
   hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
+  services.xserver.videoDrivers = lib.mkIf config.services.xserver.enable [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
   #nixpkgs.config.xorg.abiCompat = "1.18";
 
   # https://nixos.org/nixos/manual/index.html#sec-container-networking
