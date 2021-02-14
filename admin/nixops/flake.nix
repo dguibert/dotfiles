@@ -383,7 +383,7 @@
           programs.singularity.enable = true;
 
           networking.firewall.checkReversePath = false;
-          systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
+          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.libvirtd.enable [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
           programs.adb.enable = true;
 
