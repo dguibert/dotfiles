@@ -112,6 +112,7 @@ let
       programs.git.iniContent.diff.tool = "vimdiff";
       programs.git.iniContent.diff.renames = "copies";
       programs.git.iniContent.merge.tool = "vimdiff";
+      programs.git.iniContent.pull.ff="only";       # fast-forward only
 
       # http://ubuntuforums.org/showthread.php?t=1150822
       ## Save and reload the history after each command finishes
