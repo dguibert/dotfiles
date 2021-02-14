@@ -374,11 +374,11 @@
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
-          virtualisation.libvirtd.enable = true;
+	  #virtualisation.libvirtd.enable = true;
           #virtualisation.anbox.enable = true;
           #services.nfs.server.enable = true;
-          virtualisation.docker.enable = true;
-          virtualisation.docker.storageDriver = "zfs";
+	  #virtualisation.docker.enable = true;
+	  #virtualisation.docker.storageDriver = "zfs";
 
           programs.singularity.enable = true;
 
