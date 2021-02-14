@@ -363,40 +363,6 @@
             ./modules/yubikey-gpg.nix
             ./modules/distributed-build.nix
             ./modules/x11.nix
-            ({ ... }: {
-              nix = {
-                # add binary caches
-                binaryCachePublicKeys = [
-                  "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-                ];
-                binaryCaches = [
-                  "https://nixpkgs-wayland.cachix.org"
-                ];
-              };
-              #specialisation.wayland = { inheritParentConfig = true; configuration = {
-                services.xserver.enable = lib.mkForce false;
-                # use it as an overlay
-                nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
-                programs.sway = {
-                  enable = true;
-                  wrapperFeatures.gtk = true; # so that gtk works properly
-                  extraPackages = with pkgs; [
-                    swaylock
-                    swayidle
-                    wl-clipboard
-                    mako # notification daemon
-                    alacritty # Alacritty is the default terminal in the config
-                    dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
-
-                    waypipe
-                    grim
-                    slurp
-                    wayvnc
-                  ];
-                };
-              #  };
-              #};
-            })
           ];
           hardware.opengl.enable = true;
           hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
