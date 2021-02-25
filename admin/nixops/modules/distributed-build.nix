@@ -35,7 +35,7 @@
       sshKey = "/etc/nix/id_buildfarm";
       sshUser = "nixBuild";
       system = "aarch64-linux";
-      #supportedFeatures = [ "big-parallel" ];
+      supportedFeatures = [ "big-parallel" ];
     })
     ];
   };
