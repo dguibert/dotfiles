@@ -298,8 +298,8 @@
     #  modules = [
     #    ({ config, lib, pkgs, resources, ... }: {
     #      imports = [
-    #        #(import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix")
-    #        (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+    #        #(import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
+    #        (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
     #        #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
     #        #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
     #        (import ./hosts/rpi01/configuration.nix)
@@ -476,7 +476,7 @@
           #nixpkgs.localSystem.system = "x86_64-linux";
           nixpkgs.localSystem.system = "aarch64-linux";
           imports = [
-            (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+            (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
             (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import ./hosts/rpi31/configuration.nix)
             self.nixosModules.defaults
@@ -529,7 +529,7 @@
           #nixpkgs.localSystem.system = "x86_64-linux";
           nixpkgs.localSystem.system = "aarch64-linux";
           imports = [
-            (import "${nixpkgs}/nixos/modules/installer/cd-dvd/sd-image.nix")
+            (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
             (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import "${nixpkgs}/nixos/modules/profiles/base.nix")
             (import ./hosts/rpi41/configuration.nix)
