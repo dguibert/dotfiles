@@ -710,7 +710,7 @@
       profiles.system.path = deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
       profiles.system.user = "root";
       fastConnection = true;
-    }) self.nixosConfigurations)
+    }) (builtins.removeAttrs self.nixosConfigurations ["iso" ]))
     ({
       titan.profiles.dguibert-hm = {
         user = "dguibert";
