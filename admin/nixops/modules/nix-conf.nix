@@ -27,11 +27,13 @@ rec {
     "https://r-ryantm.cachix.org"
     "https://arm.cachix.org"
     "https://dguibert.cachix.org"
+    #"https://nixos-rocm.cachix.org"
   ];
   nix.binaryCachePublicKeys = [
     "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
     "r-ryantm.cachix.org-1:gkUbLkouDAyvBdpBX0JOdIiD2/DP1ldF3Z3Y6Gqcc4c="
     "arm.cachix.org-1:fGqEJIhp5zM7hxe/Dzt9l9Ene9SY27PUyx3hT9Vvei0="
     "dguibert.cachix.org-1:vb2EHDaV82f6qqfxmapK3AQOPsVfJFO6/g7pbHSEMjY="
+    # nixos-rocm.cachix.org-1:VEpsf7pRIijjd8csKjFNBGzkBqOmw8H9PRmgAq14LnE=
   ];
 }
