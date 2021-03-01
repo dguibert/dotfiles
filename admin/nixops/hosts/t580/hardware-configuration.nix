@@ -86,4 +86,10 @@
     lib.mkIf config.services.tlp.enable (lib.mkForce null);
 
   services.tlp.enable = lib.mkDefault true;
+
+  services.udev.extraRules = ''
+  # Suspend the system when battery level drops to 5% or lower
+  SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl hibernate"
+  '';
+
 }
