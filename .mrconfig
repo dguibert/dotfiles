@@ -649,3 +649,6 @@ checkout = git clone 'https://github.com/danielfullmer/robotnix' 'robotnix'
 
 [code/deploy-rs]
 checkout = git clone 'https://github.com/serokell/deploy-rs' 'deploy-rs'
+
+[code/nix-portable]
+checkout = git clone 'https://github.com/DavHau/nix-portable' 'nix-portable'
