@@ -122,8 +122,8 @@ rec {
   services.sslh = {
     enable=true;
     verbose=true;
-    #transparent=true;
-    #port=443;
+    transparent=true;
+    port=443;
     ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
     ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
     ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
@@ -132,7 +132,7 @@ rec {
       protocols:
       (
         { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-        { name: "anyprot"; host: "localhost"; port: "8388"; probe: "builtin"; }
+        { name: "anyprot"; host: "localhost"; port: "${toString config.services.shadowsocks.port}"; probe: "builtin"; }
       );
     '';
   };
@@ -157,14 +157,14 @@ rec {
   ##    server openssh 127.0.0.1:22
   ##  backend shadowsocks
   ##    mode tcp
-  ##    server socks 127.0.0.1:8388
+  ##    server socks 127.0.0.1:${toString config.services.shadowsocks.port}
   ##'';
 
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
     enable = true;
     localAddress= [ "127.0.0.1" ];
-    #port=443;
+    port=8388;
     passwordFile = config.sops.secrets.shadowsocks.path;
   };
 

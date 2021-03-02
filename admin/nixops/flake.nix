@@ -508,7 +508,7 @@
             X11Forwarding no
             PasswordAuthentication no
           '';
-          #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(pass rpi31/shadowsocks)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
+          #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
           sops.secrets.shadowsocks = {};
           sops.defaultSopsFile = ./hosts/rpi31/secrets/secrets.yaml;
         })
