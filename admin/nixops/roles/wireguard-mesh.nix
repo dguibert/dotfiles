@@ -25,7 +25,7 @@ in {
           t580 = "fe80::216:3eff:fe10:a915/64";
           rpi41 = "fe80::216:3eff:fe6f:cf10/64";
           rpi01 = "fe80::216:3eff:fe77:22f1/64";
-          asus-laptop = "fe80::216:3eff:fe3c:2427/64";
+          #asus-laptop = "fe80::216:3eff:fe3c:2427/64";
         };
         listenPort = 500;
         publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
@@ -40,7 +40,7 @@ in {
           t580 = "fe80::216:3eff:fe21:0caa/64";
           rpi41 = "fe80::216:3eff:fe0d:c822/64";
           rpi01 = "fe80::216:3eff:fe70:6d0c/64";
-          asus-laptop = "fe80::216:3eff:fe5a:d172/64";
+          #asus-laptop = "fe80::216:3eff:fe5a:d172/64";
         };
         listenPort = 501;
         publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
@@ -54,7 +54,7 @@ in {
           t580 = "fe80::216:3eff:fe4e:cb1c/64";
           rpi41 = "fe80::216:3eff:fe24:4ee4/64";
           rpi01 = "fe80::216:3eff:fe39:f05b/64";
-          asus-laptop = "fe80::216:3eff:fe06:1aaf/64";
+          #asus-laptop = "fe80::216:3eff:fe06:1aaf/64";
         };
         listenPort = 503;
         publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
@@ -68,7 +68,7 @@ in {
           titan = "fe80::216:3eff:fe53:753e/64";
           rpi41 = "fe80::216:3eff:fe09:f8e5/64";
           rpi01 = "fe80::216:3eff:fe5f:aa48/64";
-          asus-laptop = "fe80::216:3eff:fe6a:64a5/64";
+          #asus-laptop = "fe80::216:3eff:fe6a:64a5/64";
         };
         listenPort = 504;
         publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
@@ -82,11 +82,11 @@ in {
           titan = "fe80::216:3eff:fe25:8bd5/64";
           t580 = "fe80::216:3eff:fe54:7b14/64";
           rpi01 = "fe80::216:3eff:fe0b:6b03/64";
-          asus-laptop = "fe80::216:3eff:fe48:51ce/64";
+          #asus-laptop = "fe80::216:3eff:fe48:51ce/64";
         };
         listenPort = 505;
         publicKey  = "LF3Dgj29b7GVH/klZhwTAqfo2t6PQnpmTaY8IiQARkA=";
-        endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        endpoint   = "192.168.1.14:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       rpi01 = {
@@ -97,23 +97,23 @@ in {
           titan = "fe80::216:3eff:fe68:c921/64";
           t580 = "fe80::216:3eff:fe6f:5221/64";
           rpi41 = "fe80::216:3eff:fe72:4bea/64";
-          asus-laptop = "fe80::216:3eff:fe04:fd86/64";
+          #asus-laptop = "fe80::216:3eff:fe04:fd86/64";
         };
         listenPort = 506;
         publicKey  = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
       };
-      asus-laptop = {
-        ipv4Address = "10.147.27.154/32";
-        ipv6Addresses = {
-          rpi31 = "fe80::216:3eff:fe5e:3af7/64";
-          orsine = "fe80::216:3eff:fe59:9b80/64";
-          titan = "fe80::216:3eff:fe1b:abdb/64";
-          t580 = "fe80::216:3eff:fe2f:a16c/64";
-          rpi41 = "fe80::216:3eff:fe4e:4e97/64";
-        };
-        listenPort = 507;
-        publicKey  = "WoGmHJwHdx2Ormt07CgQ5mK8jU1wMDOSqUli14VzqwI=";
-      };
+      #asus-laptop = {
+      #  ipv4Address = "10.147.27.154/32";
+      #  ipv6Addresses = {
+      #    rpi31 = "fe80::216:3eff:fe5e:3af7/64";
+      #    orsine = "fe80::216:3eff:fe59:9b80/64";
+      #    titan = "fe80::216:3eff:fe1b:abdb/64";
+      #    t580 = "fe80::216:3eff:fe2f:a16c/64";
+      #    rpi41 = "fe80::216:3eff:fe4e:4e97/64";
+      #  };
+      #  listenPort = 507;
+      #  publicKey  = "WoGmHJwHdx2Ormt07CgQ5mK8jU1wMDOSqUli14VzqwI=";
+      #};
     };
 
     sops.secrets."wireguard_key"          .path = "/persist/etc/wireguard_key";
