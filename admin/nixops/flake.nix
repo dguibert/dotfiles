@@ -96,6 +96,7 @@
 
       inherit (nixpkgsFor "x86_64-linux")
         sopsDecrypt_
+	wgPubKey_
         extra_builtins_file;
 
   in (flake-utils.lib.eachDefaultSystem (system:
@@ -212,7 +213,7 @@
 
         ./roles/mopidy.nix
         ./roles/sshguard.nix
-        ./roles/wireguard-mesh.nix
+        (import ./roles/wireguard-mesh.nix { inherit wgPubKey_ sopsDecrypt_; })
 
         ./users/default.nix
       ];
@@ -508,7 +509,7 @@
             X11Forwarding no
             PasswordAuthentication no
           '';
-          #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(pass rpi31/shadowsocks)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
+          #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
           sops.secrets.shadowsocks = {};
           sops.defaultSopsFile = ./hosts/rpi31/secrets/secrets.yaml;
         })
