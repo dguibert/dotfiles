@@ -1,3 +1,4 @@
+{ wgPubKey_, sopsDecrypt_ }:
 { config, lib, pkgs, ... }:
 let
   cfg = config.roles.wireguard-mesh;
@@ -28,7 +29,7 @@ in {
           #asus-laptop = "fe80::216:3eff:fe3c:2427/64";
         };
         listenPort = 500;
-        publicKey  = "wBBjx9LCPf4CQ07FKf6oR8S1+BoIBimu1amKbS8LWWo=";
+        publicKey  = wgPubKey_ (sopsDecrypt_ ../hosts/rpi31/secrets/secrets.yaml "wireguard_key");
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
@@ -57,7 +58,7 @@ in {
           #asus-laptop = "fe80::216:3eff:fe06:1aaf/64";
         };
         listenPort = 503;
-        publicKey  = "wJPL+85/cCK53thEzXB9LIrXF9tCVZ8kxK+tDCHaAU0=";
+        publicKey  = wgPubKey_ (sopsDecrypt_ ../hosts/titan/secrets/secrets.yaml "wireguard_key");
         endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       t580 = {
@@ -71,7 +72,7 @@ in {
           #asus-laptop = "fe80::216:3eff:fe6a:64a5/64";
         };
         listenPort = 504;
-        publicKey  = "DSDxA9qtyYKFQVw/+I7uF/74GPt3E7f2QN2KBX+XtCQ=";
+        publicKey  = wgPubKey_ (sopsDecrypt_ ../hosts/t580/secrets/secrets.yaml "wireguard_key");
         endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       rpi41 = {
@@ -85,7 +86,7 @@ in {
           #asus-laptop = "fe80::216:3eff:fe48:51ce/64";
         };
         listenPort = 505;
-        publicKey  = "LF3Dgj29b7GVH/klZhwTAqfo2t6PQnpmTaY8IiQARkA=";
+        publicKey  = wgPubKey_ (sopsDecrypt_ ../hosts/rpi41/secrets/secrets.yaml "wireguard_key");
         endpoint   = "192.168.1.14:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };

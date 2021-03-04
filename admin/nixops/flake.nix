@@ -96,6 +96,7 @@
 
       inherit (nixpkgsFor "x86_64-linux")
         sopsDecrypt_
+	wgPubKey_
         extra_builtins_file;
 
   in (flake-utils.lib.eachDefaultSystem (system:
@@ -212,7 +213,7 @@
 
         ./roles/mopidy.nix
         ./roles/sshguard.nix
-        ./roles/wireguard-mesh.nix
+        (import ./roles/wireguard-mesh.nix { inherit wgPubKey_ sopsDecrypt_; })
 
         ./users/default.nix
       ];
