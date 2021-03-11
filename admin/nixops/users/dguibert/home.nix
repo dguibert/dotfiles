@@ -620,7 +620,6 @@ let
         programs.firefox.extensions =
           with pkgs.nur.repos.rycee.firefox-addons; [
             browserpass
-            browserpass-otp
 	    #switchyomega
 	    ublock-origin
         ];
