@@ -18,12 +18,10 @@ _module = chronopost
 
 [colisprive]
 _module = colisprive
+_enabled = 1
 
 [colissimo]
 _module = colissimo
-
-[opensubtitles]
-_module = opensubtitles
 
 [limetorrents]
 _module = limetorrents
