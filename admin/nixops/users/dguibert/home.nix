@@ -527,6 +527,7 @@ let
 
           dwm
           dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+          pamixer
           xsel
           (conky.override { x11Support = false; })
           gnuplot
@@ -620,8 +621,8 @@ let
         programs.firefox.extensions =
           with pkgs.nur.repos.rycee.firefox-addons; [
             browserpass
-	    #switchyomega
-	    ublock-origin
+            #switchyomega
+            ublock-origin
         ];
 
         programs.google-chrome.enable = true;
