@@ -652,40 +652,40 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             self.nixosModules.defaults
-            ({ ... }: {
-              nix = {
-                # add binary caches
-                binaryCachePublicKeys = [
-                  "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-                ];
-                binaryCaches = [
-                  "https://nixpkgs-wayland.cachix.org"
-                ];
-              };
-              #specialisation.wayland = { inheritParentConfig = true; configuration = {
-                  services.xserver.enable = lib.mkForce false;
-                  # use it as an overlay
-                  nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
-                  programs.sway = {
-                    enable = true;
-                    wrapperFeatures.gtk = true; # so that gtk works properly
-                    extraPackages = with pkgs; [
-                      swaylock
-                      swayidle
-                      wl-clipboard
-                      mako # notification daemon
-                      alacritty # Alacritty is the default terminal in the config
-                      dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+	    #({ ... }: {
+            #  nix = {
+            #    # add binary caches
+            #    binaryCachePublicKeys = [
+            #      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+            #    ];
+            #    binaryCaches = [
+            #      "https://nixpkgs-wayland.cachix.org"
+            #    ];
+            #  };
+            #  #specialisation.wayland = { inheritParentConfig = true; configuration = {
+            #      services.xserver.enable = lib.mkForce false;
+            #      # use it as an overlay
+            #      nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
+            #      programs.sway = {
+            #        enable = true;
+            #        wrapperFeatures.gtk = true; # so that gtk works properly
+            #        extraPackages = with pkgs; [
+            #          swaylock
+            #          swayidle
+            #          wl-clipboard
+            #          mako # notification daemon
+            #          alacritty # Alacritty is the default terminal in the config
+            #          dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
 
-                      waypipe
-                      grim
-                      slurp
-                      wayvnc
-                    ];
-                  };
-              #  };
-              #};
-            })
+            #          waypipe
+            #          grim
+            #          slurp
+            #          wayvnc
+            #        ];
+            #      };
+            #  #  };
+            #  #};
+            #})
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
