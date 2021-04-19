@@ -5,6 +5,7 @@
     name = "nixBuild";
     useDefaultShell = true;
     openssh.authorizedKeys.keyFiles = [ ../id_buildfarm.pub ];
+    isSystemUser = true;
   };
   # on the client machine
   programs.ssh.extraConfig = ''
