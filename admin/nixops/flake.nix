@@ -40,7 +40,7 @@
     nxsession.inputs.nixpkgs.follows = "nixpkgs";
     nxsession.inputs.flake-utils.follows = "flake-utils";
 
-    dwm-src.url = "github:dguibert/dwm";
+    dwm-src.url = "github:dguibert/dwm/pu";
     dwm-src.flake = false;
 
     # For accessing `deploy-rs`'s utility Nix functions

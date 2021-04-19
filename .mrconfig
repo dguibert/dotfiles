@@ -170,6 +170,11 @@ checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegra
 
 [code/dwm]
 checkout = git clone 'http://git.suckless.org/dwm' 'dwm'
+fixups = git_add_remotes "
+	          dguibert https://github.com/dguibert/dwm.git
+	          "
+push = git push -v dguibert +pu
+       git push -v dguibert
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
@@ -181,7 +186,7 @@ checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
 checkout = git clone 'https://github.com/NixOS/nix' 'nix'
 update = git remote update
 push = git push -v dguibert +pu
-	      git push -v dguibert
+       git push -v dguibert
 fixups = git_add_remotes "
 	origin git://github.com/NixOS/nix
 	edolstra git://github.com/edolstra/nix.git
