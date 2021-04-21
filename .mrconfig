@@ -200,6 +200,12 @@ checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph
 
 [code/st]
 checkout = git clone 'git://git.suckless.org/st' 'st'
+fixups = git_add_remotes "
+	          dguibert https://github.com/dguibert/st.git
+	          "
+push = git push -v dguibert +pu
+       git push -v dguibert
+
 
 [code/myrepos]
 checkout = git clone 'https://git.joeyh.name/git/myrepos.git' 'myrepos'
