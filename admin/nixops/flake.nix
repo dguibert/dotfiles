@@ -43,6 +43,9 @@
     dwm-src.url = "github:dguibert/dwm/pu";
     dwm-src.flake = false;
 
+    st-src.url = "github:dguibert/st/pu";
+    st-src.flake = false;
+
     # For accessing `deploy-rs`'s utility Nix functions
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
@@ -69,6 +72,7 @@
             , flake-utils
             , nxsession
             , dwm-src
+            , st-src
             , deploy-rs
       , nixpkgs-wayland
             }@flakes: let
@@ -85,8 +89,12 @@
             self.overlay
             nxsession.overlay
             (final: prev: {
-                     dwm = prev.dwm.overrideAttrs (o: {
+              dwm = prev.dwm.overrideAttrs (o: {
                 src = dwm-src;
+                patches = [];
+              });
+              st = prev.st.overrideAttrs (o: {
+                src = st-src;
                 patches = [];
               });
             })

@@ -340,6 +340,7 @@
         "nur_dguibert": "nur_dguibert",
         "nxsession": "nxsession",
         "sops-nix": "sops-nix",
+        "st-src": "st-src",
         "terranix": "terranix"
       }
     },
@@ -358,6 +359,23 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "st-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1619005886,
+        "narHash": "sha256-PGD1oVKzaFARUJnn+IhgcDwqx8xuvnouLhUjaGwsMto=",
+        "owner": "dguibert",
+        "repo": "st",
+        "rev": "d7faa1e059e1cdb7ba0d2383c1f0fc81d6d00e15",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dguibert",
+        "ref": "pu",
+        "repo": "st",
         "type": "github"
       }
     },

@@ -529,6 +529,7 @@ let
           dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
           pamixer
           xsel
+	  xclip
           (conky.override { x11Support = false; })
           gnuplot
           mkpasswd
