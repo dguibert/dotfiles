@@ -58,11 +58,11 @@
     "dwm-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1619121347,
-        "narHash": "sha256-Z1q5DR0OoGBDcg8SGeKCyQnRjCVvCtBd5/zsxymoq2k=",
+        "lastModified": 1619122128,
+        "narHash": "sha256-AmOflm6STkpu9ErU6KZrOxiJnnR72QtaZLiPdXjqwVA=",
         "owner": "dguibert",
         "repo": "dwm",
-        "rev": "e1e47c8366a3e959880b39615a2dd39aec2d3589",
+        "rev": "9569739aa853167455ea38e6f95771509b58536e",
         "type": "github"
       },
       "original": {
