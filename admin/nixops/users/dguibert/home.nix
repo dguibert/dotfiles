@@ -527,6 +527,7 @@ let
 
           dwm
           dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
+	  dvtm abduco
           pamixer
           xsel
 	  xclip
