@@ -301,6 +301,22 @@
         "type": "github"
       }
     },
+    "nvd-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618105467,
+        "narHash": "sha256-dQcfoMtRGg+SRvgY9pbSqlyeTozlHp3qE70egSEiFX0=",
+        "ref": "master",
+        "rev": "7cdaa6d818119bd7a51930d990fded5d594c6623",
+        "revCount": 4,
+        "type": "git",
+        "url": "https://gitlab.com/khumba/nvd"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.com/khumba/nvd"
+      }
+    },
     "nxsession": {
       "inputs": {
         "flake-utils": [
@@ -338,6 +354,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
+        "nvd-src": "nvd-src",
         "nxsession": "nxsession",
         "sops-nix": "sops-nix",
         "st-src": "st-src",
