@@ -23,7 +23,6 @@ mkEnv rec {
     "./keys/users/dguibert.asc"
   ];
   buildInputs = [
-    nix
     sops-pgp-hook
     ssh-to-pgp
     deploy-rs
