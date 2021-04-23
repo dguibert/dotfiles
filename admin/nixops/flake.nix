@@ -40,11 +40,9 @@
     nxsession.inputs.nixpkgs.follows = "nixpkgs";
     nxsession.inputs.flake-utils.follows = "flake-utils";
 
-    dwm-src.url = "github:dguibert/dwm/pu";
-    dwm-src.flake = false;
-
-    st-src.url = "github:dguibert/st/pu";
-    st-src.flake = false;
+    dwm-src.url = "github:dguibert/dwm/pu";        dwm-src.flake = false;
+    st-src.url  = "github:dguibert/st/pu";         st-src.flake = false;
+    nvd-src.url = "git+https://gitlab.com/khumba/nvd"; nvd-src.flake = false;
 
     # For accessing `deploy-rs`'s utility Nix functions
     deploy-rs.url = "github:serokell/deploy-rs";
@@ -73,6 +71,7 @@
             , nxsession
             , dwm-src
             , st-src
+	    , nvd-src
             , deploy-rs
       , nixpkgs-wayland
             }@flakes: let
@@ -88,16 +87,6 @@
             #nur_dguibert_envs.overlay
             self.overlay
             nxsession.overlay
-            (final: prev: {
-              dwm = prev.dwm.overrideAttrs (o: {
-                src = dwm-src;
-                patches = [];
-              });
-              st = prev.st.overrideAttrs (o: {
-                src = st-src;
-                patches = [];
-              });
-            })
           ];
           config.allowUnfree = true;
         };
@@ -122,9 +111,12 @@
         homeDirectory = "/root";
         inherit system pkgs;
         configuration = { ... }: {
-          imports = [ (import "${base16-nix}/base16.nix")
-                      (import ./users/root/home.nix).home ];
-
+          imports = [
+            (import "${base16-nix}/base16.nix")
+            (import ./users/root/home.nix).home
+	    ./modules/hm-report-changes.nix
+	    ({ ... }: { home.report-changes.enable = true; })
+          ];
         };
       };
       dguibert.no-x11 = let
@@ -145,6 +137,8 @@
           imports = [ (import "${base16-nix}/base16.nix")
             (import ./users/dguibert/home.nix).withoutX11
             home-secret.withoutX11
+	    ./modules/hm-report-changes.nix
+	    ({ ... }: { home.report-changes.enable = true; })
           ];
           _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
             dbus = prev.dbus.override { x11Support = false; };
@@ -205,6 +199,15 @@
         zfs set mountpoint=legacy rt580/tmp
       '';
 
+      dwm = prev.dwm.overrideAttrs (o: {
+        src = dwm-src;
+        patches = [];
+      });
+      st = prev.st.overrideAttrs (o: {
+        src = st-src;
+        patches = [];
+      });
+      nvd = prev.callPackage nvd-src {};
     };
 
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -218,6 +221,7 @@
         sops-nix.nixosModules.sops
 
         ./modules/wireguard-mesh.nix
+        ./modules/report-changes.nix
 
         ./roles/mopidy.nix
         ./roles/sshguard.nix
@@ -234,9 +238,6 @@
         nix.overlay
         nur_dguibert.overlays.default
         self.overlay
-        (final: prev: {
-          inherit dwm-src;
-        })
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = nix.defaultPackage."${config.nixpkgs.localSystem.system}";
@@ -292,6 +293,8 @@
           bits = 4096;
         }
       ];
+
+      report-changes.enable = true;
     };
 
     #nixosConfigurations.rpi01 = nixpkgs.lib.nixosSystem {
