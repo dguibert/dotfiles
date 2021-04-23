@@ -42,7 +42,6 @@
 
     dwm-src.url = "github:dguibert/dwm/pu";        dwm-src.flake = false;
     st-src.url  = "github:dguibert/st/pu";         st-src.flake = false;
-    nvd-src.url = "git+https://gitlab.com/khumba/nvd"; nvd-src.flake = false;
 
     # For accessing `deploy-rs`'s utility Nix functions
     deploy-rs.url = "github:serokell/deploy-rs";
@@ -71,7 +70,6 @@
             , nxsession
             , dwm-src
             , st-src
-	    , nvd-src
             , deploy-rs
       , nixpkgs-wayland
             }@flakes: let
@@ -207,7 +205,6 @@
         src = st-src;
         patches = [];
       });
-      nvd = prev.callPackage nvd-src {};
     };
 
     ## - hydraJobs: A nested set of derivations built by Hydra.
