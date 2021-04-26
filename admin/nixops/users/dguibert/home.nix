@@ -428,6 +428,10 @@ let
         '';
 
         matchBlocks = {
+          "*" = {
+            exec = "test -e ~/.ssh/extra_config";
+            extraOptions.Include = "~/.ssh/extra_config";
+          };
           "127.0.0.1 | localhost" = {
             forwardAgent=true;
             forwardX11=true;
@@ -527,10 +531,10 @@ let
 
           dwm
           dmenu xlockmore xautolock xorg.xset xorg.xinput xorg.xsetroot xorg.setxkbmap xorg.xmodmap rxvt_unicode st
-	  dvtm abduco
+          dvtm abduco
           pamixer
           xsel
-	  xclip
+          xclip
           (conky.override { x11Support = false; })
           gnuplot
           mkpasswd
