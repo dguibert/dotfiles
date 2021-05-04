@@ -87,6 +87,7 @@
             nxsession.overlay
           ];
           config.allowUnfree = true;
+	  #config.contentAddressedByDefault = true;
         };
 
       inherit (nixpkgsFor "x86_64-linux")
