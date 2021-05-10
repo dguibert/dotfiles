@@ -389,6 +389,15 @@
           programs.adb.enable = true;
 
           services.jellyfin.enable = true;
+	  systemd.services.jellyfin-acl = {
+            enable = true;
+	    wantedBy = [ "jellyfin.service" ];
+	    script = ''
+	      ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/
+	      ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos
+	    '';
+	    unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
+	  };
           networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
