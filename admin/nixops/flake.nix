@@ -395,8 +395,8 @@
               set -x
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/ || true
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/Videos || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/ || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos || true
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Series || true
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Movies || true
               set +x
             '';
             unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
