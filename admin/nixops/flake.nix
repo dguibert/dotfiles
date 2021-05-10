@@ -87,12 +87,12 @@
             nxsession.overlay
           ];
           config.allowUnfree = true;
-	  #config.contentAddressedByDefault = true;
+          #config.contentAddressedByDefault = true;
         };
 
       inherit (nixpkgsFor "x86_64-linux")
         sopsDecrypt_
-	wgPubKey_
+        wgPubKey_
         extra_builtins_file;
 
   in (flake-utils.lib.eachDefaultSystem (system:
@@ -113,8 +113,8 @@
           imports = [
             (import "${base16-nix}/base16.nix")
             (import ./users/root/home.nix).home
-	    ./modules/hm-report-changes.nix
-	    ({ ... }: { home.report-changes.enable = true; })
+            ./modules/hm-report-changes.nix
+            ({ ... }: { home.report-changes.enable = true; })
           ];
         };
       };
@@ -136,8 +136,8 @@
           imports = [ (import "${base16-nix}/base16.nix")
             (import ./users/dguibert/home.nix).withoutX11
             home-secret.withoutX11
-	    ./modules/hm-report-changes.nix
-	    ({ ... }: { home.report-changes.enable = true; })
+            ./modules/hm-report-changes.nix
+            ({ ... }: { home.report-changes.enable = true; })
           ];
           _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
             dbus = prev.dbus.override { x11Support = false; };
@@ -375,11 +375,11 @@
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
-	  #virtualisation.libvirtd.enable = true;
+          #virtualisation.libvirtd.enable = true;
           #virtualisation.anbox.enable = true;
           #services.nfs.server.enable = true;
-	  #virtualisation.docker.enable = true;
-	  #virtualisation.docker.storageDriver = "zfs";
+          #virtualisation.docker.enable = true;
+          #virtualisation.docker.storageDriver = "zfs";
 
           programs.singularity.enable = true;
 
@@ -389,18 +389,18 @@
           programs.adb.enable = true;
 
           services.jellyfin.enable = true;
-	  systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
+          systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
             serviceConfig.PermissionsStartOnly = true;
-	    preStart = ''
-	      set -x
-	      ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/ || true
-	      ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/Videos || true
-	      ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/ || true
-	      ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos || true
-	      set +x
-	    '';
-	    unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
-	  };
+            preStart = ''
+              set -x
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/ || true
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/Videos || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/ || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos || true
+              set +x
+            '';
+            unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
+          };
           networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
@@ -411,6 +411,12 @@
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
 
+          hardware.pulseaudio = {
+            support32Bit = true;
+            tcp.enable = true;
+            tcp.anonymousClients.allowAll = true;
+            tcp.anonymousClients.allowedIpRanges = [ "127.0.0.1" "192.168.1.0/24" ];
+          };
           #services.hydra-dev = {
           #  enable = true;
           #  hydraURL = "http://localhost:3000";
@@ -673,7 +679,7 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             self.nixosModules.defaults
-	    #({ ... }: {
+            #({ ... }: {
             #  nix = {
             #    # add binary caches
             #    binaryCachePublicKeys = [
