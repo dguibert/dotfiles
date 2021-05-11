@@ -172,5 +172,10 @@ rec {
   programs.adb.enable = true;
   programs.light.enable = true;
 
+  services.udev.extraRules = with pkgs; ''
+    # This files changes the mode of the Dynastream ANT UsbStick2 so all users can read and write to it.
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0fcf", ATTR{idProduct}=="1008", MODE="0666", SYMLINK+="ttyANT", ACTION=="add"
+  '';
+
 }
 
