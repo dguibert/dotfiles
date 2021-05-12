@@ -118,8 +118,8 @@ in
       unitConfig = {
         BindTo=[ "dev-yubikey.device" ];
         after= [ "dev-yubikey.device" ];
-        wantedBy = [ "dev-yubikey.device" ];
       };
+      wantedBy = [ "dev-yubikey.device" ];
     };
     ## $ sudo mkdir /etc/systemd/system/dev-yubikey.device.wants
     ## $ sudo ln -s /etc/systemd/system/step-ca.service /etc/systemd/system/dev-yubikey.device.wants/
