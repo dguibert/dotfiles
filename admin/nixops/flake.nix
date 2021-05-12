@@ -412,7 +412,11 @@
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
 
-	  roles.tiny-ca.enable = false;
+          roles.tiny-ca.enable = true;
+          services.step-ca.intermediatePasswordFile = config.sops.secrets.orsin-ca-intermediatePassword.path;
+          sops.secrets.orsin-ca-intermediatePassword = {
+            sopsFile = ./secrets/defaults.yaml;
+          };
 
           hardware.pulseaudio = {
             support32Bit = true;

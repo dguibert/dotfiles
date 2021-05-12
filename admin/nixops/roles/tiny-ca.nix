@@ -16,8 +16,27 @@ in
 
   config = lib.mkIf cfg.enable {
     services.udev.extraRules = with pkgs; ''
-      ACTION=="add", SUBSYSTEM=="usb", ENV{PRODUCT}=="1050/407/*", TAG+="systemd", SYMLINK+="yubikey-ca"
-      ACTION=="remove", SUBSYSTEM=="usb", ENV{PRODUCT}=="1050/407/*", TAG+="systemd"
+      ATTR{idProduct}=="0407", ATTR{idVendor}=="1050", TAG+="systemd", SYMLINK="yubikey"
+    '';
+
+    # :May 12 14:00:25 titan pcscd[398380]: 05472881 auth.c:137:IsClientAuthorized() Process 402117 (user: 64191) is NOT authorized for action: access_pcsc
+    # :May 12 14:00:25 titan pcscd[398380]: 00000146 winscard_svc.c:335:ContextThread() Rejected unauthorized PC/SC client
+    # :May 12 14:00:25 titan step-ca[402117]: connecting to pscs: an internal communications error has been detected
+    # https://github.com/LudovicRousseau/PCSC/blob/master/doc/README.polkit
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.debian.pcsc-lite.access_card" &&
+            subject.user == "step") {
+          return polkit.Result.YES;
+        }
+      });
+
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.debian.pcsc-lite.access_pcsc" &&
+            subject.user == "step") {
+          return polkit.Result.YES;
+        }
+      });
     '';
 
     # https://github.com/NixOS/nixpkgs/pull/112322
@@ -31,7 +50,7 @@ in
       address = "127.0.0.1";
       port = 9443;
       openFirewall = cfg.openFirewall;
-      intermediatePasswordFile = "/etc/nixos/secrets/tiny-ca.passwd";
+      #intermediatePasswordFile = "/etc/nixos/secrets/tiny-ca.passwd";
       settings = /* builtins.fromJSON config/ca.json*/ {
         dnsNames = ["localhost"];
         #root = ../../../secrets/root_ca.crt;
@@ -39,7 +58,7 @@ in
         #key = ../../../secrets/intermediate_ca.key;
         root = ../online-ca-orsin/certs/root_ca.crt;
         crt = ../online-ca-orsin/certs/intermediate_ca.crt;
-        key = "hubikey:slot-id=9c";
+        key = "yubikey:slot-id=9c";
         kms = {
           type = "yubikey";
           pin = "123456";
@@ -87,8 +106,8 @@ in
             "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305"
             "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
           ];
-          minVersion = "1.2";
-          maxVersion = "1.3";
+          minVersion = 1.2;
+          maxVersion = 1.3;
           renegotiation = false;
         };
       };
@@ -97,15 +116,12 @@ in
     systemd.services."step-ca" = {
       #[Unit]
       unitConfig = {
-        BindsTo=[ "dev-yubikey-ca.device" ];
-        After= [ "dev-yubikey-ca.device" ];
+        BindTo=[ "dev-yubikey.device" ];
+        after= [ "dev-yubikey.device" ];
+        wantedBy = [ "dev-yubikey.device" ];
       };
     };
     ## $ sudo mkdir /etc/systemd/system/dev-yubikey.device.wants
     ## $ sudo ln -s /etc/systemd/system/step-ca.service /etc/systemd/system/dev-yubikey.device.wants/
-    systemd.services."dev-yubikey-ca.device" = {
-      wants = [ "step-ca.service" ];
-    };
-
   };
 }
