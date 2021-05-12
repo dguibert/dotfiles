@@ -412,7 +412,7 @@
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
 
-	  roles.tiny-ca.enable = true;
+	  roles.tiny-ca.enable = false;
 
           hardware.pulseaudio = {
             support32Bit = true;
