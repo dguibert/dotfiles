@@ -9,6 +9,7 @@
   environment.systemPackages = with pkgs; [
     gnupg
     yubikey-personalization
+    yubikey-manager
     yubico-piv-tool
   ];
 
