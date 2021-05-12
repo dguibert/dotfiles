@@ -221,6 +221,7 @@
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
 
+        ./roles/tiny-ca.nix
         ./roles/mopidy.nix
         ./roles/sshguard.nix
         (import ./roles/wireguard-mesh.nix { inherit wgPubKey_ sopsDecrypt_; })
@@ -411,12 +412,15 @@
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
 
+	  roles.tiny-ca.enable = true;
+
           hardware.pulseaudio = {
             support32Bit = true;
             tcp.enable = true;
             tcp.anonymousClients.allowAll = true;
             tcp.anonymousClients.allowedIpRanges = [ "127.0.0.1" "192.168.1.0/24" ];
           };
+
           #services.hydra-dev = {
           #  enable = true;
           #  hydraURL = "http://localhost:3000";
