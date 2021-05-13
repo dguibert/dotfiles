@@ -47,12 +47,16 @@ in
     ## Repeat this for the user SSH CA key, using slot 83.
     services.step-ca = {
       enable = true;
-      address = "127.0.0.1";
+      address = "0.0.0.0";
       port = 9443;
       openFirewall = cfg.openFirewall;
       #intermediatePasswordFile = "/etc/nixos/secrets/tiny-ca.passwd";
       settings = /* builtins.fromJSON config/ca.json*/ {
-        dnsNames = ["localhost"];
+        dnsNames = [
+          "localhost"
+          "192.168.1.24"
+          "10.147.27.24"
+        ];
         #root = ../../../secrets/root_ca.crt;
         #crt = ../../../secrets/intermediate_ca.crt;
         #key = ../../../secrets/intermediate_ca.key;

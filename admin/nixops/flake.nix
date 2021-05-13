@@ -406,7 +406,10 @@
             '';
             unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
           };
-          networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
+	  networking.firewall.interfaces."bond0".allowedTCPPorts = [
+	    8096 /*http*/ 8920 /*https*/
+            config.services.step-ca.port
+	  ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
