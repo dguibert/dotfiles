@@ -67,9 +67,10 @@ in
           type = "yubikey";
           pin = "123456";
         };
-        ##"ssh": {
-        ##  "hostKey": "/tmp/mystep/secrets/ssh_host_ca_key",
-        ##  "userKey": "/tmp
+        ssh = {
+          hostKey = "yubikey:slot-id=82";
+          userKey = "yubikey:slot-id=83";
+        };
         db = {
           type = "badger";
           dataSource = "/var/lib/step-ca/db";
