@@ -224,7 +224,7 @@
         ./roles/tiny-ca.nix
         ./roles/mopidy.nix
         ./roles/sshguard.nix
-        (import ./roles/wireguard-mesh.nix { inherit wgPubKey_ sopsDecrypt_; })
+        ./roles/wireguard-mesh.nix
 
         ./users/default.nix
       ];
