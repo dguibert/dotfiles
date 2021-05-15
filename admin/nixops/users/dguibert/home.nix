@@ -1,10 +1,26 @@
+{ sopsDecrypt_, pkgs, inputs, ... }:
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
 let
+  home-secret = let
+      home_sec = sopsDecrypt_ ./home-sec.nix "data";
+      loaded = home_sec.success or true;
+    in if loaded
+       then (builtins.trace "loaded encrypted ./user/dguibert/home-sec.nix (${toString loaded})" home_sec)
+       else (builtins.trace "use dummy        ./user/dguibert/home-sec.nix (${toString loaded})"
+            { withoutX11 = { ... }: {};
+              withX11 = { ... }: {};
+            });
+
   homes = {
     withoutX11 = { config, pkgs, lib
         , ...}@args:
         with lib;
     ({
+      imports = [ (import "${inputs.base16-nix}/base16.nix")
+        home-secret.withoutX11
+        ../../modules/hm-report-changes.nix
+        ({ ... }: { home.report-changes.enable = true; })
+      ];
       # Choose your themee
       themes.base16 = {
         enable = true;
@@ -501,6 +517,12 @@ let
         lib.recursiveUpdate
       (homes.withoutX11 args)
       ({
+        imports = [ (import "${inputs.base16-nix}/base16.nix")
+          home-secret.withX11
+          ../../modules/hm-report-changes.nix
+          ({ ... }: { home.report-changes.enable = true; })
+        ];
+
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
           jrnl
           pandoc
@@ -624,12 +646,12 @@ let
 
         programs.firefox.enable = true;
         programs.firefox.package = pkgs.firefox-bin;
-        programs.firefox.extensions =
-          with pkgs.nur.repos.rycee.firefox-addons; [
-            browserpass
-            #switchyomega
-            ublock-origin
-        ];
+	#programs.firefox.extensions =
+        #  with pkgs.nur.repos.rycee.firefox-addons; [
+        #    browserpass
+        #    #switchyomega
+        #    ublock-origin
+        #];
 
         programs.google-chrome.enable = true;
         programs.google-chrome.extensions = [
@@ -659,7 +681,7 @@ let
         #   map <C-o> zoom out
         #'';
 
-        fonts.fontconfig.enable = true;
+        fonts.fontconfig.enable = lib.mkForce true;
 
         services.udiskie.enable = true;
         services.pasystray.enable = true;

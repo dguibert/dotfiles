@@ -1,3 +1,4 @@
+args:
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
 let
   homes = {
@@ -5,6 +6,10 @@ let
            , ...}:
            with lib;
     {
+      imports = [
+        ../../modules/hm-report-changes.nix
+        ({ ... }: { home.report-changes.enable = true; })
+      ];
       programs.bash.shellAliases.ls="ls --color";
 
       programs.bash.initExtra = ''

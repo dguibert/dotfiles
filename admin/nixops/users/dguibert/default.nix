@@ -1,3 +1,4 @@
+{ sopsDecrypt_, pkgs, inputs, ...}@args:
 { config, lib, ... }:
 
 with lib;
@@ -38,6 +39,11 @@ in {
 
     users.groups.dguibert.gid = 1000;
 
-    #home-manager.users.dguibert = import <config/nixpkgs/home.nix> { inherit pkgs lib; };
+    home-manager.users.dguibert = if (config.services.xserver.enable)
+      then (import ./home.nix args).withX11
+      else (import ./home.nix args).withoutX11;
+    home-manager.useGlobalPkgs = true;
+    #home-manager.useUserPackages = true;
+    home-manager.verbose = true;
   };
 }

@@ -1,6 +1,7 @@
+{ sopsDecrypt_, pkgs, inputs, ...}@args:
 { ... }: {
   imports = [
-    ./root/default.nix
-    ./dguibert/default.nix
+    (import ./root/default.nix args)
+    (import ./dguibert/default.nix args)
   ];
 }

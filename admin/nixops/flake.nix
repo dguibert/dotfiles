@@ -66,7 +66,7 @@
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-	    inputs.self.overlay
+            inputs.self.overlay
             inputs.nxsession.overlay
           ];
           config.allowUnfree = true;
@@ -87,78 +87,10 @@
     };
     legacyPackages = pkgs;
 
-    homeConfigurations = /*flake-utils.lib.flattenTree*/ {
-      root = inputs.home-manager.lib.homeManagerConfiguration {
-        username = "root";
-        homeDirectory = "/root";
-        inherit system pkgs;
-        configuration = { ... }: {
-          imports = [
-            (import "${inputs.base16-nix}/base16.nix")
-            (import ./users/root/home.nix).home
-            ./modules/hm-report-changes.nix
-            ({ ... }: { home.report-changes.enable = true; })
-          ];
-        };
-      };
-      dguibert.no-x11 = let
-          home-secret = let
-              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
-              loaded = home_sec.success or true;
-            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-               then home_sec
-               else { withoutX11 = { ... }: {};
-                      withX11 = { ... }: {};
-                    };
-
-      in inputs.home-manager.lib.homeManagerConfiguration {
-        username = "dguibert";
-        homeDirectory = "/home/dguibert";
-        inherit system pkgs;
-        configuration = { lib, ... }: {
-          imports = [ (import "${inputs.base16-nix}/base16.nix")
-            (import ./users/dguibert/home.nix).withoutX11
-            home-secret.withoutX11
-            ./modules/hm-report-changes.nix
-            ({ ... }: { home.report-changes.enable = true; })
-          ];
-          _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
-            dbus = prev.dbus.override { x11Support = false; };
-            networkmanager-fortisslvpn = prev.networkmanager-fortisslvpn.override { withGnome = false; };
-            networkmanager-l2tp = prev.networkmanager-l2tp.override { withGnome = false; };
-            networkmanager-openconnect = prev.networkmanager-openconnect.override { withGnome = false; };
-            networkmanager-openvpn = prev.networkmanager-openvpn.override { withGnome = false; };
-            networkmanager-vpnc = prev.networkmanager-vpnc.override { withGnome = false; };
-            networkmanager-iodine = prev.networkmanager-iodine.override { withGnome = false; };
-            gobject-introspection = prev.gobject-introspection.override { x11Support = false; };
-            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-          }));
-        };
-      };
-      dguibert.x11 = let
-          home-secret = let
-              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
-              loaded = home_sec.success or true;
-            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-               then home_sec
-               else { withoutX11 = { ... }: {};
-                      withX11 = { ... }: {};
-                    };
-
-        in inputs.home-manager.lib.homeManagerConfiguration {
-        username = "dguibert";
-        homeDirectory = "/home/dguibert";
-        inherit system pkgs;
-        configuration = { lib, ... }: {
-          imports = [ (import "${inputs.base16-nix}/base16.nix")
-            (import ./users/dguibert/home.nix).withX11
-            home-secret.withX11
-          ];
-          _module.args.pkgs = lib.mkForce pkgs;
-        };
-      };
+    homeConfigurations = inputs.nixpkgs.lib.genAttrs
+      (builtins.attrNames (builtins.removeAttrs inputs.self.nixosConfigurations ["iso" ]))
+          (host: inputs.self.nixosConfigurations.${host}.config.home-manager.users) // {
     };
-
 
   })) // (rec {
     overlay = final: prev: with final; {
@@ -197,8 +129,8 @@
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosModules.defaults = { config, lib, pkgs, resources, ...}: {
       imports = [
-      inputs.nixpkgs.nixosModules.notDetected
-      inputs.home-manager.nixosModules.home-manager
+        inputs.nixpkgs.nixosModules.notDetected
+        inputs.home-manager.nixosModules.home-manager
         inputs.sops-nix.nixosModules.sops
 
         ./modules/wireguard-mesh.nix
@@ -209,7 +141,7 @@
         ./roles/sshguard.nix
         ./roles/wireguard-mesh.nix
 
-        ./users/default.nix
+        (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
       ];
 
       system.nixos.versionSuffix = lib.mkForce
@@ -218,11 +150,19 @@
       nixpkgs.config = import "${inputs.nur_dguibert}/config.nix";
       nixpkgs.overlays = [
         inputs.nix.overlay
-        inputs.nur_dguibert.overlays.default
+        inputs.nur.overlay
+        inputs.nur_dguibert.overlay
+        inputs.nur_dguibert.overlays.extra-builtins
+        #nur_dguibert_envs.overlay
         inputs.self.overlay
+        inputs.nxsession.overlay
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+      nix.registry = lib.mapAttrs (id: flake: {
+        inherit flake;
+        from = { inherit id; type = "indirect"; };
+      }) inputs;
       environment.shellInit = ''
         export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
         NIX_OPTIONS=()
@@ -344,7 +284,7 @@
           imports = [
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
-	    inputs.self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
             ./modules/yubikey-gpg.nix
             ./modules/distributed-build.nix
             ./modules/x11.nix
@@ -496,11 +436,11 @@
             (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
             (import "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import ./hosts/rpi31/configuration.nix)
-	    inputs.self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
           ];
           nixpkgs.overlays = [
             inputs.nix.overlay
-	    inputs.nur_dguibert.overlays.default
+            inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
               # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
@@ -550,7 +490,7 @@
             (import "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import "${inputs.nixpkgs}/nixos/modules/profiles/base.nix")
             (import ./hosts/rpi41/configuration.nix)
-	    inputs.self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
           ];
           boot.kernelPackages = pkgs.linuxPackages_rpi4;
           fileSystems."/".options = [ "defaults" "discard" ];
@@ -676,7 +616,7 @@
           nixpkgs.localSystem.system = "x86_64-linux";
           imports = [
             (import ./hosts/t580/configuration.nix)
-	    inputs.self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
             #({ ... }: {
             #  nix = {
             #    # add binary caches
@@ -717,44 +657,19 @@
       ];
     };
 
-    #deploy.nodes.titan.hostname = "titan";
-    #deploy.nodes.titan.profiles.system = {
-    #  user ="root";
-    #  path = deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations.titan;
-    #};
-    deploy.nodes = inputs.nixpkgs.lib.recursiveUpdate (inputs.nixpkgs.lib.mapAttrs (_: nixosConfig: {
+    deploy.nodes = inputs.nixpkgs.lib.recursiveUpdate (inputs.nixpkgs.lib.mapAttrs (host: nixosConfig: {
       hostname = "${nixosConfig.config.networking.hostName}";
-      profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
+      profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos
+        nixosConfig;
       profiles.system.user = "root";
       fastConnection = true;
+      profiles.hm-dguibert.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.custom
+        inputs.self.homeConfigurations.${nixosConfig.config.nixpkgs.localSystem.system}.${host}.dguibert.home.activationPackage
+        "./activate";
+      profiles.hm-dguibert.user = "dguibert";
     }) (builtins.removeAttrs inputs.self.nixosConfigurations ["iso" ]))
     ({
-      titan.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = inputs.deploy-rs.lib.x86_64-linux.activate.custom inputs.self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
-      };
-      t580.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = inputs.deploy-rs.lib.x86_64-linux.activate.custom inputs.self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
-      };
-      rpi31.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = inputs.deploy-rs.lib.aarch64-linux.activate.custom inputs.self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
-      };
-      rpi41.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = inputs.deploy-rs.lib.aarch64-linux.activate.custom inputs.self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
-      };
     });
-    #deploy = {
-    #  sshUser = "dguibert";
-    #  user = "root";
-    #  nodes = (builtins.mapAttrs (_: conf: {
-    #    hostname = conf.config.networking.hostName;
-    #    profiles.system.path = conf.config.system.build.toplevel;
-    #    profiles.system.activate = "$PROFILE/bin/switch-to-configuration switch";
-    #  };
-    #};
 
     # This is highly advised, and will prevent many possible mistakes
     checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
