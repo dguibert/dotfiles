@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> { }
-, flakes ? {}
+, inputs ? {}
 , ssh-to-pgp
 , sops-pgp-hook
 , deploy-rs
@@ -49,8 +49,8 @@ mkEnv rec {
     unset NIX_STORE NIX_DAEMON
     NIX_PATH=
     ${lib.concatMapStrings (f: ''
-      NIX_PATH+=:${toString f}=${toString flakes.${f}}
-    '') (builtins.attrNames flakes) }
+      NIX_PATH+=:${toString f}=${toString inputs.${f}}
+    '') (builtins.attrNames inputs) }
     export NIX_PATH
 
     NIX_OPTIONS=()
