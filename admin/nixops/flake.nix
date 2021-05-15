@@ -224,7 +224,7 @@
         ./roles/tiny-ca.nix
         ./roles/mopidy.nix
         ./roles/sshguard.nix
-        (import ./roles/wireguard-mesh.nix { inherit wgPubKey_ sopsDecrypt_; })
+        ./roles/wireguard-mesh.nix
 
         ./users/default.nix
       ];
@@ -398,11 +398,18 @@
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/Videos || true
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Series || true
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Movies || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/ || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rx /home/dguibert/Videos/Series || true
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rx /home/dguibert/Videos/Movies || true
               set +x
             '';
             unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
           };
-          networking.firewall.interfaces."bond0".allowedTCPPorts = [ 8096 /*http*/ 8920 /*https*/ ];
+	  networking.firewall.interfaces."bond0".allowedTCPPorts = [
+	    8096 /*http*/ 8920 /*https*/
+            config.services.step-ca.port
+	  ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
@@ -412,7 +419,11 @@
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
 
-	  roles.tiny-ca.enable = false;
+          roles.tiny-ca.enable = true;
+          services.step-ca.intermediatePasswordFile = config.sops.secrets.orsin-ca-intermediatePassword.path;
+          sops.secrets.orsin-ca-intermediatePassword = {
+            sopsFile = ./secrets/defaults.yaml;
+          };
 
           hardware.pulseaudio = {
             support32Bit = true;
