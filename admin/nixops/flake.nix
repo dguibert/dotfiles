@@ -55,36 +55,19 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = { self, nixpkgs
-            , nur_dguibert
-            #, nur_dguibert_envs
-            , base16-nix
-            , nur
-            , sops-nix
-            , gitignore
-            , home-manager
-            , terranix
-            , hydra
-            , nix
-            , flake-utils
-            , nxsession
-            , dwm-src
-            , st-src
-            , deploy-rs
-      , nixpkgs-wayland
-            }@flakes: let
+  outputs = inputs: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
-        import nixpkgs {
+        import inputs.nixpkgs {
           inherit system;
           overlays =  [
-            nix.overlay
-            nur.overlay
-            nur_dguibert.overlay
-            nur_dguibert.overlays.extra-builtins
+            inputs.nix.overlay
+            inputs.nur.overlay
+            inputs.nur_dguibert.overlay
+            inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-            self.overlay
-            nxsession.overlay
+            inputs.self.overlay
+            inputs.nxsession.overlay
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -95,87 +78,19 @@
         wgPubKey_
         extra_builtins_file;
 
-  in (flake-utils.lib.eachDefaultSystem (system:
+  in (inputs.flake-utils.lib.eachDefaultSystem (system:
        let pkgs = nixpkgsFor system; in rec {
 
-    devShell = pkgs.callPackage ./shell.nix { inherit flakes;
-      inherit (sops-nix.packages.${system}) sops-pgp-hook ssh-to-pgp;
-      deploy-rs = deploy-rs.packages.${system}.deploy-rs;
+    devShell = pkgs.callPackage ./shell.nix { inherit inputs;
+      inherit (inputs.sops-nix.packages.${system}) sops-pgp-hook ssh-to-pgp;
+      deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
     };
     legacyPackages = pkgs;
 
-    homeConfigurations = /*flake-utils.lib.flattenTree*/ {
-      root = home-manager.lib.homeManagerConfiguration {
-        username = "root";
-        homeDirectory = "/root";
-        inherit system pkgs;
-        configuration = { ... }: {
-          imports = [
-            (import "${base16-nix}/base16.nix")
-            (import ./users/root/home.nix).home
-            ./modules/hm-report-changes.nix
-            ({ ... }: { home.report-changes.enable = true; })
-          ];
-        };
-      };
-      dguibert.no-x11 = let
-          home-secret = let
-              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
-              loaded = home_sec.success or true;
-            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-               then home_sec
-               else { withoutX11 = { ... }: {};
-                      withX11 = { ... }: {};
-                    };
-
-        in home-manager.lib.homeManagerConfiguration {
-        username = "dguibert";
-        homeDirectory = "/home/dguibert";
-        inherit system pkgs;
-        configuration = { lib, ... }: {
-          imports = [ (import "${base16-nix}/base16.nix")
-            (import ./users/dguibert/home.nix).withoutX11
-            home-secret.withoutX11
-            ./modules/hm-report-changes.nix
-            ({ ... }: { home.report-changes.enable = true; })
-          ];
-          _module.args.pkgs = lib.mkForce (pkgs.extend(final: prev: {
-            dbus = prev.dbus.override { x11Support = false; };
-            networkmanager-fortisslvpn = prev.networkmanager-fortisslvpn.override { withGnome = false; };
-            networkmanager-l2tp = prev.networkmanager-l2tp.override { withGnome = false; };
-            networkmanager-openconnect = prev.networkmanager-openconnect.override { withGnome = false; };
-            networkmanager-openvpn = prev.networkmanager-openvpn.override { withGnome = false; };
-            networkmanager-vpnc = prev.networkmanager-vpnc.override { withGnome = false; };
-            networkmanager-iodine = prev.networkmanager-iodine.override { withGnome = false; };
-            gobject-introspection = prev.gobject-introspection.override { x11Support = false; };
-            pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-          }));
-        };
-      };
-      dguibert.x11 = let
-          home-secret = let
-              home_sec = sopsDecrypt_ ./users/dguibert/home-sec.nix "data";
-              loaded = home_sec.success or true;
-            in if (builtins.trace "hm dguibert loading secret: ${toString loaded}" ) loaded
-               then home_sec
-               else { withoutX11 = { ... }: {};
-                      withX11 = { ... }: {};
-                    };
-
-        in home-manager.lib.homeManagerConfiguration {
-        username = "dguibert";
-        homeDirectory = "/home/dguibert";
-        inherit system pkgs;
-        configuration = { lib, ... }: {
-          imports = [ (import "${base16-nix}/base16.nix")
-            (import ./users/dguibert/home.nix).withX11
-            home-secret.withX11
-          ];
-          _module.args.pkgs = lib.mkForce pkgs;
-        };
-      };
+    homeConfigurations = inputs.nixpkgs.lib.genAttrs
+      (builtins.attrNames (builtins.removeAttrs inputs.self.nixosConfigurations ["iso" ]))
+          (host: inputs.self.nixosConfigurations.${host}.config.home-manager.users) // {
     };
-
 
   })) // (rec {
     overlay = final: prev: with final; {
@@ -199,11 +114,11 @@
       '';
 
       dwm = prev.dwm.overrideAttrs (o: {
-        src = dwm-src;
+        src = inputs.dwm-src;
         patches = [];
       });
       st = prev.st.overrideAttrs (o: {
-        src = st-src;
+        src = inputs.st-src;
         patches = [];
       });
     };
@@ -214,9 +129,9 @@
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
     nixosModules.defaults = { config, lib, pkgs, resources, ...}: {
       imports = [
-        nixpkgs.nixosModules.notDetected
-        home-manager.nixosModules.home-manager
-        sops-nix.nixosModules.sops
+        inputs.nixpkgs.nixosModules.notDetected
+        inputs.home-manager.nixosModules.home-manager
+        inputs.sops-nix.nixosModules.sops
 
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
@@ -226,22 +141,30 @@
         ./roles/sshguard.nix
         ./roles/wireguard-mesh.nix
 
-        ./users/default.nix
+        (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
       ];
 
       system.nixos.versionSuffix = lib.mkForce
-        ".${lib.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-      system.nixos.revision = lib.mkIf (self ? rev) (lib.mkForce self.rev);
-      nixpkgs.config = import "${nur_dguibert}/config.nix";
+        ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
+      system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
+      nixpkgs.config = import "${inputs.nur_dguibert}/config.nix";
       nixpkgs.overlays = [
-        nix.overlay
-        nur_dguibert.overlays.default
-        self.overlay
+        inputs.nix.overlay
+        inputs.nur.overlay
+        inputs.nur_dguibert.overlay
+        inputs.nur_dguibert.overlays.extra-builtins
+        #nur_dguibert_envs.overlay
+        inputs.self.overlay
+        inputs.nxsession.overlay
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
-      nix.package = nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+      nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+      nix.registry = lib.mapAttrs (id: flake: {
+        inherit flake;
+        from = { inherit id; type = "indirect"; };
+      }) inputs;
       environment.shellInit = ''
-        export NIX_PATH=nixpkgs=${nixpkgs}:nur_dguibert=${nur_dguibert}
+        export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
         NIX_OPTIONS=()
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
         export NIX_OPTIONS
@@ -296,7 +219,7 @@
       report-changes.enable = true;
     };
 
-    #nixosConfigurations.rpi01 = nixpkgs.lib.nixosSystem {
+    #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
     #  modules = [
     #    ({ config, lib, pkgs, resources, ... }: {
     #      imports = [
@@ -329,12 +252,12 @@
     #  ];
     #};
 
-    #nixosConfigurations.orsine = nixpkgs.lib.nixosSystem {
+    #nixosConfigurations.orsine = inputs.nixpkgs.lib.nixosSystem {
     #  modules = [
     #    ({ config, lib, pkgs, resources, ... }: {
     #      nixpkgs.localSystem.system = "x86_64-linux";
     #      imports = [
-    #        self.nixosModules.defaults
+    #        inputs.self.nixosModules.defaults
     #        (import ./hosts/orsine/configuration.nix)
     #      ];
     #    })
@@ -343,9 +266,9 @@
 
 
     ## nix build .#nixosConfigurations.iso.config.system.build.isoImage
-    nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
       modules = [
-        (import "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+        (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
         ./modules/zfs.nix
         ./hosts/iso.nix
         ({ config, lib, pkgs, resources, ... }: {
@@ -354,14 +277,14 @@
       ];
     };
 
-    nixosConfigurations.titan = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.titan = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
           imports = [
-            hydra.nixosModules.hydra
+            inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
-            self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
             ./modules/yubikey-gpg.nix
             ./modules/distributed-build.nix
             ./modules/x11.nix
@@ -406,10 +329,10 @@
             '';
             unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
           };
-	  networking.firewall.interfaces."bond0".allowedTCPPorts = [
-	    8096 /*http*/ 8920 /*https*/
-            config.services.step-ca.port
-	  ];
+          networking.firewall.interfaces."bond0".allowedTCPPorts = [
+            8096 /*http*/ 8920 /*https*/
+              config.services.step-ca.port
+          ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
@@ -503,21 +426,21 @@
       ];
     };
 
-    nixosConfigurations.rpi31 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.rpi31 = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
           #nixpkgs.localSystem.system = "x86_64-linux";
           nixpkgs.localSystem.system = "aarch64-linux";
           imports = [
-            (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
-            (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+            (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
+            (import "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix")
             (import ./hosts/rpi31/configuration.nix)
-            self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
           ];
           nixpkgs.overlays = [
-            nix.overlay
-            nur_dguibert.overlays.default
+            inputs.nix.overlay
+            inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
               # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
@@ -556,18 +479,18 @@
     #  # error: Package ‘raspberrypi-firmware-1.20190925’ in /nix/store/v6yxfmgriax99l3hq0lmmqfg0fvj5874-source/pkgs/os-specific/linux/firmware/raspberrypi/default.nix:20 is not supported on ‘x86_64-linux’, refusing to evaluate.
     #  nixpkgs.config.allowUnsupportedSystem = true;
     #};
-    nixosConfigurations.rpi41 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.rpi41 = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
           #nixpkgs.localSystem.system = "x86_64-linux";
           nixpkgs.localSystem.system = "aarch64-linux";
           imports = [
-            (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
-            (import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-            (import "${nixpkgs}/nixos/modules/profiles/base.nix")
+            (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
+            (import "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix")
+            (import "${inputs.nixpkgs}/nixos/modules/profiles/base.nix")
             (import ./hosts/rpi41/configuration.nix)
-            self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
           ];
           boot.kernelPackages = pkgs.linuxPackages_rpi4;
           fileSystems."/".options = [ "defaults" "discard" ];
@@ -640,8 +563,8 @@
 
 
           nixpkgs.overlays = [
-            nix.overlay
-            nur_dguibert.overlays.default
+            inputs.nix.overlay
+            inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
               # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
@@ -687,13 +610,13 @@
         })
       ];
     };
-    nixosConfigurations.t580 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.t580 = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
           imports = [
             (import ./hosts/t580/configuration.nix)
-            self.nixosModules.defaults
+            inputs.self.nixosModules.defaults
             #({ ... }: {
             #  nix = {
             #    # add binary caches
@@ -734,47 +657,22 @@
       ];
     };
 
-    #deploy.nodes.titan.hostname = "titan";
-    #deploy.nodes.titan.profiles.system = {
-    #  user ="root";
-    #  path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.titan;
-    #};
-    deploy.nodes = nixpkgs.lib.recursiveUpdate (nixpkgs.lib.mapAttrs (_: nixosConfig: {
+    deploy.nodes = inputs.nixpkgs.lib.recursiveUpdate (inputs.nixpkgs.lib.mapAttrs (host: nixosConfig: {
       hostname = "${nixosConfig.config.networking.hostName}";
-      profiles.system.path = deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos nixosConfig;
+      profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos
+        nixosConfig;
       profiles.system.user = "root";
       fastConnection = true;
-    }) (builtins.removeAttrs self.nixosConfigurations ["iso" ]))
+      profiles.hm-dguibert.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.custom
+        inputs.self.homeConfigurations.${nixosConfig.config.nixpkgs.localSystem.system}.${host}.dguibert.home.activationPackage
+        "./activate";
+      profiles.hm-dguibert.user = "dguibert";
+    }) (builtins.removeAttrs inputs.self.nixosConfigurations ["iso" ]))
     ({
-      titan.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = deploy-rs.lib.x86_64-linux.activate.custom self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
-      };
-      t580.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = deploy-rs.lib.x86_64-linux.activate.custom self.homeConfigurations.x86_64-linux.dguibert.x11.activationPackage "./activate";
-      };
-      rpi31.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = deploy-rs.lib.aarch64-linux.activate.custom self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
-      };
-      rpi41.profiles.dguibert-hm = {
-        user = "dguibert";
-        path = deploy-rs.lib.aarch64-linux.activate.custom self.homeConfigurations.aarch64-linux.dguibert.no-x11.activationPackage "./activate";
-      };
     });
-    #deploy = {
-    #  sshUser = "dguibert";
-    #  user = "root";
-    #  nodes = (builtins.mapAttrs (_: conf: {
-    #    hostname = conf.config.networking.hostName;
-    #    profiles.system.path = conf.config.system.build.toplevel;
-    #    profiles.system.activate = "$PROFILE/bin/switch-to-configuration switch";
-    #  };
-    #};
 
     # This is highly advised, and will prevent many possible mistakes
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
 
   });
 }
