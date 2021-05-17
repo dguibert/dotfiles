@@ -122,8 +122,8 @@ in
       #[Unit]
       unitConfig = {
         BindTo=[ "dev-yubikey.device" ];
-        after= [ "dev-yubikey.device" ];
       };
+      after= [ "dev-yubikey.device" ];
       wantedBy = [ "dev-yubikey.device" ];
     };
     ## $ sudo mkdir /etc/systemd/system/dev-yubikey.device.wants
