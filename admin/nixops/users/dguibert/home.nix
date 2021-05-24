@@ -512,7 +512,7 @@ let
 
     withX11 = { config, pkgs, lib
             , ...}@args: let
-      davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre8; };
+      davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
     in with lib;
         lib.recursiveUpdate
       (homes.withoutX11 args)

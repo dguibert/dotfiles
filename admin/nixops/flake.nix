@@ -147,7 +147,11 @@
       system.nixos.versionSuffix = lib.mkForce
         ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
       system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
-      nixpkgs.config = import "${inputs.nur_dguibert}/config.nix";
+      nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+        permittedInsecurePackages = [
+          "ffmpeg-3.4.8" # oraclejre
+        ];
+      };
       nixpkgs.overlays = [
         inputs.nix.overlay
         inputs.nur.overlay
