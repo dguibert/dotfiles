@@ -611,13 +611,13 @@ let
             # Turn off beeps.
             xset -b
             xrdb -merge ~/.Xresources
-            # launch daemons
-            # Speed up terminal startup
-            # This needs to run in the desktop session for child
-            # processes (shells etc) to also run in the session
-            ${pkgs.rxvt_unicode}/bin/urxvtd -q -o -f &
+
             sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-            sleep 10 && ${davmail_}/bin/davmail &
+	    case "$HOSTNAME" in
+	      titan)
+                sleep 10 && ${davmail_}/bin/davmail &
+		;;
+            esac
             ${pkgs.autorandr}/bin/autorandr -c
 
             conky -c ~/.conkyrc | while read line; do
