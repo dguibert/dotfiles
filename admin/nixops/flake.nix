@@ -278,6 +278,9 @@
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
         })
+        ({ ... }: {
+          networking.wireless.interfaces = [ "wlan0" ];
+        })
       ];
     };
 
