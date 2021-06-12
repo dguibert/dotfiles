@@ -28,10 +28,12 @@
     zfs rollback -r rt580/local/root@blank
   '';
 
-  boot.kernelPackages = pkgs.linuxPackages_5_11;
+  boot.kernelPackages = pkgs.linuxPackages_5_12;
   # https://lists.ubuntu.com/archives/kernel-team/2020-November/114986.html
   #boot.kernelPackages = pkgs.linuxPackages_testing;
-  #boot.zfs.enableUnstable = true;
+  # *** ZFS Version: zfs-2.0.4-1
+  # *** Compatible Kernels: 3.10 - 5.11
+  boot.zfs.enableUnstable = true;
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";
