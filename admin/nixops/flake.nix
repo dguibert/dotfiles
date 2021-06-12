@@ -321,6 +321,7 @@
 
           services.jellyfin.enable = true;
           systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
+            serviceConfig.PrivateUsers = lib.mkForce false;
             serviceConfig.PermissionsStartOnly = true;
             preStart = ''
               set -x
