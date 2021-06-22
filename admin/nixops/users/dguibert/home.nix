@@ -654,15 +654,6 @@ let
         #];
 
         programs.google-chrome.enable = true;
-        programs.google-chrome.extensions = [
-          "oeehiifcaeengdofhogmkblhkmpephcj" # active inbox
-          "mhkbaognlahkdimlfcfhbeihldmjofgg" # circuit by unify
-          "padekgcemlokbadohgkifijomclgjgif" # Proxy SwitchyOmega
-          "oiigbmnaadbkfbmpbfijlflahbdbdgdf" # script safe
-          "naepdomgkenhinolocfifgehidddafch" # browserpass-ce
-          "hipbfijinpcgfogaopmgehiegacbhmob" # feedly
-          "cbgkkbaghihhnaeabfcmmglhnfkfnpon" # separate window
-        ];
 
         programs.zathura.enable = true;
         programs.zathura.extraConfig = ''
