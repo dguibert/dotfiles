@@ -484,7 +484,7 @@ let
       programs.htop.enable = true;
       # fields=0 48 17 18 38 39 40 2 46 47 49 109 110 1
       programs.htop.settings = {
-	fields = with config.lib.htop.fields; [
+        fields = with config.lib.htop.fields; [
           PID #= 0; #
           USER #= 48; #
           PRIORITY #= 17; #
@@ -610,6 +610,9 @@ let
           fira-code-symbols
 
           nxsession
+
+          my-emacs
+          my-texlive
         ];
 
         xsession = {
@@ -621,10 +624,10 @@ let
             xrdb -merge ~/.Xresources
 
             sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-	    case "$HOSTNAME" in
-	      titan)
+            case "$HOSTNAME" in
+              titan)
                 sleep 10 && ${davmail_}/bin/davmail &
-		;;
+                ;;
             esac
             ${pkgs.autorandr}/bin/autorandr -c
 
@@ -654,7 +657,7 @@ let
 
         programs.firefox.enable = true;
         programs.firefox.package = pkgs.firefox-bin;
-	#programs.firefox.extensions =
+        #programs.firefox.extensions =
         #  with pkgs.nur.repos.rycee.firefox-addons; [
         #    browserpass
         #    #switchyomega
