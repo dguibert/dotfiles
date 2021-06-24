@@ -589,7 +589,7 @@ let
           haskellPackages.hledger-interest
           #pythonPackages.ofxparse
           #pkgs-18_09.pythonPackages.weboob
-          python3Packages.weboob
+          python3Packages.woob
 
           mpv
           python3Packages.subliminal
