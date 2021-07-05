@@ -76,7 +76,7 @@ rec {
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   # *** ZFS Version: zfs-2.0.4-1
   # *** Compatible Kernels: 3.10 - 5.11
-  boot.zfs.enableUnstable = true;
+  boot.zfs.enableUnstable = false;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

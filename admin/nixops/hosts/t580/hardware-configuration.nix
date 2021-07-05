@@ -33,7 +33,7 @@
   #boot.kernelPackages = pkgs.linuxPackages_testing;
   # *** ZFS Version: zfs-2.0.4-1
   # *** Compatible Kernels: 3.10 - 5.11
-  boot.zfs.enableUnstable = true;
+  boot.zfs.enableUnstable = false;
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";
