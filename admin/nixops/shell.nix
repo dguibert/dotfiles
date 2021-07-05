@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> { }
 , inputs ? {}
 , ssh-to-pgp
-, sops-pgp-hook
+, sops-import-keys-hook
 , deploy-rs
 }:
 with pkgs;
@@ -23,7 +23,7 @@ mkEnv rec {
     "./keys/users/dguibert.asc"
   ];
   buildInputs = [
-    sops-pgp-hook
+    sops-import-keys-hook
     ssh-to-pgp
     deploy-rs
     #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
@@ -58,6 +58,6 @@ mkEnv rec {
     export NIX_OPTIONS
 
     export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
-    sopsPGPHook
+    #sopsPGPHook
   '';
 }

@@ -82,7 +82,7 @@
        let pkgs = nixpkgsFor system; in rec {
 
     devShell = pkgs.callPackage ./shell.nix { inherit inputs;
-      inherit (inputs.sops-nix.packages.${system}) sops-pgp-hook ssh-to-pgp;
+      inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
       deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
     };
     legacyPackages = pkgs;
