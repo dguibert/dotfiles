@@ -6,8 +6,9 @@
 }:
 with pkgs;
 
-mkEnv rec {
+mkShell rec {
   name = "deploy";
+  ENVRC = name;
 
   # imports all files ending in .asc/.gpg and sets $SOPS_PGP_FP.
   sopsPGPKeyDirs = [
@@ -30,20 +31,12 @@ mkEnv rec {
 
     jq
   ];
-  SOPS_PGP_FP = "";
+  #SOPS_PGP_FP = "";
+  #sopsCreateGPGHome
   shellHook = ''
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL NIX_REMOTE
     unset TMP TMPDIR
-
-    # https://blog.wearewizards.io/how-to-use-nixops-in-a-team
-    export NIXOPS_STATE=secrets/deploy.nixops
-
-    export DISNIXOS_USE_NIXOPS=1
-    export DISNIX_TARGET_PROPERTY=target
-
-    export PASSWORD_STORE_DIR=$PWD/secrets
-    export SHELL=${bashInteractive}/bin/bash
 
     export XDG_CACHE_HOME=$HOME/.cache/${name}
     unset NIX_STORE NIX_DAEMON
@@ -58,6 +51,5 @@ mkEnv rec {
     export NIX_OPTIONS
 
     export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
-    #sopsPGPHook
   '';
 }
