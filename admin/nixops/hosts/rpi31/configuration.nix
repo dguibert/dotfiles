@@ -78,47 +78,73 @@ rec {
 
   fonts.fontconfig.enable = false;
 
-  networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
-  services.sslh = {
-    enable=true;
-    verbose=true;
-    transparent=true;
-    port=443;
-    ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
-    ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
-    ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-    ##  { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
-    appendConfig=''
-      protocols:
-      (
-        { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-        { name: "anyprot"; host: "localhost"; port: "${toString config.services.shadowsocks.port}"; probe: "builtin"; }
-      );
-    '';
-  };
-  ##services.haproxy.enable = true;
+  networking.firewall.allowedTCPPorts = [ 443 22322 ];
+  #networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
+  #services.sslh = {
+  #  enable=true;
+  #  verbose=true;
+  #  transparent=true;
+  #  port=443;
+  #  ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
+  #  ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
+  #  ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
+  #  ##  { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
+  #  appendConfig=''
+  #    protocols:
+  #    (
+  #      { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
+  #      { name: "anyprot"; host: "localhost"; port: "${toString config.services.shadowsocks.port}"; probe: "builtin"; }
+  #    );
+  #  '';
+  #};
+  services.haproxy.enable = true;
   ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
-  ##services.haproxy.config = ''
-  ##  frontend ssl
-  ##    mode tcp
-  ##    bind 0.0.0.0:443
-  ##    tcp-request inspect-delay 3s
-  ##    tcp-request content accept if { req.ssl_hello_type 1 }
+  services.haproxy.config = ''
+    frontend ssl
+      mode tcp
+      bind 0.0.0.0:443
+      tcp-request inspect-delay 3s
+      tcp-request content accept if { req.ssl_hello_type 1 }
 
-  ##    acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
+      acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
 
-  ##    use_backend openssh            if ssh_payload
-  ##    use_backend openssh            if !{ req.ssl_hello_type 1 } { req.len 0 }
-  ##    use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
+      use_backend openssh            if ssh_payload
+      use_backend openssh            if !{ req.ssl_hello_type 1 } { req.len 0 }
+      use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
 
-  ##  backend openssh
-  ##    mode tcp
-  ##    timeout server 3h
-  ##    server openssh 127.0.0.1:22
-  ##  backend shadowsocks
-  ##    mode tcp
-  ##    server socks 127.0.0.1:${toString config.services.shadowsocks.port}
-  ##'';
+    backend openssh
+      mode tcp
+      timeout server 3h
+      server openssh 127.0.0.1:22
+    backend shadowsocks
+      mode tcp
+      server socks 127.0.0.1:${toString config.services.shadowsocks.port}
+  '';
+  # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
+  #services.nginx.enable = true;
+  #services.nginx.streamConfig = ''
+  #  upstream ssh {
+  #    server 127.0.0.1:22;
+  #  }
+
+  #  upstream shadowsocks {
+  #    server 127.0.0.1:${toString config.services.shadowsocks.port};
+  #  }
+
+  #  map $ssl_preread_protocol $upstream {
+  #    "" ssh;
+  #    "TLSv1*"   shadowsocks;
+  #    default    shadowsocks;
+  #  }
+
+  #  # SSH and SSL on the same port
+  #  server {
+  #    listen 443;
+
+  #    proxy_pass $upstream;
+  #    ssl_preread on;
+  #  }
+  #'';
 
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
