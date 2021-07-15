@@ -36,6 +36,7 @@ rec {
   fileSystems."/tmp"                      = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
   fileSystems."/home_nfs/bguibertd/nix"  = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; };
   fileSystems."/home_nfs_robin_ib/bguibertd/nix"  = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; };
+  fileSystems."/p/project/prcoe08/guibert1/nix"  = { device = "icybox1/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
@@ -76,7 +77,7 @@ rec {
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   # *** ZFS Version: zfs-2.0.4-1
   # *** Compatible Kernels: 3.10 - 5.11
-  boot.zfs.enableUnstable = true;
+  boot.zfs.enableUnstable = false;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
