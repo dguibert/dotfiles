@@ -553,7 +553,7 @@ let
           '')
           bup par2cmdline fpart # ~/Makefile ~/bin/prepare-bd.sh
           rclone
-          python3Packages.datalad
+          python38Packages.datalad # boto 2.49.0 incompatible with pyton > 3.9
 
           exiftool
           udftools
