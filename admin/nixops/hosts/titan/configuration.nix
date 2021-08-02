@@ -182,9 +182,9 @@ rec {
 
       autosnap = true;
     };
-    datasets."icybox1/safe".useTemplate = [ "prod" ];
+    datasets."icybox1/safe".use_template = [ "prod" ];
     datasets."icybox1/safe".recursive = true;
-    datasets."icybox1/safe/home/dguibert/Videos".useTemplate = [ "media" ];
+    datasets."icybox1/safe/home/dguibert/Videos".use_template = [ "media" ];
     datasets."icybox1/safe/home/dguibert/Videos".recursive = true;
 
     templates.backup = {
@@ -199,7 +199,7 @@ rec {
       daily = 30;
       monthly = 12;
     };
-    datasets."st4000dm004-1/backup/icybox1".useTemplate = [ "backup" ];
+    datasets."st4000dm004-1/backup/icybox1".use_template = [ "backup" ];
     datasets."st4000dm004-1/backup/icybox1".recursive = true;
 
     extraArgs = [ "--verbose" ];
