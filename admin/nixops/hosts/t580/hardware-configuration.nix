@@ -68,9 +68,9 @@
 
       autosnap = true;
     };
-    datasets."rt580/safe".useTemplate = [ "user" ];
+    datasets."rt580/safe".use_template = [ "user" ];
     datasets."rt580/safe".recursive = true;
-    datasets."rt580/local/root".useTemplate = [ "root" ];
+    datasets."rt580/local/root".use_template = [ "root" ];
     datasets."rt580/local/root".recursive = true;
 
     extraArgs = [ "--verbose" ];
