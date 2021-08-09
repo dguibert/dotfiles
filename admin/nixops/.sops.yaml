@@ -1,10 +1,10 @@
-#keys:
-#- &dguibert        3198EB02EB0EEC85FE5BF6AC4E6EE5C219FDD513
-#- &titan           CC55AD556CF16A9254593FF0C87E00A6B869DE96
-##rpi41           00064376b1bf4617928161cd5b5318afcd030f01 (20201218)
-#- &rpi41           00064376b1bf4617928161cd5b5318afcd030f01
-#- &rpi31           F7368E72F15D95927F685CD0A264BDA92AE79515
-#- &laptop-s93efa6b CE0DA0A123AA2DC1E7AA38E0011B75E24664FD1E
+keys:
+- &dguibert        3198EB02EB0EEC85FE5BF6AC4E6EE5C219FDD513
+- &titan           CC55AD556CF16A9254593FF0C87E00A6B869DE96
+#rpi41           00064376b1bf4617928161cd5b5318afcd030f01 (20201218)
+- &rpi41           00064376b1bf4617928161cd5b5318afcd030f01
+- &rpi31           F7368E72F15D95927F685CD0A264BDA92AE79515
+- &t580  CE0DA0A123AA2DC1E7AA38E0011B75E24664FD1E
 creation_rules:
   # dguibert
   - path_regex: users/dguibert/[^/]+-sec\.nix$
@@ -29,17 +29,17 @@ creation_rules:
       *dguibert,
       *rpi31
   # dguibert
-  # laptop-s93efa6b
+  # t580
   - path_regex: hosts/laptop-s93efa6b/secrets/[^/]+\.yaml$
     pgp: >-
       *dguibert,
-      *laptop-s93efa6b
+      *t580
   # dguibert
   - path_regex: ./secrets/[^/]+\.yaml$
     pgp: >-
       *dguibert,
-      *titan
-      *rpi41
-      *rpi31
-      *laptop-s93efa6b
+      *titan,
+      *rpi41,
+      *rpi31,
+      *t580
 

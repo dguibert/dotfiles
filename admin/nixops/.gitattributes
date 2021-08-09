@@ -1,5 +1,5 @@
 .envrc filter=git-crypt diff=git-crypt
 *-secret.nix filter=git-crypt diff=git-crypt
 # git config diff.sopsdiffer.textconv "sops -d"
-*.yaml diff=sopsdiffer
+#*.yaml diff=sopsdiffer
 *-sec.nix diff=sopsdiffer
