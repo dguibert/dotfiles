@@ -53,5 +53,7 @@ mkShell rec {
     export NIX_OPTIONS
 
     export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
+
+    export PASSWORD_STORE_DIR=$PWD/secrets
   '';
 }
