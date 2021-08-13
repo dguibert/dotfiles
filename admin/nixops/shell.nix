@@ -11,10 +11,10 @@ mkShell rec {
   ENVRC = name;
 
   # imports all files ending in .asc/.gpg and sets $SOPS_PGP_FP.
-  sopsPGPKeyDirs = [
-  #  #"./keys/hosts"
-  #  #"./keys/users"
-  ];
+  #sopsPGPKeyDirs = [
+  ##  #"./keys/hosts"
+  ##  #"./keys/users"
+  #];
   # Also single files can be imported.
   sopsPGPKeys = [
     "./keys/hosts/titan.asc"
@@ -24,12 +24,14 @@ mkShell rec {
     "./keys/users/dguibert.asc"
   ];
   buildInputs = [
-    sops-import-keys-hook
     ssh-to-pgp
     deploy-rs
     #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
     jq
+  ];
+  nativeBuildInputs = [
+    sops-import-keys-hook
   ];
   #SOPS_PGP_FP = "";
   #sopsCreateGPGHome

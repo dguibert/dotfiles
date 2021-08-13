@@ -8,38 +8,44 @@ keys:
 creation_rules:
   # dguibert
   - path_regex: users/dguibert/[^/]+-sec\.nix$
-    pgp: >-
-      *dguibert
+    key_groups:
+      - pgp:
+        - *dguibert
   # dguibert
   # titan
   - path_regex: hosts/titan/secrets/[^/]+\.yaml$
-    pgp: >-
-      *dguibert,
-      *titan
+    key_groups:
+      - pgp:
+        - *dguibert
+        - *titan
   # dguibert
   # rpi41
   - path_regex: hosts/rpi41/secrets/[^/]+\.yaml$
-    pgp: >-
-      *dguibert,
-      *rpi41
+    key_groups:
+    - pgp:
+      - *dguibert
+      - *rpi41
   # dguibert
   # rpi31
   - path_regex: hosts/rpi31/secrets/[^/]+\.yaml$
-    pgp: >-
-      *dguibert,
-      *rpi31
+    key_groups:
+    - pgp:
+      - *dguibert
+      - *rpi31
   # dguibert
   # t580
   - path_regex: hosts/laptop-s93efa6b/secrets/[^/]+\.yaml$
-    pgp: >-
-      *dguibert,
-      *t580
+    key_groups:
+    - pgp:
+      - *dguibert
+      - *t580
   # dguibert
   - path_regex: ./secrets/[^/]+\.yaml$
-    pgp: >-
-      *dguibert,
-      *titan,
-      *rpi41,
-      *rpi31,
-      *t580
+    key_groups:
+    - pgp:
+      - *dguibert
+      - *titan
+      - *rpi41
+      - *rpi31
+      - *t580
 
