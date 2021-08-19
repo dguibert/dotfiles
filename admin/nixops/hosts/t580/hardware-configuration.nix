@@ -28,7 +28,7 @@
     zfs rollback -r rt580/local/root@blank
   '';
 
-  boot.kernelPackages = pkgs.linuxPackages_5_12;
+  boot.kernelPackages = pkgs.linuxPackages_5_13;
   # https://lists.ubuntu.com/archives/kernel-team/2020-November/114986.html
   #boot.kernelPackages = pkgs.linuxPackages_testing;
   # *** ZFS Version: zfs-2.0.4-1
