@@ -455,29 +455,91 @@ let
             extraOptions.NoHostAuthenticationForLocalhost="yes";
           };
 
-          rpi31_0 =                                    matchexec_host "rpi31" "192.168.1.13" 22322;
-          rpi31_1 = lib.hm.dag.entryAfter ["rpi31_0"] (matchexec_host "rpi31" "10.147.27.13" 443);
-          rpi31_3 = lib.hm.dag.entryAfter ["rpi31_1" "rpi31_2"] (matchexec_host "rpi31" "82.64.121.168" 443);
-
-          rpi41_0 =                                    matchexec_host "rpi41" "192.168.1.14" 22322;
-          rpi41_1 = lib.hm.dag.entryAfter ["rpi41_0"] (matchexec_host "rpi41" "10.147.27.14" 443);
-          rpi41   = lib.hm.dag.entryAfter ["rpi41_1"] {
-            hostname = "192.168.1.24";
-            port = 22322;
+          ## https://superuser.com/a/1635657
+          ## For gateway machine.
+          ## Coming from localhost.
+          #Match originalhost t580 exec "[ %h = %L ]"
+          #  LocalCommand echo "SSH %n: To localhost" >&2
+	  rpi31_0 = {
+            matchHeader = "originalhost rpi31 exec \"[ %h = %L ]\"";
+	    extraOptions.LocalCommand = "echo \"SSH %n: To localhost\" >&2";
+	    host = "rpi31";
+	  };
+	  rpi41_0 = {
+            matchHeader = "originalhost rpi41 exec \"[ %h = %L ]\"";
+	    extraOptions.LocalCommand = "echo \"SSH %n: To localhost\" >&2";
+	    host = "rpi41";
+	  };
+	  t580_0 = {
+            matchHeader = "originalhost t580 exec \"[ %h = %L ]\"";
+	    extraOptions.LocalCommand = "echo \"SSH %n: To localhost\" >&2";
+	    host = "t580";
+	  };
+	  titan_0 = {
+            matchHeader = "originalhost titan exec \"[ %h = %L ]\"";
+	    extraOptions.LocalCommand = "echo \"SSH %n: To localhost\" >&2";
+	    host = "titan";
+	  };
+          ## Coming from outside home network.
+          #Match originalhost t580 !exec "[ %h = %L ]" !exec "{ ip neigh; ip link; }|grep -Fw 00:24:d4:ad:07:0e"
+          #  LocalCommand echo "SSH %n: From outside network, to %h" >&2
+          #  Hostname t580.orsin.freeboxos.fr
+	  rpi31_1 = lib.hm.dag.entryAfter ["rpi31_0"] {
+	    host = "rpi31";
+            matchHeader = "originalhost rpi31 !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw b8:27:eb:46:86:14\"";
+            extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
+	    hostname = "82.64.121.168";
+	    port = 443;
+	  };
+	  rpi41_1 = lib.hm.dag.entryAfter ["rpi41_0"] {
+	    host = "rpi41";
+            matchHeader = "originalhost rpi41 !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw dc:a6:32:67:dd:9f\"";
+            extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
             proxyJump = "rpi31";
-          };
-
-          titan_0 =                                    matchexec_host "titan" "192.168.1.24" 22;
-          titan_1 = lib.hm.dag.entryAfter ["titan_0"] (matchexec_host "titan" "10.147.27.24" 22);
-          titan   = lib.hm.dag.entryAfter ["titan_1"] {
-            hostname = "192.168.1.24";
-            port = 22;
+	  };
+	  t580_1 = lib.hm.dag.entryAfter ["t580_0"] {
+	    host = "t580";
+            matchHeader = "originalhost t580 !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw d2:b6:17:1d:b8:97\"";
+            extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
             proxyJump = "rpi31";
-          };
-          "t580" = {
-            hostname="192.168.1.17";
-            extraOptions.HostKeyAlias="t580";
-          };
+	  };
+	  titan_1 = lib.hm.dag.entryAfter ["titan_0"] {
+	    host = "titan";
+            matchHeader = "originalhost titan !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw be:f8:2c:e5:1d:4e\"";
+            extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
+            proxyJump = "rpi31";
+	  };
+          ## Coming from inside home network.
+          #Host t580
+          #  PermitLocalCommand yes
+          #  LocalCommand echo "SSH %n: From home network, to %h" >&2
+          #  Hostname 192.168.1.17
+	  rpi31_2 = lib.hm.dag.entryAfter ["rpi31_1"] {
+	    host = "rpi31";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+	    hostname = "192.168.1.13";
+	    port = 22322;
+	  };
+	  rpi41_2 = lib.hm.dag.entryAfter ["rpi41_1"] {
+	    host = "rpi41";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+	    hostname = "192.168.1.14";
+	    port = 22322;
+	  };
+	  t580_2 = lib.hm.dag.entryAfter ["t580_1"] {
+	    host = "t580";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+	    hostname = "192.168.1.17";
+	  };
+	  titan_2 = lib.hm.dag.entryAfter ["titan_1"] {
+	    host = "titan";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+	    hostname = "192.168.1.24";
+	  };
         };
       };
 
