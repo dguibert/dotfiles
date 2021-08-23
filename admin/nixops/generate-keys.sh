@@ -3,13 +3,15 @@ set -euo pipefail
 set -x
 host=$1; shift
 regenerate=${2:-false}
-sops_file=${3:-hosts/$host/secrets/secrets.yaml}
+host_sops_file=${3:-hosts/$host/secrets/secrets.yaml}
 
 command -v sops
 
 d=$(mktemp -d)
 trap "rm -r $d" EXIT
 keyfile=$d/key
+
+options=""
 
 declare -a keys
 keys+=(wireguard_key)
@@ -21,6 +23,8 @@ keys+=(ssh_host_ed25519_key.pub) # order matter (private key before pub one)
 keys+=(ssh_host_ed25519_key-cert.pub)
 keys+=(missing_key)
 
+keys=($(nix eval .\#nixosConfigurations.$host.config.sops.secrets --json | jq -r '.[].key') )
+
 for key in ${@:-${keys[@]}}; do
     echo "key ${key}"
     # test if key is present
@@ -30,6 +34,14 @@ for key in ${@:-${keys[@]}}; do
             echo "but found in $sops_file"
         fi
     else
+        case "$(nix eval .\#nixosConfigurations.$host.config.sops.secrets --json | jq -r '.["'$key'"].sopsFile')" in
+            *-defaults.yaml)
+                sops_file=./secrets/defaults.yaml
+                ;;
+            *)
+                sops_file=$host_sops_file
+                ;;
+        esac
         # check if the key exists
         if ! sops  --extract '["'$key'"]' -d $sops_file > $keyfile; then
             regenerate=true
@@ -65,6 +77,11 @@ for key in ${@:-${keys[@]}}; do
                         -V -5m:+$(( 365 * 1))d \
                         -h \
                         $keyfile
+                    ;;
+                id_buildfarm)
+                    rm -f $keyfile
+                    ssh-keygen -t ed25519 $options -f $keyfile -N "" -C ""
+                    ssh-keygen -y -f $keyfile # generate pub
                     ;;
                 *)
                     echo "ERROR: unknown key '$key'"
