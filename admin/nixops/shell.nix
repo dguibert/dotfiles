@@ -34,7 +34,7 @@ mkShell rec {
     sops-import-keys-hook
   ];
   #SOPS_PGP_FP = "";
-  #sopsCreateGPGHome
+  sopsCreateGPGHome="";
   shellHook = ''
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL NIX_REMOTE
