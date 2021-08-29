@@ -79,6 +79,7 @@ rec {
   environment.systemPackages = with pkgs; [
      vim
      pavucontrol
+     pulseaudioLight
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
