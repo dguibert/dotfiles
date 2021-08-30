@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -127,8 +127,8 @@ checkout = git clone 'https://github.com/dagit/language-fortran' 'language-fortr
 #checkout = git clone 'https://github.com/STEllAR-GROUP/hpx' 'hpx'
 deleted = true
 
-[code/imp-code]
-checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'
+#[code/imp-code]
+#checkout = hg clone 'https://dguibert@bitbucket.org/VictorEijkhout/imp-code' 'imp-code'
 
 [code/kokkos]
 checkout = git clone 'https://github.com/kokkos/kokkos' 'kokkos'
@@ -265,9 +265,9 @@ checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
 [code/nextflow]
 checkout = git clone 'https://github.com/nextflow-io/nextflow' 'nextflow'
 
-[code/myrt]
-checkout = git clone '/home/dguibert/public_git/myrt.git' 'myrt'
-push = git push -v
+#[code/myrt]
+#checkout = git clone '/home/dguibert/public_git/myrt.git' 'myrt'
+#push = git push -v
 
 [code/multigit]
 checkout = git clone 'https://github.com/capr/multigit' 'multigit'
@@ -616,7 +616,11 @@ checkout = git clone 'https://github.com/NixOS/hydra-provisioner' 'hydra-provisi
 checkout = git clone 'https://github.com/t184256/nix-on-droid-bootstrap' 'nix-on-droid-bootstrap'
 
 [code/nixflk]
-checkout = git clone 'https://github.com/nrdxp/nixflk' 'nixflk'
+#checkout = git clone 'https://github.com/nrdxp/nixflk' 'nixflk'
+deleted = true
+
+[code/devos]
+checkout = git clone https://github.com/divnix/devos devos
 
 [code/nxsession]
 checkout = git clone 'https://github.com/jeff-dagenais/nxsession' 'nxsession'
