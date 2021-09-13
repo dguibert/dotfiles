@@ -28,7 +28,7 @@ rec {
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_13;
   #boot.supportedFilesystems = [ "zfs" ];
   boot.supportedFilesystems = mkForce [ /*"btrfs" "reiserfs"*/ "vfat" "f2fs" /*"xfs" "zfs"*/ "ntfs" /*"cifs"*/ ];
   #boot.zfs.enableUnstable = true;
