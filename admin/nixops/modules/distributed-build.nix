@@ -7,6 +7,9 @@
     openssh.authorizedKeys.keyFiles = [ ../id_buildfarm.pub ];
     isSystemUser = true;
   };
+  users.users.nixBuild.group = "nixBuild";
+  users.groups.nixBuild = {};
+
   # on the client machine
   programs.ssh.extraConfig = ''
     Host rpi31
