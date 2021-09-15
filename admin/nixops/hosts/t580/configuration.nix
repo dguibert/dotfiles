@@ -202,6 +202,9 @@ rec {
         NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
       '';
 
+      users.users.cntlm.group = "cntlm";
+      users.groups.cntlm = {};
+
     };
   };
 
