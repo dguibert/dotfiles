@@ -38,3 +38,6 @@ _module = btmon
 [dpd]
 _module = dpd
 
+[dhl]
+_module = dhl
+
