@@ -24,6 +24,11 @@
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
 
-  security.wrappers.xlock.source = "${pkgs.xlockmore}/bin/xlock";
+  security.wrappers.xlock = {
+    setuid = true;
+    owner = "root";
+    group = "root";
+    source = "${pkgs.xlockmore}/bin/xlock";
+  };
 }
 
