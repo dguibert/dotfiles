@@ -571,8 +571,9 @@ let
           '')
           bup par2cmdline fpart # ~/Makefile ~/bin/prepare-bd.sh
           rclone
-          python38Packages.datalad # boto 2.49.0 incompatible with pyton > 3.9
+          python3Packages.datalad
 
+          imagemagick
           exiftool
           udftools
           gitAndTools.hub # command-line wrapper for git that makes you better at GitHub
@@ -620,7 +621,6 @@ let
           gmailieer
           muchsync
           notmuch-addrlookup
-          thunderbird-bin
           #firefox-bin
 
           terminus_font powerline-fonts #corefonts
