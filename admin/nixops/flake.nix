@@ -498,7 +498,7 @@
             (import ./hosts/rpi41/configuration.nix)
             inputs.self.nixosModules.defaults
           ];
-          boot.kernelPackages = pkgs.linuxPackages_5_13;
+          boot.kernelPackages = pkgs.linuxPackages_5_14;
           fileSystems."/".options = [ "defaults" "discard" ];
 
           boot.loader.generic-extlinux-compatible.enable = true;
