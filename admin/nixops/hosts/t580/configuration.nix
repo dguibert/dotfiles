@@ -26,6 +26,8 @@ rec {
     '';
     extraCmdArgs = "-u";
   };
+
+  services.fwupd.enable = true;
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   #networking.wireless.userControlled.enable = true;
   #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
