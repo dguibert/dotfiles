@@ -101,7 +101,7 @@ let
   #''
 
 in {
-  boot.kernelPackages = pkgs.linuxPackages_5_13;
+  boot.kernelPackages = pkgs.linuxPackages_5_14;
   boot.supportedFilesystems = [ "zfs" ];
   users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";
   services.openssh.enable = true;
