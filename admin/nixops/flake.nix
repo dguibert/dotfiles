@@ -201,7 +201,7 @@
       #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
       sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
       sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
-      sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
+      #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
       sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
       sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
 
@@ -211,7 +211,8 @@
       '';
       services.openssh.hostKeys = [
         {
-          path = config.sops.secrets."ssh_host_ed25519_key".path;
+	  #path = config.sops.secrets."ssh_host_ed25519_key".path;
+          path = "/persist/etc/ssh/ssh_host_ed25519_key";
           type = "ed25519";
         }
         {
