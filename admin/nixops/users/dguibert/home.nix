@@ -640,6 +640,8 @@ let
           my-emacs
           my-texlive
         ];
+        home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
         xsession = {
           enable = true;
