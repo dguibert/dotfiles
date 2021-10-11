@@ -655,6 +655,15 @@ let
             done &
            '';
         };
+        services.screen-locker = {
+          enable =true;
+          inactiveInterval = 5;
+          lockCmd = "${pkgs.xlockmore}/bin/xlock -mode blank";
+          xautolock = {
+            enable = true;
+            detectSleep = true;
+          };
+        };
         home.file.".conkyrc".text = ''
           conky.config = {
               out_to_console = true,
