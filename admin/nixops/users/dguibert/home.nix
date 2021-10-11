@@ -1,4 +1,4 @@
-{ sopsDecrypt_, pkgs, inputs, ... }:
+{ sopsDecrypt_, pkgs, inputs, isCentralMailHost ? false, ... }:
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
 let
   home-secret = let
@@ -20,6 +20,10 @@ let
         home-secret.withoutX11
         ../../modules/hm-report-changes.nix
         ({ ... }: { home.report-changes.enable = true; })
+        ({ ... }: {
+          options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
+          config.centralMailHost.enable = isCentralMailHost;
+        })
       ];
       # Choose your themee
       themes.base16 = {
@@ -547,6 +551,10 @@ let
           home-secret.withX11
           ../../modules/hm-report-changes.nix
           ({ ... }: { home.report-changes.enable = true; })
+          ({ ... }: {
+            options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
+            config.centralMailHost.enable = isCentralMailHost;
+          })
         ];
 
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
@@ -654,6 +662,15 @@ let
                 echo "$line" > .conky.out
             done &
            '';
+        };
+        services.screen-locker = {
+          enable =true;
+          inactiveInterval = 5;
+          lockCmd = "${pkgs.xlockmore}/bin/xlock -mode blank";
+          xautolock = {
+            enable = true;
+            detectSleep = true;
+          };
         };
         home.file.".conkyrc".text = ''
           conky.config = {
