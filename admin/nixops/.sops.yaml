@@ -48,4 +48,12 @@ creation_rules:
       - *rpi41
       - *rpi31
       - *t580
+  - path_regex: ./users/dguibert/[^/]+-sec\.el$
+    key_groups:
+      - pgp:
+        - *dguibert
+        - *titan
+        - *rpi41
+        - *rpi31
+        - *t580
 
