@@ -143,6 +143,7 @@ let
       home.sessionVariables.PATH="$HOME/bin:$PATH";
       home.sessionVariables.MANPATH="$HOME/man:$MANPATH:/share/man:/usr/share/man";
       home.sessionVariables.PAGER="less -R";
+      home.sessionVariables.LESS="RFX";
       home.sessionVariables.EDITOR="vim";
       home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
       # ✗ 1    dguibert@vbox-57nvj72 ~ $ systemctl --user status
