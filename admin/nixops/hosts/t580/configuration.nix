@@ -212,7 +212,7 @@ rec {
 
   # https://nixos.org/nixops/manual/#idm140737318329504
   virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemuOvmfPackage = pkgs.OVMF.override { secureBoot=true; tpmSupport=true; };
+  virtualisation.libvirtd.qemu.ovmf.package = pkgs.OVMF.override { secureBoot=true; tpmSupport=true; };
   # https://github.com/NixOS/nixpkgs/issues/75878
   systemd.services.libvirtd.environment.EBTABLES_PATH="${pkgs.ebtables}/bin/ebtables-legacy";
   # https://github.com/NixOS/nixpkgs/pull/35214#pullrequestreview-97783209
