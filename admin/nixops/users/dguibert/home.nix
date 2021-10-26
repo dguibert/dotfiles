@@ -117,6 +117,14 @@ let
       programs.git.userEmail = "david.guibert@gmail.com";
       programs.git.aliases.files = "ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard";
       programs.git.aliases.wdiff = "diff --word-diff=color --unified=1";
+      programs.git.aliases.bd  = "!git for-each-ref --sort='-committerdate:iso8601' --format='%(committerdate:iso8601)%09%(refname)'";
+      programs.git.aliases.bdr = "!git for-each-ref --sort='-committerdate:iso8601' --format='%(committerdate:iso8601)%09%(refname)' refs/remotes/$1";
+      programs.git.aliases.bs="branch -v -v";
+      programs.git.aliases.df="diff";
+      programs.git.aliases.dn="diff --name-only";
+      programs.git.aliases.dp="diff --no-ext-diff";
+      programs.git.aliases.ds="diff --stat -w";
+      programs.git.aliases.dt="difftool";
       #programs.git.ignores
       programs.git.iniContent.clean.requireForce = true;
       programs.git.iniContent.rerere.enabled = true;
