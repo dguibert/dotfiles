@@ -646,10 +646,13 @@ let
 
           nxsession
 
-          my-emacs
+          # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
         ];
         home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        programs.emacs.enable = true;
+        programs.emacs.package = pkgs.my-emacs;
+        services.emacs.enable = true;
         #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
         xsession = {
