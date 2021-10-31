@@ -346,7 +346,7 @@
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-          roles.mopidy-server.enable = false;
+          roles.mopidy-server.enable = true;
           roles.mopidy-server.listenAddress = "192.168.1.24";
           roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music";
           roles.mopidy-server.configuration.iris.country = "FR";
