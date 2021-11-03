@@ -42,11 +42,12 @@ in {
       audio = {
         mixer = "software";
         mixer_volume = "";
-        # output = "pulsesink";
-        output = "pulsesink device=Snapcast";
+        #output = "pulsesink";
+	#output = "pulsesink device=Snapcast";
         #output = pulsesink server=127.0.0.1
         # output = "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! pulsesink  device=kind2  stream-properties="props,media.role=music"
         #output = lamemp3enc ! shout2send mount=mopidy ip=192.168.1.24 port=8000 username=source password=hackme
+	output = "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! filesink location=/run/pulse/snap-mopidy-fifo";
       };
       mpd = {
         hostname = "${cfg.listenAddress}";
@@ -89,8 +90,8 @@ in {
       #pactl load-module module-role-ducking trigger_roles=announcement ducking_roles=music
     };
 
-    users.users.root.extraGroups = lib.optionals (config.users.groups ? pulse) [ "pulse" ];
-    users.users.mopidy.extraGroups = lib.optionals (config.users.groups ? pulse) [ "pulse" ];
+    users.users.root.extraGroups = lib.optionals (config.users.groups ? pulse) [ "pulse" "audio" ];
+    users.users.mopidy.extraGroups = lib.optionals (config.users.groups ? pulse) [ "pulse" "audio" "snapserver" ];
 
     programs.dconf.enable = true;
     environment.systemPackages = with pkgs; [
