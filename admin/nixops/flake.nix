@@ -176,6 +176,9 @@
       '';
       nix.systemFeatures = [ "recursive-nix" ] ++ # default
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+	lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
+	  "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
+	] ++
         lib.optionals (pkgs.hostPlatform ? gcc.arch) (
           # a builder can run code for `gcc.arch` and inferior architectures
           [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
@@ -289,7 +292,11 @@
     nixosConfigurations.titan = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
-          nixpkgs.localSystem.system = "x86_64-linux";
+          nixpkgs.localSystem = {
+	    #gcc.arch = "broadwell"; #E5-2690v4
+	    #gcc.tune = "broadwell";
+            system = "x86_64-linux";
+          };
           imports = [
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
@@ -560,7 +567,11 @@
     nixosConfigurations.t580 = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
-          nixpkgs.localSystem.system = "x86_64-linux";
+          nixpkgs.localSystem = {
+	    #gcc.arch = "skylake"; #kabylake
+	    #gcc.tune = "skylake"; #kabylake
+            system = "x86_64-linux";
+          };
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
