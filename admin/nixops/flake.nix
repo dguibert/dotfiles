@@ -472,7 +472,7 @@
           ];
 
           documentation.nixos.enable = false;
-          fileSystems."/".options = [ "defaults" "discard" ];
+	  #fileSystems."/".options = [ "defaults" "discard" ];
 
           programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
           #assertions = lib.singleton {
@@ -513,8 +513,10 @@
             (import ./hosts/rpi41/configuration.nix)
             inputs.self.nixosModules.defaults
           ];
-          boot.kernelPackages = pkgs.linuxPackages_5_14;
-          fileSystems."/".options = [ "defaults" "discard" ];
+          boot.kernelPackages = pkgs.linuxPackages_latest;
+	  boot.initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
+	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
+	  #fileSystems."/".options = [ "defaults" "discard" ];
 
           boot.loader.generic-extlinux-compatible.enable = true;
           boot.loader.generic-extlinux-compatible.configurationLimit = 10;
