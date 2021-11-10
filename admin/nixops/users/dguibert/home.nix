@@ -573,7 +573,10 @@ let
           (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update pass-otp pass-import ]))
           gitAndTools.git-credential-password-store
 
+          perlPackages.GitAutofixup
+
           nix-prefetch-scripts
+          nix-update
 
           mr
           mercurial
