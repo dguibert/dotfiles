@@ -136,7 +136,7 @@
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
 
-        ./roles/tiny-ca.nix
+        (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
         ./roles/mopidy.nix
         ./roles/sshguard.nix
         ./roles/wireguard-mesh.nix

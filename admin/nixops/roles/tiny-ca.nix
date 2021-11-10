@@ -1,3 +1,4 @@
+{ sopsDecrypt_ }:
 { config, lib, pkgs, ... }:
 let
   cfg = config.roles.tiny-ca;
@@ -171,31 +172,24 @@ in
         authority = {
           provisioners = [
             {
-              type = "JWK";
-              name = "david.guibert@gmail.com";
-              key = {
-                use = "sig";
-                kty = "EC";
-                kid = "_tR4oJYrA7NnS3pLyFmPCXXq4K0LucpIME98E1YGN20";
-                crv = "P-256";
-                alg = "ES256";
-                x = "RizikYmFrTuIkGPGXDKH91dI03OL7_Rer0vwaoy4sjU";
-                y = "dVNBlCoPfT4U7VfDUUMo0-m-V4golPrfFf99gBwxmdA";
-              };
-              encryptedKey = "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjEwMDAwMCwicDJzIjoibXJTZnVSNVhsb0l1V0puNHpob3BFQSJ9.E-DhIuoL7zY4dSGzKFCPdtm47uR6lq_J5XGaSC2lgg7H7t_P2of5nQ.Cmjob-x3k60Ttu_a._zpYG-XX8VrWUba4qn1EQJO3WTZ1hJXc70i5xKI4VRKzjgPXhNv7xuHztQWIiyRs9PbC5RufmV3OVeSvLLXGMIY74OXggk0tVGVGqhM0q8i0fcRU2xsvzU8j31nPPMYTHYwrUrqjTX50xgE47bSu08kL-RnKmrLXezTzJHueHrMFGucS3tvXQ2NSPBfZtnJaBwMFkDhosgcTGXGgZTDx5F6GWB2TGk8S9c6xwdiN4BKgOUfbiQcB3irppm_IPoaNUyGsu7iFPkJqr1TTBaVLL79G0B8LGmUrxJfj1pDu2s7i63IrvbPs2m5CMjssGGrBu23jUiP9W9XWSY7oQZg.gGJd1C5k0eZFjmurm2UFWA";
+              type = "OIDC";
+              name = "Google";
+              clientID = "811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
+              clientSecret = sopsDecrypt_ ../secrets/defaults.yaml "orsin-ca-811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
+              configurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
+              admins = [ "david.guibert@gmail.com" ];
+              domains = [ "gmail.com" ];
               claims.enableSSHCA = true;
             }
             {
               type = "ACME";
               name = "acme";
             }
-            ##{
-            ##  "type": "SSHPOP",
-            ##  "name": "sshpop",
-            ##  "claims": {
-            ##    "enableSSHCA": true
-            ##  }
-            ##},
+            {
+              type = "SSHPOP";
+              name = "sshpop";
+              claims.enableSSHCA = true;
+            }
           ];
         };
         tls = {
