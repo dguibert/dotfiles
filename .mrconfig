@@ -159,12 +159,15 @@ fixups = git_add_remotes "
 	          github https://github.com/NixOS/nixpkgs
 	        "
 	        git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
+	        git config --get-all remote.origin.push "/heads/*" &>/dev/null || git config --add remote.origin.push refs/heads/*:refs/heads/*
+	        git config --get-all remote.origin.push "/tags/*" &>/dev/null || git config --add remote.origin.push refs/tags/*:refs/tags/*
+	        git config --get-all remote.origin.push "/heads/pu" &>/dev/null || git config --add remote.origin.push +refs/heads/pu:refs/heads/pu
 	        #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
 
 update = git remote update
 push = git push -v origin +pu
-	             git push -v origin +pu-cluster
-	             git push -v origin
+       git push -v origin +pu-cluster
+       git push -v origin
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'

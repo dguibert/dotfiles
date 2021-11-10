@@ -176,6 +176,9 @@
       '';
       nix.systemFeatures = [ "recursive-nix" ] ++ # default
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+	lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
+	  "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
+	] ++
         lib.optionals (pkgs.hostPlatform ? gcc.arch) (
           # a builder can run code for `gcc.arch` and inferior architectures
           [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
@@ -289,7 +292,11 @@
     nixosConfigurations.titan = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
-          nixpkgs.localSystem.system = "x86_64-linux";
+          nixpkgs.localSystem = {
+	    #gcc.arch = "broadwell"; #E5-2690v4
+	    #gcc.tune = "broadwell";
+            system = "x86_64-linux";
+          };
           imports = [
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
@@ -349,6 +356,12 @@
           roles.mopidy-server.enable = true;
           roles.mopidy-server.listenAddress = "192.168.1.24";
           roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
+	  roles.mopidy-server.configuration.m3u = {
+	    enabled = true;
+	    playlists_dir = "/home/dguibert/Music/playlists";
+            base_dir = config.roles.mopidy-server.configuration.local.media_dir;
+            default_extension = ".m3u8";
+          };
           roles.mopidy-server.configuration.local.scan_follow_symlinks = true;
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
@@ -459,7 +472,7 @@
           ];
 
           documentation.nixos.enable = false;
-          fileSystems."/".options = [ "defaults" "discard" ];
+	  #fileSystems."/".options = [ "defaults" "discard" ];
 
           programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
           #assertions = lib.singleton {
@@ -500,8 +513,10 @@
             (import ./hosts/rpi41/configuration.nix)
             inputs.self.nixosModules.defaults
           ];
-          boot.kernelPackages = pkgs.linuxPackages_5_14;
-          fileSystems."/".options = [ "defaults" "discard" ];
+          boot.kernelPackages = pkgs.linuxPackages_latest;
+	  boot.initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
+	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
+	  #fileSystems."/".options = [ "defaults" "discard" ];
 
           boot.loader.generic-extlinux-compatible.enable = true;
           boot.loader.generic-extlinux-compatible.configurationLimit = 10;
@@ -560,7 +575,11 @@
     nixosConfigurations.t580 = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
-          nixpkgs.localSystem.system = "x86_64-linux";
+          nixpkgs.localSystem = {
+	    #gcc.arch = "skylake"; #kabylake
+	    #gcc.tune = "skylake"; #kabylake
+            system = "x86_64-linux";
+          };
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
