@@ -356,6 +356,12 @@
           roles.mopidy-server.enable = true;
           roles.mopidy-server.listenAddress = "192.168.1.24";
           roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
+	  roles.mopidy-server.configuration.m3u = {
+	    enabled = true;
+	    playlists_dir = "/home/dguibert/Music/playlists";
+            base_dir = config.roles.mopidy-server.configuration.local.media_dir;
+            default_extension = ".m3u8";
+          };
           roles.mopidy-server.configuration.local.scan_follow_symlinks = true;
           roles.mopidy-server.configuration.iris.country = "FR";
           roles.mopidy-server.configuration.iris.locale = "FR";
