@@ -18,7 +18,24 @@
 
   fonts.fontDir.enable = true;
   fonts.enableGhostscriptFonts = true;
-  fonts.fonts = with pkgs ; [ terminus_font powerline-fonts /*corefonts*/ ];
+  fonts.fontconfig.enable = true;
+  fonts.fontconfig.antialias = true;
+  fonts.fontconfig.hinting.enable = true;
+  fonts.fonts = with pkgs ; [
+    terminus_font
+    powerline-fonts
+    nerdfonts
+    /*corefonts*/
+    #noto-fonts
+    #noto-fonts-cjk
+    #noto-fonts-emoji
+    #liberation_ttf
+    #fira-code
+    #fira-code-symbols
+    #mplus-outline-fonts
+    #dina-font
+    #proggyfonts
+  ];
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
