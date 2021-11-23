@@ -44,7 +44,7 @@ lib =
 	               test "$whoami" = dguibert && on titan orsine t580
 	       }
 	       source $HOME/.config/mr/lib/git-remotes
-push = echo "$MR_REPO has to be manually pushed"
+git_push = echo "$MR_REPO has to be manually pushed"
 
 #include = cat $HOME/.config/mr/config.d/*
 
