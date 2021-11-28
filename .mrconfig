@@ -166,8 +166,8 @@ fixups = git_add_remotes "
 
 update = git remote update
 push = git push -v origin +pu
-       git push -v origin +pu-cluster
-       git push -v origin
+	      git push -v origin +pu-cluster
+	      git push -v origin
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
@@ -672,6 +672,11 @@ checkout = git clone 'https://github.com/danielfullmer/robotnix' 'robotnix'
 
 [code/deploy-rs]
 checkout = git clone 'https://github.com/serokell/deploy-rs' 'deploy-rs'
+fixups = git_add_remotes "
+	dguibert git@github.com:dguibert/deploy-rs.git
+	"
+push = git push -v dguibert +pu
+	      git push -v dguibert
 
 [code/nix-portable]
 checkout = git clone 'https://github.com/DavHau/nix-portable' 'nix-portable'
@@ -687,3 +692,12 @@ checkout = git clone 'https://github.com/hatchet/hatchet' 'hatchet'
 
 [code/sops-nix]
 checkout = git clone 'https://github.com/Mic92/sops-nix' 'sops-nix'
+
+[code/nixpack]
+checkout = git clone 'https://github.com/dguibert/nixpack' 'nixpack'
+fixups = git_add_remotes "
+        flatironinstitute  https://github.com/flatironinstitute/nixpack
+	genji genji:software-cepp-spack/nixpack
+	spartan spartan:software-cepp-spack/nixpack
+	        "
+
