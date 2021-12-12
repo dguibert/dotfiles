@@ -700,4 +700,7 @@ fixups = git_add_remotes "
 	genji genji:software-cepp-spack/nixpack
 	spartan spartan:software-cepp-spack/nixpack
 	        "
+push = git push -v origin +pu
+       git push -v origin
+
 
