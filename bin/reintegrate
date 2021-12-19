@@ -5,7 +5,7 @@ set -xue -o pipefail
 PARENT_BRANCH=${1:-origin/master}
 INT_BRANCH=${2:-pu}
 
-git branch previous/${INT_BRANCH}/$(git describe --always) ${INT_BRANCH}
+git branch previous/${INT_BRANCH}/$(git describe --always ${INT_BRANCH}) ${INT_BRANCH}
 fork_point=$(git merge-base --fork-point ${PARENT_BRANCH} ${INT_BRANCH} || \
              git merge-base ${PARENT_BRANCH} ${INT_BRANCH})
 git rebase --onto ${PARENT_BRANCH} --rebase-merges --interactive $fork_point ${INT_BRANCH}
