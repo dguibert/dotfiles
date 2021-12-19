@@ -33,7 +33,7 @@
     #"nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
     #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
     #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix           = { url  = "github:atpotts/base16-nix"; flake=false; };
+    base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
     gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
 
     nxsession.url           = "github:dguibert/nxsession";
