@@ -18,7 +18,7 @@ rec {
     keep-outputs = true       # Nice for developers
     keep-derivations = true   # Idem
     #extra-sandbox-paths = /opt/intel/licenses=/home/dguibert/nur-packages/secrets?
-    experimental-features = nix-command flakes ca-references ca-derivations recursive-nix
+    experimental-features = nix-command flakes ca-derivations recursive-nix
   '';
     #plugin-files = ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
     #      buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
