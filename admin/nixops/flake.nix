@@ -136,6 +136,7 @@
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
 
+        (import ./roles/robotnix-ota.nix)
         (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
         ./roles/mopidy.nix
         ./roles/sshguard.nix
@@ -371,6 +372,8 @@
           sops.secrets.orsin-ca-intermediatePassword = {
             sopsFile = ./secrets/defaults.yaml;
           };
+          roles.robotnix-ota-server.enable = true;
+          roles.robotnix-ota-server.openFirewall = true;
 
           hardware.pulseaudio = {
             support32Bit = true;
