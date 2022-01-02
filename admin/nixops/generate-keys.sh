@@ -24,6 +24,8 @@ declare -a keys
 #keys+=(missing_key)
 declare -A realms
 realms[titan]="titan,192.168.1.24,10.147.27.24"
+realms[t580]="t580,192.168.1.17,10.147.27.17"
+
 
 # Call getopt to validate the provided input.
 options=$(getopt -o rkf: --long key:,file: -- "$@")
