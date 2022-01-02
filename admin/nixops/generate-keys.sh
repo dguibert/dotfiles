@@ -25,7 +25,8 @@ declare -a keys
 declare -A realms
 realms[titan]="titan,192.168.1.24,10.147.27.24"
 realms[t580]="t580,192.168.1.17,10.147.27.17"
-
+realms[rpi31]="rpi31,192.168.1.13,10.137.27.13"
+realms[rpi41]="rpi41,192.168.1.14,10.147.27.14"
 
 # Call getopt to validate the provided input.
 options=$(getopt -o rkf: --long key:,file: -- "$@")
