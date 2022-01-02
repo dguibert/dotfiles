@@ -14,15 +14,38 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."192.168.1.24" = {
-      listen = [{ addr="192.168.1.24"; port=80; }];
-      #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-      locations."/android".root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+    networking.hosts = {
+      "192.168.1.24" = [ "ota.orsin.net" ];
     };
 
+    services.nginx.enable = true;
+    services.nginx.virtualHosts."ota.orsin.net" = {
+      forceSSL = true;
+      #onlySSL = true;
+      enableACME = true;
+
+      #listen = [
+      #  { addr="192.168.1.24"; port=443; }
+      #];
+      #extraConfig = ''
+      #  rewrite ^/android /android/;
+      #'';
+      #  #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+      locations."/android/" = {
+        root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+        tryFiles = "$uri $uri/ =404";
+        extraConfig = ''
+          rewrite ^/android/ /;
+        '';
+      };
+    };
+
+    security.acme.acceptTerms = true;
+    security.acme.email = "david.guibert+certs@gmail.com";
+    security.acme.server = "https://localhost:9443/acme/acme/directory";
+
     networking.firewall.interfaces.bond0.allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      80
+      80 443
     ];
   };
 }

@@ -184,6 +184,10 @@ in
             {
               type = "ACME";
               name = "acme";
+              claims = {
+                maxTLSCertDuration = "2160h";
+                defaultTLSCertDuration = "2160h";
+              };
             }
             {
               type = "SSHPOP";
