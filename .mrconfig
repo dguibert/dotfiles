@@ -167,6 +167,7 @@ fixups = git_add_remotes "
 update = git remote update
 push = git push -v origin +pu
 	      git push -v origin +pu-cluster
+	      git push -v origin +pu-nixpack
 	      git push -v origin
 
 [code/git-reintegrate]
