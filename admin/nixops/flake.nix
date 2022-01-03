@@ -136,7 +136,8 @@
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
 
-        (import ./roles/robotnix-ota.nix)
+        ./roles/libvirtd.nix
+        ./roles/robotnix-ota.nix
         (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
         ./roles/mopidy.nix
         ./roles/sshguard.nix
@@ -188,7 +189,7 @@
 
       programs.gnupg.agent.pinentryFlavor = "gtk2";
 
-      roles.wireguard-mesh.enable = true;
+      role.wireguard-mesh.enable = true;
       # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
       programs.ssh.knownHosts."*" = {
         certAuthority=true;
@@ -316,6 +317,7 @@
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
+	  role.libvirtd.enable = true;
           #virtualisation.libvirtd.enable = true;
           #virtualisation.anbox.enable = true;
           #services.nfs.server.enable = true;
@@ -325,7 +327,6 @@
           programs.singularity.enable = true;
 
           networking.firewall.checkReversePath = false;
-          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.libvirtd.enable [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
 
           programs.adb.enable = true;
 
@@ -354,26 +355,26 @@
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-          roles.mopidy-server.enable = true;
-          roles.mopidy-server.listenAddress = "192.168.1.24";
-          roles.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
-	  roles.mopidy-server.configuration.m3u = {
+          role.mopidy-server.enable = true;
+          role.mopidy-server.listenAddress = "192.168.1.24";
+          role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
+	  role.mopidy-server.configuration.m3u = {
 	    enabled = true;
 	    playlists_dir = "/home/dguibert/Music/playlists";
-            base_dir = config.roles.mopidy-server.configuration.local.media_dir;
+            base_dir = config.role.mopidy-server.configuration.local.media_dir;
             default_extension = ".m3u8";
           };
-          roles.mopidy-server.configuration.local.scan_follow_symlinks = true;
-          roles.mopidy-server.configuration.iris.country = "FR";
-          roles.mopidy-server.configuration.iris.locale = "FR";
+          role.mopidy-server.configuration.local.scan_follow_symlinks = true;
+          role.mopidy-server.configuration.iris.country = "FR";
+          role.mopidy-server.configuration.iris.locale = "FR";
 
-          roles.tiny-ca.enable = true;
+          role.tiny-ca.enable = true;
           services.step-ca.intermediatePasswordFile = config.sops.secrets.orsin-ca-intermediatePassword.path;
           sops.secrets.orsin-ca-intermediatePassword = {
             sopsFile = ./secrets/defaults.yaml;
           };
-          roles.robotnix-ota-server.enable = true;
-          roles.robotnix-ota-server.openFirewall = true;
+          role.robotnix-ota-server.enable = true;
+          role.robotnix-ota-server.openFirewall = true;
 
           hardware.pulseaudio = {
             support32Bit = true;

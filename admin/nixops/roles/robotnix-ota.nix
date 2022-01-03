@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.roles.tiny-ca;
+  cfg = config.role.tiny-ca;
 in
 {
   # https://smallstep.com/blog/build-a-tiny-ca-with-raspberry-pi-yubikey/
-  options.roles.robotnix-ota-server = {
+  options.role.robotnix-ota-server = {
     enable = lib.mkOption {
       default = false;
       description = "Wether to enable OTA role for robotnix";
