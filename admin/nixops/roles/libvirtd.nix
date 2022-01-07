@@ -4,7 +4,7 @@ let
   cfg = config.role.libvirtd;
 in {
   options.role.libvirtd.enable = lib.mkOption {
-    default = true;
+    default = false;
     description = "Whether to enable libvirtd";
     type = lib.types.bool;
   };
