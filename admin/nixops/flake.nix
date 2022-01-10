@@ -517,7 +517,7 @@
             inputs.self.nixosModules.defaults
           ];
           boot.kernelPackages = pkgs.linuxPackages_latest;
-	  boot.initrd.availableKernelModules = [ "usbhid" "usb_storage" ];
+	  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
 	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
 	  #fileSystems."/".options = [ "defaults" "discard" ];
 
