@@ -516,7 +516,7 @@
             (import ./hosts/rpi41/configuration.nix)
             inputs.self.nixosModules.defaults
           ];
-          boot.kernelPackages = pkgs.linuxPackages_latest;
+          boot.kernelPackages = pkgs.linuxPackages_5_10;
 	  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
 	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
 	  #fileSystems."/".options = [ "defaults" "discard" ];
