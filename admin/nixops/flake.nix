@@ -476,6 +476,7 @@
 
           documentation.nixos.enable = false;
 	  #fileSystems."/".options = [ "defaults" "discard" ];
+	  services.fstrim.enable = true;
 
           programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
           #assertions = lib.singleton {
@@ -519,7 +520,8 @@
           boot.kernelPackages = pkgs.linuxPackages_5_10;
 	  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
 	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
-	  #fileSystems."/".options = [ "defaults" "discard" ];
+          #fileSystems."/".options = [ "defaults" "discard" ];
+	  services.fstrim.enable = true;
 
           boot.loader.generic-extlinux-compatible.enable = true;
           boot.loader.generic-extlinux-compatible.configurationLimit = 10;
