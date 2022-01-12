@@ -24,21 +24,25 @@ in
       #onlySSL = true;
       enableACME = true;
 
+      root = "/var/www/ota.orsin.net";
       #listen = [
       #  { addr="192.168.1.24"; port=443; }
       #];
-      #extraConfig = ''
+      extraConfig = ''
       #  rewrite ^/android /android/;
-      #'';
+        autoindex on;
+        autoindex_exact_size off;
+      '';
       #  #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-      locations."/android/" = {
-        root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-        tryFiles = "$uri $uri/ =404";
-        extraConfig = ''
-          rewrite ^/android/ /;
-        '';
-      };
+      #locations."/android/" = {
+      #  root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+      #  tryFiles = "$uri $uri/ =404";
+      #  extraConfig = ''
+      #    rewrite ^/android/ /;
+      #  '';
+      #};
     };
+    systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
 
     security.acme.acceptTerms = true;
     security.acme.email = "david.guibert+certs@gmail.com";
