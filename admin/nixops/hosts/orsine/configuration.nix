@@ -219,7 +219,7 @@ rec {
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
   # ca.desrt.dconf was not provided by any .service files
-  services.dbus.packages = with pkgs; [ gnome3.dconf ];
+  services.dbus.packages = with pkgs; [ pkgs.dconf ];
 
   ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61NHVC1-part9
   ## /dev/disk/by-id/ata-WDC_WD10TMVV-11TK7S1_WD-WXL1E61PEJW5-part9

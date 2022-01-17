@@ -95,7 +95,7 @@ in {
 
     programs.dconf.enable = true;
     environment.systemPackages = with pkgs; [
-      gnome3.dconf
+      pkgs.dconf
       pavucontrol
       pamixer
       paprefs
