@@ -570,7 +570,7 @@ let
           jrnl
           pandoc
 
-          (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update pass-otp pass-import ]))
+          (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update pass-otp pass-import pass-checkup ]))
           gitAndTools.git-credential-password-store
 
           perlPackages.GitAutofixup
