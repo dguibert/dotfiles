@@ -136,6 +136,7 @@
         ./modules/wireguard-mesh.nix
         ./modules/report-changes.nix
 
+        ./roles/dns.nix
         ./roles/libvirtd.nix
         ./roles/robotnix-ota.nix
         (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
