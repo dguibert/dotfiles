@@ -525,11 +525,11 @@
           #fileSystems."/".options = [ "defaults" "discard" ];
 	  services.fstrim.enable = true;
 
-          boot.loader.generic-extlinux-compatible.enable = true;
+	  ##boot.loader.generic-extlinux-compatible.enable = true;
           boot.loader.generic-extlinux-compatible.configurationLimit = 10;
-          boot.loader.raspberryPi.uboot.enable = true;
-          boot.loader.raspberryPi.enable = true;
-          boot.loader.raspberryPi.version = 4;
+          #boot.loader.raspberryPi.uboot.enable = false;
+          #boot.loader.raspberryPi.enable = true;
+          #boot.loader.raspberryPi.version = 4;
 
           nixpkgs.overlays = [
             inputs.nix.overlay
