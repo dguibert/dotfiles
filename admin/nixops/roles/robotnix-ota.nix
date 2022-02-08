@@ -29,6 +29,8 @@ in
       #  { addr="192.168.1.24"; port=443; }
       #];
       extraConfig = ''
+        ssl_protocols       TLSv1.2 TLSv1.3;
+	ssl_ciphers         HIGH:!aNULL:!MD5;
       #  rewrite ^/android /android/;
         autoindex on;
         autoindex_exact_size off;
