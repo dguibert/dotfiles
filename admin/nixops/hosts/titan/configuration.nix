@@ -38,6 +38,7 @@ rec {
   fileSystems."/home_nfs/bguibertd/nix"             = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; };
   fileSystems."/home_nfs_robin_ib/bguibertd/nix"    = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; };
   fileSystems."/p/project/prcoe08/guibert1/nix"     = { device = "icybox1/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; };
+  fileSystems."/cluster/projects/nn9560k/dguibert"  = { device = "icybox1/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; };
 
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
