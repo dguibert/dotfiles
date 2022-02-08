@@ -55,7 +55,7 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = inputs: let
+  outputs = { self , ...}@inputs: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
         import inputs.nixpkgs {
@@ -286,8 +286,17 @@
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
         })
-        ({ ... }: {
+        ({ lib, ... }: {
           networking.wireless.interfaces = [ "wlan0" ];
+        })
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            (pkgs.writeScriptBin "nixos-install-t580" ''
+              #!${pkgs.stdenv.shell}
+              set -eux -o pipefail
+              nixos-install --system ${self.nixosConfigurations.t580.config.system.build.toplevel}
+	      '')
+          ];
         })
       ];
     };
