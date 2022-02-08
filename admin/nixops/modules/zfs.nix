@@ -5,7 +5,7 @@
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";
-  services.zfs.trim.enable = false;
+  services.zfs.trim.enable = true;
 
   boot.kernelParams = [ "elevator=none" ];
   boot.extraModprobeConfig = ''

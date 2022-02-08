@@ -67,7 +67,7 @@ let
   '';
 
   # T580
-  # zpool create -o ashift=12 -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD -O xattr=sa -O mountpoint=/ -R /mnt -f rt580 /dev/nvme0n1p6
+  # zpool create -o ashift=12 -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD -O xattr=sa -O aclinherit=passthrough -O recordsize=1M -O mountpoint=/ -O dnodesize=auto -R /mnt -f rt580 /dev/disk/by-id/nvme-INTEL_SSDPEKKF256G8L_BTHP93731V6V256B-part7
   # fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
   # fileSystems."/boot" = { device = "/dev/disk/by-uuid/FE98-E8BD"; fsType = "vfat"; };
   # fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot=true; };
@@ -94,6 +94,9 @@ let
   # mount -t zfs rt580/safe/persist /mnt/persist
 
   # nixos-install --system /nix/store/87wcv7a9zg06jf7yih2n3s9xvw60l2al-nixos-system-t580-21.03.20210107.d92c727
+  # sops --extract '["ssh_host_ed25519_key"]' -d hosts/t580/secrets/secrets.yaml | ssh root@192.168.1.18 tee /mnt/persist/etc/ssh/ssh_host_ed25519_key
+  # sops --extract '["ssh_host_rsa_key"]' -d hosts/t580/secrets/secrets.yaml | ssh root@192.168.1.18 tee /mnt/persist/etc/ssh/ssh_host_rsa_key
+  # ssh root@192.168.1.18 mkdir /mnt/persist/etc/ssh/
 
   ## https://grahamc.com/blog/erase-your-darlings
   #boot.initrd.postDeviceCommands = lib.mkAfter ''

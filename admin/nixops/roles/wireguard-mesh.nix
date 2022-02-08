@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.roles.wireguard-mesh;
+  cfg = config.role.wireguard-mesh;
 
   readWgPub = file: builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile file);
 in {
   options = {
-    roles.wireguard-mesh = {
+    role.wireguard-mesh = {
       enable = lib.mkOption {
         default = false;
         description = "Enable to be part of this wiregard-mesh network";

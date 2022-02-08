@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.roles.tiny-ca;
+  cfg = config.role.tiny-ca;
 in
 {
   # https://smallstep.com/blog/build-a-tiny-ca-with-raspberry-pi-yubikey/
-  options.roles.robotnix-ota-server = {
+  options.role.robotnix-ota-server = {
     enable = lib.mkOption {
       default = false;
       description = "Wether to enable OTA role for robotnix";
@@ -24,21 +24,27 @@ in
       #onlySSL = true;
       enableACME = true;
 
+      root = "/var/www/ota.orsin.net";
       #listen = [
       #  { addr="192.168.1.24"; port=443; }
       #];
-      #extraConfig = ''
+      extraConfig = ''
+        ssl_protocols       TLSv1.2 TLSv1.3;
+	ssl_ciphers         HIGH:!aNULL:!MD5;
       #  rewrite ^/android /android/;
-      #'';
+        autoindex on;
+        autoindex_exact_size off;
+      '';
       #  #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-      locations."/android/" = {
-        root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-        tryFiles = "$uri $uri/ =404";
-        extraConfig = ''
-          rewrite ^/android/ /;
-        '';
-      };
+      #locations."/android/" = {
+      #  root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+      #  tryFiles = "$uri $uri/ =404";
+      #  extraConfig = ''
+      #    rewrite ^/android/ /;
+      #  '';
+      #};
     };
+    systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
 
     security.acme.acceptTerms = true;
     security.acme.email = "david.guibert+certs@gmail.com";

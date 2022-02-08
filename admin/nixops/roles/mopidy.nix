@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.roles.mopidy-server;
+  cfg = config.role.mopidy-server;
 
   silence_mp3 = pkgs.fetchurl {
     url = "https://github.com/anars/blank-audio/blob/master/500-milliseconds-of-silence.mp3";
@@ -16,7 +16,7 @@ let
   '';
 in {
   options = {
-    roles.mopidy-server = {
+    role.mopidy-server = {
       enable = mkEnableOption "Enable a mopidy server";
       listenAddress = mkOption {
         type = types.str;
@@ -38,7 +38,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    roles.mopidy-server.configuration = {
+    role.mopidy-server.configuration = {
       audio = {
         mixer = "software";
         mixer_volume = "";
@@ -95,7 +95,7 @@ in {
 
     programs.dconf.enable = true;
     environment.systemPackages = with pkgs; [
-      gnome3.dconf
+      pkgs.dconf
       pavucontrol
       pamixer
       paprefs
@@ -125,8 +125,8 @@ in {
     ];
     networking.firewall.interfaces.bond0.allowedTCPPorts = [
       1900
-      config.roles.mopidy-server.configuration.mpd.port
-      config.roles.mopidy-server.configuration.http.port
+      config.role.mopidy-server.configuration.mpd.port
+      config.role.mopidy-server.configuration.http.port
       8000 /* stream */
       4317 /* module-native-protocol-tcp will use 4317/tcp port to handle connections */
       #config.services.upmpdcli.configuration.upnpport

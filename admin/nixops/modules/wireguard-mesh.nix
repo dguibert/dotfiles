@@ -69,13 +69,19 @@ in {
         in nameValuePair "${n}" {
         ips = [
           cfg.peers."${config.networking.hostName}".ipv4Address
+          # Assign an IPv6 link local address on the tunnel so multicast works
           cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
         ];
         listenPort = peer.listenPort;
         allowedIPsAsRoutes=false;
         privateKeyFile = cfg.privateKeyFile;
         peers = [
-          { allowedIPs = [ "0.0.0.0/0" "ff02::/16" "::/0" ];
+          { allowedIPs = [ "0.0.0.0/0"
+              #"ff02::/16"
+              "::/0"
+              # The Babel protocol uses IPv6 link-local unicast and multicast addresses
+              "fe80::/64" "ff02::1:6/128"
+            ];
             publicKey  = peer.publicKey;
             endpoint   = mkIf (peer ? endpoint) peer.endpoint;
             persistentKeepalive = mkIf (peer ? persistentKeepalive) peer.persistentKeepalive;
@@ -88,11 +94,14 @@ in {
       type = "tunnel";
       "split-horizon" = true;
     };
+    # https://www.kepstin.ca/blog/babel-routing-over-wireguard-for-the-tubes/
     services.babeld.extraConfig = ''
       ${concatMapStrings (n: ''
         interface ${n}
       '') peerNames}
       skip-kernel-setup true
+      # Prefer using unicast messages over the tunnel
+      default unicast true
       # mesh IPv4
       redistribute local ip 10.147.27.0/24 metric 128
       redistribute ip 10.147.27.0/24 ge 13 metric 128

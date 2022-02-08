@@ -1,11 +1,11 @@
 { sopsDecrypt_ }:
 { config, lib, pkgs, ... }:
 let
-  cfg = config.roles.tiny-ca;
+  cfg = config.role.tiny-ca;
 in
 {
   # https://smallstep.com/blog/build-a-tiny-ca-with-raspberry-pi-yubikey/
-  options.roles.tiny-ca = {
+  options.role.tiny-ca = {
     enable = lib.mkOption {
       default = false;
       description = "Wether to enable tiny-ca role";
