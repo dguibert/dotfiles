@@ -179,9 +179,9 @@
       '';
       nix.systemFeatures = [ "recursive-nix" ] ++ # default
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-	lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
-	  "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
-	] ++
+        lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
+          "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
+        ] ++
         lib.optionals (pkgs.hostPlatform ? gcc.arch) (
           # a builder can run code for `gcc.arch` and inferior architectures
           [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
@@ -217,7 +217,7 @@
       '';
       services.openssh.hostKeys = [
         {
-	  #path = config.sops.secrets."ssh_host_ed25519_key".path;
+          #path = config.sops.secrets."ssh_host_ed25519_key".path;
           path = "/persist/etc/ssh/ssh_host_ed25519_key";
           type = "ed25519";
         }
@@ -295,7 +295,7 @@
               #!${pkgs.stdenv.shell}
               set -eux -o pipefail
               nixos-install --system ${self.nixosConfigurations.t580.config.system.build.toplevel}
-	      '')
+              '')
           ];
         })
       ];
@@ -305,8 +305,8 @@
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem = {
-	    #gcc.arch = "broadwell"; #E5-2690v4
-	    #gcc.tune = "broadwell";
+            #gcc.arch = "broadwell"; #E5-2690v4
+            #gcc.tune = "broadwell";
             system = "x86_64-linux";
           };
           imports = [
@@ -327,7 +327,7 @@
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
-	  role.libvirtd.enable = true;
+          role.libvirtd.enable = true;
           #virtualisation.libvirtd.enable = true;
           #virtualisation.anbox.enable = true;
           #services.nfs.server.enable = true;
@@ -368,9 +368,9 @@
           role.mopidy-server.enable = true;
           role.mopidy-server.listenAddress = "192.168.1.24";
           role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
-	  role.mopidy-server.configuration.m3u = {
-	    enabled = true;
-	    playlists_dir = "/home/dguibert/Music/playlists";
+          role.mopidy-server.configuration.m3u = {
+            enabled = true;
+            playlists_dir = "/home/dguibert/Music/playlists";
             base_dir = config.role.mopidy-server.configuration.local.media_dir;
             default_extension = ".m3u8";
           };
@@ -486,8 +486,8 @@
           ];
 
           documentation.nixos.enable = false;
-	  #fileSystems."/".options = [ "defaults" "discard" ];
-	  services.fstrim.enable = true;
+          #fileSystems."/".options = [ "defaults" "discard" ];
+          services.fstrim.enable = true;
 
           programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
           #assertions = lib.singleton {
@@ -529,12 +529,12 @@
             inputs.self.nixosModules.defaults
           ];
           boot.kernelPackages = pkgs.linuxPackages_5_10;
-	  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
-	  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
+          boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
+          boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
           #fileSystems."/".options = [ "defaults" "discard" ];
-	  services.fstrim.enable = true;
+          services.fstrim.enable = true;
 
-	  ##boot.loader.generic-extlinux-compatible.enable = true;
+          ##boot.loader.generic-extlinux-compatible.enable = true;
           boot.loader.generic-extlinux-compatible.configurationLimit = 10;
           #boot.loader.raspberryPi.uboot.enable = false;
           #boot.loader.raspberryPi.enable = true;
@@ -592,8 +592,8 @@
       modules = [
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem = {
-	    #gcc.arch = "skylake"; #kabylake
-	    #gcc.tune = "skylake"; #kabylake
+            #gcc.arch = "skylake"; #kabylake
+            #gcc.tune = "skylake"; #kabylake
             system = "x86_64-linux";
           };
           imports = [
