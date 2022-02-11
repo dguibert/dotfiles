@@ -24,6 +24,10 @@ rec {
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.extraModprobeConfig = ''
+    # 24G
+    options zfs zfs_arc_max=25769803776
+  '';
 
   fileSystems."/"                                   = { device = "icybox1/local/root"; fsType = "zfs"; };
   fileSystems."/nix"                                = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
