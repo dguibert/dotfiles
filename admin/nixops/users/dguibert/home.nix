@@ -567,7 +567,6 @@ let
         ];
 
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
-          jrnl
           pandoc
 
           (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update pass-otp pass-import pass-checkup ]))
