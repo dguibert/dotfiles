@@ -48,10 +48,11 @@ rec {
   boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
     "elevator=none" "loglevel=6"
     "resume=/dev/nvme0n1p1"
+    "resume=/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"
     #"add_efi_memmap"
     #"acpi_osi="
   ];
-  swapDevices = [ { device="/dev/nvme0n1p1"; } ];
+  swapDevices = [ { device="/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"; } ];
 
   nix.maxJobs = lib.mkDefault 8;
   nix.buildCores = lib.mkDefault 24;
