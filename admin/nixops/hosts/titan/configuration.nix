@@ -28,6 +28,7 @@ rec {
     # 24G
     options zfs zfs_arc_max=25769803776
   '';
+  boot.extraModprobeConfig = config.boot.initrd.extraModprobeConfig;
 
   fileSystems."/"                                   = { device = "icybox1/local/root"; fsType = "zfs"; };
   fileSystems."/nix"                                = { device = "icybox1/local/nix"; fsType = "zfs"; neededForBoot=true; };
