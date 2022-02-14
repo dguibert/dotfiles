@@ -71,6 +71,21 @@
         "type": "github"
       }
     },
+    "emacs-overlay": {
+      "locked": {
+        "lastModified": 1644863141,
+        "narHash": "sha256-JZaH9yydRtK25WOuuw2/koyh6OWNTdtKl+V13F50ZzE=",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "4079646746c264818338cd2733f38c33050f821f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -324,6 +339,7 @@
         "base16-nix": "base16-nix",
         "deploy-rs": "deploy-rs",
         "dwm-src": "dwm-src",
+        "emacs-overlay": "emacs-overlay",
         "flake-utils": "flake-utils",
         "gitignore": "gitignore",
         "home-manager": "home-manager",

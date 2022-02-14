@@ -51,6 +51,7 @@
     # only needed if you use as a package set:
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     #nixpkgs-wayland.inputs.master.follows = "master";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
   };
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -68,6 +69,7 @@
             #nur_dguibert_envs.overlay
             inputs.self.overlay
             inputs.nxsession.overlay
+            inputs.emacs-overlay.overlay
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
