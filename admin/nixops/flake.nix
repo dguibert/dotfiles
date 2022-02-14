@@ -166,6 +166,7 @@
         #nur_dguibert_envs.overlay
         inputs.self.overlay
         inputs.nxsession.overlay
+        inputs.emacs-overlay.overlay
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
