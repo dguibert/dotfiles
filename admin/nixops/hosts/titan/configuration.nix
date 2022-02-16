@@ -215,7 +215,7 @@ rec {
   boot.zfs.extraPools = [ "st4000dm004-1" ];
 
   services.syncoid = {
-    enable = true;
+    enable = false;
     #sshKey = "/root/.ssh/id_ecdsa";
     commonArgs = [ "--no-sync-snap" "--debug" /*"--create-bookmark"*/ ];
     #commands."pool/test".target = "root@target:pool/test";
