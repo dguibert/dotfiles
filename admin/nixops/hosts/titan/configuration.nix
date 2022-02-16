@@ -27,6 +27,12 @@ rec {
   boot.initrd.extraModprobeConfig = ''
     # 24G
     options zfs zfs_arc_max=25769803776
+    options zfs zfs_vdev_scheduler="none"
+    # use the prefetch method
+    options zfs zfs_prefetch_disable=0
+
+    options zfs zfs_dirty_data_max_percent=40
+    options zfs zfs_txg_timeout=15
   '';
   boot.extraModprobeConfig = config.boot.initrd.extraModprobeConfig;
 
