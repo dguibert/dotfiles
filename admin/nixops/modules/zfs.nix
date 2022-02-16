@@ -5,7 +5,7 @@
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoScrub.interval = "monthly";
-  services.zfs.trim.enable = true;
+  services.zfs.trim.enable = false; # per zpool?
 
   boot.kernelParams = [ "elevator=none" ];
   # 64GB  = 68719476736
