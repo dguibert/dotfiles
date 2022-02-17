@@ -73,11 +73,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1644863141,
-        "narHash": "sha256-JZaH9yydRtK25WOuuw2/koyh6OWNTdtKl+V13F50ZzE=",
+        "lastModified": 1645067062,
+        "narHash": "sha256-8RVN/vOtaZYXKz7UAJEUISni2ZdmEF6X9BkfSl7wi1g=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "4079646746c264818338cd2733f38c33050f821f",
+        "rev": "9fb18d58b0072db9ef1d2488401bf69c66d4376d",
         "type": "github"
       },
       "original": {
@@ -218,12 +218,13 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1644740429,
-        "narHash": "sha256-0VZX8lhkB8Jsnm5sALk5hrD257Krx8LJ60jUIEvq0uY=",
-        "owner": "dguibert",
-        "repo": "nixpkgs",
-        "rev": "080d25bdbdaaef246e1a2b4baae2ce4e619749c8",
-        "type": "github"
+        "lastModified": 1645046122,
+        "narHash": "sha256-vRMCyH9ow9VYgpStUMxxiHwLXYiFbz94m2vE49dfVKQ=",
+        "ref": "pu",
+        "rev": "cc2414b454fc86a086d2c7e36741be761c57b2bf",
+        "revCount": 354368,
+        "type": "git",
+        "url": "file:///home/dguibert/code/nixpkgs"
       },
       "original": {
         "owner": "dguibert",
@@ -271,11 +272,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1644823855,
-        "narHash": "sha256-SbeJW+sqS83dtK+d216OZ1KjuXlsS3I/DwqfyWyvsuI=",
+        "lastModified": 1645075650,
+        "narHash": "sha256-1SKmssTjm1FFcQ0uP6kTR8yAdL1q883qC7aWmRKRHuw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "a530239ad525d681d977c65ecbc11b42a3cf4be0",
+        "rev": "bc8d5b8cda77bf9660152b3c781478d5759e5450",
         "type": "github"
       },
       "original": {
