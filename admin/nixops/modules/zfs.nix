@@ -7,7 +7,7 @@
   services.zfs.autoScrub.interval = "monthly";
   services.zfs.trim.enable = false; # per zpool?
 
-  boot.kernelParams = [ "elevator=none" ];
+  #boot.kernelParams = [ "elevator=none" ];
   # 64GB  = 68719476736
   # 32GB  = 34359738368
   # 24GB  = 25769803776
