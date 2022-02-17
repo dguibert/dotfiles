@@ -56,9 +56,17 @@ rec {
   system.fsPackages = [ pkgs.fuse-migratefs ];
   boot.initrd.kernelModules = [ "fuse" ];
   boot.initrd.extraUtilsCommands = ''
+    copy_bin_and_libs ${pkgs.fuse}/sbin/mount.fuse
     copy_bin_and_libs ${pkgs.fuse-migratefs}/bin/migratefs
     ln -sv $out/bin/migratefs $out/bin/mount.migratefs
     ln -sv $out/bin/migratefs $out/bin/mount.fuse.migratefs
+  '';
+  # from unionfs-fuse.nix
+  boot.initrd.postDeviceCommands = ''
+    # Hacky!!! fuse hard-codes the path to mount
+    mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
+    ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
+    ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
   '';
 
   fileSystems."/"                                   = { device = "icybox1/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
@@ -81,7 +89,9 @@ rec {
   fileSystems."/home/dguibert/Videos"               = migrate "/mnt/old/home/dguibert/Videos" "/mnt/new/home/dguibert/Videos";
   fileSystems."/home/dguibert/Maildir/.notmuch"     = migrate "/mnt/old/home/dguibert/Maildir/.notmuch" "/mnt/new/home/dguibert/Maildir/.notmuch";
 
-  fileSystems."/persist"                            = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
+  fileSystems."/mnt/new/persist"                            = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
+  fileSystems."/mnt/old/persist"                            = { device = "icybox1/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
+  fileSystems."/persist" = (migrate "/mnt/old/persist" "/mnt/new/persist") // { neededForBoot=true; };
 
   fileSystems."/boot/efi"                           = { label = "EFI1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ]; };
   fileSystems."/tmp"                                = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=50G" ]; neededForBoot=true; };
