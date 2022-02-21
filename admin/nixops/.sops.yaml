@@ -1,8 +1,10 @@
 keys:
 - &dguibert        3198EB02EB0EEC85FE5BF6AC4E6EE5C219FDD513
+- &dguibert_titan  age1gthhn69gtgn8gsvv58xqu9vxfnczl68kktm64638xfv5j3qm4grqeuw0h4
 - &titan           CC55AD556CF16A9254593FF0C87E00A6B869DE96
 #rpi41           00064376b1bf4617928161cd5b5318afcd030f01 (20201218)
 - &rpi41           00064376b1bf4617928161cd5b5318afcd030f01
+- &rpi41_age       age1lml6xd6l7ntypmtmv7rsqxzguln5puynzlv2yf3k99hrr48l3ppq6nw3t3
 - &rpi31           F7368E72F15D95927F685CD0A264BDA92AE79515
 - &t580  CE0DA0A123AA2DC1E7AA38E0011B75E24664FD1E
 creation_rules:
@@ -25,6 +27,7 @@ creation_rules:
     - pgp:
       - *dguibert
       - *rpi41
+      - *rpi41_age
   # dguibert
   # rpi31
   - path_regex: hosts/rpi31/secrets/[^/]+\.yaml$
@@ -46,6 +49,7 @@ creation_rules:
       - *dguibert
       - *titan
       - *rpi41
+      - *rpi41_age
       - *rpi31
       - *t580
   - path_regex: ./users/dguibert/[^/]+-sec\.el$
@@ -54,6 +58,7 @@ creation_rules:
         - *dguibert
         - *titan
         - *rpi41
+        - *rpi41_age
         - *rpi31
         - *t580
 
