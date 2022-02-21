@@ -21,7 +21,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     #sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur_dguibert.url     = "github:dguibert/nur-packages/master";
+    nur_dguibert.url     = "github:dguibert/nur-packages/pu";
     nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
     nur_dguibert.inputs.nix.follows = "nix";
     nur_dguibert.inputs.flake-utils.follows = "flake-utils";
