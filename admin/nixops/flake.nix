@@ -4,55 +4,54 @@
 
   # To update all inputs:
   # $ nix flake update --recreate-lock-file
-  inputs = {
-    home-manager. url    = "github:dguibert/home-manager/pu";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.home-manager. url    = "github:dguibert/home-manager/pu";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    hydra.url            = "github:dguibert/hydra/pu";
-    hydra.inputs.nix.follows = "nix";
-    hydra.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.hydra.url            = "github:dguibert/hydra/pu";
+  inputs.hydra.inputs.nix.follows = "nix";
+  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.url          = "github:dguibert/nixpkgs/pu";
+  inputs.nixpkgs.url          = "github:dguibert/nixpkgs/pu";
 
-    nix.url              = "github:dguibert/nix/pu";
-    nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nix.url              = "github:dguibert/nix/pu";
+  inputs.nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur.url = "github:nix-community/NUR";
-    sops-nix.url = "github:Mic92/sops-nix";
-    #sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nur.url = "github:nix-community/NUR";
+  inputs.sops-nix.url = "github:Mic92/sops-nix";
+  #inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur_dguibert.url     = "github:dguibert/nur-packages/pu";
-    nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
-    nur_dguibert.inputs.nix.follows = "nix";
-    nur_dguibert.inputs.flake-utils.follows = "flake-utils";
-    #nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
-    #nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
-    #nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
-    #nur_dguibert_envs.inputs.nix.follows     = "nix";
-    terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
-    #"nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
-    gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
+  inputs.nur_dguibert.url     = "github:dguibert/nur-packages/pu";
+  inputs.nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nur_dguibert.inputs.nix.follows = "nix";
+  inputs.nur_dguibert.inputs.flake-utils.follows = "flake-utils";
 
-    nxsession.url           = "github:dguibert/nxsession";
-    nxsession.inputs.nixpkgs.follows = "nixpkgs";
-    nxsession.inputs.flake-utils.follows = "flake-utils";
+  #inputs.nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
+  #inputs.nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
+  #inputs.nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nur_dguibert_envs.inputs.nix.follows     = "nix";
+  inputs.terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
+  #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
+  #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
+  #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
+  inputs.base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
+  inputs.gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
 
-    dwm-src.url = "github:dguibert/dwm/pu";        dwm-src.flake = false;
-    st-src.url  = "github:dguibert/st/pu";         st-src.flake = false;
+  inputs.nxsession.url           = "github:dguibert/nxsession";
+  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
 
-    # For accessing `deploy-rs`'s utility Nix functions
-    deploy-rs.url = "github:serokell/deploy-rs";
-    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
+  inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
 
-    nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
-    # only needed if you use as a package set:
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    #nixpkgs-wayland.inputs.master.follows = "master";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-  };
+  # For accessing `deploy-rs`'s utility Nix functions
+  inputs.deploy-rs.url = "github:serokell/deploy-rs";
+  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
+  # only needed if you use as a package set:
+  inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nixpkgs-wayland.inputs.master.follows = "master";
+  inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
