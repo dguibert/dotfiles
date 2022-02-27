@@ -19,11 +19,12 @@
       HostName 192.168.1.14
       Port 22322
   '';
-  nix = {
-    trustedUsers = [ "nixBuild" "dguibert" ];
+  nix.settings = {
+    trusted-users = [ "nixBuild" "dguibert" ];
+  };
     # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
-    distributedBuilds = true;
-    buildMachines = [
+  nix.distributedBuilds = true;
+  nix.buildMachines = [
     #(lib.mkIf (config.networking.hostName != "rpi31") {
     #  hostName = "rpi31";
     #  maxJobs = 1;
@@ -42,8 +43,7 @@
       supportedFeatures = [ "big-parallel" ];
     })
     ];
-  };
 
-  nix.binaryCachePublicKeys = [ "titan:dkOH0pvwo9CQMDs/H/Rs4HYEePVmwPf0/uSQi9ZmjxE=" ];
-  nix.trustedBinaryCaches = [ "ssh-ng://titan" ];
+  nix.settings.binary-cache-public-keys = [ "titan:dkOH0pvwo9CQMDs/H/Rs4HYEePVmwPf0/uSQi9ZmjxE=" ];
+  nix.settings.trusted-binary-caches = [ "ssh-ng://titan" ];
 }

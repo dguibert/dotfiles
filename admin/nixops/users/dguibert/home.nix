@@ -192,7 +192,7 @@ let
         bc
         unzip
 
-        sshfsFuse
+        sshfs-fuse
 
         moreutils
         jq

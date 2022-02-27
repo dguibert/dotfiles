@@ -51,7 +51,8 @@
   # only needed if you use as a package set:
   inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
-  inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
@@ -179,7 +180,7 @@
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
         export NIX_OPTIONS
       '';
-      nix.systemFeatures = [ "recursive-nix" ] ++ # default
+      nix.settings.system-features = [ "recursive-nix" ] ++ # default
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
         lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
           "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"

@@ -76,7 +76,7 @@
     extraArgs = [ "--verbose" ];
   };
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix.settings.max-jobs = lib.mkDefault 8;
 
   services.xserver.libinput.enable = lib.mkDefault true;
   hardware.trackpoint.enable = lib.mkDefault true;
