@@ -51,7 +51,8 @@
   # only needed if you use as a package set:
   inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
-  inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
