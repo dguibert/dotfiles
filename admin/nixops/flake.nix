@@ -179,7 +179,7 @@
         NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
         export NIX_OPTIONS
       '';
-      nix.systemFeatures = [ "recursive-nix" ] ++ # default
+      nix.settings.system-features = [ "recursive-nix" ] ++ # default
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
         lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
           "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"

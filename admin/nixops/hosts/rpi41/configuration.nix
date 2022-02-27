@@ -48,7 +48,7 @@ rec {
 
   environment.systemPackages = [ pkgs.vim ];
 
-  nix.maxJobs = 4;
+  nix.settings.max-jobs = 4;
 
   networking.useNetworkd = lib.mkForce false;
   networking.dhcpcd.enable = false;

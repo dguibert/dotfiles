@@ -46,7 +46,7 @@ rec {
 
   swapDevices = [ { device = "/dev/sda2"; } ];
 
-  nix.maxJobs = 2;
+  nix.settings.max-jobs = 2;
 
   hardware.trackpoint.enable = true;
   hardware.trackpoint.emulateWheel = true;

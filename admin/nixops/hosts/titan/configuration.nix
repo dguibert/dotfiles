@@ -150,8 +150,8 @@ rec {
     #{ device="/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"; }
   ];
 
-  nix.maxJobs = lib.mkDefault 8;
-  nix.buildCores = lib.mkDefault 24;
+  nix.settings.max-jobs = lib.mkDefault 8;
+  nix.settings.build-cores = lib.mkDefault 24;
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   boot.loader.systemd-boot.enable = true;
