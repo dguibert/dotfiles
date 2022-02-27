@@ -135,7 +135,7 @@ rec {
 
   hardware.pulseaudio = {
     enable = true;
-    package = pkgs.pulseaudioLight.override {
+    package = pkgs.pulseaudio.override {
       /*gconf = gnome3.gconf;*/
       x11Support = true;
       /*gconfSupport = true;*/
