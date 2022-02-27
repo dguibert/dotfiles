@@ -25,7 +25,7 @@ in {
       setuid=true;
       owner = "root";
       group = "root";
-      source = "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper";
+      source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
     };
 
     programs.dconf.enable = true;
