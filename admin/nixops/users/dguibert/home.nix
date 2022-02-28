@@ -686,6 +686,7 @@ let
           xautolock = {
             enable = true;
             detectSleep = true;
+            extraOptions = [ "-corners 0+0-" "-cornersize 30" ]; # top left, top right, bottom left, bottom right
           };
         };
         home.file.".conkyrc".text = ''
