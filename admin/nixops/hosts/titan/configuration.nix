@@ -327,12 +327,13 @@ rec {
   boot.zfs.extraPools = [ "st4000dm004-1" ];
 
   services.syncoid = {
-    enable = false;
+    enable = true;
     #sshKey = "/root/.ssh/id_ecdsa";
     commonArgs = [ "--no-sync-snap" "--debug" /*"--create-bookmark"*/ ];
     #commands."pool/test".target = "root@target:pool/test";
-    commands."icybox1/safe".target = "st4000dm004-1/backup/icybox1/safe";
-    commands."icybox1/safe".recursive = true;
+    commands."rpool_vanif0/local/root".target = "st4000dm004-1/backup/rpool_vanif0/local/root";
+    commands."rpool_vanif0/safe".target = "st4000dm004-1/backup/rpool_vanif0/safe";
+    commands."rpool_vanif0/safe".recursive = true;
   };
 
 }
