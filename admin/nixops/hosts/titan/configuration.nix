@@ -97,13 +97,13 @@ rec {
   fileSystems."/mnt/old/persist"                            = { device = "icybox1/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
   #fileSystems."/persist" = (migrate "/mnt/old/persist" "/mnt/new/persist") // { neededForBoot=true; };
 
-  fileSystems."/boot/efi"                           = { label = "EFI1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ]; };
-  fileSystems."/boot/efi1" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi4" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part4"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi1"                           = { label = "EFI1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ]; };
+  fileSystems."/boot/efi"  = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi4" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
 
   fileSystems."/tmp"                                = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=50G" ]; neededForBoot=true; };
   #fileSystems."/tmp"                                = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
