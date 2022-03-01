@@ -69,7 +69,7 @@ rec {
     ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
 
     # https://grahamc.com/blog/erase-your-darlings
-    zfs rollback -r rpool_vanif0/local/root@blank
+    #zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
   fileSystems."/mnt/old-root"                       = { device = "icybox1/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
