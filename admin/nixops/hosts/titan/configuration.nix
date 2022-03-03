@@ -105,8 +105,9 @@ rec {
   fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
   fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
 
-  fileSystems."/tmp"                                = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=50G" ]; neededForBoot=true; };
-  #fileSystems."/tmp"                                = { device="icybox1/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
+  #fileSystems."/tmp"                                = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=50G" ]; neededForBoot=true; };
+  # to build robotnix more thant 100G are needed
+  fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
   fileSystems."/mnt/old/home_nfs/bguibertd/nix"             = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/mnt/old/home_nfs_robin_ib/bguibertd/nix"    = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/mnt/old/p/project/prcoe08/guibert1/nix"     = { device = "icybox1/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
