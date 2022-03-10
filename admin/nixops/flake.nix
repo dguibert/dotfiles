@@ -53,6 +53,7 @@
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
+  inputs.chemacs.url = "github:plexus/chemacs2"; inputs.chemacs.flake = false;
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 

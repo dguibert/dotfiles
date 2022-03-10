@@ -651,7 +651,13 @@ let
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
         ];
-        home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        home.file.".emacs.d".source = inputs.chemacs;
+        home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/site-lisp";
+        home.file.".emacs-profiles.el".text = ''
+          (("default" . ((user-emacs-directory . "~/.emacs.default"))))
+        '';
         programs.emacs.enable = true;
         programs.emacs.package = pkgs.my-emacs;
         services.emacs.enable = true;
