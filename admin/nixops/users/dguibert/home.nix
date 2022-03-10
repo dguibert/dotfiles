@@ -653,8 +653,8 @@ let
         ];
         #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
         home.file.".emacs.d".source = inputs.chemacs;
-        home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
-        home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/site-lisp";
+        home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
+        home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
         home.file.".emacs-profiles.el".text = ''
           (("default" . ((user-emacs-directory . "~/.emacs.default"))))
         '';
