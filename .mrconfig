@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -385,13 +385,22 @@ push = git push -v public_git
 checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
 
 [code/eztrace]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace.git' 'eztrace'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace' 'eztrace'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace
+	"
 
 [code/eztrace-plugins]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-plugins.git' 'eztrace-plugins'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace-plugins' 'eztrace-plugins'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace-plugins
+	"
 
 [code/eztrace-tools]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-tools.git' 'eztrace-tools'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace-tools' 'eztrace-tools'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace-tools
+	"
 
 [code/dysnomia]
 checkout = git clone 'https://github.com/svanderburg/dysnomia' 'dysnomia'
@@ -643,6 +652,7 @@ checkout = git clone 'https://gitlab.com/veprbl/nix-batch-submit' 'nix-batch-sub
 
 [code/wireguard-linux]
 checkout = git clone 'https://git.zx2c4.com/wireguard-linux/' 'wireguard-linux'
+deleted = true
 
 [code/setup.nix]
 checkout = git clone 'https://github.com/nix-community/setup.nix' 'setup.nix'
@@ -708,3 +718,6 @@ push = git push -v origin +pu
 
 [code/nixos-shell]
 checkout = git clone 'https://github.com/Mic92/nixos-shell' 'nixos-shell'
+
+[code/dydisnix]
+checkout = git clone 'https://github.com/svanderburg/dydisnix' 'dydisnix'
