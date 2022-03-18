@@ -40,7 +40,7 @@ rec {
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.initrd.extraModprobeConfig = ''
+  boot.extraModprobeConfig = ''
     # 24G
     options zfs zfs_arc_max=25769803776
     options zfs zfs_vdev_scheduler="none"
@@ -50,7 +50,6 @@ rec {
     options zfs zfs_dirty_data_max_percent=40
     options zfs zfs_txg_timeout=15
   '';
-  boot.extraModprobeConfig = config.boot.initrd.extraModprobeConfig;
 
   # migrate-fs
   system.fsPackages = [ pkgs.fuse-migratefs ];
