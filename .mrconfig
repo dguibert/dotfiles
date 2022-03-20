@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -193,8 +193,8 @@ update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 fixups = git_add_remotes "
-	origin git://github.com/NixOS/nix
-	edolstra git://github.com/edolstra/nix.git
+	origin https://github.com/NixOS/nix
+	edolstra https://github.com/edolstra/nix.git
 	dguibert git@github.com:dguibert/nix.git
 	"
 
