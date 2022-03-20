@@ -649,7 +649,17 @@
       profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos
         nixosConfig;
       profiles.system.user = "root";
+      # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
+      # This defaults to `false`
       fastConnection = true;
+
+      # If the previous profile should be re-activated if activation fails.
+      autoRollback = true;
+
+      # See the earlier section about Magic Rollback for more information.
+      # This defaults to `true`
+      magicRollback = false;
+
       profiles.hm-dguibert.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.custom
         inputs.self.homeConfigurations.${nixosConfig.config.nixpkgs.localSystem.system}.${host}.dguibert.home.activationPackage
         "./activate";
