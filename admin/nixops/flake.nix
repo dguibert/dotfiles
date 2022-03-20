@@ -53,6 +53,7 @@
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
+  inputs.chemacs.url = "github:plexus/chemacs2"; inputs.chemacs.flake = false;
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
@@ -321,7 +322,7 @@
             ./modules/x11.nix
           ];
           hardware.opengl.enable = true;
-          hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+          #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
 
           hardware.pulseaudio.enable = true;
           # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound

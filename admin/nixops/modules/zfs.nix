@@ -18,7 +18,7 @@
   # 1GB   = 1073741824
   # 500MB = 536870912
   # 250MB = 268435456
-  #boot.initrd.extraModprobeConfig = ''
+  #boot.extraModprobeConfig = ''
   #  # 24G
   #  options zfs zfs_arc_max=25769803776
   #  # https://github.com/archzfs/archzfs/issues/187
