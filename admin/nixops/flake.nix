@@ -350,7 +350,7 @@
             serviceConfig.PermissionsStartOnly = true;
             preStart = ''
               set -x
-              #${pkgs.acl}/bin/setfacl -Rm u:jellyfin:rwX,m:rw-,g:jellyfin:rwX,d:u:jellyfin:rwX,d:g:jellyfin:rwX,o:---,d:o:--- /home/dguibert/Videos/Series/ /home/dguibert/Videos/Movies/
+              #${pkgs.acl}/bin/setfacl -Rm u:jellyfin:rwX,m:rw-,g:jellyfin:rwX,d:u:jellyfin:rwX,d:g:jellyfin:rwX,o:---,d:o:---,d:m:rwx,m;rwx /home/dguibert/Videos/Series/ /home/dguibert/Videos/Movies/
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert/Videos
               ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Series
