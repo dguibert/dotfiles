@@ -322,7 +322,7 @@
             ./modules/x11.nix
           ];
           hardware.opengl.enable = true;
-          hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+          #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
 
           hardware.pulseaudio.enable = true;
           # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
