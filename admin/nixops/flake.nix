@@ -84,7 +84,7 @@
   in (inputs.flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux" ] (system:
        let pkgs = nixpkgsFor system; in rec {
 
-    devShell = pkgs.callPackage ./shell.nix { inherit inputs;
+    devShells.default = pkgs.callPackage ./shell.nix { inherit inputs;
       inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
       deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
     };
