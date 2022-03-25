@@ -68,7 +68,7 @@
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-            inputs.self.overlay
+            inputs.self.overlays.default
             inputs.nxsession.overlay
             inputs.emacs-overlay.overlay
           ];
@@ -96,7 +96,7 @@
     };
 
   })) // (rec {
-    overlay = final: prev: with final; {
+    overlays.default = final: prev: with final; {
       # Patch libvirt to use ebtables-legacy
       libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
         then
@@ -165,7 +165,7 @@
         inputs.nur_dguibert.overlays.extra-builtins
         inputs.nur_dguibert.overlays.emacs
         #nur_dguibert_envs.overlay
-        inputs.self.overlay
+        inputs.self.overlays.default
         inputs.nxsession.overlay
         inputs.emacs-overlay.overlay
       ];
