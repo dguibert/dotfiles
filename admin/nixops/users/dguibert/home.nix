@@ -61,15 +61,11 @@ let
 
       programs.bash.enable = true;
 
-      #programs.bash.historySize = 50000;
-      #programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
-      #programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g" ];
-
-      home.sessionVariables.HISTCONTROL="erasedups:ignoredups:ignorespace";
-      home.sessionVariables.HISTFILE="$HOME/.bash_history";
-      home.sessionVariables.HISTFILESIZE="";
-      home.sessionVariables.HISTIGNORE="ls:cd:clear:[bf]g";
-      home.sessionVariables.HISTSIZE="";
+      programs.bash.historySize = -1; # no truncation
+      programs.bash.historyFile = "$HOME/.bash_history";
+      programs.bash.historyFileSize = -1; # no truncation
+      programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+      programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g" "exit" ];
 
       programs.bash.shellAliases.ls="ls --color";
 
