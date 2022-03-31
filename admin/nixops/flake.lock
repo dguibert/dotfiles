@@ -173,9 +173,11 @@
       },
       "locked": {
         "lastModified": 1648662843,
-        "narHash": "sha256-AaptgnLjOVJkE3jvACeVdYuLGKqKAEgG1pISbAA+rn0=",
-        "type": "git",
-        "url": "file:///home/dguibert/code/home-manager"
+        "narHash": "sha256-QNydlvWP37/ZaT5Sz84CgRvq3XMtxpftyhRnTqiaBwc=",
+        "owner": "dguibert",
+        "repo": "home-manager",
+        "rev": "883135ce7c8ed5fee121222e066a458607f74b30",
+        "type": "github"
       },
       "original": {
         "owner": "dguibert",
@@ -287,11 +289,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1648537032,
-        "narHash": "sha256-Ock2krMj6pLghssjpU74x9qA1jc5ijY2oZQGuFILWGg=",
+        "lastModified": 1648667571,
+        "narHash": "sha256-tXyxJjTNMeCM0IeMFlY46o9RciIdad01XzDP3Q+FeMI=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "d574f1f1d5152b2c46d560e56f18933b2d50dacd",
+        "rev": "4998b3b9605660e7f7594b3719830d9394d732df",
         "type": "github"
       },
       "original": {
@@ -318,11 +320,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1648662359,
-        "narHash": "sha256-BHJYXn5sj0E/hZcoS7lpD0toc78GGZm3EMAosN3z/dU=",
+        "lastModified": 1648699453,
+        "narHash": "sha256-4r6dNP79mtiOqa88wUK2tin76nOlFSVzX6mHFS/WNBI=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "7f82c5ba7d6a110aea0f578bdde54bc69666554e",
+        "rev": "ca3be5ea5bb03d793cd50d2c191b37f73461b42b",
         "type": "github"
       },
       "original": {
