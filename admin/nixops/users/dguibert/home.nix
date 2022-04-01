@@ -161,7 +161,6 @@ let
       home.packages = with pkgs; [
         (vim_configurable.override {
           guiSupport = "no";
-          gtk2=null; gtk3=null;
           libX11=null; libXext=null; libSM=null; libXpm=null; libXt=null; libXaw=null; libXau=null; libXmu=null;
           libICE=null;
         })
