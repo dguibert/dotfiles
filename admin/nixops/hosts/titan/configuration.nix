@@ -108,7 +108,7 @@ rec {
   # to build robotnix more thant 100G are needed
   # git/... fails with normalization/utf8only of zfs
   #fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
-  fileSystems."/tmp"                                = { device="/dev/zvol/rpool_vanif0/local/tmp_vol"; fsType="ext4"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
+  fileSystems."/tmp"                                = { device="/dev/zvol/rpool_vanif0/local/tmp_vol"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
   fileSystems."/mnt/old/home_nfs/bguibertd/nix"             = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/mnt/old/home_nfs_robin_ib/bguibertd/nix"    = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/mnt/old/p/project/prcoe08/guibert1/nix"     = { device = "icybox1/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
