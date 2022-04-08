@@ -79,7 +79,7 @@ rec {
   # to build robotnix more thant 100G are needed
   # git/... fails with normalization/utf8only of zfs
   #fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
-  fileSystems."/tmp"                                = { device="/dev/zvol/rpool_vanif0/local/tmp_vol"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
+  fileSystems."/tmp"                                = { label="rpool_vanif0_tmp"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
 
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
