@@ -51,52 +51,23 @@ rec {
     options zfs zfs_txg_timeout=15
   '';
 
-  # migrate-fs
-  system.fsPackages = [ pkgs.fuse-migratefs ];
-  boot.initrd.kernelModules = [ "fuse" ];
-  boot.initrd.extraUtilsCommands = ''
-    copy_bin_and_libs ${pkgs.fuse}/sbin/mount.fuse
-    copy_bin_and_libs ${pkgs.fuse-migratefs}/bin/migratefs
-    ln -sv $out/bin/migratefs $out/bin/mount.migratefs
-    ln -sv $out/bin/migratefs $out/bin/mount.fuse.migratefs
-  '';
-  # from unionfs-fuse.nix
   boot.initrd.postDeviceCommands = ''
-    # Hacky!!! fuse hard-codes the path to mount
-    mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-    ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-    ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.util-linux.name}-bin/bin
-
     # https://grahamc.com/blog/erase-your-darlings
     #zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
-  fileSystems."/mnt/old-root"                       = { device = "icybox1/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/"                                   = { device = "rpool_vanif0/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
 
-  fileSystems."/mnt/old/nix"                        = { device = "icybox1/local/nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
   fileSystems."/nix"                                = { device = "rpool_vanif0/local/nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
-  #fileSystems."/nix" = migrate "/mnt/old/nix" "/mnt/new/nix";
 
-  fileSystems."/mnt/old/root"                       = { device = "icybox1/safe/home/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/root"                               = { device = "rpool_vanif0/safe/home/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  #fileSystems."/root" = migrate "/mnt/old/root" "/mnt/new/root";
 
   fileSystems."/home/dguibert"                      = { device = "rpool_vanif0/safe/home/dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/home/dguibert/Videos"               = { device = "rpool_vanif0/safe/home/dguibert/Videos"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/home/dguibert/Maildir/.notmuch"     = { device = "rpool_vanif0/safe/home/dguibert/notmuch"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/home/dguibert"                      = { device = "icybox1/safe/home/dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/home/dguibert/Videos"               = { device = "icybox1/safe/home/dguibert/Videos"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/home/dguibert/Maildir/.notmuch"     = { device = "icybox1/safe/home/dguibert/notmuch"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  #fileSystems."/home/dguibert"                      = migrate "/mnt/old/home/dguibert" "/mnt/new/home/dguibert";
-  #fileSystems."/home/dguibert/Videos"               = migrate "/mnt/old/home/dguibert/Videos" "/mnt/new/home/dguibert/Videos";
-  #fileSystems."/home/dguibert/Maildir/.notmuch"     = migrate "/mnt/old/home/dguibert/Maildir/.notmuch" "/mnt/new/home/dguibert/Maildir/.notmuch";
 
   fileSystems."/persist"                            = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
-  fileSystems."/mnt/old/persist"                            = { device = "icybox1/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
-  #fileSystems."/persist" = (migrate "/mnt/old/persist" "/mnt/new/persist") // { neededForBoot=true; };
 
-  fileSystems."/boot/efi1"                           = { label = "EFI1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ]; };
   fileSystems."/boot/efi"  = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
   fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
   fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
@@ -109,19 +80,6 @@ rec {
   # git/... fails with normalization/utf8only of zfs
   #fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
   fileSystems."/tmp"                                = { device="/dev/zvol/rpool_vanif0/local/tmp_vol"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
-  fileSystems."/mnt/old/home_nfs/bguibertd/nix"             = { device = "icybox1/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/home_nfs_robin_ib/bguibertd/nix"    = { device = "icybox1/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/p/project/prcoe08/guibert1/nix"     = { device = "icybox1/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/mnt/old/cluster/projects/nn9560k/dguibert"  = { device = "icybox1/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-
-  fileSystems."/home_nfs/bguibertd/nix"             = { device = "rpool_vanif0/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home_nfs_robin_ib/bguibertd/nix"    = { device = "rpool_vanif0/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/p/project/prcoe08/guibert1/nix"     = { device = "rpool_vanif0/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/cluster/projects/nn9560k/dguibert"  = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  #fileSystems."/home_nfs/bguibertd/nix"             = migrate "/mnt/old/home_nfs/bguibertd/nix" "/mnt/new/home_nfs/bguibertd/nix";
-  #fileSystems."/home_nfs_robin_ib/bguibertd/nix"    = migrate "/mnt/old/home_nfs_robin_ib/bguibertd/nix" "/mnt/new/home_nfs_robin_ib/bguibertd/nix";
-  #fileSystems."/p/project/prcoe08/guibert1/nix"     = migrate "/mnt/old/p/project/prcoe08/guibert1/nix" "/mnt/new/p/project/prcoe08/guibert1/nix";
-  #fileSystems."/cluster/projects/nn9560k/dguibert"  = migrate "/mnt/old/cluster/projects/nn9560k/dguibert" "/mnt/new/cluster/projects/nn9560k/dguibert";
 
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
@@ -297,11 +255,6 @@ rec {
 
       autosnap = true;
     };
-    datasets."icybox1/safe".use_template = [ "prod" ];
-    datasets."icybox1/safe".recursive = true;
-    datasets."icybox1/safe/home/dguibert/Videos".use_template = [ "media" ];
-    datasets."icybox1/safe/home/dguibert/Videos".recursive = true;
-
     datasets."rpool_vanif0/local/root".use_template = [ "prod" ];
     datasets."rpool_vanif0/safe".use_template = [ "prod" ];
     datasets."rpool_vanif0/safe".recursive = true;
@@ -322,6 +275,8 @@ rec {
     };
     datasets."st4000dm004-1/backup/icybox1".use_template = [ "backup" ];
     datasets."st4000dm004-1/backup/icybox1".recursive = true;
+    datasets."st4000dm004-1/backup/rpool_vanif0".use_template = [ "backup" ];
+    datasets."st4000dm004-1/backup/rpool_vanif0".recursive = true;
 
     extraArgs = [ "--verbose" ];
   };
