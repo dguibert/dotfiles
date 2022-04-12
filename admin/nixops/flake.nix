@@ -384,6 +384,10 @@
             8096 /*http*/ 8920 /*https*/
             config.services.step-ca.port
           ];
+          systemd.tmpfiles.rules = [
+            "L /var/lib/jellyfin/config - - - - /persist/var/lib/jellyfin/config"
+            "L /var/lib/jellyfin/data   - - - - /persist/var/lib/jellyfin/data"
+          ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
