@@ -124,6 +124,23 @@
         src = inputs.st-src;
         patches = [];
       });
+
+      pythonOverrides = prev.lib.composeOverlays [
+        (prev.pythonOverrides or (_:_: {}))
+        (python-self: python-super: {
+          datalad = lib.upgradeOverride python-super.datalad (o: rec {
+            version = "0.15.6";
+
+            src = fetchFromGitHub {
+              owner = "datalad";
+              repo = "datalad";
+              rev = "refs/tags/${version}";
+              sha256 = "sha256-zlFrYFRykHHM4NKqK+V2h85AAAWmvuDGp4nVSc6vCk4=";
+              };
+          });
+
+        })];
+
     };
 
     ## - hydraJobs: A nested set of derivations built by Hydra.
@@ -366,6 +383,10 @@
           networking.firewall.interfaces."bond0".allowedTCPPorts = [
             8096 /*http*/ 8920 /*https*/
             config.services.step-ca.port
+          ];
+          systemd.tmpfiles.rules = [
+            "L /var/lib/jellyfin/config - - - - /persist/var/lib/jellyfin/config"
+            "L /var/lib/jellyfin/data   - - - - /persist/var/lib/jellyfin/data"
           ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
