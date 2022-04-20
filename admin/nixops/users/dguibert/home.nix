@@ -461,21 +461,22 @@ let
             port = lib.mkIf (host == "rpi31") 443;
 
           };
-          ## Coming from inside home network.
+          ## Coming from VPN
           "${host}_2" = lib.hm.dag.entryAfter ["${host}_1"] {
-            host = "${host}";
-            extraOptions.PermitLocalCommand = "yes";
-            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
-            hostname = "${ip}";
-            inherit port;
-          };
-          "${host}_3" = lib.hm.dag.entryAfter ["${host}_2"] {
             host = "${host}";
             matchHeader = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
             extraOptions.PermitLocalCommand = "yes";
             extraOptions.LocalCommand = "echo \"SSH %n: From VPN network, to %h\" >&2";
             proxyCommand="none";
             hostname = "${vpn_ip}";
+            inherit port;
+          };
+          ## Coming from inside home network.
+          "${host}_3" = lib.hm.dag.entryAfter ["${host}_2"] {
+            host = "${host}";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+            hostname = "${ip}";
             inherit port;
           };
         };
