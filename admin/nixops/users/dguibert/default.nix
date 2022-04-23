@@ -39,7 +39,9 @@ in {
 
     users.groups.dguibert.gid = 1000;
 
-    home-manager.users.dguibert = if (config.services.xserver.enable)
+    home-manager.users.dguibert = if (config.services.xserver.enable
+      || (config.networking.hostName == "t580")
+      )
       then (import ./home.nix (args // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withX11
       else (import ./home.nix (args // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withoutX11
       ;

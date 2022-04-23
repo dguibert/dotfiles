@@ -126,6 +126,7 @@
         patches = [];
       });
       dwl = prev.dwl.overrideAttrs (o: {
+        version = "0.3.1-custom";
         src = inputs.dwl-src;
         patches = [];
       });
