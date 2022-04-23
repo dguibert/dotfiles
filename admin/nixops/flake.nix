@@ -644,6 +644,7 @@
                 services.xserver.enable = lib.mkForce false;
                 environment.systemPackages = with pkgs; [
                   dwl
+                  somebar
                   nwg-panel
                   wl-clipboard
                   mako # notification daemon
@@ -680,6 +681,8 @@
                     wayvnc
                   ];
                 };
+
+                xdg.portal.wlr.enable = true;
               };
             };
             })
