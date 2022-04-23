@@ -20,9 +20,7 @@ in {
     start-dwl
     dwl
     somebar
-    nwg-panel
     wl-clipboard
-    mako # notification daemon
     alacritty # Alacritty is the default terminal in the config
     dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
     swaylock # lockscreen
