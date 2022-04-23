@@ -129,6 +129,11 @@
         src = inputs.dwl-src;
         patches = [];
       });
+      somebar = prev.somebar.overrideAttrs (o: {
+        patches = [
+          ./patches/0001-bigger-rectangle-for-occupied-tags.patch
+        ];
+      });
 
       pythonOverrides = prev.lib.composeOverlays [
         (prev.pythonOverrides or (_:_: {}))
