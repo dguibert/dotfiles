@@ -645,59 +645,22 @@
                   "https://nixpkgs-wayland.cachix.org"
                 ];
               };
-              specialisation.wayland = { inheritParentConfig = true; configuration = {
+              #specialisation.wayland = { inheritParentConfig = true; configuration = {
                 services.xserver.enable = lib.mkForce false;
-                environment.systemPackages = with pkgs; [
-                  dwl
-                  somebar
-                  nwg-panel
-                  wl-clipboard
-                  mako # notification daemon
-                  alacritty # Alacritty is the default terminal in the config
-                  dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
-                  swaylock # lockscreen
-                  swayidle
-                  xwayland # for legacy apps
-                  mako # notification daemon
-                  kanshi # autorandr
-                  brightnessctl
-
-                  waypipe
-                  grim
-                  slurp
-                  wayvnc
-                ];
                 # use it as an overlay
                 nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
-                programs.sway = {
-                  enable = true;
-                  wrapperFeatures.gtk = true; # so that gtk works properly
-                  extraPackages = with pkgs; [
-                    swaylock
-                    swayidle
-                    wl-clipboard
-                    mako # notification daemon
-                    alacritty # Alacritty is the default terminal in the config
-                    dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
-
-                    waypipe
-                    grim
-                    slurp
-                    wayvnc
-                  ];
-                };
 
                 xdg.portal.wlr.enable = true;
-                services.greetd.enable = true;
-                services.greetd.settings = {
-                  default_session = {
-                    command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "dwl -s somebar"'';
-                    #command = "${pkgs.greetd.wlgreet}/bin/wlgreet -e \"dwl -s somebar\"";
-                  };
-                };
+                #services.greetd.enable = true;
+                #services.greetd.settings = {
+                #  default_session = {
+                #    command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "dwl -s somebar"'';
+                #    #command = "${pkgs.greetd.wlgreet}/bin/wlgreet -e \"dwl -s somebar\"";
+                #  };
+                #};
 
-              };
-            };
+              #};
+              #};
             })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;

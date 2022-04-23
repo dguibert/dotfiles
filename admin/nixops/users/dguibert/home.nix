@@ -572,6 +572,7 @@ let
             options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
             config.centralMailHost.enable = isCentralMailHost;
           })
+          ./module-dwl.nix
         ];
 
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [

@@ -186,29 +186,29 @@ rec {
   # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
   #- The option definition `nesting.clone' in `flake.nix' no longer has any effect; please remove it.
   #specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }
-  specialisation.work = { inheritParentConfig = true; configuration = {
-      boot.loader.grub.configurationName = "Work";
-      networking.proxy.default = "http://localhost:3128";
-      networking.proxy.noProxy = "127.0.0.1,localhost,10.*,192.168.*";
-      services.cntlm.enable = true;
-      services.cntlm.username = "a629925";
-      services.cntlm.domain = "ww930";
-      services.cntlm.netbios_hostname = "fr-57nvj72";
-      services.cntlm.proxy = [
-        "10.89.0.72:84"
-        #"proxy-emea.my-it-solutions.net:84"
-        #"10.92.32.21:84"
-        #"proxy-americas.my-it-solutions.net:84"
-      ];
-      services.cntlm.extraConfig = ''
-        NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
-      '';
+  #specialisation.work = { inheritParentConfig = true; configuration = {
+  #    boot.loader.grub.configurationName = "Work";
+  #    networking.proxy.default = "http://localhost:3128";
+  #    networking.proxy.noProxy = "127.0.0.1,localhost,10.*,192.168.*";
+  #    services.cntlm.enable = true;
+  #    services.cntlm.username = "a629925";
+  #    services.cntlm.domain = "ww930";
+  #    services.cntlm.netbios_hostname = "fr-57nvj72";
+  #    services.cntlm.proxy = [
+  #      "10.89.0.72:84"
+  #      #"proxy-emea.my-it-solutions.net:84"
+  #      #"10.92.32.21:84"
+  #      #"proxy-americas.my-it-solutions.net:84"
+  #    ];
+  #    services.cntlm.extraConfig = ''
+  #      NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+  #    '';
 
-      users.users.cntlm.group = "cntlm";
-      users.groups.cntlm = {};
+  #    users.users.cntlm.group = "cntlm";
+  #    users.groups.cntlm = {};
 
-    };
-  };
+  #  };
+  #};
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
