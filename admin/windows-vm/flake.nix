@@ -66,7 +66,7 @@
           '');
         };
         # nix run
-        defaultApp = self.apps.${system}.apply;
+        apps.default = self.apps.${system}.apply;
   }) // (let
     in {
       # architecture agnostic attributes

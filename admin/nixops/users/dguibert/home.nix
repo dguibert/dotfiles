@@ -79,6 +79,9 @@ let
         export HISTIGNORE
         export HISTSIZE
         export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
+        # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
+        test "$TERM" != "dumb" || return
+
 
         # Provide a nice prompt.
         PS1=""

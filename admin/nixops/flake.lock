@@ -70,6 +70,23 @@
         "type": "github"
       }
     },
+    "dwl-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650704760,
+        "narHash": "sha256-QGhnSeda9LTbohoutSlSgaLthol/SmZ4SqOLaOcQaOs=",
+        "owner": "dguibert",
+        "repo": "dwl",
+        "rev": "3f4fa60a3adc75d50216c4e0b3c6b41ba1ede591",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dguibert",
+        "ref": "pu",
+        "repo": "dwl",
+        "type": "github"
+      }
+    },
     "dwm-src": {
       "flake": false,
       "locked": {
@@ -388,6 +405,7 @@
         "base16-nix": "base16-nix",
         "chemacs": "chemacs",
         "deploy-rs": "deploy-rs",
+        "dwl-src": "dwl-src",
         "dwm-src": "dwm-src",
         "emacs-overlay": "emacs-overlay",
         "flake-utils": "flake-utils",

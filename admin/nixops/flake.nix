@@ -42,6 +42,7 @@
 
   inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
   inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
+  inputs.dwl-src.url = "github:dguibert/dwl/pu";        inputs.dwl-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
@@ -122,6 +123,10 @@
       });
       st = prev.st.overrideAttrs (o: {
         src = inputs.st-src;
+        patches = [];
+      });
+      dwl = prev.dwl.overrideAttrs (o: {
+        src = inputs.dwl-src;
         patches = [];
       });
 
@@ -625,40 +630,59 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
-            #({ ... }: {
-            #  nix = {
-            #    # add binary caches
-            #    binaryCachePublicKeys = [
-            #      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-            #    ];
-            #    binaryCaches = [
-            #      "https://nixpkgs-wayland.cachix.org"
-            #    ];
-            #  };
-            #  #specialisation.wayland = { inheritParentConfig = true; configuration = {
-            #      services.xserver.enable = lib.mkForce false;
-            #      # use it as an overlay
-            #      nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
-            #      programs.sway = {
-            #        enable = true;
-            #        wrapperFeatures.gtk = true; # so that gtk works properly
-            #        extraPackages = with pkgs; [
-            #          swaylock
-            #          swayidle
-            #          wl-clipboard
-            #          mako # notification daemon
-            #          alacritty # Alacritty is the default terminal in the config
-            #          dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+            ({ ... }: {
+              nix.settings = {
+                # add binary caches
+                trusted-public-keys = [
+                  "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+                ];
+                substituters = [
+                  "https://nixpkgs-wayland.cachix.org"
+                ];
+              };
+              specialisation.wayland = { inheritParentConfig = true; configuration = {
+                services.xserver.enable = lib.mkForce false;
+                environment.systemPackages = with pkgs; [
+                  dwl
+                  nwg-panel
+                  wl-clipboard
+                  mako # notification daemon
+                  alacritty # Alacritty is the default terminal in the config
+                  dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
+                  swaylock # lockscreen
+                  swayidle
+                  xwayland # for legacy apps
+                  mako # notification daemon
+                  kanshi # autorandr
+                  brightnessctl
 
-            #          waypipe
-            #          grim
-            #          slurp
-            #          wayvnc
-            #        ];
-            #      };
-            #  #  };
-            #  #};
-            #})
+                  waypipe
+                  grim
+                  slurp
+                  wayvnc
+                ];
+                # use it as an overlay
+                nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+                programs.sway = {
+                  enable = true;
+                  wrapperFeatures.gtk = true; # so that gtk works properly
+                  extraPackages = with pkgs; [
+                    swaylock
+                    swayidle
+                    wl-clipboard
+                    mako # notification daemon
+                    alacritty # Alacritty is the default terminal in the config
+                    dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
+
+                    waypipe
+                    grim
+                    slurp
+                    wayvnc
+                  ];
+                };
+              };
+            };
+            })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
