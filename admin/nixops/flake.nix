@@ -657,7 +657,12 @@
               #  services.xserver.enable = lib.mkForce false;
                 # use it as an overlay
                 #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+                security.polkit.enable = true;
+                security.pam.services.swaylock = {};
                 hardware.opengl.enable = lib.mkDefault true;
+                fonts.enableDefaultFonts = lib.mkDefault true;
+                programs.dconf.enable = lib.mkDefault true;
+                programs.xwayland.enable = lib.mkDefault true;
 
                 xdg = {
                   portal = {
