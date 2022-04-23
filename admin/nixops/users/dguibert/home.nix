@@ -166,6 +166,7 @@ let
       # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
       # ✗ 130    dguibert@vbox-57nvj72 ~ $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
       home.sessionVariables.XDG_RUNTIME_DIR="/run/user/$(id -u)";
+      home.sessionVariables.MOZ_ENABLE_WAYLAND=1;
 
       # Fix stupid java applications like android studio
       home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
@@ -722,8 +723,16 @@ let
 
         programs.browserpass.enable = true;
 
-        programs.firefox.enable = true;
-        programs.firefox.package = pkgs.firefox-bin;
+        # https://nixos.wiki/wiki/Firefox
+        programs.firefox = {
+          enable = true;
+          package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+            forceWayland = true;
+            extraPolicies = {
+              ExtensionSettings = {};
+            };
+          };
+        };
         #programs.firefox.extensions =
         #  with pkgs.nur.repos.rycee.firefox-addons; [
         #    browserpass

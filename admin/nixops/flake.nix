@@ -186,6 +186,8 @@
         ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
       system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
       nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+        # https://nixos.wiki/wiki/Chromium
+        chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
         permittedInsecurePackages = [
           "ffmpeg-3.4.8" # oraclejre
         ];
@@ -656,7 +658,17 @@
                 # use it as an overlay
                 #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
 
-                xdg.portal.wlr.enable = true;
+                xdg = {
+                  portal = {
+                    enable = true;
+                    wlr.enable = true;
+                    extraPortals = with pkgs; [
+                      xdg-desktop-portal-wlr
+                      xdg-desktop-portal-gtk
+                    ];
+                    gtkUsePortal = true;
+                  };
+                };
                 #services.greetd.enable = true;
                 #services.greetd.settings = {
                 #  default_session = {
