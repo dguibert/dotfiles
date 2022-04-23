@@ -683,6 +683,14 @@
                 };
 
                 xdg.portal.wlr.enable = true;
+                services.greetd.enable = true;
+                services.greetd.settings = {
+                  default_session = {
+                    command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "dwl -s somebar"'';
+                    #command = "${pkgs.greetd.wlgreet}/bin/wlgreet -e \"dwl -s somebar\"";
+                  };
+                };
+
               };
             };
             })
