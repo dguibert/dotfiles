@@ -657,6 +657,7 @@
               #  services.xserver.enable = lib.mkForce false;
                 # use it as an overlay
                 #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+                hardware.opengl.enable = lib.mkDefault true;
 
                 xdg = {
                   portal = {
