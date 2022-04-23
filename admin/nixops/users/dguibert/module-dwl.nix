@@ -27,6 +27,7 @@ in {
     dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
     swaylock # lockscreen
     swayidle
+    wlr-randr
     xwayland # for legacy apps
     mako # notification daemon
     kanshi # autorandr

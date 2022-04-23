@@ -42,7 +42,7 @@
 
   inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
   inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
-  inputs.dwl-src.url = "github:dguibert/dwl/pu";        inputs.dwl-src.flake = false;
+  inputs.dwl-src.url = "github:dguibert/dwl/pu-next";   inputs.dwl-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
@@ -72,6 +72,7 @@
             inputs.self.overlays.default
             inputs.nxsession.overlay
             inputs.emacs-overlay.overlay
+            inputs.nixpkgs-wayland.overlay
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -129,6 +130,9 @@
         version = "0.3.1-custom";
         src = inputs.dwl-src;
         patches = [];
+        buildInputs = o.buildInputs ++ [
+          xorg.xcbutilwm
+        ];
       });
       somebar = prev.somebar.overrideAttrs (o: {
         patches = [
@@ -196,6 +200,7 @@
         inputs.self.overlays.default
         inputs.nxsession.overlay
         inputs.emacs-overlay.overlay
+        inputs.nixpkgs-wayland.overlay
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
@@ -649,7 +654,7 @@
               #specialisation.wayland = { inheritParentConfig = true; configuration = {
                 services.xserver.enable = lib.mkForce false;
                 # use it as an overlay
-                nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+                #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
 
                 xdg.portal.wlr.enable = true;
                 #services.greetd.enable = true;
