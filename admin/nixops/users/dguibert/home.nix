@@ -72,6 +72,11 @@ let
 
       programs.bash.shellAliases.ls="ls --color";
 
+      programs.bash.bashrcExtra = ''
+        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v start-dwl >/dev/null ; then
+          exec start-dwl
+        fi
+      '';
       programs.bash.initExtra = ''
         export HISTCONTROL
         export HISTFILE
@@ -81,7 +86,6 @@ let
         export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
         # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
         test "$TERM" != "dumb" || return
-
 
         # Provide a nice prompt.
         PS1=""
