@@ -664,17 +664,7 @@
                 programs.dconf.enable = lib.mkDefault true;
                 programs.xwayland.enable = lib.mkDefault true;
 
-                xdg = {
-                  portal = {
-                    enable = true;
-                    wlr.enable = true;
-                    extraPortals = with pkgs; [
-                      xdg-desktop-portal-wlr
-                      xdg-desktop-portal-gtk
-                    ];
-                    gtkUsePortal = true;
-                  };
-                };
+                xdg.portal.wlr.enable = true;
                 #services.greetd.enable = true;
                 #services.greetd.settings = {
                 #  default_session = {
