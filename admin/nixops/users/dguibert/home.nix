@@ -72,6 +72,11 @@ let
 
       programs.bash.shellAliases.ls="ls --color";
 
+      programs.bash.bashrcExtra = ''
+        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v start-dwl >/dev/null ; then
+          exec start-dwl
+        fi
+      '';
       programs.bash.initExtra = ''
         export HISTCONTROL
         export HISTFILE
@@ -81,7 +86,6 @@ let
         export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
         # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
         test "$TERM" != "dumb" || return
-
 
         # Provide a nice prompt.
         PS1=""
@@ -166,6 +170,7 @@ let
       # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
       # ✗ 130    dguibert@vbox-57nvj72 ~ $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
       home.sessionVariables.XDG_RUNTIME_DIR="/run/user/$(id -u)";
+      home.sessionVariables.MOZ_ENABLE_WAYLAND=1;
 
       # Fix stupid java applications like android studio
       home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
@@ -572,6 +577,7 @@ let
             options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
             config.centralMailHost.enable = isCentralMailHost;
           })
+          ./module-dwl.nix
         ];
 
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
@@ -721,8 +727,16 @@ let
 
         programs.browserpass.enable = true;
 
-        programs.firefox.enable = true;
-        programs.firefox.package = pkgs.firefox-bin;
+        # https://nixos.wiki/wiki/Firefox
+        programs.firefox = {
+          enable = true;
+          package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+            forceWayland = true;
+            extraPolicies = {
+              ExtensionSettings = {};
+            };
+          };
+        };
         #programs.firefox.extensions =
         #  with pkgs.nur.repos.rycee.firefox-addons; [
         #    browserpass

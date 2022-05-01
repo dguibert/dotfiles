@@ -42,7 +42,7 @@
 
   inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
   inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
-  inputs.dwl-src.url = "github:dguibert/dwl/pu";        inputs.dwl-src.flake = false;
+  inputs.dwl-src.url = "github:dguibert/dwl/pu-next";   inputs.dwl-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
@@ -72,6 +72,7 @@
             inputs.self.overlays.default
             inputs.nxsession.overlay
             inputs.emacs-overlay.overlay
+            inputs.nixpkgs-wayland.overlay
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -126,25 +127,18 @@
         patches = [];
       });
       dwl = prev.dwl.overrideAttrs (o: {
+        version = "0.3.1-custom";
         src = inputs.dwl-src;
         patches = [];
+        buildInputs = o.buildInputs ++ [
+          xorg.xcbutilwm
+        ];
       });
-
-      pythonOverrides = prev.lib.composeOverlays [
-        (prev.pythonOverrides or (_:_: {}))
-        (python-self: python-super: {
-          datalad = lib.upgradeOverride python-super.datalad (o: rec {
-            version = "0.15.6";
-
-            src = fetchFromGitHub {
-              owner = "datalad";
-              repo = "datalad";
-              rev = "refs/tags/${version}";
-              sha256 = "sha256-zlFrYFRykHHM4NKqK+V2h85AAAWmvuDGp4nVSc6vCk4=";
-              };
-          });
-
-        })];
+      somebar = prev.somebar.overrideAttrs (o: {
+        patches = [
+          ./patches/0001-bigger-rectangle-for-occupied-tags.patch
+        ];
+      });
 
     };
 
@@ -176,6 +170,8 @@
         ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
       system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
       nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+        # https://nixos.wiki/wiki/Chromium
+        chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
         permittedInsecurePackages = [
           "ffmpeg-3.4.8" # oraclejre
         ];
@@ -190,6 +186,7 @@
         inputs.self.overlays.default
         inputs.nxsession.overlay
         inputs.emacs-overlay.overlay
+        inputs.nixpkgs-wayland.overlay
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
@@ -640,48 +637,28 @@
                   "https://nixpkgs-wayland.cachix.org"
                 ];
               };
-              specialisation.wayland = { inheritParentConfig = true; configuration = {
+              #specialisation.wayland = { inheritParentConfig = true; configuration = {
                 services.xserver.enable = lib.mkForce false;
-                environment.systemPackages = with pkgs; [
-                  dwl
-                  nwg-panel
-                  wl-clipboard
-                  mako # notification daemon
-                  alacritty # Alacritty is the default terminal in the config
-                  dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
-                  swaylock # lockscreen
-                  swayidle
-                  xwayland # for legacy apps
-                  mako # notification daemon
-                  kanshi # autorandr
-                  brightnessctl
-
-                  waypipe
-                  grim
-                  slurp
-                  wayvnc
-                ];
                 # use it as an overlay
-                nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
-                programs.sway = {
-                  enable = true;
-                  wrapperFeatures.gtk = true; # so that gtk works properly
-                  extraPackages = with pkgs; [
-                    swaylock
-                    swayidle
-                    wl-clipboard
-                    mako # notification daemon
-                    alacritty # Alacritty is the default terminal in the config
-                    dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native
+                #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+                security.polkit.enable = true;
+                security.pam.services.swaylock = {};
+                hardware.opengl.enable = lib.mkDefault true;
+                fonts.enableDefaultFonts = lib.mkDefault true;
+                programs.dconf.enable = lib.mkDefault true;
+                programs.xwayland.enable = lib.mkDefault true;
 
-                    waypipe
-                    grim
-                    slurp
-                    wayvnc
-                  ];
-                };
-              };
-            };
+                xdg.portal.wlr.enable = true;
+                #services.greetd.enable = true;
+                #services.greetd.settings = {
+                #  default_session = {
+                #    command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "dwl -s somebar"'';
+                #    #command = "${pkgs.greetd.wlgreet}/bin/wlgreet -e \"dwl -s somebar\"";
+                #  };
+                #};
+
+              #};
+              #};
             })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
