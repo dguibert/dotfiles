@@ -140,22 +140,6 @@
         ];
       });
 
-      pythonOverrides = prev.lib.composeOverlays [
-        (prev.pythonOverrides or (_:_: {}))
-        (python-self: python-super: {
-          datalad = lib.upgradeOverride python-super.datalad (o: rec {
-            version = "0.15.6";
-
-            src = fetchFromGitHub {
-              owner = "datalad";
-              repo = "datalad";
-              rev = "refs/tags/${version}";
-              sha256 = "sha256-zlFrYFRykHHM4NKqK+V2h85AAAWmvuDGp4nVSc6vCk4=";
-              };
-          });
-
-        })];
-
     };
 
     ## - hydraJobs: A nested set of derivations built by Hydra.
