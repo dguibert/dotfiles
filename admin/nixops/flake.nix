@@ -654,7 +654,7 @@
                 ];
               };
               #specialisation.wayland = { inheritParentConfig = true; configuration = {
-              #  services.xserver.enable = lib.mkForce false;
+                services.xserver.enable = lib.mkForce false;
                 # use it as an overlay
                 #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
                 security.polkit.enable = true;
