@@ -4,7 +4,7 @@ let
 
   start-dwl = pkgs.writeShellScriptBin "start-dwl" ''
     # first import environment variables from the login manager
-    systemctl --user import-environment
+    systemctl --user import-environment XDG_SEAT WAYLAND_DISPLAY
     # then start the service
     exec systemctl --user start dwl.service
   '';
@@ -93,6 +93,22 @@ in {
       Type = "dbus";
       BusName = "org.freedesktop.Notifications";
       ExecStart = "${pkgs.mako}/bin/mako";
+      RestartSec = 5;
+      Restart = "always";
+    };
+  };
+
+  systemd.user.services.swayidle = {
+    Unit = {
+      Description = "Idle display configuration";
+      PartOf = [ "graphical-session.target" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };
