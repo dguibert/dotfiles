@@ -73,8 +73,8 @@ let
       programs.bash.shellAliases.ls="ls --color";
 
       programs.bash.bashrcExtra = ''
-        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v start-dwl >/dev/null ; then
-          exec start-dwl
+        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
+          exec dwl-session
         fi
       '';
       programs.bash.initExtra = ''
