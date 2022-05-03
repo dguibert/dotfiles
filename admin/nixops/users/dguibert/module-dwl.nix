@@ -38,6 +38,8 @@ let
     fi
   '';
 
+  # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
+
 in {
 
   home.packages = with pkgs; [
@@ -132,7 +134,7 @@ in {
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };

@@ -99,6 +99,11 @@
 
   })) // (rec {
     overlays.default = final: prev: with final; {
+      swayidle = prev.swayidle.overrideAttrs (o: {
+        postPatch = (o.postPatch or "") + ''
+          sed -i -e 's@"sh"@"${bash}/bin/bash"@' main.c
+        '';
+      });
       # Patch libvirt to use ebtables-legacy
       libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
         then
@@ -178,15 +183,15 @@
       };
       nixpkgs.overlays = [
         inputs.nix.overlay
+        inputs.nixpkgs-wayland.overlay
         inputs.nur.overlay
         inputs.nur_dguibert.overlay
         inputs.nur_dguibert.overlays.extra-builtins
         inputs.nur_dguibert.overlays.emacs
         #nur_dguibert_envs.overlay
-        inputs.self.overlays.default
         inputs.nxsession.overlay
         inputs.emacs-overlay.overlay
-        inputs.nixpkgs-wayland.overlay
+        inputs.self.overlays.default
       ];
       # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
       nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
