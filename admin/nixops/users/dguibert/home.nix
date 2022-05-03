@@ -620,7 +620,6 @@ let
           (conky.override { x11Support = false; })
           gnuplot
           mkpasswd
-          xpra
           aria2
           qtpass
           qrencode
