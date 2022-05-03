@@ -73,11 +73,11 @@
     "dwl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1651602636,
-        "narHash": "sha256-XML5JMe6asf4JJUiePzj3zJYxJvLD2tVZAC9GofTduY=",
+        "lastModified": 1651604435,
+        "narHash": "sha256-HXx8d11N1ktDX2rtaM11/8xaoB8xvG92BXDZQWc3R1w=",
         "owner": "dguibert",
         "repo": "dwl",
-        "rev": "333d521a2c2bab581260b2f42f54e68c9e43c5eb",
+        "rev": "45d486abfc522cf63c1daddb8e2dbd26cd712452",
         "type": "github"
       },
       "original": {
@@ -337,11 +337,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1651598969,
-        "narHash": "sha256-TYGiklLzXEtObbEfXeI3/SZYnDNztMcxaV5BGU9Z0+c=",
+        "lastModified": 1651603005,
+        "narHash": "sha256-RiLwJeeBuf5JBWyDd1+Ge1MHHatrt9HVbbKumRNHKrs=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "04bdecaeaaabafd5343b41e4b57c7434ec571730",
+        "rev": "ecaad5dee8d95e1595ec2b00639558704fa47766",
         "type": "github"
       },
       "original": {
