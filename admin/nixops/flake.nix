@@ -134,14 +134,19 @@
       dwl = prev.dwl.overrideAttrs (o: {
         version = "0.3.1-custom";
         src = inputs.dwl-src;
-        patches = [];
+        patches = [
+          (prev.fetchpatch {
+            url = "https://git.sr.ht/~raphi/dwl/blob/master/patches/wayland-ipc.patch";
+          })
+        ];
         buildInputs = o.buildInputs ++ [
           xorg.xcbutilwm
         ];
       });
       somebar = prev.somebar.overrideAttrs (o: {
         patches = [
-          ./patches/0001-bigger-rectangle-for-occupied-tags.patch
+          ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
+          ./patches/0002-bigger-occupied-rectangle.patch
         ];
       });
 
