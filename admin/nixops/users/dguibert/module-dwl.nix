@@ -9,11 +9,6 @@ let
     exec systemctl --user start dwl.service
   '';
 
-  start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
-    export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -f 'sway$').sock
-    ${pkgs.waybar}/bin/waybar
-  '';
-
 in {
 
   home.packages = with pkgs; [
