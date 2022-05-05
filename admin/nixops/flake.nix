@@ -155,8 +155,18 @@
     nixosModules = (import ./modules) // {
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
+          {
+	    _module.args.inputs = inputs;
+	    _module.args.sopsDecrypt_ = pkgs.sopsDecrypt_;
+          }
           inputs.nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
+	  {
+            home-manager.useGlobalPkgs = true;
+	    home-manager.useUserPackages = true;
+	    home-manager.extraSpecialArgs.inputs = inputs;
+	    home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
+	  }
 	  inputs.sops-nix.nixosModules.sops
 
           self.nixosModules.wireguard-mesh
@@ -169,12 +179,12 @@
           ./roles/dns.nix
           ./roles/libvirtd.nix
           ./roles/robotnix-ota.nix
-          (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
+          ./roles/tiny-ca.nix
           ./roles/mopidy.nix
           ./roles/sshguard.nix
           ./roles/wireguard-mesh.nix
 
-          (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
+          ./users/default.nix
         ];
 
         system.nixos.versionSuffix = lib.mkForce
