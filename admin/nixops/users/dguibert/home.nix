@@ -164,7 +164,6 @@ let
       home.sessionVariables.MANPATH="$HOME/man:$MANPATH:/share/man:/usr/share/man";
       home.sessionVariables.PAGER="less -R";
       home.sessionVariables.LESS="RFX";
-      home.sessionVariables.EDITOR="vim";
       home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
       # ✗ 1    dguibert@vbox-57nvj72 ~ $ systemctl --user status
       # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
@@ -665,6 +664,11 @@ let
           my-texlive
         ];
         #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        #home.sessionVariables.EDITOR="vim";
+        programs.bash.shellAliases.e="emacsclient";
+        home.sessionVariables.ALTERNATE_EDITOR="";
+        home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
+        home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
         home.file.".emacs.d".source = inputs.chemacs;
         home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
         home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
