@@ -156,25 +156,28 @@
       defaults = { config, lib, pkgs, resources, ...}: {
         imports = [
           {
-	    _module.args.inputs = inputs;
-	    _module.args.sopsDecrypt_ = pkgs.sopsDecrypt_;
+            _module.args.inputs = inputs;
+            _module.args.sopsDecrypt_ = pkgs.sopsDecrypt_;
           }
           inputs.nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
-	  {
+          {
             home-manager.useGlobalPkgs = true;
-	    home-manager.useUserPackages = true;
-	    home-manager.extraSpecialArgs.inputs = inputs;
-	    home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
-	  }
-	  inputs.sops-nix.nixosModules.sops
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs.inputs = inputs;
+            home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
+          }
+          inputs.sops-nix.nixosModules.sops
 
-          self.nixosModules.wireguard-mesh
+          self.nixosModules.distributed-build-conf
+          ({ config, ... }: { distributed-build-conf.enable = true; })
+          self.nixosModules.nix-conf
+          ({ config, ... }: { nix-conf.enable = true; })
           self.nixosModules.report-changes
-	  self.nixosModules.distributed-build-conf
-	  ({ config, ... }: { distributed-build-conf.enable = true; })
-	  self.nixosModules.nix-conf
-	  ({ config, ... }: { nix-conf.enable = true; })
+          self.nixosModules.wayland-conf
+          self.nixosModules.wireguard-mesh
+          self.nixosModules.x11-conf
+          self.nixosModules.yubikey-gpg-conf
 
           ./roles/dns.nix
           ./roles/libvirtd.nix
@@ -326,8 +329,8 @@
     nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
-	self.nixosModules.zfs
-	({ config, ... }: { zfs-conf.enable = true; })
+        self.nixosModules.zfs
+        ({ config, ... }: { zfs-conf.enable = true; })
         ./hosts/iso.nix
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
@@ -359,10 +362,8 @@
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
             inputs.self.nixosModules.defaults
-	    self.nixosModules.yubikey-gpg-conf
-	    ({ config, ... }: { yubikey-gpg-conf.enable = true; })
-	    self.nixosModules.x11-conf
-	    ({ config, ... }: { x11-conf.enable = true; })
+            ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+            ({ config, ... }: { x11-conf.enable = true; })
           ];
           hardware.opengl.enable = true;
           #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
@@ -651,44 +652,10 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
-	    self.nixosModules.yubikey-gpg-conf
-	    ({ config, ... }: { yubikey-gpg-conf.enable = true; })
-	    self.nixosModules.x11-conf
-	    ({ config, ... }: { x11-conf.enable = true; })
+            ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+            ({ config, ... }: { x11-conf.enable = false; })
 
-            ({ ... }: {
-              nix.settings = {
-                # add binary caches
-                trusted-public-keys = [
-                  "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-                ];
-                substituters = [
-                  "https://nixpkgs-wayland.cachix.org"
-                ];
-              };
-              #specialisation.wayland = { inheritParentConfig = true; configuration = {
-                services.xserver.enable = lib.mkForce false;
-                # use it as an overlay
-                #nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
-                security.polkit.enable = true;
-                security.pam.services.swaylock = {};
-                hardware.opengl.enable = lib.mkDefault true;
-                fonts.enableDefaultFonts = lib.mkDefault true;
-                programs.dconf.enable = lib.mkDefault true;
-                programs.xwayland.enable = lib.mkDefault true;
-
-                xdg.portal.wlr.enable = true;
-                #services.greetd.enable = true;
-                #services.greetd.settings = {
-                #  default_session = {
-                #    command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "dwl -s somebar"'';
-                #    #command = "${pkgs.greetd.wlgreet}/bin/wlgreet -e \"dwl -s somebar\"";
-                #  };
-                #};
-
-              #};
-              #};
-            })
+            ({ config, ... }: { wayland-conf.enable = true; })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
