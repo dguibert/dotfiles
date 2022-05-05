@@ -76,8 +76,6 @@ rec {
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim
-     pavucontrol
-     pulseaudio
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -103,63 +101,6 @@ rec {
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
-
-  # Enable sound.
-  # Remove sound.enable or turn it off if you had it set previously, it seems to cause conflicts with pipewire
-  #sound.enable = false;
-
-  # rtkit is optional but recommended
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-    ## low-latency pulse backend https://nixos.wiki/wiki/PipeWire
-    #config.pipewire-pulse = {
-    #  "context.properties" = {
-    #    "log.level" = 2;
-    #  };
-    #  "context.modules" = [
-    #    {
-    #      name = "libpipewire-module-rtkit";
-    #      args = {
-    #        "nice.level" = -15;
-    #        "rt.prio" = 88;
-    #        "rt.time.soft" = 200000;
-    #        "rt.time.hard" = 200000;
-    #      };
-    #      flags = [ "ifexists" "nofail" ];
-    #    }
-    #    { name = "libpipewire-module-protocol-native"; }
-    #    { name = "libpipewire-module-client-node"; }
-    #    { name = "libpipewire-module-adapter"; }
-    #    { name = "libpipewire-module-metadata"; }
-    #    {
-    #      name = "libpipewire-module-protocol-pulse";
-    #      args = {
-    #        "pulse.min.req" = "32/48000";
-    #        "pulse.default.req" = "32/48000";
-    #        "pulse.max.req" = "32/48000";
-    #        "pulse.min.quantum" = "32/48000";
-    #        "pulse.max.quantum" = "32/48000";
-    #        "server.address" = [ "unix:native" ];
-    #      };
-    #    }
-    #  ];
-    #  "stream.properties" = {
-    #    "node.latency" = "32/48000";
-    #    "resample.quality" = 1;
-    #  };
-    #};
-  };
-
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;

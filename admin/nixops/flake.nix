@@ -363,15 +363,12 @@
             (import ./hosts/titan/configuration.nix)
             inputs.self.nixosModules.defaults
             ({ config, ... }: { yubikey-gpg-conf.enable = true; })
-            ({ config, ... }: { x11-conf.enable = true; })
+            ({ config, ... }: { x11-conf.enable = false; })
+
+            ({ config, ... }: { wayland-conf.enable = true; })
           ];
-          hardware.opengl.enable = true;
           #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
 
-          hardware.pulseaudio.enable = true;
-          # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
-          hardware.pulseaudio.daemon.config.default-fragments = "5";
-          hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
@@ -418,7 +415,7 @@
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-          role.mopidy-server.enable = true;
+          role.mopidy-server.enable = false; # TODO migrate to pipewire
           role.mopidy-server.listenAddress = "192.168.1.24";
           role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
           role.mopidy-server.configuration.m3u = {

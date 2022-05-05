@@ -67,6 +67,7 @@ in {
 
     #sound.enable = true;
     #sound.mediaKeys.enable = true;
+    # TODO migrate to pipewire
     hardware.pulseaudio = {
       enable = true;
       support32Bit = true;
