@@ -135,6 +135,7 @@ in {
     ];
 
     services.snapserver.enable = true;
+    services.snapserver.openFirewall = false; # suppress warning: no longer default to true starting with NixOS 22.11
     services.snapserver.streams.snapinfo = {
       type = "pipe";
       location = "/run/snapserver/snapfifo";
