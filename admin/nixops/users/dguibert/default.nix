@@ -46,7 +46,7 @@ in {
       else (import ./home.nix (args // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withoutX11
       ;
     home-manager.useGlobalPkgs = true;
-    #home-manager.useUserPackages = true;
+    home-manager.useUserPackages = true;
     home-manager.verbose = true;
   };
 }
