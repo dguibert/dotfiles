@@ -15,10 +15,6 @@ rec {
 
   imports = [
     ../common.nix
-    ../../modules/nix-conf.nix
-    ../../modules/yubikey-gpg.nix
-    ../../modules/distributed-build.nix
-    ../../modules/x11.nix
   ];
   nixpkgs.localSystem.system = "x86_64-linux";
 

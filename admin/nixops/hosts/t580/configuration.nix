@@ -4,11 +4,7 @@ rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-    ../common.nix
-    ../../modules/yubikey-gpg.nix
-    ../../modules/distributed-build.nix
-    ../../modules/nix-conf.nix
-    ../../modules/x11.nix
+      ../common.nix
     ];
 
   # Use the systemd-boot EFI boot loader.

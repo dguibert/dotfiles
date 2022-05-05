@@ -23,9 +23,6 @@ in
 rec {
   imports = [
       ../common.nix
-      ../../modules/nix-conf.nix
-      ../../modules/zfs.nix
-      ../../modules/yubikey-gpg.nix
       #(import <nur_dguibert/modules>).qemu-user
       #../../modules/wayland-nvidia.nix
     ];

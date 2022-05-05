@@ -152,112 +152,118 @@
     ##
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-    nixosModules.defaults = { config, lib, pkgs, resources, ...}: {
-      imports = [
-        inputs.nixpkgs.nixosModules.notDetected
-        inputs.home-manager.nixosModules.home-manager
-        inputs.sops-nix.nixosModules.sops
+    nixosModules = (import ./modules) // {
+      defaults = { config, lib, pkgs, resources, ...}: {
+        imports = [
+          inputs.nixpkgs.nixosModules.notDetected
+          inputs.home-manager.nixosModules.home-manager
+	  inputs.sops-nix.nixosModules.sops
 
-        ./modules/wireguard-mesh.nix
-        ./modules/report-changes.nix
+          self.nixosModules.wireguard-mesh
+          self.nixosModules.report-changes
+	  self.nixosModules.distributed-build-conf
+	  ({ config, ... }: { distributed-build-conf.enable = true; })
+	  self.nixosModules.nix-conf
+	  ({ config, ... }: { nix-conf.enable = true; })
 
-        ./roles/dns.nix
-        ./roles/libvirtd.nix
-        ./roles/robotnix-ota.nix
-        (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
-        ./roles/mopidy.nix
-        ./roles/sshguard.nix
-        ./roles/wireguard-mesh.nix
+          ./roles/dns.nix
+          ./roles/libvirtd.nix
+          ./roles/robotnix-ota.nix
+          (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
+          ./roles/mopidy.nix
+          ./roles/sshguard.nix
+          ./roles/wireguard-mesh.nix
 
-        (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
-      ];
-
-      system.nixos.versionSuffix = lib.mkForce
-        ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
-      system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
-      nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
-        # https://nixos.wiki/wiki/Chromium
-        chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
-        permittedInsecurePackages = [
-          "ffmpeg-3.4.8" # oraclejre
+          (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
         ];
+
+        system.nixos.versionSuffix = lib.mkForce
+          ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
+        system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
+        nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+          # https://nixos.wiki/wiki/Chromium
+          chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+          permittedInsecurePackages = [
+            "ffmpeg-3.4.8" # oraclejre
+          ];
+        };
+        nixpkgs.overlays = [
+          inputs.nix.overlay
+          inputs.nixpkgs-wayland.overlay
+          inputs.nur.overlay
+          inputs.nur_dguibert.overlay
+          inputs.nur_dguibert.overlays.extra-builtins
+          inputs.nur_dguibert.overlays.emacs
+          #nur_dguibert_envs.overlay
+          inputs.nxsession.overlay
+          inputs.emacs-overlay.overlay
+          inputs.self.overlays.default
+        ];
+        # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
+        nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+        nix.registry = lib.mapAttrs (id: flake: {
+          inherit flake;
+          from = { inherit id; type = "indirect"; };
+        }) inputs;
+        environment.shellInit = ''
+          export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
+          NIX_OPTIONS=()
+          NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
+          export NIX_OPTIONS
+        '';
+        nix.settings.system-features = [ "recursive-nix" ] ++ # default
+          [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+          lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
+            "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
+          ] ++
+          lib.optionals (pkgs.hostPlatform ? gcc.arch) (
+            # a builder can run code for `gcc.arch` and inferior architectures
+            [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
+            map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
+          );
+
+        programs.gnupg.agent.pinentryFlavor = "gtk2";
+
+        role.wireguard-mesh.enable = true;
+        # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
+        programs.ssh.knownHosts."*" = {
+          certAuthority=true;
+          publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
+        };
+
+        sops.secrets.id_buildfarm = {
+          sopsFile = ./secrets/defaults.yaml;
+          owner = "root";
+          path = "/etc/nix/id_buildfarm";
+        };
+
+        # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
+        #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
+        sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
+        sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
+        #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
+        sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
+
+        services.openssh.extraConfig = lib.mkOrder 100 ''
+          HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
+          HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
+        '';
+        services.openssh.hostKeys = [
+          {
+            #path = config.sops.secrets."ssh_host_ed25519_key".path;
+            path = "/persist/etc/ssh/ssh_host_ed25519_key";
+            type = "ed25519";
+          }
+          {
+            path = "/persist/etc/ssh/ssh_host_rsa_key";
+            type = "rsa";
+            bits = 4096;
+          }
+        ];
+
+        report-changes.enable = true;
       };
-      nixpkgs.overlays = [
-        inputs.nix.overlay
-        inputs.nixpkgs-wayland.overlay
-        inputs.nur.overlay
-        inputs.nur_dguibert.overlay
-        inputs.nur_dguibert.overlays.extra-builtins
-        inputs.nur_dguibert.overlays.emacs
-        #nur_dguibert_envs.overlay
-        inputs.nxsession.overlay
-        inputs.emacs-overlay.overlay
-        inputs.self.overlays.default
-      ];
-      # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
-      nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
-      nix.registry = lib.mapAttrs (id: flake: {
-        inherit flake;
-        from = { inherit id; type = "indirect"; };
-      }) inputs;
-      environment.shellInit = ''
-        export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
-        NIX_OPTIONS=()
-        NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
-        export NIX_OPTIONS
-      '';
-      nix.settings.system-features = [ "recursive-nix" ] ++ # default
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
-          "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
-        ] ++
-        lib.optionals (pkgs.hostPlatform ? gcc.arch) (
-          # a builder can run code for `gcc.arch` and inferior architectures
-          [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
-        );
-
-      programs.gnupg.agent.pinentryFlavor = "gtk2";
-
-      role.wireguard-mesh.enable = true;
-      # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-      programs.ssh.knownHosts."*" = {
-        certAuthority=true;
-        publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
-      };
-
-      sops.secrets.id_buildfarm = {
-        sopsFile = ./secrets/defaults.yaml;
-        owner = "root";
-        path = "/etc/nix/id_buildfarm";
-      };
-
-      # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
-      #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
-      sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
-      sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
-      #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
-      sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
-      sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
-
-      services.openssh.extraConfig = lib.mkOrder 100 ''
-        HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
-        HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
-      '';
-      services.openssh.hostKeys = [
-        {
-          #path = config.sops.secrets."ssh_host_ed25519_key".path;
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-        {
-          path = "/persist/etc/ssh/ssh_host_rsa_key";
-          type = "rsa";
-          bits = 4096;
-        }
-      ];
-
-      report-changes.enable = true;
     };
 
     #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
@@ -310,7 +316,8 @@
     nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
-        ./modules/zfs.nix
+	self.nixosModules.zfs
+	({ config, ... }: { zfs-conf.enable = true; })
         ./hosts/iso.nix
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
@@ -342,9 +349,10 @@
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
             inputs.self.nixosModules.defaults
-            ./modules/yubikey-gpg.nix
-            ./modules/distributed-build.nix
-            ./modules/x11.nix
+	    self.nixosModules.yubikey-gpg-conf
+	    ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+	    self.nixosModules.x11-conf
+	    ({ config, ... }: { x11-conf.enable = true; })
           ];
           hardware.opengl.enable = true;
           #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
@@ -633,6 +641,11 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
+	    self.nixosModules.yubikey-gpg-conf
+	    ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+	    self.nixosModules.x11-conf
+	    ({ config, ... }: { x11-conf.enable = true; })
+
             ({ ... }: {
               nix.settings = {
                 # add binary caches
