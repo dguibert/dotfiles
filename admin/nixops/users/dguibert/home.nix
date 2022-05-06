@@ -629,7 +629,7 @@ let
 
           wayland
           sway
-          swaybar
+          nwg-panel
 
           corkscrew
           autossh
