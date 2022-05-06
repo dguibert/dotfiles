@@ -562,8 +562,10 @@ let
     });
 
     withX11 = { config, pkgs, lib
-            , ...}@args: let
+              , ...}@args: let
+
       davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
+
     in with lib;
         lib.recursiveUpdate
       (homes.withoutX11 args)
@@ -631,8 +633,6 @@ let
           corkscrew
           autossh
 
-          davmail_
-          neomutt
           urlscan
 
           hledger
@@ -662,6 +662,8 @@ let
 
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
+        ] ++ optionals config.centralMailHost.enable [
+	  davmail_
         ];
         #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
         #home.sessionVariables.EDITOR="vim";
@@ -680,38 +682,6 @@ let
         services.emacs.enable = true;
         #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
-        xsession = {
-          enable = true;
-          windowManager.command = "${pkgs.dwm}/bin/dwm";
-          initExtra = ''
-            # Turn off beeps.
-            xset -b
-            xrdb -merge ~/.Xresources
-
-            sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-            case "$HOSTNAME" in
-              titan)
-                sleep 10 && ${davmail_}/bin/davmail &
-                ;;
-            esac
-            ${pkgs.autorandr}/bin/autorandr -c
-
-            conky -c ~/.conkyrc | while read line; do
-                xsetroot -name "$line"
-                echo "$line" > .conky.out
-            done &
-           '';
-        };
-        services.screen-locker = {
-          enable =true;
-          inactiveInterval = 5;
-          lockCmd = "${pkgs.xlockmore}/bin/xlock -mode blank";
-          xautolock = {
-            enable = true;
-            detectSleep = true;
-            extraOptions = [ "-corners 0+0-" "-cornersize 30" ]; # top left, top right, bottom left, bottom right
-          };
-        };
         home.file.".conkyrc".text = ''
           conky.config = {
               out_to_console = true,
@@ -769,7 +739,6 @@ let
         fonts.fontconfig.enable = lib.mkForce true;
 
         services.udiskie.enable = true;
-        services.pasystray.enable = true;
 
         xresources.properties = {
           "*visualBell" = false;

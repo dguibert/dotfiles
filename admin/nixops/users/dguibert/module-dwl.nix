@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
 
@@ -40,7 +40,7 @@ let
 
   # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
 
-in {
+in with lib; {
 
   home.packages = with pkgs; [
     dwl-session
