@@ -761,6 +761,14 @@ let
           "URxvt.termName" = "xterm-256color";
           "st.termname" = "st-256color";
           "st.termName" = "st-256color";
+	  # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
+	  # use 'shell' template to set these if necessary
+	  "*color16" = "base09";
+	  "*color17" = "base0F";
+	  "*color18" = "base01";
+	  "*color19" = "base02";
+	  "*color20" = "base04";
+	  "*color21" = "base06";
         };
         xresources.extraConfig = builtins.readFile (config.lib.base16.base16template "xresources");
         programs.autorandr.enable = true;
