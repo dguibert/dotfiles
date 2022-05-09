@@ -67,6 +67,7 @@ in {
 
     #sound.enable = true;
     #sound.mediaKeys.enable = true;
+    # TODO migrate to pipewire
     hardware.pulseaudio = {
       enable = true;
       support32Bit = true;
@@ -135,6 +136,7 @@ in {
     ];
 
     services.snapserver.enable = true;
+    services.snapserver.openFirewall = false; # suppress warning: no longer default to true starting with NixOS 22.11
     services.snapserver.streams.snapinfo = {
       type = "pipe";
       location = "/run/snapserver/snapfifo";

@@ -1,5 +1,4 @@
-{ sopsDecrypt_, pkgs, inputs, ...}@args:
-{ config, lib, ... }:
+{ config, lib, sopsDecrypt_, inputs, pkgs, ... }:
 
 with lib;
 let
@@ -39,14 +38,11 @@ in {
 
     users.groups.dguibert.gid = 1000;
 
-    home-manager.users.dguibert = if (config.services.xserver.enable
-      || config.programs.xwayland.enable
+    home-manager.users.dguibert = if (config.x11-conf.enable
+      || config.wayland-conf.enable
       )
-      then (import ./home.nix (args // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withX11
-      else (import ./home.nix (args // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withoutX11
+      then (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withX11
+      else (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost=lib.mkIf (config.networking.hostName == "titan") true; } )).withoutX11
       ;
-    home-manager.useGlobalPkgs = true;
-    #home-manager.useUserPackages = true;
-    home-manager.verbose = true;
   };
 }

@@ -1,23 +1,49 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
 
-  start-dwl = pkgs.writeShellScriptBin "start-dwl" ''
-    # first import environment variables from the login manager
-    systemctl --user import-environment
-    # then start the service
-    exec systemctl --user start dwl.service
+  # https://git.sr.ht/~raphi/dwl/tree/master/item/dwl-session
+  dwl-session = pkgs.writeShellScriptBin "dwl-session" ''
+    #!/bin/sh
+    set -e
+    maybe() {
+      command -v "$1" > /dev/null && "$@"
+    }
+
+    if [ "$1" = 'startup' ]; then
+      # this is hell
+      dbus-update-activation-environment --systemd \
+        QT_QPA_PLATFORM WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+      #maybe ~/.local/lib/pulseaudio-watch someblocks &
+      PATH=~/code/someblocks:$PATH someblocks &
+      swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
+      somebar
+
+      # kill any remaining background tasks
+      for pid in $(pgrep -g $$); do
+        test "$$" != "$pid" && kill "$pid"
+      done
+    else
+      if [ -e /dev/nvidiactl ]; then
+        export WLR_NO_HARDWARE_CURSORS=1
+      fi
+      export QT_QPA_PLATFORM=wayland-egl
+      export XDG_CURRENT_DESKTOP=wlroots
+
+      # Start systemd user services for graphical sessions
+      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+
+      exec dwl -s "setsid -w $0 startup <&-" # close standard input
+    fi
   '';
 
-  start-waybar = pkgs.writeShellScriptBin "start-waybar" ''
-    export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -f 'sway$').sock
-    ${pkgs.waybar}/bin/waybar
-  '';
+  # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
 
-in {
+in with lib; {
 
   home.packages = with pkgs; [
-    start-dwl
+    dwl-session
     dwl
     somebar
     wl-clipboard
@@ -65,21 +91,21 @@ in {
     };
   };
 
-  systemd.user.services.dwl = {
-    Unit = {
-      Description = "DWL - Wayland window manager";
-      BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" ];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.dwl}/bin/dwl -s ${pkgs.somebar}/bin/somebar";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
+  #systemd.user.services.dwl = {
+  #  Unit = {
+  #    Description = "DWL - Wayland window manager";
+  #    BindsTo = [ "graphical-session.target" ];
+  #    Wants = [ "graphical-session-pre.target" ];
+  #    After = [ "graphical-session-pre.target" ];
+  #  };
+  #  Service = {
+  #    Type = "simple";
+  #    ExecStart = "${pkgs.dwl}/bin/dwl -s ${pkgs.somebar}/bin/somebar";
+  #    Restart = "on-failure";
+  #    RestartSec = 1;
+  #    TimeoutStopSec = 10;
+  #  };
+  #};
 
   systemd.user.services.mako = {
     Unit = {
@@ -93,6 +119,22 @@ in {
       Type = "dbus";
       BusName = "org.freedesktop.Notifications";
       ExecStart = "${pkgs.mako}/bin/mako";
+      RestartSec = 5;
+      Restart = "always";
+    };
+  };
+
+  systemd.user.services.swayidle = {
+    Unit = {
+      Description = "Idle display configuration";
+      PartOf = [ "graphical-session.target" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };

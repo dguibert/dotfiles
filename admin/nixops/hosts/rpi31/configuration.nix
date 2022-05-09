@@ -9,8 +9,6 @@ rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
     ../common.nix
-    ../../modules/nix-conf.nix
-    ../../modules/distributed-build.nix
     ../../users/rdolbeau
   ];
 

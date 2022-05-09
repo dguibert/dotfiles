@@ -73,8 +73,8 @@ let
       programs.bash.shellAliases.ls="ls --color";
 
       programs.bash.bashrcExtra = ''
-        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v start-dwl >/dev/null ; then
-          exec start-dwl
+        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
+          exec dwl-session
         fi
       '';
       programs.bash.initExtra = ''
@@ -164,7 +164,6 @@ let
       home.sessionVariables.MANPATH="$HOME/man:$MANPATH:/share/man:/usr/share/man";
       home.sessionVariables.PAGER="less -R";
       home.sessionVariables.LESS="RFX";
-      home.sessionVariables.EDITOR="vim";
       home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
       # ✗ 1    dguibert@vbox-57nvj72 ~ $ systemctl --user status
       # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
@@ -563,8 +562,10 @@ let
     });
 
     withX11 = { config, pkgs, lib
-            , ...}@args: let
+              , ...}@args: let
+
       davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
+
     in with lib;
         lib.recursiveUpdate
       (homes.withoutX11 args)
@@ -620,7 +621,6 @@ let
           (conky.override { x11Support = false; })
           gnuplot
           mkpasswd
-          xpra
           aria2
           qtpass
           qrencode
@@ -629,12 +629,11 @@ let
 
           wayland
           sway
+          nwg-panel
 
           corkscrew
           autossh
 
-          davmail_
-          neomutt
           urlscan
 
           hledger
@@ -664,8 +663,15 @@ let
 
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
+        ] ++ optionals config.centralMailHost.enable [
+          davmail_
         ];
         #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        #home.sessionVariables.EDITOR="vim";
+        programs.bash.shellAliases.e="emacsclient";
+        home.sessionVariables.ALTERNATE_EDITOR="";
+        home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
+        home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
         home.file.".emacs.d".source = inputs.chemacs;
         home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
         home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
@@ -677,38 +683,6 @@ let
         services.emacs.enable = true;
         #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
-        xsession = {
-          enable = true;
-          windowManager.command = "${pkgs.dwm}/bin/dwm";
-          initExtra = ''
-            # Turn off beeps.
-            xset -b
-            xrdb -merge ~/.Xresources
-
-            sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-            case "$HOSTNAME" in
-              titan)
-                sleep 10 && ${davmail_}/bin/davmail &
-                ;;
-            esac
-            ${pkgs.autorandr}/bin/autorandr -c
-
-            conky -c ~/.conkyrc | while read line; do
-                xsetroot -name "$line"
-                echo "$line" > .conky.out
-            done &
-           '';
-        };
-        services.screen-locker = {
-          enable =true;
-          inactiveInterval = 5;
-          lockCmd = "${pkgs.xlockmore}/bin/xlock -mode blank";
-          xautolock = {
-            enable = true;
-            detectSleep = true;
-            extraOptions = [ "-corners 0+0-" "-cornersize 30" ]; # top left, top right, bottom left, bottom right
-          };
-        };
         home.file.".conkyrc".text = ''
           conky.config = {
               out_to_console = true,
@@ -766,7 +740,6 @@ let
         fonts.fontconfig.enable = lib.mkForce true;
 
         services.udiskie.enable = true;
-        services.pasystray.enable = true;
 
         xresources.properties = {
           "*visualBell" = false;
@@ -789,6 +762,14 @@ let
           "URxvt.termName" = "xterm-256color";
           "st.termname" = "st-256color";
           "st.termName" = "st-256color";
+          # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
+          # use 'shell' template to set these if necessary
+          "*color16" = "base09";
+          "*color17" = "base0F";
+          "*color18" = "base01";
+          "*color19" = "base02";
+          "*color20" = "base04";
+          "*color21" = "base06";
         };
         xresources.extraConfig = builtins.readFile (config.lib.base16.base16template "xresources");
         programs.autorandr.enable = true;
@@ -861,73 +842,5 @@ let
       programs.direnv.enable = true;
       programs.direnv.nix-direnv.enable = true;
     });
-
-    cluster = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.withoutX11 args)
-      ({
-        programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
-          if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-            source $HOME/.nix-profile/etc/profile.d/nix.sh
-          fi
-          export NIX_IGNORE_SYMLINK_STORE=1 # aloy
-
-          export PATH=$HOME/bin:$PATH
-        '';
-
-        nixpkgs.overlays = [ (final: prev: {
-          pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-        })];
-        services.gpg-agent.pinentryFlavor = lib.mkForce "curses";
-
-        home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
-          editorconfig-core-c
-          todo-txt-cli
-          ctags
-          dvtm
-          gnupg1compat
-
-          nix
-          gitAndTools.git-annex
-          gitAndTools.hub
-          gitAndTools.git-crypt
-          gitFull #guiSupport is harmless since we also installl xpra
-          (pkgs.writeScriptBin "git-annex-diff-wrapper" ''
-            #!${pkgs.runtimeShell}
-            LANG=C ${pkgs.difftools}/bin/diff -u "$1" "$2"
-            exit 0
-          '')
-          python3Packages.datalad
-          subversion
-          tig
-          jq
-          lsof
-          #xpra
-          htop
-          tree
-
-          # testing (removed 20171122)
-          #Mitos
-          #MemAxes
-          python3
-        ];
-        programs.direnv.enable = true;
-        programs.direnv.nix-direnv.enable = true;
-      });
-    spartan = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.cluster args)
-      ({
-      });
-
-    inti = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.cluster args)
-      ({
-      });
-
   };
 in homes
