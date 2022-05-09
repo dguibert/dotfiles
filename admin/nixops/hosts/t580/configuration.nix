@@ -4,11 +4,7 @@ rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-    ../common.nix
-    ../../modules/yubikey-gpg.nix
-    ../../modules/distributed-build.nix
-    ../../modules/nix-conf.nix
-    ../../modules/x11.nix
+      ../common.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -80,8 +76,6 @@ rec {
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim
-     pavucontrol
-     pulseaudioLight
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -108,63 +102,6 @@ rec {
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
-  # Remove sound.enable or turn it off if you had it set previously, it seems to cause conflicts with pipewire
-  #sound.enable = false;
-
-  # rtkit is optional but recommended
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-    ## low-latency pulse backend https://nixos.wiki/wiki/PipeWire
-    #config.pipewire-pulse = {
-    #  "context.properties" = {
-    #    "log.level" = 2;
-    #  };
-    #  "context.modules" = [
-    #    {
-    #      name = "libpipewire-module-rtkit";
-    #      args = {
-    #        "nice.level" = -15;
-    #        "rt.prio" = 88;
-    #        "rt.time.soft" = 200000;
-    #        "rt.time.hard" = 200000;
-    #      };
-    #      flags = [ "ifexists" "nofail" ];
-    #    }
-    #    { name = "libpipewire-module-protocol-native"; }
-    #    { name = "libpipewire-module-client-node"; }
-    #    { name = "libpipewire-module-adapter"; }
-    #    { name = "libpipewire-module-metadata"; }
-    #    {
-    #      name = "libpipewire-module-protocol-pulse";
-    #      args = {
-    #        "pulse.min.req" = "32/48000";
-    #        "pulse.default.req" = "32/48000";
-    #        "pulse.max.req" = "32/48000";
-    #        "pulse.min.quantum" = "32/48000";
-    #        "pulse.max.quantum" = "32/48000";
-    #        "server.address" = [ "unix:native" ];
-    #      };
-    #    }
-    #  ];
-    #  "stream.properties" = {
-    #    "node.latency" = "32/48000";
-    #    "resample.quality" = 1;
-    #  };
-    #};
-  };
-
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "fr";
@@ -186,29 +123,29 @@ rec {
   # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
   #- The option definition `nesting.clone' in `flake.nix' no longer has any effect; please remove it.
   #specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }
-  specialisation.work = { inheritParentConfig = true; configuration = {
-      boot.loader.grub.configurationName = "Work";
-      networking.proxy.default = "http://localhost:3128";
-      networking.proxy.noProxy = "127.0.0.1,localhost,10.*,192.168.*";
-      services.cntlm.enable = true;
-      services.cntlm.username = "a629925";
-      services.cntlm.domain = "ww930";
-      services.cntlm.netbios_hostname = "fr-57nvj72";
-      services.cntlm.proxy = [
-        "10.89.0.72:84"
-        #"proxy-emea.my-it-solutions.net:84"
-        #"10.92.32.21:84"
-        #"proxy-americas.my-it-solutions.net:84"
-      ];
-      services.cntlm.extraConfig = ''
-        NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
-      '';
+  #specialisation.work = { inheritParentConfig = true; configuration = {
+  #    boot.loader.grub.configurationName = "Work";
+  #    networking.proxy.default = "http://localhost:3128";
+  #    networking.proxy.noProxy = "127.0.0.1,localhost,10.*,192.168.*";
+  #    services.cntlm.enable = true;
+  #    services.cntlm.username = "a629925";
+  #    services.cntlm.domain = "ww930";
+  #    services.cntlm.netbios_hostname = "fr-57nvj72";
+  #    services.cntlm.proxy = [
+  #      "10.89.0.72:84"
+  #      #"proxy-emea.my-it-solutions.net:84"
+  #      #"10.92.32.21:84"
+  #      #"proxy-americas.my-it-solutions.net:84"
+  #    ];
+  #    services.cntlm.extraConfig = ''
+  #      NoProxy localhost, 127.0.0.*, 10.*, 192.168.*
+  #    '';
 
-      users.users.cntlm.group = "cntlm";
-      users.groups.cntlm = {};
+  #    users.users.cntlm.group = "cntlm";
+  #    users.groups.cntlm = {};
 
-    };
-  };
+  #  };
+  #};
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

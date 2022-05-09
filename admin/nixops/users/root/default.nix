@@ -1,4 +1,3 @@
-inputs:
 { config, lib, ... }:
 
 let
@@ -11,10 +10,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.root = (import ./home.nix inputs).home;
-    home-manager.useGlobalPkgs = true;
-    #home-manager.useUserPackages = true;
-    home-manager.verbose = true;
+    home-manager.users.root = import ./home.nix;
   };
 
 }

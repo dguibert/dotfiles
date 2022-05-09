@@ -15,10 +15,6 @@ rec {
 
   imports = [
     ../common.nix
-    ../../modules/nix-conf.nix
-    ../../modules/yubikey-gpg.nix
-    ../../modules/distributed-build.nix
-    ../../modules/x11.nix
   ];
   nixpkgs.localSystem.system = "x86_64-linux";
 
@@ -46,7 +42,7 @@ rec {
 
   swapDevices = [ { device = "/dev/sda2"; } ];
 
-  nix.maxJobs = 2;
+  nix.settings.max-jobs = 2;
 
   hardware.trackpoint.enable = true;
   hardware.trackpoint.emulateWheel = true;
@@ -135,7 +131,7 @@ rec {
 
   hardware.pulseaudio = {
     enable = true;
-    package = pkgs.pulseaudioLight.override {
+    package = pkgs.pulseaudio.override {
       /*gconf = gnome3.gconf;*/
       x11Support = true;
       /*gconfSupport = true;*/

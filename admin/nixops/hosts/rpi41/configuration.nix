@@ -9,8 +9,6 @@ rec {
   #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
   imports = [
     ../common.nix
-    ../../modules/nix-conf.nix
-    ../../modules/distributed-build.nix
   ];
 
   #sdImage.bootSize = 512;
@@ -48,7 +46,7 @@ rec {
 
   environment.systemPackages = [ pkgs.vim ];
 
-  nix.maxJobs = 4;
+  nix.settings.max-jobs = 4;
 
   networking.useNetworkd = lib.mkForce false;
   networking.dhcpcd.enable = false;
@@ -57,7 +55,7 @@ rec {
     DHCP = "yes";
   };
 
-  environment.noXlibs = true;
+  environment.noXlibs = false; #https://github.com/NixOS/nixpkgs/issues/102137
   programs.ssh.setXAuthLocation = false;
   security.pam.services.su.forwardXAuth = lib.mkForce false;
 

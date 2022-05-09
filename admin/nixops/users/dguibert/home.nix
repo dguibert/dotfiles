@@ -61,19 +61,32 @@ let
 
       programs.bash.enable = true;
 
-      #programs.bash.historySize = 50000;
-      #programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
-      #programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g" ];
-
-      home.sessionVariables.HISTCONTROL="erasedups:ignoredups:ignorespace";
-      home.sessionVariables.HISTFILE="$HOME/.bash_history";
-      home.sessionVariables.HISTFILESIZE="";
-      home.sessionVariables.HISTIGNORE="ls:cd:clear:[bf]g";
-      home.sessionVariables.HISTSIZE="";
+      programs.bash.historySize = -1; # no truncation
+      programs.bash.historyFile = "$HOME/.bash_history";
+      programs.bash.historyFileSize = -1; # no truncation
+      programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+      programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g"
+        " *" "cd -" "history" "history -*" "man" "man *"
+        "pwd" "exit" "date" "* --help:"
+      ];
 
       programs.bash.shellAliases.ls="ls --color";
 
+      programs.bash.bashrcExtra = ''
+        if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
+          exec dwl-session
+        fi
+      '';
       programs.bash.initExtra = ''
+        export HISTCONTROL
+        export HISTFILE
+        export HISTFILESIZE
+        export HISTIGNORE
+        export HISTSIZE
+        export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
+        # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
+        test "$TERM" != "dumb" || return
+
         # Provide a nice prompt.
         PS1=""
         PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
@@ -144,7 +157,6 @@ let
 
       # http://ubuntuforums.org/showthread.php?t=1150822
       ## Save and reload the history after each command finishes
-      home.sessionVariables.PROMPT_COMMAND="history -a; history -c; history -r";
       home.sessionVariables.SQUEUE_FORMAT="%.18i %.25P %35j %.8u %.2t %.10M %.6D %.6C %.6z %.15E %20R %W";
      #home.sessionVariables.SINFO_FORMAT="%30N  %.6D %.6c %15F %10t %20f %P"; # with state
       home.sessionVariables.SINFO_FORMAT="%30N  %.6D %.6c %15F %20f %P";
@@ -152,12 +164,12 @@ let
       home.sessionVariables.MANPATH="$HOME/man:$MANPATH:/share/man:/usr/share/man";
       home.sessionVariables.PAGER="less -R";
       home.sessionVariables.LESS="RFX";
-      home.sessionVariables.EDITOR="vim";
       home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
       # ✗ 1    dguibert@vbox-57nvj72 ~ $ systemctl --user status
       # Failed to read server status: Process org.freedesktop.systemd1 exited with status 1
       # ✗ 130    dguibert@vbox-57nvj72 ~ $ export XDG_RUNTIME_DIR=/run/user/$(id -u)
       home.sessionVariables.XDG_RUNTIME_DIR="/run/user/$(id -u)";
+      home.sessionVariables.MOZ_ENABLE_WAYLAND=1;
 
       # Fix stupid java applications like android studio
       home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
@@ -165,7 +177,6 @@ let
       home.packages = with pkgs; [
         (vim_configurable.override {
           guiSupport = "no";
-          gtk2=null; gtk3=null;
           libX11=null; libXext=null; libSM=null; libXpm=null; libXt=null; libXaw=null; libXau=null; libXmu=null;
           libICE=null;
         })
@@ -192,7 +203,7 @@ let
         bc
         unzip
 
-        sshfsFuse
+        sshfs-fuse
 
         moreutils
         jq
@@ -457,21 +468,22 @@ let
             port = lib.mkIf (host == "rpi31") 443;
 
           };
-          ## Coming from inside home network.
+          ## Coming from VPN
           "${host}_2" = lib.hm.dag.entryAfter ["${host}_1"] {
-            host = "${host}";
-            extraOptions.PermitLocalCommand = "yes";
-            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
-            hostname = "${ip}";
-            inherit port;
-          };
-          "${host}_3" = lib.hm.dag.entryAfter ["${host}_2"] {
             host = "${host}";
             matchHeader = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
             extraOptions.PermitLocalCommand = "yes";
             extraOptions.LocalCommand = "echo \"SSH %n: From VPN network, to %h\" >&2";
             proxyCommand="none";
             hostname = "${vpn_ip}";
+            inherit port;
+          };
+          ## Coming from inside home network.
+          "${host}_3" = lib.hm.dag.entryAfter ["${host}_2"] {
+            host = "${host}";
+            extraOptions.PermitLocalCommand = "yes";
+            extraOptions.LocalCommand = "echo \"SSH %n: From home network, to %h\" >&2";
+            hostname = "${ip}";
             inherit port;
           };
         };
@@ -550,8 +562,10 @@ let
     });
 
     withX11 = { config, pkgs, lib
-            , ...}@args: let
+              , ...}@args: let
+
       davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
+
     in with lib;
         lib.recursiveUpdate
       (homes.withoutX11 args)
@@ -564,6 +578,7 @@ let
             options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
             config.centralMailHost.enable = isCentralMailHost;
           })
+          ./module-dwl.nix
         ];
 
         home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
@@ -606,7 +621,6 @@ let
           (conky.override { x11Support = false; })
           gnuplot
           mkpasswd
-          xpra
           aria2
           qtpass
           qrencode
@@ -615,12 +629,11 @@ let
 
           wayland
           sway
+          nwg-panel
 
           corkscrew
           autossh
 
-          davmail_
-          neomutt
           urlscan
 
           hledger
@@ -650,44 +663,26 @@ let
 
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
+        ] ++ optionals config.centralMailHost.enable [
+          davmail_
         ];
-        home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
+        #home.sessionVariables.EDITOR="vim";
+        programs.bash.shellAliases.e="emacsclient";
+        home.sessionVariables.ALTERNATE_EDITOR="";
+        home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
+        home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
+        home.file.".emacs.d".source = inputs.chemacs;
+        home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
+        home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
+        home.file.".emacs-profiles.el".text = ''
+          (("default" . ((user-emacs-directory . "~/.emacs.default"))))
+        '';
         programs.emacs.enable = true;
         programs.emacs.package = pkgs.my-emacs;
         services.emacs.enable = true;
         #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
-        xsession = {
-          enable = true;
-          windowManager.command = "${pkgs.dwm}/bin/dwm";
-          initExtra = ''
-            # Turn off beeps.
-            xset -b
-            xrdb -merge ~/.Xresources
-
-            sleep 10 && ${pkgs.qtpass}/bin/qtpass &
-            case "$HOSTNAME" in
-              titan)
-                sleep 10 && ${davmail_}/bin/davmail &
-                ;;
-            esac
-            ${pkgs.autorandr}/bin/autorandr -c
-
-            conky -c ~/.conkyrc | while read line; do
-                xsetroot -name "$line"
-                echo "$line" > .conky.out
-            done &
-           '';
-        };
-        services.screen-locker = {
-          enable =true;
-          inactiveInterval = 5;
-          lockCmd = "${pkgs.xlockmore}/bin/xlock -mode blank";
-          xautolock = {
-            enable = true;
-            detectSleep = true;
-          };
-        };
         home.file.".conkyrc".text = ''
           conky.config = {
               out_to_console = true,
@@ -706,8 +701,16 @@ let
 
         programs.browserpass.enable = true;
 
-        programs.firefox.enable = true;
-        programs.firefox.package = pkgs.firefox-bin;
+        # https://nixos.wiki/wiki/Firefox
+        programs.firefox = {
+          enable = true;
+          package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+            forceWayland = true;
+            extraPolicies = {
+              ExtensionSettings = {};
+            };
+          };
+        };
         #programs.firefox.extensions =
         #  with pkgs.nur.repos.rycee.firefox-addons; [
         #    browserpass
@@ -737,7 +740,6 @@ let
         fonts.fontconfig.enable = lib.mkForce true;
 
         services.udiskie.enable = true;
-        services.pasystray.enable = true;
 
         xresources.properties = {
           "*visualBell" = false;
@@ -760,6 +762,14 @@ let
           "URxvt.termName" = "xterm-256color";
           "st.termname" = "st-256color";
           "st.termName" = "st-256color";
+          # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
+          # use 'shell' template to set these if necessary
+          "*color16" = "base09";
+          "*color17" = "base0F";
+          "*color18" = "base01";
+          "*color19" = "base02";
+          "*color20" = "base04";
+          "*color21" = "base06";
         };
         xresources.extraConfig = builtins.readFile (config.lib.base16.base16template "xresources");
         programs.autorandr.enable = true;
@@ -787,7 +797,7 @@ let
           fingerprint = {
             #"DVI-I-1-1"="00ffffffffffff0030aeb461010101010c1d0104a53420783e5595a9544c9e240d5054bdcf00d1c0714f818c81008180950f9500b300283c80a070b023403020360006442100001a000000ff0056354747323030350a20202020000000fd00324b1e5311000a202020202020000000fc004c454e20543234642d31300a200121020318f14b010203040514111213901f230907078301000028190050500016300820880006442100001e662156aa51001e30468f330006442100001e483f403062b0324040c0130006442100001800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9";
             "HDMI-2"= "00ffffffffffff0030aeb461010101010c1d0103803420782e5595a9544c9e240d5054bdcf00d1c0714f818c81008180950f9500b300283c80a070b023403020360006442100001a000000ff0056354747323030350a20202020000000fd00324b1e5311000a202020202020000000fc004c454e20543234642d31300a20015702031ef14b010203040514111213901f230907078301000065030c00100028190050500016300820880006442100001e662156aa51001e30468f330006442100001e483f403062b0324040c01300064421000018000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f";
-            "eDP1"="00ffffffffffff0030aeba4000000000001c0104a5221378e238d5975e598e271c505400000001010101010101010101010101010101243680a070381f403020350058c210000019502b80a070381f403020350058c2100000190000000f00d10930d10930190a0030e4e705000000fe004c503135365746432d535044420094";
+            "eDP-1"="00ffffffffffff0030aeba4000000000001c0104a5221378e238d5975e598e271c505400000001010101010101010101010101010101243680a070381f403020350058c210000019502b80a070381f403020350058c2100000190000000f00d10930d10930190a0030e4e705000000fe004c503135365746432d535044420094";
           };
           config = {
             "HDMI-2" = {
@@ -797,7 +807,7 @@ let
               mode = "1920x1200";
             };
 
-            "eDP1" = {
+            "eDP-1" = {
               enable = true;
               position = "1920x0";
               mode = "1920x1080";
@@ -808,7 +818,7 @@ let
         programs.autorandr.profiles.t580-thinkvision-on-dock = {
           fingerprint = {
             "DP2-3"    ="00ffffffffffff0030aeb461010101010c1d0104a53420783e5595a9544c9e240d5054bdcf00d1c0714f818c81008180950f9500b300283c80a070b023403020360006442100001a000000ff0056354747323030350a20202020000000fd00324b1e5311000a202020202020000000fc004c454e20543234642d31300a200121020318f14b010203040514111213901f230907078301000028190050500016300820880006442100001e662156aa51001e30468f330006442100001e483f403062b0324040c0130006442100001800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9";
-            "eDP1"="00ffffffffffff0030aeba4000000000001c0104a5221378e238d5975e598e271c505400000001010101010101010101010101010101243680a070381f403020350058c210000019502b80a070381f403020350058c2100000190000000f00d10930d10930190a0030e4e705000000fe004c503135365746432d535044420094";
+            "eDP-1"="00ffffffffffff0030aeba4000000000001c0104a5221378e238d5975e598e271c505400000001010101010101010101010101010101243680a070381f403020350058c210000019502b80a070381f403020350058c2100000190000000f00d10930d10930190a0030e4e705000000fe004c503135365746432d535044420094";
           };
           config = {
             "DP2-3" = {
@@ -818,7 +828,7 @@ let
               mode = "1920x1200";
             };
 
-            "eDP1" = {
+            "eDP-1" = {
               enable = true;
               position = "1920x0";
               mode = "1920x1080";
@@ -832,73 +842,5 @@ let
       programs.direnv.enable = true;
       programs.direnv.nix-direnv.enable = true;
     });
-
-    cluster = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.withoutX11 args)
-      ({
-        programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
-          if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-            source $HOME/.nix-profile/etc/profile.d/nix.sh
-          fi
-          export NIX_IGNORE_SYMLINK_STORE=1 # aloy
-
-          export PATH=$HOME/bin:$PATH
-        '';
-
-        nixpkgs.overlays = [ (final: prev: {
-          pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-        })];
-        services.gpg-agent.pinentryFlavor = lib.mkForce "curses";
-
-        home.packages = with pkgs; (homes.withoutX11 args).home.packages ++ [
-          editorconfig-core-c
-          todo-txt-cli
-          ctags
-          dvtm
-          gnupg1compat
-
-          nix
-          gitAndTools.git-annex
-          gitAndTools.hub
-          gitAndTools.git-crypt
-          gitFull #guiSupport is harmless since we also installl xpra
-          (pkgs.writeScriptBin "git-annex-diff-wrapper" ''
-            #!${pkgs.runtimeShell}
-            LANG=C ${pkgs.difftools}/bin/diff -u "$1" "$2"
-            exit 0
-          '')
-          python3Packages.datalad
-          subversion
-          tig
-          jq
-          lsof
-          #xpra
-          htop
-          tree
-
-          # testing (removed 20171122)
-          #Mitos
-          #MemAxes
-          python3
-        ];
-        programs.direnv.enable = true;
-        programs.direnv.nix-direnv.enable = true;
-      });
-    spartan = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.cluster args)
-      ({
-      });
-
-    inti = { pkgs, lib
-        , ...}@args: with lib;
-        lib.recursiveUpdate
-      (homes.cluster args)
-      ({
-      });
-
   };
 in homes

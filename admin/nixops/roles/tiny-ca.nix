@@ -1,5 +1,4 @@
-{ sopsDecrypt_ }:
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, sopsDecrypt_, ... }:
 let
   cfg = config.role.tiny-ca;
 in

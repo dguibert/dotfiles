@@ -193,8 +193,8 @@ update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 fixups = git_add_remotes "
-	origin git://github.com/NixOS/nix
-	edolstra git://github.com/edolstra/nix.git
+	origin https://github.com/NixOS/nix
+	edolstra https://github.com/edolstra/nix.git
 	dguibert git@github.com:dguibert/nix.git
 	"
 
@@ -714,10 +714,11 @@ fixups = git_add_remotes "
 push = git push -v origin +pu
 	      git push -v origin
 
-
-
 [code/nixos-shell]
 checkout = git clone 'https://github.com/Mic92/nixos-shell' 'nixos-shell'
 
 [code/dydisnix]
 checkout = git clone 'https://github.com/svanderburg/dydisnix' 'dydisnix'
+
+[code/bionix]
+checkout = git clone 'https://github.com/PapenfussLab/bionix' 'bionix'

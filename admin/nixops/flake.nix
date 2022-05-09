@@ -4,55 +4,57 @@
 
   # To update all inputs:
   # $ nix flake update --recreate-lock-file
-  inputs = {
-    home-manager. url    = "github:dguibert/home-manager/pu";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.home-manager.url    = "github:dguibert/home-manager/pu";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    hydra.url            = "github:dguibert/hydra/pu";
-    hydra.inputs.nix.follows = "nix";
-    hydra.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.hydra.url            = "github:dguibert/hydra/pu";
+  inputs.hydra.inputs.nix.follows = "nix";
+  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.url          = "github:dguibert/nixpkgs/pu";
+  inputs.nixpkgs.url          = "github:dguibert/nixpkgs/pu";
 
-    nix.url              = "github:dguibert/nix/pu";
-    nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nix.url              = "github:dguibert/nix/pu";
+  inputs.nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur.url = "github:nix-community/NUR";
-    sops-nix.url = "github:Mic92/sops-nix";
-    #sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nur.url = "github:nix-community/NUR";
+  inputs.sops-nix.url = "github:Mic92/sops-nix";
+  #inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur_dguibert.url     = "github:dguibert/nur-packages/pu";
-    nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
-    nur_dguibert.inputs.nix.follows = "nix";
-    nur_dguibert.inputs.flake-utils.follows = "flake-utils";
-    #nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
-    #nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
-    #nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
-    #nur_dguibert_envs.inputs.nix.follows     = "nix";
-    terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
-    #"nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
-    #"nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
-    #"nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
-    base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
-    gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
+  inputs.nur_dguibert.url     = "github:dguibert/nur-packages/pu";
+  inputs.nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nur_dguibert.inputs.nix.follows = "nix";
+  inputs.nur_dguibert.inputs.flake-utils.follows = "flake-utils";
 
-    nxsession.url           = "github:dguibert/nxsession";
-    nxsession.inputs.nixpkgs.follows = "nixpkgs";
-    nxsession.inputs.flake-utils.follows = "flake-utils";
+  #inputs.nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
+  #inputs.nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
+  #inputs.nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nur_dguibert_envs.inputs.nix.follows     = "nix";
+  inputs.terranix             = { url = "github:mrVanDalo/terranix"; flake=false; };
+  #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
+  #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
+  #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
+  inputs.base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
+  inputs.gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
 
-    dwm-src.url = "github:dguibert/dwm/pu";        dwm-src.flake = false;
-    st-src.url  = "github:dguibert/st/pu";         st-src.flake = false;
+  inputs.nxsession.url           = "github:dguibert/nxsession";
+  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
 
-    # For accessing `deploy-rs`'s utility Nix functions
-    deploy-rs.url = "github:serokell/deploy-rs";
-    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
+  inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
+  inputs.dwl-src.url = "github:dguibert/dwl/pu-next";   inputs.dwl-src.flake = false;
 
-    nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
-    # only needed if you use as a package set:
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    #nixpkgs-wayland.inputs.master.follows = "master";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-  };
+  # For accessing `deploy-rs`'s utility Nix functions
+  inputs.deploy-rs.url = "github:serokell/deploy-rs";
+  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
+  # only needed if you use as a package set:
+  inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nixpkgs-wayland.inputs.master.follows = "master";
+  #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
+  inputs.chemacs.url = "github:plexus/chemacs2"; inputs.chemacs.flake = false;
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
@@ -67,9 +69,10 @@
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-            inputs.self.overlay
+            inputs.self.overlays.default
             inputs.nxsession.overlay
             inputs.emacs-overlay.overlay
+            inputs.nixpkgs-wayland.overlay
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -83,7 +86,7 @@
   in (inputs.flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux" ] (system:
        let pkgs = nixpkgsFor system; in rec {
 
-    devShell = pkgs.callPackage ./shell.nix { inherit inputs;
+    devShells.default = pkgs.callPackage ./shell.nix { inherit inputs;
       inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
       deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
     };
@@ -95,7 +98,12 @@
     };
 
   })) // (rec {
-    overlay = final: prev: with final; {
+    overlays.default = final: prev: with final; {
+      swayidle = prev.swayidle.overrideAttrs (o: {
+        postPatch = (o.postPatch or "") + ''
+          sed -i -e 's@"sh"@"${bash}/bin/bash"@' main.c
+        '';
+      });
       # Patch libvirt to use ebtables-legacy
       libvirt = if prev.libvirt.version <= "5.4.0" && prev.ebtables.version > "2.0.10-4"
         then
@@ -123,115 +131,151 @@
         src = inputs.st-src;
         patches = [];
       });
+      dwl = prev.dwl.overrideAttrs (o: {
+        version = "0.3.1-custom";
+        src = inputs.dwl-src;
+        buildInputs = o.buildInputs ++ [
+          xorg.xcbutilwm
+        ];
+      });
+      somebar = prev.somebar.overrideAttrs (o: {
+        patches = [
+          ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
+          ./patches/0002-bigger-occupied-rectangle.patch
+          ./patches/0003-add-net-tapesoftware-dwl-wm-unstable-v1-protocols.patch
+        ];
+      });
+
     };
 
     ## - hydraJobs: A nested set of derivations built by Hydra.
     ##
     ## -
     ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-    nixosModules.defaults = { config, lib, pkgs, resources, ...}: {
-      imports = [
-        inputs.nixpkgs.nixosModules.notDetected
-        inputs.home-manager.nixosModules.home-manager
-        inputs.sops-nix.nixosModules.sops
+    nixosModules = (import ./modules) // {
+      defaults = { config, lib, pkgs, resources, ...}: {
+        imports = [
+          {
+            _module.args.inputs = inputs;
+            _module.args.sopsDecrypt_ = pkgs.sopsDecrypt_;
+          }
+          inputs.nixpkgs.nixosModules.notDetected
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.extraSpecialArgs.inputs = inputs;
+            home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
+          }
+          inputs.sops-nix.nixosModules.sops
 
-        ./modules/wireguard-mesh.nix
-        ./modules/report-changes.nix
+          self.nixosModules.distributed-build-conf
+          ({ config, ... }: { distributed-build-conf.enable = true; })
+          self.nixosModules.nix-conf
+          ({ config, ... }: { nix-conf.enable = true; })
+          self.nixosModules.report-changes
+          self.nixosModules.wayland-conf
+          self.nixosModules.wireguard-mesh
+          self.nixosModules.x11-conf
+          self.nixosModules.yubikey-gpg-conf
 
-        ./roles/dns.nix
-        ./roles/libvirtd.nix
-        ./roles/robotnix-ota.nix
-        (import ./roles/tiny-ca.nix { inherit sopsDecrypt_; })
-        ./roles/mopidy.nix
-        ./roles/sshguard.nix
-        ./roles/wireguard-mesh.nix
+          ./roles/dns.nix
+          ./roles/libvirtd.nix
+          ./roles/robotnix-ota.nix
+          ./roles/tiny-ca.nix
+          ./roles/mopidy.nix
+          ./roles/sshguard.nix
+          ./roles/wireguard-mesh.nix
 
-        (import ./users/default.nix { inherit sopsDecrypt_ pkgs inputs; })
-      ];
-
-      system.nixos.versionSuffix = lib.mkForce
-        ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
-      system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
-      nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
-        permittedInsecurePackages = [
-          "ffmpeg-3.4.8" # oraclejre
+          ./users/default.nix
         ];
+
+        system.nixos.versionSuffix = lib.mkForce
+          ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
+        system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
+        nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+          # https://nixos.wiki/wiki/Chromium
+          chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+          permittedInsecurePackages = [
+            "ffmpeg-3.4.8" # oraclejre
+          ];
+        };
+        nixpkgs.overlays = [
+          inputs.nix.overlay
+          inputs.nixpkgs-wayland.overlay
+          inputs.nur.overlay
+          inputs.nur_dguibert.overlay
+          inputs.nur_dguibert.overlays.extra-builtins
+          inputs.nur_dguibert.overlays.emacs
+          #nur_dguibert_envs.overlay
+          inputs.nxsession.overlay
+          inputs.emacs-overlay.overlay
+          inputs.self.overlays.default
+        ];
+        # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
+        nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+        nix.registry = lib.mapAttrs (id: flake: {
+          inherit flake;
+          from = { inherit id; type = "indirect"; };
+        }) inputs;
+        environment.shellInit = ''
+          export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
+          NIX_OPTIONS=()
+          NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
+          export NIX_OPTIONS
+        '';
+        nix.settings.system-features = [ "recursive-nix" ] ++ # default
+          [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+          lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
+            "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
+          ] ++
+          lib.optionals (pkgs.hostPlatform ? gcc.arch) (
+            # a builder can run code for `gcc.arch` and inferior architectures
+            [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
+            map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
+          );
+
+        programs.gnupg.agent.pinentryFlavor = "gtk2";
+
+        role.wireguard-mesh.enable = true;
+        # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
+        programs.ssh.knownHosts."*" = {
+          certAuthority=true;
+          publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
+        };
+
+        sops.secrets.id_buildfarm = {
+          sopsFile = ./secrets/defaults.yaml;
+          owner = "root";
+          path = "/etc/nix/id_buildfarm";
+        };
+
+        # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
+        #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
+        sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
+        sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
+        #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
+        sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
+
+        services.openssh.extraConfig = lib.mkOrder 100 ''
+          HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
+          HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
+        '';
+        services.openssh.hostKeys = [
+          {
+            #path = config.sops.secrets."ssh_host_ed25519_key".path;
+            path = "/persist/etc/ssh/ssh_host_ed25519_key";
+            type = "ed25519";
+          }
+          {
+            path = "/persist/etc/ssh/ssh_host_rsa_key";
+            type = "rsa";
+            bits = 4096;
+          }
+        ];
+
+        report-changes.enable = true;
       };
-      nixpkgs.overlays = [
-        inputs.nix.overlay
-        inputs.nur.overlay
-        inputs.nur_dguibert.overlay
-        inputs.nur_dguibert.overlays.extra-builtins
-        inputs.nur_dguibert.overlays.emacs
-        #nur_dguibert_envs.overlay
-        inputs.self.overlay
-        inputs.nxsession.overlay
-        inputs.emacs-overlay.overlay
-      ];
-      # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
-      nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
-      nix.registry = lib.mapAttrs (id: flake: {
-        inherit flake;
-        from = { inherit id; type = "indirect"; };
-      }) inputs;
-      environment.shellInit = ''
-        export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
-        NIX_OPTIONS=()
-        NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
-        export NIX_OPTIONS
-      '';
-      nix.systemFeatures = [ "recursive-nix" ] ++ # default
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
-          "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
-        ] ++
-        lib.optionals (pkgs.hostPlatform ? gcc.arch) (
-          # a builder can run code for `gcc.arch` and inferior architectures
-          [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
-        );
-
-      programs.gnupg.agent.pinentryFlavor = "gtk2";
-
-      role.wireguard-mesh.enable = true;
-      # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-      programs.ssh.knownHosts."*" = {
-        certAuthority=true;
-        publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
-      };
-
-      sops.secrets.id_buildfarm = {
-        sopsFile = ./secrets/defaults.yaml;
-        owner = "root";
-        path = "/etc/nix/id_buildfarm";
-      };
-
-      # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
-      #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
-      sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
-      sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
-      #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
-      sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
-      sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
-
-      services.openssh.extraConfig = lib.mkOrder 100 ''
-        HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
-        HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
-      '';
-      services.openssh.hostKeys = [
-        {
-          #path = config.sops.secrets."ssh_host_ed25519_key".path;
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-        {
-          path = "/persist/etc/ssh/ssh_host_rsa_key";
-          type = "rsa";
-          bits = 4096;
-        }
-      ];
-
-      report-changes.enable = true;
     };
 
     #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
@@ -284,7 +328,8 @@
     nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
-        ./modules/zfs.nix
+        self.nixosModules.zfs
+        ({ config, ... }: { zfs-conf.enable = true; })
         ./hosts/iso.nix
         ({ config, lib, pkgs, resources, ... }: {
           nixpkgs.localSystem.system = "x86_64-linux";
@@ -316,17 +361,13 @@
             inputs.hydra.nixosModules.hydra
             (import ./hosts/titan/configuration.nix)
             inputs.self.nixosModules.defaults
-            ./modules/yubikey-gpg.nix
-            ./modules/distributed-build.nix
-            ./modules/x11.nix
-          ];
-          hardware.opengl.enable = true;
-          hardware.opengl.extraPackages = [ pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+            ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+            ({ config, ... }: { x11-conf.enable = false; })
 
-          hardware.pulseaudio.enable = true;
-          # https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Laggy_sound
-          hardware.pulseaudio.daemon.config.default-fragments = "5";
-          hardware.pulseaudio.daemon.config.default-fragment-size-msec = "2";
+            ({ config, ... }: { wayland-conf.enable = true; })
+          ];
+          #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
+
           environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
           # https://nixos.org/nixops/manual/#idm140737318329504
@@ -349,26 +390,31 @@
             serviceConfig.PermissionsStartOnly = true;
             preStart = ''
               set -x
-              ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/ || true
-              ${pkgs.acl}/bin/setfacl -m user:jellyfin:x /home/dguibert/Videos || true
-              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Series || true
-              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rx /home/dguibert/Videos/Movies || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/ || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:x /home/dguibert/Videos || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rx /home/dguibert/Videos/Series || true
-              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rx /home/dguibert/Videos/Movies || true
+              #${pkgs.acl}/bin/setfacl -Rm u:jellyfin:rwX,m:rw-,g:jellyfin:rwX,d:u:jellyfin:rwX,d:g:jellyfin:rwX,o:---,d:o:---,d:m:rwx,m;rwx /home/dguibert/Videos/Series/ /home/dguibert/Videos/Movies/
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert/Videos
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Series
+              ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Movies
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert/Videos
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Series
+              ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Movies
               set +x
             '';
             unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
           };
           networking.firewall.interfaces."bond0".allowedTCPPorts = [
             8096 /*http*/ 8920 /*https*/
-              config.services.step-ca.port
+            config.services.step-ca.port
+          ];
+          systemd.tmpfiles.rules = [
+            "L /var/lib/jellyfin/config - - - - /persist/var/lib/jellyfin/config"
+            "L /var/lib/jellyfin/data   - - - - /persist/var/lib/jellyfin/data"
           ];
 
           systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-          role.mopidy-server.enable = true;
+          role.mopidy-server.enable = false; # TODO migrate to pipewire
           role.mopidy-server.listenAddress = "192.168.1.24";
           role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
           role.mopidy-server.configuration.m3u = {
@@ -602,40 +648,10 @@
           imports = [
             (import ./hosts/t580/configuration.nix)
             inputs.self.nixosModules.defaults
-            #({ ... }: {
-            #  nix = {
-            #    # add binary caches
-            #    binaryCachePublicKeys = [
-            #      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-            #    ];
-            #    binaryCaches = [
-            #      "https://nixpkgs-wayland.cachix.org"
-            #    ];
-            #  };
-            #  #specialisation.wayland = { inheritParentConfig = true; configuration = {
-            #      services.xserver.enable = lib.mkForce false;
-            #      # use it as an overlay
-            #      nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
-            #      programs.sway = {
-            #        enable = true;
-            #        wrapperFeatures.gtk = true; # so that gtk works properly
-            #        extraPackages = with pkgs; [
-            #          swaylock
-            #          swayidle
-            #          wl-clipboard
-            #          mako # notification daemon
-            #          alacritty # Alacritty is the default terminal in the config
-            #          dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+            ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+            ({ config, ... }: { x11-conf.enable = false; })
 
-            #          waypipe
-            #          grim
-            #          slurp
-            #          wayvnc
-            #        ];
-            #      };
-            #  #  };
-            #  #};
-            #})
+            ({ config, ... }: { wayland-conf.enable = true; })
           ];
           sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
         })
@@ -647,7 +663,17 @@
       profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos
         nixosConfig;
       profiles.system.user = "root";
+      # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
+      # This defaults to `false`
       fastConnection = true;
+
+      # If the previous profile should be re-activated if activation fails.
+      autoRollback = true;
+
+      # See the earlier section about Magic Rollback for more information.
+      # This defaults to `true`
+      magicRollback = false;
+
       profiles.hm-dguibert.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.custom
         inputs.self.homeConfigurations.${nixosConfig.config.nixpkgs.localSystem.system}.${host}.dguibert.home.activationPackage
         "./activate";
