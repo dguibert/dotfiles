@@ -722,3 +722,14 @@ checkout = git clone 'https://github.com/svanderburg/dydisnix' 'dydisnix'
 
 [code/bionix]
 checkout = git clone 'https://github.com/PapenfussLab/bionix' 'bionix'
+
+[code/dwl]
+checkout = git clone 'https://github.com/djpohly/dwl' 'dwl'
+fixups = git_add_remotes "
+	   dguibert https://github.com/dguibert/dwl.git
+         "
+push = git push -v dguibert +pu
+       git push -v dguibert +pu-next
+       git push -v dguibert
+
+
