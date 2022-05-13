@@ -668,7 +668,8 @@ let
         ];
         #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
         #home.sessionVariables.EDITOR="vim";
-        programs.bash.shellAliases.e="emacsclient";
+        programs.bash.shellAliases.e="emacsclient -t -a \"\"";
+        programs.bash.shellAliases.eg="emacsclient -n -c -a \"\"";
         home.sessionVariables.ALTERNATE_EDITOR="";
         home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
         home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
