@@ -102,24 +102,6 @@ rec {
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "fr";
-  services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.videoDrivers = [ "modesetting" ];
-  # https://support.displaylink.com/knowledgebase/articles/1181623
-  services.xserver.deviceSection = ''
-    Option "PageFlip" "false"
-  '';
-
-  # Enable touchpad support.
-  services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  #services.xserver.desktopManager.pantheon.enable = true;
-
   # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
   #- The option definition `nesting.clone' in `flake.nix' no longer has any effect; please remove it.
   #specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }
