@@ -34,7 +34,7 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl -s "setsid -w $0 startup <&-" # close standard input
+      exec dwl -s "setsid -w $0 startup <&-" ; history -n # close standard input
     fi
   '';
 
