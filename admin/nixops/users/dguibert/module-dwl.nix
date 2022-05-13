@@ -34,11 +34,36 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl -s "setsid -w $0 startup <&-" ; history -n # close standard input
+      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log ; history -n # close standard input
     fi
   '';
 
   # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
+
+  wlr-toggle = pkgs.writeShellScriptBin "wlr-toggle" ''
+    #!/bin/sh
+
+    ''${VERBOSE:-true} && set -x
+    arg=''${1:-}
+    command -v wlr-randr
+    toggle_file=/run/user/$(id -u)/toggle_outputs
+
+    if [ -e $toggle_file ]; then
+      options=""
+      for output in $(cat $toggle_file); do
+        options+=" --output $output --''${arg:-on}"
+      done
+      wlr-randr $options
+      rm $toggle_file
+    else
+      outputs=$(wlr-randr | awk '/[A-Z]+-1/ { output=$1; } /Enabled: yes/ { print output } { next; } ')
+      echo $outputs > $toggle_file
+      for output in $(cat $toggle_file); do
+        options+=" --output $output --''${arg:-off}"
+      done
+      wlr-randr $options
+    fi
+  '';
 
 in with lib; {
 
@@ -134,7 +159,11 @@ in with lib; {
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w
+        timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000'
+        timeout 360 '${wlr-toggle} off'
+        resume '${wlr-toggle} on'
+        before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };
