@@ -157,8 +157,16 @@ in with lib; {
   };
 
   xdg.configFile."kanshi/config".text = ''
-    {
+    profile {
+      output DVI-D-1 mode 1920x1080 position 0,0
+      output HDMI-A-1 mode 1920x1080 position 1920,0
+    }
+    profile {
       output eDP-1 mode 1920x1080 position 0,0
+    }
+    profile {
+      output "Lenovo Group Limited LEN T24d-10 V5GG2005" mode 1920x1080 position 0,0
+      output eDP-1 mode 1920x1080 position 1920,0
     }
   '';
 
