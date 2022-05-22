@@ -628,9 +628,6 @@ let
           go-mtpfs
 
           wayland
-          sway
-          nwg-panel
-
           corkscrew
           autossh
 

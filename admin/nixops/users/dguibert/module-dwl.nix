@@ -45,18 +45,21 @@ let
 
     ''${VERBOSE:-true} && set -x
     arg=''${1:-}
+    export PATH=''${PATH+$PATH:}${pkgs.wlr-randr}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin
     command -v wlr-randr
     toggle_file=/run/user/$(id -u)/toggle_outputs
 
-    if [ -e $toggle_file ]; then
-      options=""
-      for output in $(cat $toggle_file); do
-        options+=" --output $output --''${arg:-on}"
-      done
-      wlr-randr $options
-      rm $toggle_file
+    if [ "$arg" = "on" ]; then
+      if [ -e $toggle_file ]; then
+        options=""
+        for output in $(cat $toggle_file); do
+          options+=" --output $output --''${arg:-on}"
+        done
+        wlr-randr $options
+        rm $toggle_file
+      fi
     else
-      outputs=$(wlr-randr | awk '/[A-Z]+-1/ { output=$1; } /Enabled: yes/ { print output } { next; } ')
+      outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { output=$1; } /Enabled: yes/ { print output } { next; } ')
       echo $outputs > $toggle_file
       for output in $(cat $toggle_file); do
         options+=" --output $output --''${arg:-off}"
@@ -159,11 +162,7 @@ in with lib; {
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w
-        timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000'
-        timeout 360 '${wlr-toggle} off'
-        resume '${wlr-toggle} on'
-        before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${wlr-toggle}/bin/wlr-toggle off' resume '${wlr-toggle}/bin/wlr-toggle on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };
