@@ -47,25 +47,12 @@ let
     arg=''${1:-}
     export PATH=''${PATH+$PATH:}${pkgs.wlr-randr}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin
     command -v wlr-randr
-    toggle_file=/run/user/$(id -u)/toggle_outputs
 
-    if [ "$arg" = "on" ]; then
-      if [ -e $toggle_file ]; then
-        options=""
-        for output in $(cat $toggle_file); do
-          options+=" --output $output --''${arg:-on}"
-        done
-        wlr-randr $options
-        rm $toggle_file
-      fi
-    else
-      outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { output=$1; } /Enabled: yes/ { print output } { next; } ')
-      echo $outputs > $toggle_file
-      for output in $(cat $toggle_file); do
-        options+=" --output $output --''${arg:-off}"
-      done
-      wlr-randr $options
-    fi
+    outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { print $1; } { next; } ')
+    for output in $outputs; do
+      options+=" --output $output --''${arg:-on}"
+    done
+    wlr-randr $options
   '';
 
 in with lib; {
