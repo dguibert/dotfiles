@@ -196,6 +196,10 @@ in with lib; {
       output "Lenovo Group Limited LEN T24d-10 V5GG2005" mode 1920x1080 position 0,0
       output eDP-1 mode 1920x1080 position 1920,0
     }
+    profile {
+      output "Philips Consumer Electronics Company PHL 241B7QG 0x000004CC" mode 1920x1080 position 0,0
+      output eDP-1 mode 1920x1080 position 1920,0
+    }
   '';
 
   #systemd.user.services.someblocks = {
