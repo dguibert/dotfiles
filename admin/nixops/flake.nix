@@ -194,7 +194,7 @@
         system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
         nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
           # https://nixos.wiki/wiki/Chromium
-          chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+          chromium.commandLineArgs = "--ozone-platform-hint=auto";
           permittedInsecurePackages = [
             "ffmpeg-3.4.8" # oraclejre
           ];
