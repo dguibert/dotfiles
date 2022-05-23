@@ -34,11 +34,39 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl -s "setsid -w $0 startup <&-" # close standard input
+      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log ; history -n # close standard input
     fi
   '';
 
   # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
+
+  wlr-toggle = pkgs.writeShellScriptBin "wlr-toggle" ''
+    #!/bin/sh
+
+    ''${VERBOSE:-true} && set -x
+    arg=''${1:-}
+    export PATH=''${PATH+$PATH:}${pkgs.wlr-randr}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin
+    command -v wlr-randr
+    toggle_file=/run/user/$(id -u)/toggle_outputs
+
+    if [ "$arg" = "on" ]; then
+      if [ -e $toggle_file ]; then
+        options=""
+        for output in $(cat $toggle_file); do
+          options+=" --output $output --''${arg:-on}"
+        done
+        wlr-randr $options
+        rm $toggle_file
+      fi
+    else
+      outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { output=$1; } /Enabled: yes/ { print output } { next; } ')
+      echo $outputs > $toggle_file
+      for output in $(cat $toggle_file); do
+        options+=" --output $output --''${arg:-off}"
+      done
+      wlr-randr $options
+    fi
+  '';
 
 in with lib; {
 
@@ -134,7 +162,7 @@ in with lib; {
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --off' resume '${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${wlr-toggle}/bin/wlr-toggle off' resume '${wlr-toggle}/bin/wlr-toggle on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
       RestartSec = 5;
       Restart = "always";
     };
@@ -157,8 +185,20 @@ in with lib; {
   };
 
   xdg.configFile."kanshi/config".text = ''
-    {
+    profile {
+      output DVI-D-1 mode 1920x1080 position 0,0
+      output HDMI-A-1 mode 1920x1080 position 1920,0
+    }
+    profile {
       output eDP-1 mode 1920x1080 position 0,0
+    }
+    profile {
+      output "Lenovo Group Limited LEN T24d-10 V5GG2005" mode 1920x1080 position 0,0
+      output eDP-1 mode 1920x1080 position 1920,0
+    }
+    profile {
+      output "Philips Consumer Electronics Company PHL 241B7QG 0x000004CC" mode 1920x1080 position 0,0
+      output eDP-1 mode 1920x1080 position 1920,0
     }
   '';
 

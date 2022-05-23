@@ -165,10 +165,10 @@ fixups = git_add_remotes "
 	        #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
 
 update = git remote update
-push = git push -v origin +pu
-	      git push -v origin +pu-cluster
-	      git push -v origin +pu-nixpack
-	      git push -v origin
+push = git push origin +pu
+	      git push origin +pu-cluster
+	      git push origin +pu-nixpack
+	      git push origin
 
 [code/git-reintegrate]
 checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegrate'
