@@ -15,7 +15,7 @@ in {
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemu = {
       #ovmf.package = pkgs.OVMF.override { secureBoot=true; tpmSupport=true; };
-      ovmf.package = pkgs.OVMFFull;
+      ovmf.packages = [pkgs.OVMFFull.fd];
       swtpm.enable = true;
     };
     # https://github.com/NixOS/nixpkgs/issues/75878
