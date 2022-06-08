@@ -378,8 +378,8 @@
           #virtualisation.libvirtd.enable = true;
           #virtualisation.anbox.enable = true;
           #services.nfs.server.enable = true;
-          #virtualisation.docker.enable = true;
-          #virtualisation.docker.storageDriver = "zfs";
+          virtualisation.docker.enable = true;
+          virtualisation.docker.storageDriver = "zfs";
 
           programs.singularity.enable = true;
 
