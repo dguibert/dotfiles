@@ -83,7 +83,9 @@
         wgPubKey_
         extra_builtins_file;
 
-  in (inputs.flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux" ] (system:
+      supportedSystems = ["x86_64-linux" "aarch64-linux" ];
+
+  in (inputs.flake-utils.lib.eachSystem supportedSystems (system:
        let pkgs = nixpkgsFor system; in rec {
 
     devShells.default = pkgs.callPackage ./shell.nix { inherit inputs;
@@ -684,7 +686,8 @@
     });
 
     # This is highly advised, and will prevent many possible mistakes
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy)
+      (inputs.nixpkgs.lib.getAttrs supportedSystems inputs.deploy-rs.lib);
 
   });
 }
