@@ -77,8 +77,22 @@ in with lib; {
     grim
     slurp
     wayvnc
-    foot # terminal
   ];
+
+  programs.foot.enable = true;
+  programs.foot.server.enable = true;
+  programs.foot.settings = {
+    main = {
+      term = "xterm-256color";
+
+      font = "Fira Code:size=8";
+      dpi-aware = "yes";
+    };
+
+    mouse = {
+      hide-when-typing = "yes";
+    };
+  };
 
   systemd.user.sockets.dbus = {
     Unit = {
