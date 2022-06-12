@@ -64,7 +64,7 @@
         import inputs.nixpkgs {
           inherit system;
           overlays =  [
-            inputs.nix.overlay
+            inputs.nix.overlays.default
             inputs.nur.overlay
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
@@ -203,7 +203,7 @@
           ];
         };
         nixpkgs.overlays = [
-          inputs.nix.overlay
+          inputs.nix.overlays.default
           inputs.nixpkgs-wayland.overlay
           inputs.nur.overlay
           inputs.nur_dguibert.overlay
@@ -528,7 +528,7 @@
             inputs.self.nixosModules.defaults
           ];
           nixpkgs.overlays = [
-            inputs.nix.overlay
+            inputs.nix.overlays.default
             inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
@@ -593,7 +593,7 @@
           #boot.loader.raspberryPi.version = 4;
 
           nixpkgs.overlays = [
-            inputs.nix.overlay
+            inputs.nix.overlays.defualt
             inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
