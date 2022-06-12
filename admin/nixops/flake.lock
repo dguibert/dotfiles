@@ -249,11 +249,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654014175,
-        "narHash": "sha256-x9Qppzv5uic14v23T46AicjELIMG+jrqNspcosFa0MQ=",
+        "lastModified": 1655052439,
+        "narHash": "sha256-F9me0lxbzsTOP8hM74Yn8xOukZUq+qK5xyvvbEtTOaY=",
         "owner": "dguibert",
         "repo": "hydra",
-        "rev": "cf9f38e43fd81f9298e3f2ff50c8a6ee0acc3af0",
+        "rev": "dee1b2cd4226f8a0b30bc70686d4ae3c72a126d9",
         "type": "github"
       },
       "original": {
