@@ -215,7 +215,7 @@
           inputs.self.overlays.default
         ];
         # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
-        nix.package = inputs.nix.defaultPackage."${config.nixpkgs.localSystem.system}";
+        nix.package = inputs.nix.packages."${config.nixpkgs.localSystem.system}".default;
         nix.registry = lib.mapAttrs (id: flake: {
           inherit flake;
           from = { inherit id; type = "indirect"; };
@@ -593,7 +593,7 @@
           #boot.loader.raspberryPi.version = 4;
 
           nixpkgs.overlays = [
-            inputs.nix.overlays.defualt
+            inputs.nix.overlays.default
             inputs.nur_dguibert.overlays.default
             (final: prev: {
               # don't build qt5
