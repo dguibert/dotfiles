@@ -85,8 +85,8 @@ in with lib; {
     main = {
       term = "xterm-256color";
 
-      font = "Fira Code:size=8";
-      dpi-aware = "yes";
+      font = "Fira Code:size=11";
+      dpi-aware = "no";
     };
 
     mouse = {
