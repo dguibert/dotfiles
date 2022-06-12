@@ -240,6 +240,7 @@
     },
     "hydra": {
       "inputs": {
+        "newNixpkgs": "newNixpkgs",
         "nix": [
           "nix"
         ],
@@ -248,11 +249,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1630331039,
-        "narHash": "sha256-ovLKLreysPsbFyoRC3mDCAD9/a6/XrCUX4S8ZWpx90E=",
+        "lastModified": 1654014175,
+        "narHash": "sha256-x9Qppzv5uic14v23T46AicjELIMG+jrqNspcosFa0MQ=",
         "owner": "dguibert",
         "repo": "hydra",
-        "rev": "bec44614f469da39b789274d2724f91662efabfc",
+        "rev": "cf9f38e43fd81f9298e3f2ff50c8a6ee0acc3af0",
         "type": "github"
       },
       "original": {
@@ -294,6 +295,22 @@
       "original": {
         "owner": "kristapsdz",
         "repo": "lowdown",
+        "type": "github"
+      }
+    },
+    "newNixpkgs": {
+      "locked": {
+        "lastModified": 1647380550,
+        "narHash": "sha256-909TI9poX7CIUiFx203WL29YON6m/I6k0ExbZvR7bLM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6e3ee8957637a60f5072e33d78e05c0f65c54366",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
