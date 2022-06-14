@@ -83,10 +83,11 @@ in with lib; {
   programs.foot.server.enable = true;
   programs.foot.settings = {
     main = {
-      term = "xterm-256color";
+      term = "xterm";
 
       font = "Fira Code:size=11";
       dpi-aware = "no";
+      lines = "100000";
     };
 
     mouse = {
