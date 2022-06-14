@@ -143,9 +143,11 @@ checkout = git clone 'git://git.kitenet.net/propellor.git' 'propellor'
 checkout = git clone 'git://github.com/kmcallister/shqq' 'shqq'
 
 [code/spack]
-checkout = git clone 'https://github.com/scalability-llnl/spack' 'spack'
+checkout = git clone 'https://github.com/spack/spack' 'spack'
 fixups = git_add_remotes "
+	          origin https://github.com/spack/spack
 	          dguibert git@github.com:dguibert/spack.git
+	          flatironinstitute https://github.com/flatironinstitute/spack
 	          "
 push = git push -v dguibert
 
