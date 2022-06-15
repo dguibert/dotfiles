@@ -19,6 +19,9 @@ in
     };
 
     services.nginx.enable = true;
+    # https://docs.robotnix.org/modules/ota.html
+    systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
+    systemd.services.nginx.serviceConfig.ReadOnlyPaths = [ "/var/www" ];
     services.nginx.virtualHosts."ota.orsin.net" = {
       forceSSL = true;
       #onlySSL = true;
@@ -31,20 +34,15 @@ in
       extraConfig = ''
         ssl_protocols       TLSv1.2 TLSv1.3;
 	ssl_ciphers         HIGH:!aNULL:!MD5;
-      #  rewrite ^/android /android/;
         autoindex on;
         autoindex_exact_size off;
       '';
-      #  #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-      #locations."/android/" = {
-      #  root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
-      #  tryFiles = "$uri $uri/ =404";
-      #  extraConfig = ''
-      #    rewrite ^/android/ /;
-      #  '';
-      #};
+      #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
+      locations."/android/" = {
+        root = "/var/www/ota.orsin.net";
+        tryFiles = "$uri $uri/ =404";
+      };
     };
-    systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
 
     security.acme.acceptTerms = true;
     security.acme.email = "david.guibert+certs@gmail.com";
