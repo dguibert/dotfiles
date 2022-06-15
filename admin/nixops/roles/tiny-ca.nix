@@ -118,14 +118,14 @@ in
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {
         if (action.id == "org.debian.pcsc-lite.access_card" &&
-            subject.user == "step") {
+            subject.user == "step-ca") {
           return polkit.Result.YES;
         }
       });
 
       polkit.addRule(function(action, subject) {
         if (action.id == "org.debian.pcsc-lite.access_pcsc" &&
-            subject.user == "step") {
+            subject.user == "step-ca") {
           return polkit.Result.YES;
         }
       });
