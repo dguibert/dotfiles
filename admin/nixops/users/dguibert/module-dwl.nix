@@ -87,6 +87,8 @@ in with lib; {
 
       font = "Fira Code:size=11";
       dpi-aware = "no";
+    };
+    scrollback = {
       lines = "100000";
     };
 
