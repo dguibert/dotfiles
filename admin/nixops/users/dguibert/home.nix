@@ -622,7 +622,7 @@ let
           '')
           bup par2cmdline fpart # ~/Makefile ~/bin/prepare-bd.sh
           rclone
-          python3Packages.datalad
+          datalad
 
           imagemagick
           exiftool

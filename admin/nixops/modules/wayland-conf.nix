@@ -39,8 +39,18 @@
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;
 
-    xdg.portal.wlr.enable = true;
-    xdg.portal.gtkUsePortal = true;
+    xdg = {
+      portal = {
+        wlr.enable = true;
+        enable = true;
+        extraPortals = with pkgs; [
+          xdg-desktop-portal-wlr
+          xdg-desktop-portal-gtk
+        ];
+        gtkUsePortal = true;
+      };
+    };
+
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     #services.greetd.enable = true;
     #services.greetd.settings = {
