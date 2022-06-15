@@ -36,7 +36,7 @@ rec {
   #networking.interfaces.wlp4s0.useDHCP = true;
   systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
     "" # clear old command
-    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --ignore wlp4s0 --ignore enp0s31f6 --ignore vboxnet0"
+    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any --timeout 20"
   ];
 
   networking.useNetworkd = lib.mkForce false;
