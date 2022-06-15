@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.role.tiny-ca;
+  cfg = config.role.robotnix-ota-server;
 in
 {
   # https://smallstep.com/blog/build-a-tiny-ca-with-raspberry-pi-yubikey/
@@ -48,7 +48,7 @@ in
     security.acme.email = "david.guibert+certs@gmail.com";
     security.acme.server = "https://localhost:9443/acme/acme/directory";
 
-    networking.firewall.interfaces.bond0.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+    networking.firewall.interfaces."bond0".allowedTCPPorts = lib.mkIf cfg.openFirewall [
       80 443
     ];
   };
