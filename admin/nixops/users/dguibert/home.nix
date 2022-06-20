@@ -87,7 +87,7 @@ let
         # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
         test "$TERM" != "dumb" || return
 
-	# https://codeberg.org/dnkl/foot/wiki#user-content-how-to-configure-my-shell-to-emit-the-osc-7-escape-sequence
+        # https://codeberg.org/dnkl/foot/wiki#user-content-how-to-configure-my-shell-to-emit-the-osc-7-escape-sequence
         osc7_cwd() {
           local strlen=''${#PWD}
           local encoded=""
@@ -126,6 +126,7 @@ let
         case $TERM in
           dvtm*|st*|rxvt|*term)
             trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
+            PS1+='\[\033]0;\u@\h: \w\007\]'
           ;;
         esac
 
