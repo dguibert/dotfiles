@@ -161,10 +161,7 @@ rec {
 
   networking.useNetworkd = lib.mkForce false;
   networking.dhcpcd.enable = false;
-  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
-    "" # clear old command
-    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any --timeout 20"
-  ];
+  systemd.network.wait-online.anyInterface = true;
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";

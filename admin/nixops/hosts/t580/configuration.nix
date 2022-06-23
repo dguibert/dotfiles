@@ -28,19 +28,9 @@ rec {
   #networking.wireless.userControlled.enable = true;
   #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  #networking.useDHCP = false;
-  #networking.interfaces.enp0s31f6.useDHCP = true;
-  #networking.interfaces.wlp4s0.useDHCP = true;
-  systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = [
-    "" # clear old command
-    "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any --timeout 20"
-  ];
-
   networking.useNetworkd = lib.mkForce false;
   networking.dhcpcd.enable = false;
+  systemd.network.wait-online.anyInterface = true;
 
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
