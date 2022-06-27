@@ -701,8 +701,12 @@ let
         home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
         home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
         home.file.".emacs-profiles.el".text = ''
-	  (("default" . ((user-emacs-directory . "~/.emacs.default")))
-	   ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")))
+	  (("default" . ((user-emacs-directory . "~/.emacs.default")
+                         (server-name . "default")
+                        ))
+	   ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")
+                         (server-name . "dev")
+                        ))
           )
         '';
         programs.emacs.enable = true;
