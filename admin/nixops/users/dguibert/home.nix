@@ -678,6 +678,15 @@ let
 
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
+
+	  (makeDesktopItem {
+		  name = "org-protocol";
+		  exec = "emacsclient %u";
+		  comment = "Org protocol";
+		  desktopName = "org-protocol";
+		  type = "Application";
+		  mimeTypes = [ "x-scheme-handler/org-protocol" ];
+	  })
         ] ++ optionals config.centralMailHost.enable [
           davmail_
         ];
