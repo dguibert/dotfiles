@@ -1,0 +1,242 @@
+#awesome: &awesome Font Awesome 5 Free:style=solid:pixelsize=14
+awesome: &awesome FiraCode-VF:pixelsize=14
+
+bar:
+  background: 005577ff
+  height: 24
+  location: top
+  spacing: 5
+  margin: 7
+  # Default font
+  font: "Sans:pixelsize=15"
+
+  left:
+  - script:
+      path: @dwlScript@
+      args: [1]
+      anchors:
+        - occupied: &occupied {foreground: 57bbf4ff}
+        - focused: &focused {foreground: fc65b0ff}
+        - default: &default {foreground: d2ccd6ff}
+      content:
+        - map:
+            margin: 4
+            conditions:
+              tag_0_occupied == true:
+                map:
+                  conditions:
+                    tag_0_focused == true: {string: {text: "{tag_0}", <<: *focused}}
+                    tag_0_focused == false: {string: {text: "{tag_0}", <<: *occupied}}
+              tag_0_occupied == false:
+                map:
+                  conditions:
+                    tag_0_focused == true: {string: {text: "{tag_0}", <<: *focused}}
+                    tag_0_focused == false: {string: {text: "{tag_0}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_1_occupied == true:
+                map:
+                  conditions:
+                    tag_1_focused == true: {string: {text: "{tag_1}", <<: *focused}}
+                    tag_1_focused == false: {string: {text: "{tag_1}", <<: *occupied}}
+              tag_1_occupied == false:
+                map:
+                  conditions:
+                    tag_1_focused == true: {string: {text: "{tag_1}", <<: *focused}}
+                    tag_1_focused == false: {string: {text: "{tag_1}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_2_occupied == true:
+                map:
+                  conditions:
+                    tag_2_focused == true: {string: {text: "{tag_2}", <<: *focused}}
+                    tag_2_focused == false: {string: {text: "{tag_2}", <<: *occupied}}
+              tag_2_occupied == false:
+                map:
+                  conditions:
+                    tag_2_focused == true: {string: {text: "{tag_2}", <<: *focused}}
+                    tag_2_focused == false: {string: {text: "{tag_2}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_3_occupied == true:
+                map:
+                  conditions:
+                    tag_3_focused == true: {string: {text: "{tag_3}", <<: *focused}}
+                    tag_3_focused == false: {string: {text: "{tag_3}", <<: *occupied}}
+              tag_3_occupied == false:
+                map:
+                  conditions:
+                    tag_3_focused == true: {string: {text: "{tag_3}", <<: *focused}}
+                    tag_3_focused == false: {string: {text: "{tag_3}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_4_occupied == true:
+                map:
+                  conditions:
+                    tag_4_focused == true: {string: {text: "{tag_4}", <<: *focused}}
+                    tag_4_focused == false: {string: {text: "{tag_4}", <<: *occupied}}
+              tag_4_occupied == false:
+                map:
+                  conditions:
+                    tag_4_focused == true: {string: {text: "{tag_4}", <<: *focused}}
+                    tag_4_focused == false: {string: {text: "{tag_4}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_5_occupied == true:
+                map:
+                  conditions:
+                    tag_5_focused == true: {string: {text: "{tag_5}", <<: *focused}}
+                    tag_5_focused == false: {string: {text: "{tag_5}", <<: *occupied}}
+              tag_5_occupied == false:
+                map:
+                  conditions:
+                    tag_5_focused == true: {string: {text: "{tag_5}", <<: *focused}}
+                    tag_5_focused == false: {string: {text: "{tag_5}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_6_occupied == true:
+                map:
+                  conditions:
+                    tag_6_focused == true: {string: {text: "{tag_6}", <<: *focused}}
+                    tag_6_focused == false: {string: {text: "{tag_6}", <<: *occupied}}
+              tag_6_occupied == false:
+                map:
+                  conditions:
+                    tag_6_focused == true: {string: {text: "{tag_6}", <<: *focused}}
+                    tag_6_focused == false: {string: {text: "{tag_6}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_7_occupied == true:
+                map:
+                  conditions:
+                    tag_7_focused == true: {string: {text: "{tag_7}", <<: *focused}}
+                    tag_7_focused == false: {string: {text: "{tag_7}", <<: *occupied}}
+              tag_7_occupied == false:
+                map:
+                  conditions:
+                    tag_7_focused == true: {string: {text: "{tag_7}", <<: *focused}}
+                    tag_7_focused == false: {string: {text: "{tag_7}", <<: *default}}
+        - map:
+            margin: 4
+            conditions:
+              tag_8_occupied == true:
+                map:
+                  conditions:
+                    tag_8_focused == true: {string: {text: "{tag_8}", <<: *focused}}
+                    tag_8_focused == false: {string: {text: "{tag_8}", <<: *occupied}}
+              tag_8_occupied == false:
+                map:
+                  conditions:
+                    tag_8_focused == true: {string: {text: "{tag_8}", <<: *focused}}
+                    tag_8_focused == false: {string: {text: "{tag_8}", <<: *default}}
+        - list:
+            spacing: 3
+            items:
+                - string: {text: "{layout}"}
+                - string: {text: "{title}"}
+  right:
+  - network:
+      name: bond0
+      content:
+        map:
+          conditions:
+            ~carrier: {empty: {}}
+            carrier:
+              map:
+                default: {string: {text: "❎", font: *awesome, foreground: ffffff66}}
+                conditions:
+                  state == up:
+                    map:
+                      default: {string: {text: "🌐 {dl-speed:mb}/{ul-speed:mb}", font: *awesome}}
+                      conditions:
+                        ipv4 == "": {string: {text: "🌐 -", font: *awesome, foreground: ffffff66}}
+  - network:
+      name: wlp4s0
+      poll-interval: 1
+      content:
+        map:
+          default: {string: {text: "📶", font: *awesome, foreground: ffffff66}}
+          conditions:
+            state == down: {string: {text: , font: *awesome, foreground: ff0000ff}}
+            state == up:
+              map:
+                default:
+                  - string: {text: "📶", font: *awesome}
+                  - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s"}
+
+                conditions:
+                  ipv4 == "":
+                    - string: {text: "📶", font: *awesome, foreground: ffffff66}
+                    - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s", foreground: ffffff66}
+  - backlight:
+      name: intel_backlight
+      content: [ string: {text: , font: *awesome}, string: {text: "{percent}%"}]
+  - battery:
+      name: BAT1
+      poll-interval: 30
+      anchors:
+        discharging: &discharging
+          list:
+            items:
+              - ramp:
+                  tag: capacity
+                  items:
+                    - string: {text: "", foreground: ff0000ff, font: *awesome}
+                    - string: {text: "", foreground: ffa600ff, font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", font: *awesome}
+                    - string: {text: "", foreground: 00ff00ff, font: *awesome}
+              - string: {text: "{capacity}% {estimate}"}
+      content:
+        map:
+          conditions:
+            state == unknown:
+              <<: *discharging
+            state == discharging:
+              <<: *discharging
+            state == charging:
+              - string: {text: "🔌", foreground: 00ff00ff, font: *awesome}
+              - string: {text: "{capacity}% {estimate}"}
+            state == full:
+              - string: {text: , foreground: 00ff00ff, font: *awesome}
+              - string: {text: "{capacity}% ⚡"}
+            state == not charging:
+              - ramp:
+                  tag: capacity
+                  items:
+                    - string: {text: "🛑 ", foreground: ff0000ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: ffa600ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+                    - string: {text: "🛑 ", foreground: 00ff00ff, font: *awesome}
+              - string: {text: "{capacity}%"}
+  - clock:
+        date-format: "%a %d"
+        time-format: "%H:%M"
+        content:
+          - string: {text: "{date}", right-margin: 5}
+          - string: {text: , font: *awesome}
+          - string: {text: "{time}"}
+  - label:
+      content:
+      - string:
+          on-click: sh -c "pkill -USR1 swayidle"
+          text: 
+          font: *awesome
