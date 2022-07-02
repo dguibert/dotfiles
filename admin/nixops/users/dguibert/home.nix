@@ -679,14 +679,14 @@ let
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
 
-	  (makeDesktopItem {
-		  name = "org-protocol";
-		  exec = "emacsclient %u";
-		  comment = "Org protocol";
-		  desktopName = "org-protocol";
-		  type = "Application";
-		  mimeTypes = [ "x-scheme-handler/org-protocol" ];
-	  })
+          (makeDesktopItem {
+                  name = "org-protocol";
+                  exec = "emacsclient %u";
+                  comment = "Org protocol";
+                  desktopName = "org-protocol";
+                  type = "Application";
+                  mimeTypes = [ "x-scheme-handler/org-protocol" ];
+          })
         ] ++ optionals config.centralMailHost.enable [
           davmail_
         ];
@@ -695,16 +695,16 @@ let
         programs.bash.shellAliases.e="emacsclient -t -a \"\"";
         programs.bash.shellAliases.eg="emacsclient -n -c -a \"\"";
         home.sessionVariables.ALTERNATE_EDITOR="";
-        home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
-        home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
+        home.sessionVariables.EDITOR="emacsclient -s default -t";                  # $EDITOR opens in terminal
+        home.sessionVariables.VISUAL="emacsclient -s default -c -a emacs";         # $VISUAL opens in GUI mode
         home.file.".emacs.d".source = inputs.chemacs;
         home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
         home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
         home.file.".emacs-profiles.el".text = ''
-	  (("default" . ((user-emacs-directory . "~/.emacs.default")
+          (("default" . ((user-emacs-directory . "~/.emacs.default")
                          (server-name . "default")
                         ))
-	   ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")
+           ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")
                          (server-name . "dev")
                         ))
           )
