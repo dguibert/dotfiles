@@ -1,18 +1,86 @@
 {
   "nodes": {
-    "base16-nix": {
-      "flake": false,
+    "base16": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1640016217,
-        "narHash": "sha256-6qV4WfqgA/61xPDxUTnh9GD+mN/BoJfnyCranBbLT0M=",
-        "owner": "dguibert",
-        "repo": "base16-nix",
-        "rev": "cd2a09114a6ff9cdfa47bd42430aa01f0838e524",
+        "lastModified": 1656262550,
+        "narHash": "sha256-q7olpOMV5829fDpdjA18QO0opk4ClvRYluugS6//hoA=",
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "rev": "e8d6be0aeed63908c1851c47192b74abb0254a44",
         "type": "github"
       },
       "original": {
-        "owner": "dguibert",
-        "repo": "base16-nix",
+        "owner": "SenchoPens",
+        "repo": "base16.nix",
+        "type": "github"
+      }
+    },
+    "base16-schemes": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1656875486,
+        "narHash": "sha256-5UU20uaRZ757n3AtzLNpsQL+WRMxRQZvmf0Bn+JdCk4=",
+        "owner": "base16-project",
+        "repo": "base16-schemes",
+        "rev": "8574648b683a3f51e4c702f83e10f6bede647f78",
+        "type": "github"
+      },
+      "original": {
+        "owner": "base16-project",
+        "repo": "base16-schemes",
+        "type": "github"
+      }
+    },
+    "base16-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1656612798,
+        "narHash": "sha256-ZlZpMvoljpfeTuOfTrF9qEnoGnkpxGjznd54y+deYwA=",
+        "owner": "base16-project",
+        "repo": "base16-shell",
+        "rev": "1af738dbb8fb6dbfd0402502ed47937ef4ebd461",
+        "type": "github"
+      },
+      "original": {
+        "owner": "base16-project",
+        "repo": "base16-shell",
+        "type": "github"
+      }
+    },
+    "base16-tmux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1655498870,
+        "narHash": "sha256-6Tqey5QY6VKtYjilG9GLNUnSwtfCz6IWKHA7JqxZrjM=",
+        "owner": "base16-project",
+        "repo": "base16-tmux",
+        "rev": "53197a2530cb1c2c01c4d08f70527ba673d7dd5c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "base16-project",
+        "repo": "base16-tmux",
+        "type": "github"
+      }
+    },
+    "base16-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1656116121,
+        "narHash": "sha256-Hby4p9Zmx02Fw2SWzdM9ewx1ehzaWYJZwIQ0GoyuDlI=",
+        "owner": "base16-project",
+        "repo": "base16-vim",
+        "rev": "3890dd461c5e9cdeb1818ff3697578f18d55b6d0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "base16-project",
+        "repo": "base16-vim",
         "type": "github"
       }
     },
@@ -538,7 +606,11 @@
     },
     "root": {
       "inputs": {
-        "base16-nix": "base16-nix",
+        "base16": "base16",
+        "base16-schemes": "base16-schemes",
+        "base16-shell": "base16-shell",
+        "base16-tmux": "base16-tmux",
+        "base16-vim": "base16-vim",
         "chemacs": "chemacs",
         "deploy-rs": "deploy-rs",
         "dwl-src": "dwl-src",
