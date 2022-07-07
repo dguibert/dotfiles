@@ -16,7 +16,7 @@ let
         , ...}@args:
         with lib;
     ({
-      imports = [ (import "${inputs.base16-nix}/base16.nix")
+      imports = [
         home-secret.withoutX11
         ../../modules/hm-report-changes.nix
         ({ ... }: { home.report-changes.enable = true; })
@@ -25,23 +25,8 @@ let
           config.centralMailHost.enable = isCentralMailHost;
         })
       ];
-      # Choose your themee
-      themes.base16 = {
-        enable = true;
-        scheme = "solarized";
-        variant = "solarized-dark";
-
-        # Add extra variables for inclusion in custom templates
-        extraParams = {
-          fontname = mkDefault  "Inconsolata LGC for Powerline";
-      #headerfontname = mkDefault  "Cabin";
-          bodysize = mkDefault  "10";
-          headersize = mkDefault  "12";
-          xdpi= mkDefault ''
-                Xft.hintstyle: hintfull
-          '';
-        };
-      };
+      # builtins.readFile (config.scheme inputs.base16-zathura);
+      # with config.scheme.withHashtag; baseXX
       #nixpkgs.overlays = (lib.singleton (const (super: {
       #  dbus = super.dbus.override { x11Support = false; };
       #  networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
@@ -131,7 +116,7 @@ let
         esac
 
         eval "$(${pkgs.coreutils}/bin/dircolors)"
-        source ${config.lib.base16.base16template "shell"}
+        source ${config.scheme inputs.base16-shell}
 
         export TODOTXT_DEFAULT_ACTION=ls
         alias t='todo.sh'
@@ -140,7 +125,7 @@ let
       '';
 
       #home.file.".vim/base16.vim".source = ./base16.vim;
-      home.file.".vim/base16.vim".source = config.lib.base16.base16template "vim";
+      home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
 
       programs.git.enable = true;
       programs.git.package = pkgs.gitFull;
@@ -374,7 +359,7 @@ let
         #}
       ];
       programs.tmux.extraConfig = ''
-        source-file ${config.lib.base16.base16template "tmux"}
+        source-file ${config.scheme inputs.base16-tmux}
 
         set -g prefix C-a
         # ============================================= #
@@ -588,7 +573,12 @@ let
         lib.recursiveUpdate
       (homes.withoutX11 args)
       ({
-        imports = [ (import "${inputs.base16-nix}/base16.nix")
+        imports = [
+          # import the base16.nix module
+          inputs.base16.nixosModule
+          # set system's scheme to nord by setting `config.scheme`
+          { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
+
           home-secret.withX11
           ../../modules/hm-report-changes.nix
           ({ ... }: { home.report-changes.enable = true; })
@@ -678,6 +668,15 @@ let
 
           # my-emacs # 20211026 installed via programs.emacs.package
           my-texlive
+
+          (makeDesktopItem {
+                  name = "org-protocol";
+                  exec = "emacsclient %u";
+                  comment = "Org protocol";
+                  desktopName = "org-protocol";
+                  type = "Application";
+                  mimeTypes = [ "x-scheme-handler/org-protocol" ];
+          })
         ] ++ optionals config.centralMailHost.enable [
           davmail_
         ];
@@ -686,13 +685,19 @@ let
         programs.bash.shellAliases.e="emacsclient -t -a \"\"";
         programs.bash.shellAliases.eg="emacsclient -n -c -a \"\"";
         home.sessionVariables.ALTERNATE_EDITOR="";
-        home.sessionVariables.EDITOR="emacsclient -t";                  # $EDITOR opens in terminal
-        home.sessionVariables.VISUAL="emacsclient -c -a emacs";         # $VISUAL opens in GUI mode
+        home.sessionVariables.EDITOR="emacsclient -s default -t";                  # $EDITOR opens in terminal
+        home.sessionVariables.VISUAL="emacsclient -s default -c -a emacs";         # $VISUAL opens in GUI mode
         home.file.".emacs.d".source = inputs.chemacs;
         home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
         home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
         home.file.".emacs-profiles.el".text = ''
-          (("default" . ((user-emacs-directory . "~/.emacs.default"))))
+          (("default" . ((user-emacs-directory . "~/.emacs.default")
+                         (server-name . "default")
+                        ))
+           ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")
+                         (server-name . "dev")
+                        ))
+          )
         '';
         programs.emacs.enable = true;
         programs.emacs.package = pkgs.my-emacs;
@@ -757,7 +762,7 @@ let
 
         services.udiskie.enable = true;
 
-        xresources.properties = {
+        xresources.properties = with config.scheme.withHashtag; {
           "*visualBell" = false;
           "*urgentOnBell" = true;
           "*font" = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1";
@@ -780,14 +785,34 @@ let
           "st.termName" = "st-256color";
           # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
           # use 'shell' template to set these if necessary
-          "*color16" = "base09";
-          "*color17" = "base0F";
-          "*color18" = "base01";
-          "*color19" = "base02";
-          "*color20" = "base04";
-          "*color21" = "base06";
+          "*foreground" = base05;
+          "*cursorColor" = base05;
+
+          "*color0" = base00;
+          "*color1" = base08;
+          "*color2" = base0B;
+          "*color3" = base0A;
+          "*color4" = base0D;
+          "*color5" = base0E;
+          "*color6" = base0C;
+          "*color7" = base05;
+
+          "*color8" = base03;
+          "*color9" = base09;
+          "*color10" = base01;
+          "*color11" = base02;
+          "*color12" = base04;
+          "*color13" = base06;
+          "*color14" = base0F;
+          "*color15" = base07;
+
+          "*color16" = base09;
+          "*color17" = base0F;
+          "*color18" = base01;
+          "*color19" = base02;
+          "*color20" = base04;
+          "*color21" = base06;
         };
-        xresources.extraConfig = builtins.readFile (config.lib.base16.base16template "xresources");
         programs.autorandr.enable = true;
         programs.autorandr.profiles.titan-bureau = {
           fingerprint = {

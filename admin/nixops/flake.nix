@@ -33,7 +33,12 @@
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
   #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
-  inputs.base16-nix           = { url  = "github:dguibert/base16-nix"; flake=false; };
+  inputs.base16.url = "github:SenchoPens/base16.nix";
+  inputs.base16.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.base16-schemes = { url = github:base16-project/base16-schemes; flake = false; };
+  inputs.base16-tmux    = { url = github:base16-project/base16-tmux  ; flake = false; };
+  inputs.base16-vim     = { url = github:base16-project/base16-vim  ; flake = false; };
+  inputs.base16-shell   = { url = github:base16-project/base16-shell; flake = false; };
   inputs.gitignore            = { url  = "github:hercules-ci/gitignore"; flake=false; };
 
   inputs.nxsession.url           = "github:dguibert/nxsession";
