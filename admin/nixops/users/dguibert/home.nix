@@ -18,6 +18,11 @@ let
     ({
       imports = [
         home-secret.withoutX11
+        # import the base16.nix module
+        inputs.base16.nixosModule
+        # set system's scheme to nord by setting `config.scheme`
+        { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
+
         ../../modules/hm-report-changes.nix
         ({ ... }: { home.report-changes.enable = true; })
         ({ ... }: {
