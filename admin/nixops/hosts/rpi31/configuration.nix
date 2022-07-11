@@ -114,7 +114,7 @@ rec {
       mode tcp
       timeout server 3h
       source 0.0.0.0 usesrc clientip
-      server openssh 127.0.0.1:22  check send-proxy
+      server openssh 127.0.0.1:22 send-proxy
     backend shadowsocks
       mode tcp
       source 0.0.0.0 usesrc clientip
