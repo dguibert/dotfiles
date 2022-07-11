@@ -22,120 +22,120 @@ bar:
         - map:
             margin: 4
             conditions:
-              tag_0_occupied == true:
+              tag_0_occupied:
                 map:
                   conditions:
-                    tag_0_focused == true: {string: {text: "{tag_0}", <<: *focused}}
-                    tag_0_focused == false: {string: {text: "{tag_0}", <<: *occupied}}
-              tag_0_occupied == false:
+                    tag_0_focused: {string: {text: "{tag_0}", <<: *focused}}
+                    ~tag_0_focused: {string: {text: "{tag_0}", <<: *occupied}}
+              ~tag_0_occupied:
                 map:
                   conditions:
-                    tag_0_focused == true: {string: {text: "{tag_0}", <<: *focused}}
-                    tag_0_focused == false: {string: {text: "{tag_0}", <<: *default}}
+                    tag_0_focused: {string: {text: "{tag_0}", <<: *focused}}
+                    ~tag_0_focused: {string: {text: "{tag_0}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_1_occupied == true:
+              tag_1_occupied:
                 map:
                   conditions:
-                    tag_1_focused == true: {string: {text: "{tag_1}", <<: *focused}}
-                    tag_1_focused == false: {string: {text: "{tag_1}", <<: *occupied}}
-              tag_1_occupied == false:
+                    tag_1_focused: {string: {text: "{tag_1}", <<: *focused}}
+                    ~tag_1_focused: {string: {text: "{tag_1}", <<: *occupied}}
+              ~tag_1_occupied:
                 map:
                   conditions:
-                    tag_1_focused == true: {string: {text: "{tag_1}", <<: *focused}}
-                    tag_1_focused == false: {string: {text: "{tag_1}", <<: *default}}
+                    tag_1_focused: {string: {text: "{tag_1}", <<: *focused}}
+                    ~tag_1_focused: {string: {text: "{tag_1}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_2_occupied == true:
+              tag_2_occupied:
                 map:
                   conditions:
-                    tag_2_focused == true: {string: {text: "{tag_2}", <<: *focused}}
-                    tag_2_focused == false: {string: {text: "{tag_2}", <<: *occupied}}
-              tag_2_occupied == false:
+                    tag_2_focused: {string: {text: "{tag_2}", <<: *focused}}
+                    ~tag_2_focused: {string: {text: "{tag_2}", <<: *occupied}}
+              ~tag_2_occupied:
                 map:
                   conditions:
-                    tag_2_focused == true: {string: {text: "{tag_2}", <<: *focused}}
-                    tag_2_focused == false: {string: {text: "{tag_2}", <<: *default}}
+                    tag_2_focused: {string: {text: "{tag_2}", <<: *focused}}
+                    ~tag_2_focused: {string: {text: "{tag_2}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_3_occupied == true:
+              tag_3_occupied:
                 map:
                   conditions:
-                    tag_3_focused == true: {string: {text: "{tag_3}", <<: *focused}}
-                    tag_3_focused == false: {string: {text: "{tag_3}", <<: *occupied}}
-              tag_3_occupied == false:
+                    tag_3_focused: {string: {text: "{tag_3}", <<: *focused}}
+                    ~tag_3_focused: {string: {text: "{tag_3}", <<: *occupied}}
+              ~tag_3_occupied:
                 map:
                   conditions:
-                    tag_3_focused == true: {string: {text: "{tag_3}", <<: *focused}}
-                    tag_3_focused == false: {string: {text: "{tag_3}", <<: *default}}
+                    tag_3_focused: {string: {text: "{tag_3}", <<: *focused}}
+                    ~tag_3_focused: {string: {text: "{tag_3}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_4_occupied == true:
+              tag_4_occupied:
                 map:
                   conditions:
-                    tag_4_focused == true: {string: {text: "{tag_4}", <<: *focused}}
-                    tag_4_focused == false: {string: {text: "{tag_4}", <<: *occupied}}
-              tag_4_occupied == false:
+                    tag_4_focused: {string: {text: "{tag_4}", <<: *focused}}
+                    ~tag_4_focused: {string: {text: "{tag_4}", <<: *occupied}}
+              ~tag_4_occupied:
                 map:
                   conditions:
-                    tag_4_focused == true: {string: {text: "{tag_4}", <<: *focused}}
-                    tag_4_focused == false: {string: {text: "{tag_4}", <<: *default}}
+                    tag_4_focused: {string: {text: "{tag_4}", <<: *focused}}
+                    ~tag_4_focused: {string: {text: "{tag_4}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_5_occupied == true:
+              tag_5_occupied:
                 map:
                   conditions:
-                    tag_5_focused == true: {string: {text: "{tag_5}", <<: *focused}}
-                    tag_5_focused == false: {string: {text: "{tag_5}", <<: *occupied}}
-              tag_5_occupied == false:
+                    tag_5_focused: {string: {text: "{tag_5}", <<: *focused}}
+                    ~tag_5_focused: {string: {text: "{tag_5}", <<: *occupied}}
+              ~tag_5_occupied:
                 map:
                   conditions:
-                    tag_5_focused == true: {string: {text: "{tag_5}", <<: *focused}}
-                    tag_5_focused == false: {string: {text: "{tag_5}", <<: *default}}
+                    tag_5_focused: {string: {text: "{tag_5}", <<: *focused}}
+                    ~tag_5_focused: {string: {text: "{tag_5}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_6_occupied == true:
+              tag_6_occupied:
                 map:
                   conditions:
-                    tag_6_focused == true: {string: {text: "{tag_6}", <<: *focused}}
-                    tag_6_focused == false: {string: {text: "{tag_6}", <<: *occupied}}
-              tag_6_occupied == false:
+                    tag_6_focused: {string: {text: "{tag_6}", <<: *focused}}
+                    ~tag_6_focused: {string: {text: "{tag_6}", <<: *occupied}}
+              ~tag_6_occupied:
                 map:
                   conditions:
-                    tag_6_focused == true: {string: {text: "{tag_6}", <<: *focused}}
-                    tag_6_focused == false: {string: {text: "{tag_6}", <<: *default}}
+                    tag_6_focused: {string: {text: "{tag_6}", <<: *focused}}
+                    ~tag_6_focused: {string: {text: "{tag_6}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_7_occupied == true:
+              tag_7_occupied:
                 map:
                   conditions:
-                    tag_7_focused == true: {string: {text: "{tag_7}", <<: *focused}}
-                    tag_7_focused == false: {string: {text: "{tag_7}", <<: *occupied}}
-              tag_7_occupied == false:
+                    tag_7_focused: {string: {text: "{tag_7}", <<: *focused}}
+                    ~tag_7_focused: {string: {text: "{tag_7}", <<: *occupied}}
+              ~tag_7_occupied:
                 map:
                   conditions:
-                    tag_7_focused == true: {string: {text: "{tag_7}", <<: *focused}}
-                    tag_7_focused == false: {string: {text: "{tag_7}", <<: *default}}
+                    tag_7_focused: {string: {text: "{tag_7}", <<: *focused}}
+                    ~tag_7_focused: {string: {text: "{tag_7}", <<: *default}}
         - map:
             margin: 4
             conditions:
-              tag_8_occupied == true:
+              tag_8_occupied:
                 map:
                   conditions:
-                    tag_8_focused == true: {string: {text: "{tag_8}", <<: *focused}}
-                    tag_8_focused == false: {string: {text: "{tag_8}", <<: *occupied}}
-              tag_8_occupied == false:
+                    tag_8_focused: {string: {text: "{tag_8}", <<: *focused}}
+                    ~tag_8_focused: {string: {text: "{tag_8}", <<: *occupied}}
+              ~tag_8_occupied:
                 map:
                   conditions:
-                    tag_8_focused == true: {string: {text: "{tag_8}", <<: *focused}}
-                    tag_8_focused == false: {string: {text: "{tag_8}", <<: *default}}
+                    tag_8_focused: {string: {text: "{tag_8}", <<: *focused}}
+                    ~tag_8_focused: {string: {text: "{tag_8}", <<: *default}}
         - list:
             spacing: 3
             items:
