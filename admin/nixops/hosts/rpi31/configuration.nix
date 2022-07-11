@@ -98,8 +98,13 @@ rec {
   services.haproxy.enable = true;
   ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
   services.haproxy.config = ''
+    global
+      log /dev/log  local0 warning
+
     frontend ssl
       mode tcp
+      log global
+      option tcplog
       bind 0.0.0.0:443
       tcp-request inspect-delay 3s
       tcp-request content accept if { req.ssl_hello_type 1 }
@@ -113,12 +118,10 @@ rec {
     backend openssh
       mode tcp
       timeout server 3h
-      source 0.0.0.0 usesrc clientip
       server openssh 127.0.0.1:22 send-proxy
     backend shadowsocks
       mode tcp
-      source 0.0.0.0 usesrc clientip
-      server socks 127.0.0.1:${toString config.services.shadowsocks.port}
+      server socks 127.0.0.1:${toString config.services.shadowsocks.port} send-proxy
   '';
   # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
   #services.nginx.enable = true;
