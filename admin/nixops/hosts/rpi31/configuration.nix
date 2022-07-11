@@ -101,6 +101,8 @@ rec {
     frontend ssl
       mode tcp
       bind 0.0.0.0:443
+      option tcplog
+      option forwardfor
       tcp-request inspect-delay 3s
       tcp-request content accept if { req.ssl_hello_type 1 }
 
@@ -113,10 +115,12 @@ rec {
     backend openssh
       mode tcp
       timeout server 3h
-      server openssh 127.0.0.1:22
+      source 0.0.0.0 usesrc clientip
+      server openssh 127.0.0.1:22  check send-proxy
     backend shadowsocks
       mode tcp
-      server socks 127.0.0.1:${toString config.services.shadowsocks.port}
+      source 0.0.0.0 usesrc clientip
+      server socks 127.0.0.1:${toString config.services.shadowsocks.port}  check send-proxy
   '';
   # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
   #services.nginx.enable = true;
