@@ -34,7 +34,7 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl > ~.cache/dwltags |& tee ~/dwl-session.log ; history -n # close standard input
+      exec dwl > ~/.cache/dwltags |& tee ~/dwl-session.log ; history -n # close standard input
     fi
   '';
 
