@@ -77,6 +77,18 @@ rec {
   fonts.fontconfig.enable = false;
 
   networking.firewall.allowedTCPPorts = [ 443 22322 ];
+  networking.firewall.extraCommands = ''
+    ip46tables -t mangle -N DIVERT
+    ip46tables -t mangle -A PREROUTING -p tcp -m socket -j DIVERT
+    ip46tables -t mangle -A DIVERT -j MARK --set-mark 111
+    ip46tables -t mangle -A DIVERT -j ACCEPT
+    ${pkgs.iproute2}/bin/ip rule add fwmark 111 lookup 100
+    ${pkgs.iproute2}/bin/ip route add local 0.0.0.0/0 dev lo table 100
+
+    #echo 1 > /proc/sys/net/ipv4/conf/all/forwarding
+    #echo 1 > /proc/sys/net/ipv4/conf/all/send_redirects
+    #echo 1 > /proc/sys/net/ipv4/conf/bond0/send_redirects
+  '';
   #networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
   #services.sslh = {
   #  enable=true;
@@ -130,6 +142,25 @@ rec {
     backend shadowsocks
       mode tcp
       server socks 127.0.0.1:${toString config.services.shadowsocks.port}
+
+    frontend ssl_t
+      mode tcp
+      log global
+      option tcplog
+      bind 0.0.0.0:4443
+      tcp-request inspect-delay 3s
+      tcp-request content accept if { req.ssl_hello_type 1 }
+
+      acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
+
+      use_backend openssh_t          if ssh_payload
+      use_backend openssh_t          if !{ req.ssl_hello_type 1 } { req.len 0 }
+      use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
+
+    backend openssh_t
+      mode tcp
+      source 0.0.0.0 usesrc clientip
+      server openssh 127.0.0.1:22
   '';
   # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
   #services.nginx.enable = true;
