@@ -98,8 +98,14 @@ rec {
   services.haproxy.enable = true;
   ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
   services.haproxy.config = ''
+    defaults
+      log  global
+      mode tcp
+      timeout connect 10s
+      timeout client 36h
+      timeout server 36h
     global
-      log /dev/log  local0 warning
+      log /dev/log  local0 debug
 
     frontend ssl
       mode tcp
@@ -110,6 +116,9 @@ rec {
       tcp-request content accept if { req.ssl_hello_type 1 }
 
       acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
+      #acl valid_payload req.payload(0,7) -m str "SSH-2.0"
+      #tcp-request content reject if !valid_payload
+      #tcp-request content accept if { req_ssl_hello_type 1 }
 
       use_backend openssh            if ssh_payload
       use_backend openssh            if !{ req.ssl_hello_type 1 } { req.len 0 }
