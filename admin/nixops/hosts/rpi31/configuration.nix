@@ -126,11 +126,10 @@ rec {
 
     backend openssh
       mode tcp
-      timeout server 3h
-      server openssh 127.0.0.1:22 send-proxy
+      server openssh 127.0.0.1:22
     backend shadowsocks
       mode tcp
-      server socks 127.0.0.1:${toString config.services.shadowsocks.port} send-proxy
+      server socks 127.0.0.1:${toString config.services.shadowsocks.port}
   '';
   # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
   #services.nginx.enable = true;
