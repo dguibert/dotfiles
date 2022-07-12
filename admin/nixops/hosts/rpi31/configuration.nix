@@ -78,7 +78,11 @@ rec {
 
   networking.firewall.allowedTCPPorts = [ 443 22322 ];
   networking.firewall.extraCommands = ''
-    ip46tables -t mangle -N DIVERT
+    ip46tables -t mangle -F DIVERT 2> /dev/null || true
+    ip46tables -t mangle -X DIVERT 2> /dev/null || true
+    ip46tables -t mangle -N DIVERT 2> /dev/null || true
+    ip46tables -t mangle -F PREROUTING -j DIVERT 2> /dev/null || true
+    ip46tables -t mangle -X PREROUTING -j DIVERT 2> /dev/null || true
     ip46tables -t mangle -A PREROUTING -p tcp -m socket -j DIVERT
     ip46tables -t mangle -A DIVERT -j MARK --set-mark 111
     ip46tables -t mangle -A DIVERT -j ACCEPT
