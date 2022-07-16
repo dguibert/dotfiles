@@ -76,7 +76,7 @@ rec {
 
   fonts.fontconfig.enable = false;
 
-  networking.firewall.allowedTCPPorts = [ 443 22322 ];
+  networking.firewall.allowedTCPPorts = [ 443 22322 2222 ];
   networking.firewall.extraCommands = ''
     ip46tables -t mangle -F DIVERT 2> /dev/null || true
     ip46tables -t mangle -X DIVERT 2> /dev/null || true
@@ -161,6 +161,9 @@ rec {
       use_backend openssh_t          if !{ req.ssl_hello_type 1 } { req.len 0 }
       use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
 
+    frontend ssh_t
+      mode tcp
+      bind 0.0.0.0:2222 transparent
     backend openssh_t
       mode tcp
       source 0.0.0.0 usesrc clientip
