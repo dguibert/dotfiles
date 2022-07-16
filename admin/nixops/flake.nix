@@ -48,6 +48,7 @@
   inputs.dwm-src.url = "github:dguibert/dwm/pu";        inputs.dwm-src.flake = false;
   inputs.st-src.url  = "github:dguibert/st/pu";         inputs.st-src.flake = false;
   inputs.dwl-src.url = "github:dguibert/dwl/pu-next";   inputs.dwl-src.flake = false;
+  inputs.yambar-src.url = "git+https://codeberg.org/dnkl/yambar.git";   inputs.yambar-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
@@ -144,6 +145,10 @@
         buildInputs = o.buildInputs ++ [
           xorg.xcbutilwm
         ];
+      });
+      yambar = prev.yambar.overrideAttrs (o: {
+        src = inputs.yambar-src;
+        patches = [];
       });
       somebar = prev.somebar.overrideAttrs (o: {
         patches = [
