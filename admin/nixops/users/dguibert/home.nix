@@ -510,6 +510,7 @@ let
           PasswordAuthentication no
           PubkeyAuthentication yes
           TCPKeepAlive yes
+          SendEnv COLORTERM
         '';
 
         matchBlocks = {
