@@ -1,0 +1,6 @@
+.direnv
+result
+*.orig
+.deploy-gc
+tags
+online-ca-orsin
