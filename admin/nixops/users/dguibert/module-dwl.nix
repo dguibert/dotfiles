@@ -19,7 +19,7 @@ let
       #PATH=~/code/someblocks:$PATH someblocks &
       #swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
       #somebar
-      ${pkgs.yambar}/bin/yambar -c ${yambarConf}&
+      sleep 2 && ${pkgs.yambar}/bin/yambar -c ${yambarConf}&
 
       # kill any remaining background tasks
       for pid in $(pgrep -g $$); do
