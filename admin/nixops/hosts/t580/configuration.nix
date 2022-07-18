@@ -2,7 +2,8 @@
 with lib;
 rec {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../common.nix
     ];
@@ -35,24 +36,24 @@ rec {
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";
-    bondConfig.Mode="active-backup";
-    bondConfig.MIIMonitorSec="100s";
-    bondConfig.PrimaryReselectPolicy="always";
+    bondConfig.Mode = "active-backup";
+    bondConfig.MIIMonitorSec = "100s";
+    bondConfig.PrimaryReselectPolicy = "always";
   };
   systemd.network.networks = {
     "40-bond0" = {
       name = "bond0";
       DHCP = "yes";
       networkConfig.BindCarrier = "enp0s31f6 wlp4s0";
-      linkConfig.MACAddress="d2:b6:17:1d:b8:97";
+      linkConfig.MACAddress = "d2:b6:17:1d:b8:97";
     };
   } // listToAttrs (flip map [ "enp0s31f6" "wlp4s0" "enp0s20f0u4u1" ] (bi:
     nameValuePair "40-${bi}" {
-      name="${bi}";
+      name = "${bi}";
       DHCP = "no";
       networkConfig.Bond = "bond0";
       networkConfig.IPv6PrivacyExtensions = "kernel";
-      linkConfig.MACAddress="d2:b6:17:1d:b8:97";
+      linkConfig.MACAddress = "d2:b6:17:1d:b8:97";
     }));
 
   # Configure network proxy if necessary
@@ -65,7 +66,7 @@ rec {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     vim
+    vim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -82,7 +83,7 @@ rec {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.ports = [22];
+  services.openssh.ports = [ 22 ];
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];

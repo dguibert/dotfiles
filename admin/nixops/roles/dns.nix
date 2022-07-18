@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.role.dns;
-in {
+in
+{
   options.role.dns.enable = lib.mkOption {
     default = true;
     description = "Whether to enable local dns server";
@@ -17,7 +18,7 @@ in {
 
       # services.unbound.forwardAddresses doesn't let us set forward-tls-upstream
       settings = {
-        forward-zone = [ {
+        forward-zone = [{
           name = ".";
           forward-tls-upstream = true;
           forward-addr = [
@@ -34,7 +35,7 @@ in {
             # TOR
             #"127.0.0.1@853#cloudflare-dns.com"
           ];
-        } ];
+        }];
 
         server = {
           interface = [ "127.0.0.1" "::1" ];

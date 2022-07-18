@@ -18,14 +18,14 @@
 
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  services.resolved.extraConfig="DNS=8.8.8.8 8.8.4.4";
-  services.resolved.dnssec="false";
+  services.resolved.extraConfig = "DNS=8.8.8.8 8.8.4.4";
+  services.resolved.dnssec = "false";
   # https://github.com/NixOS/nixpkgs/issues/18962
   # Prevent networkd from managing unconfigured links.
   #systemd.network.networks."99-main".enable = false;
   # https://github.com/systemd/systemd/issues/9771
   # https://discourse.nixos.org/t/domain-name-resolve-problem/885
-  networking.resolvconf.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
+  networking.resolvconf.dnsExtensionMechanism = false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
   #services.nscd.enable = false; # no real gain (?) on workstations
   # unreachable DNS entries from home
   networking.hosts = {

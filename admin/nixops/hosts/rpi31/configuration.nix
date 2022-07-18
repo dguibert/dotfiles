@@ -50,13 +50,13 @@ rec {
   #};
 
   # !!! Adding a swap file is optional, but strongly recommended!
-  swapDevices = [ { device = "/swapfile"; size = 1024; } ];
+  swapDevices = [{ device = "/swapfile"; size = 1024; }];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.listenAddresses = [
-    { addr = "127.0.0.1"; port=22; }
-    { addr = "0.0.0.0"; port=22322; }
+    { addr = "127.0.0.1"; port = 22; }
+    { addr = "0.0.0.0"; port = 22322; }
   ];
 
   environment.systemPackages = [ pkgs.vim ];
@@ -198,8 +198,8 @@ rec {
   #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
   services.shadowsocks = {
     enable = true;
-    localAddress= [ "127.0.0.1" ];
-    port=8388;
+    localAddress = [ "127.0.0.1" ];
+    port = 8388;
     passwordFile = config.sops.secrets.shadowsocks.path;
   };
 

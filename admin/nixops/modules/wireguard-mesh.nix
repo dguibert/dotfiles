@@ -29,15 +29,17 @@ let
         print(random_ipv6(), end="")
   '';
   # runCommandNoCC name: env: buildCommand:
-  random-ipv6 = name: builtins.readFile (toString (pkgs.runCommandNoCC "ipv6-${name}" {} ''
-    mkdir $out
-    ${random-ipv6-script} > $out/ipv6
-    '')+"/ipv6");
+  random-ipv6 = name: builtins.readFile (toString
+    (pkgs.runCommandNoCC "ipv6-${name}" { } ''
+      mkdir $out
+      ${random-ipv6-script} > $out/ipv6
+    '') + "/ipv6");
 
   cfg = config.networking.wireguard-mesh;
 
   peerNames = builtins.filter (n: n != config.networking.hostName) (builtins.attrNames cfg.peers);
-in {
+in
+{
   options = {
     networking.wireguard-mesh = {
       enable = mkEnableOption "Enable a wireguard mesh network";
@@ -48,10 +50,9 @@ in {
         default = toString "/secrets/wireguard_key";
       };
       peers = mkOption {
-        default = {};
+        default = { };
         #type = with types; loaOf (submodule peerOpts);
-        example = {
-        };
+        example = { };
         description = ''
         '';
       };
@@ -64,30 +65,35 @@ in {
     # https://linux-audit.com/granting-temporary-access-to-servers-using-signed-ssh-keys/
     # rpi31
     networking.wireguard.interfaces = listToAttrs (flip map peerNames
-      (n : let
-        peer = builtins.getAttr n cfg.peers;
-        in nameValuePair "${n}" {
-        ips = [
-          cfg.peers."${config.networking.hostName}".ipv4Address
-          # Assign an IPv6 link local address on the tunnel so multicast works
-          cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
-        ];
-        listenPort = peer.listenPort;
-        allowedIPsAsRoutes=false;
-        privateKeyFile = cfg.privateKeyFile;
-        peers = [
-          { allowedIPs = [ "0.0.0.0/0"
-              #"ff02::/16"
-              "::/0"
-              # The Babel protocol uses IPv6 link-local unicast and multicast addresses
-              "fe80::/64" "ff02::1:6/128"
-            ];
-            publicKey  = peer.publicKey;
-            endpoint   = mkIf (peer ? endpoint) peer.endpoint;
-            persistentKeepalive = mkIf (peer ? persistentKeepalive) peer.persistentKeepalive;
-          }
-        ];
-      }));
+      (n:
+        let
+          peer = builtins.getAttr n cfg.peers;
+        in
+        nameValuePair "${n}" {
+          ips = [
+            cfg.peers."${config.networking.hostName}".ipv4Address
+            # Assign an IPv6 link local address on the tunnel so multicast works
+            cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
+          ];
+          listenPort = peer.listenPort;
+          allowedIPsAsRoutes = false;
+          privateKeyFile = cfg.privateKeyFile;
+          peers = [
+            {
+              allowedIPs = [
+                "0.0.0.0/0"
+                #"ff02::/16"
+                "::/0"
+                # The Babel protocol uses IPv6 link-local unicast and multicast addresses
+                "fe80::/64"
+                "ff02::1:6/128"
+              ];
+              publicKey = peer.publicKey;
+              endpoint = mkIf (peer ? endpoint) peer.endpoint;
+              persistentKeepalive = mkIf (peer ? persistentKeepalive) peer.persistentKeepalive;
+            }
+          ];
+        }));
 
     services.babeld.enable = true;
     services.babeld.interfaceDefaults = {
@@ -113,7 +119,7 @@ in {
       serviceConfig = {
         #IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" "10.147.27.0/24" ];
         IPAddressAllow = [ "10.147.27.0/24" ];
-        RestrictAddressFamilies=[ "AF_INET" "AF_UNIX" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_UNIX" ];
       };
     };
 

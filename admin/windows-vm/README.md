@@ -8,6 +8,6 @@ Because terraform needs to run in a folder that is writeable
 we use a flake app which copy this `config.tf.json` to the current folder
 and runs terraform commands.
 
-* `nix run ".#apply"` run `terraform apply`
-* `nix run ".#destroy"` run `terraform destroy`
-* `nix run` run `nix run ".#apply"`
+- `nix run ".#apply"` run `terraform apply`
+- `nix run ".#destroy"` run `terraform destroy`
+- `nix run` run `nix run ".#apply"`

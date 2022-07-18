@@ -103,7 +103,8 @@ let
   #  zfs rollback -r rt580/local/root@blank
   #''
 
-in {
+in
+{
   boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.supportedFilesystems = [ "zfs" ];
   users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";
@@ -162,7 +163,7 @@ in {
 
       #umount /mnt
     '')
-];
+  ];
 
 }
 

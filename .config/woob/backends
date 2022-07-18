@@ -5,8 +5,8 @@ login = `pass dag/www.creditmutuel.fr |grep -oP "login: \K.*"`
 
 [youtube]
 _module = youtube
-password = 
-username = 
+password =
+username =
 
 [freemobile]
 _module = freemobile

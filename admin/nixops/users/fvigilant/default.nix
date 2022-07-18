@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ...}: {
+{ pkgs, config, lib, ... }: {
   users.users.fvigilant = {
     isNormalUser = true;
     uid = 1502;
@@ -12,5 +12,5 @@
     shell = "/run/current-system/sw/bin/nologin";
   };
   users.groups.fvigilant.gid = 1502;
-  users.groups.sftponly = {};
+  users.groups.sftponly = { };
 }

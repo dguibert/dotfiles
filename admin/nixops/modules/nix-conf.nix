@@ -16,19 +16,19 @@
     nix.settings.sandbox = true; #"relaxed";
     nix.settings.auto-optimise-store = true; #lib.mkForce false;
     #nix.optimise.automatic=true;
-    nix.settings.keep-outputs = true;       # Nice for developers
-    nix.settings.keep-derivations = true;   # Idem
-      #extra-sandbox-paths = /opt/intel/licenses=/home/dguibert/nur-packages/secrets?
+    nix.settings.keep-outputs = true; # Nice for developers
+    nix.settings.keep-derivations = true; # Idem
+    #extra-sandbox-paths = /opt/intel/licenses=/home/dguibert/nur-packages/secrets?
     nix.settings.experimental-features = "nix-command flakes ca-derivations recursive-nix";
-      #plugin-files = ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
-      #      buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
-      #      patches = (o.patches or []) ++ [
-      #        ./0001-compile-with-new-PrimOp-struct.patch
-      #        ./0002-avoid-toJSON-template.patch
-      #        ./0003-value-mkPrimOp.patch
-      #        ./0004-mkStringNoCopy-mkString.patch
-      #      ];
-      #      })}/lib/nix/plugins/libnix-extra-builtins.so
+    #plugin-files = ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
+    #      buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
+    #      patches = (o.patches or []) ++ [
+    #        ./0001-compile-with-new-PrimOp-struct.patch
+    #        ./0002-avoid-toJSON-template.patch
+    #        ./0003-value-mkPrimOp.patch
+    #        ./0004-mkStringNoCopy-mkString.patch
+    #      ];
+    #      })}/lib/nix/plugins/libnix-extra-builtins.so
     nix.settings.binary-caches = [
       "https://cache.nixos.org"
       "https://r-ryantm.cachix.org"

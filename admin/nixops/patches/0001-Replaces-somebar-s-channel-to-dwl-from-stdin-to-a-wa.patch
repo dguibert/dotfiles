@@ -32,7 +32,7 @@ index aed4480..12a3e2e 100644
  #include <pango/pango.h>
  #include "wlr-layer-shell-unstable-v1-client-protocol.h"
 +#include "net-tapesoftware-dwl-wm-unstable-v1-client-protocol.h"
- 
+
  struct Color {
  	Color() {}
 @@ -38,7 +39,14 @@ extern wl_display* display;
@@ -41,7 +41,7 @@ index aed4480..12a3e2e 100644
  extern zwlr_layer_shell_v1* wlrLayerShell;
 +extern std::vector<std::string> tagNames;
 +extern std::vector<std::string> layoutNames;
- 
+
 +void view(Monitor& m, const Arg& arg);
 +void toggleview(Monitor& m, const Arg& arg);
 +void setlayout(Monitor& m, const Arg& arg);
@@ -56,7 +56,7 @@ index aed4480..12a3e2e 100644
  WL_DELETER(wl_surface, wl_surface_destroy);
 +WL_DELETER(znet_tapesoftware_dwl_wm_monitor_v1, znet_tapesoftware_dwl_wm_monitor_v1_release);
  WL_DELETER(zwlr_layer_surface_v1, zwlr_layer_surface_v1_destroy);
- 
+
  WL_DELETER(cairo_t, cairo_destroy);
 diff --git a/src/config.def.hpp b/src/config.def.hpp
 index 40a8c95..a9560cb 100644
@@ -65,7 +65,7 @@ index 40a8c95..a9560cb 100644
 @@ -16,12 +16,11 @@ constexpr ColorScheme colorInactive = {Color(0xbb, 0xbb, 0xbb), Color(0x22, 0x22
  constexpr ColorScheme colorActive = {Color(0xee, 0xee, 0xee), Color(0x00, 0x55, 0x77)};
  constexpr const char* termcmd[] = {"foot", nullptr};
- 
+
 -static std::vector<std::string> tagNames = {
 -	"1", "2", "3",
 -	"4", "5", "6",
@@ -85,7 +85,7 @@ index 697909b..01be870 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
 @@ -3,7 +3,6 @@
- 
+
  #include <algorithm>
  #include <cstdio>
 -#include <sstream>
@@ -101,14 +101,14 @@ index 697909b..01be870 100644
 -#include "config.hpp"
  #include "bar.hpp"
  #include "line_buffer.hpp"
- 
+
 @@ -34,6 +33,7 @@ struct Monitor {
  	bool desiredVisibility {true};
  	bool hasData;
  	uint32_t tags;
 +	wl_unique_ptr<znet_tapesoftware_dwl_wm_monitor_v1> dwlMonitor;
  };
- 
+
  struct SeatPointer {
 @@ -54,8 +54,6 @@ static void updatemon(Monitor &mon);
  static void onReady();
@@ -132,7 +132,7 @@ index 697909b..01be870 100644
 @@ -85,6 +86,26 @@ static int statusFifoFd {-1};
  static int statusFifoWriter {-1};
  static bool quitting {false};
- 
+
 +void view(Monitor& m, const Arg& arg)
 +{
 +	znet_tapesoftware_dwl_wm_monitor_v1_set_tags(m.dwlMonitor.get(), arg.ui, 1);
@@ -159,7 +159,7 @@ index 697909b..01be870 100644
 @@ -189,11 +210,62 @@ static const struct wl_seat_listener seatListener = {
  	.name = [](void*, wl_seat*, const char* name) { }
  };
- 
+
 +static const struct znet_tapesoftware_dwl_wm_v1_listener dwlWmListener = {
 +	.tag = [](void*, znet_tapesoftware_dwl_wm_v1*, const char* name) {
 +		tagNames.push_back(name);
@@ -217,7 +217,7 @@ index 697909b..01be870 100644
 +	monitor.dwlMonitor.reset(znet_tapesoftware_dwl_wm_v1_get_monitor(dwlWm, monitor.wlOutput.get()));
 +	znet_tapesoftware_dwl_wm_monitor_v1_add_listener(monitor.dwlMonitor.get(), &dwlWmMonitorListener, &monitor);
  }
- 
+
  void updatemon(Monitor& mon)
 @@ -219,6 +291,7 @@ void onReady()
  	requireGlobal(shm, "wl_shm");
@@ -226,19 +226,19 @@ index 697909b..01be870 100644
 +	requireGlobal(dwlWm, "znet_tapesoftware_dwl_wm_v1");
  	setupStatusFifo();
  	wl_display_roundtrip(display); // roundtrip so we receive all dwl tags etc.
- 
+
 @@ -226,7 +299,6 @@ void onReady()
  	for (auto output : uninitializedOutputs) {
  		setupMonitor(output.first, output.second);
  	}
 -	wl_display_roundtrip(display); // wait for xdg_output names before we read stdin
  }
- 
+
  bool createFifo(std::string path)
 @@ -273,66 +345,6 @@ void setupStatusFifo()
  	}
  }
- 
+
 -static LineBuffer<512> stdinBuffer;
 -static void onStdin()
 -{
@@ -333,6 +333,6 @@ index 697909b..01be870 100644
  				} else if (ev.fd == statusFifoFd && (ev.revents & POLLIN)) {
  					onStatus();
  				} else if (ev.fd == signalSelfPipe[0] && (ev.revents & POLLIN)) {
--- 
+--
 2.35.3
 

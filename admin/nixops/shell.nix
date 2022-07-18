@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> { }
-, inputs ? {}
+, inputs ? { }
 , ssh-to-pgp
 , sops-import-keys-hook
 , deploy-rs
@@ -40,7 +40,7 @@ mkShell rec {
     sops-import-keys-hook
   ];
   #SOPS_PGP_FP = "";
-  sopsCreateGPGHome="";
+  sopsCreateGPGHome = "";
   shellHook = ''
     export GIT_DIR=$HOME/.mgit/dotfiles/.git
     ${pre-commit-check-shellHook}

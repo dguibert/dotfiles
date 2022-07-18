@@ -7,23 +7,25 @@ rec {
 
   services.openssh.enable = true;
 
-  nixpkgs.overlays = [(self: super: {
-    ## Restrict drivers built by mesa to just the ones we need This
-    ## reduces the install size a bit.
-    #mesa = (super.mesa.override {
-    #  vulkanDrivers = [];
-    #  driDrivers = [];
-    #  galliumDrivers = ["vc4" "swrast"];
-    #  enableRadv = false;
-    #  withValgrind = false;
-    #  #enableOSMesa = false;
-    #  #enableGalliumNine = false;
-    #}).overrideAttrs (o: {
-    #  mesonFlags = (o.mesonFlags or []) ++ ["-Dglx=disabled"];
-    #});
+  nixpkgs.overlays = [
+    (self: super: {
+      ## Restrict drivers built by mesa to just the ones we need This
+      ## reduces the install size a bit.
+      #mesa = (super.mesa.override {
+      #  vulkanDrivers = [];
+      #  driDrivers = [];
+      #  galliumDrivers = ["vc4" "swrast"];
+      #  enableRadv = false;
+      #  withValgrind = false;
+      #  #enableOSMesa = false;
+      #  #enableGalliumNine = false;
+      #}).overrideAttrs (o: {
+      #  mesonFlags = (o.mesonFlags or []) ++ ["-Dglx=disabled"];
+      #});
 
-    #libcec = super.libcec.override { inherit (super) libraspberrypi; };
-  })];
+      #libcec = super.libcec.override { inherit (super) libraspberrypi; };
+    })
+  ];
 
   boot.loader.grub.enable = false;
   boot.loader.raspberryPi.enable = true;
@@ -44,19 +46,21 @@ rec {
 
   sdImage = {
     firmwareSize = 512;
-    populateFirmwareCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-        # when attempting to show low-voltage or overtemperature warnings.
-        avoid_warnings=1
+    populateFirmwareCommands =
+      let
+        configTxt = pkgs.writeText "config.txt" ''
+          # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+          # when attempting to show low-voltage or overtemperature warnings.
+          avoid_warnings=1
 
-        [pi0]
-        kernel=u-boot-rpi0.bin
+          [pi0]
+          kernel=u-boot-rpi0.bin
 
-        [pi1]
-        kernel=u-boot-rpi1.bin
-      '';
-      in ''
+          [pi1]
+          kernel=u-boot-rpi1.bin
+        '';
+      in
+      ''
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
         cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
         cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
@@ -73,4 +77,4 @@ rec {
     };
   };
 
- }
+}

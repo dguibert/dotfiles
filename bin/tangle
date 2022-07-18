@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     out = sys.stdout
-    
+
     tangle(args.chunk_name, args.filename, out)
 
 

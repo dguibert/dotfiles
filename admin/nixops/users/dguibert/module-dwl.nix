@@ -56,7 +56,8 @@ let
     wlr-randr $options
   '';
 
-in with lib; {
+in
+with lib; {
 
   home.packages = with pkgs; [
     dwl-session

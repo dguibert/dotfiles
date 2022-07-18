@@ -36,6 +36,6 @@ index fab5a8f..c9d6c30 100644
  			cairo_stroke(_painter);
  		}
  	}
--- 
+--
 2.35.3
 

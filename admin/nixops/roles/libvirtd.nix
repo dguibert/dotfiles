@@ -2,7 +2,8 @@
 
 let
   cfg = config.role.libvirtd;
-in {
+in
+{
   options.role.libvirtd.enable = lib.mkOption {
     default = false;
     description = "Whether to enable libvirtd";
@@ -15,24 +16,25 @@ in {
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemu = {
       #ovmf.package = pkgs.OVMF.override { secureBoot=true; tpmSupport=true; };
-      ovmf.packages = [pkgs.OVMFFull.fd];
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
       swtpm.enable = true;
     };
     # https://github.com/NixOS/nixpkgs/issues/75878
-    systemd.services.libvirtd.environment.EBTABLES_PATH="${pkgs.ebtables}/bin/ebtables-legacy";
+    systemd.services.libvirtd.environment.EBTABLES_PATH = "${pkgs.ebtables}/bin/ebtables-legacy";
     # https://github.com/NixOS/nixpkgs/pull/35214#pullrequestreview-97783209
     security.wrappers.spice-client-glib-usb-acl-helper = {
-      setuid=true;
+      setuid = true;
       owner = "root";
       group = "root";
       source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
     };
 
     programs.dconf.enable = true;
-    environment.systemPackages = with pkgs; [ virt-manager
-      ] ++ lib.optionals config.virtualisation.libvirtd.qemu.swtpm.enable [
-        config.virtualisation.libvirtd.qemu.swtpm.package
-      ];
+    environment.systemPackages = with pkgs; [
+      virt-manager
+    ] ++ lib.optionals config.virtualisation.libvirtd.qemu.swtpm.enable [
+      config.virtualisation.libvirtd.qemu.swtpm.package
+    ];
 
     systemd.tmpfiles.rules = [ "d /var/lib/libvirt/images 1770 root libvirtd -" ];
   };
