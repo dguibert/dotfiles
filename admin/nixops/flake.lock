@@ -636,7 +636,8 @@
         "pre-commit-hooks": "pre-commit-hooks",
         "sops-nix": "sops-nix",
         "st-src": "st-src",
-        "terranix": "terranix"
+        "terranix": "terranix",
+        "yambar-src": "yambar-src"
       }
     },
     "sops-nix": {
@@ -721,6 +722,22 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
+      }
+    },
+    "yambar-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1656796898,
+        "narHash": "sha256-B/lK6X7mmBu3d1kp5XnmeQfkLXPsXzqSmHIfa2zfn/4=",
+        "ref": "refs/heads/master",
+        "rev": "b331473a6b4b9de2f35462236ece1db11f876071",
+        "revCount": 1388,
+        "type": "git",
+        "url": "https://codeberg.org/dnkl/yambar.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/dnkl/yambar.git"
       }
     }
   },
