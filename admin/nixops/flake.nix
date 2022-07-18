@@ -63,6 +63,10 @@
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
+  inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+  inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+
   outputs = { self , ...}@inputs: let
       # Memoize nixpkgs for different platforms for efficiency.
       nixpkgsFor = system:
@@ -90,12 +94,14 @@
 
       supportedSystems = ["x86_64-linux" "aarch64-linux" ];
 
-  in (inputs.flake-utils.lib.eachSystem supportedSystems (system:
+  in inputs.nixpkgs.lib.recursiveUpdate
+  (inputs.flake-utils.lib.eachSystem supportedSystems (system:
        let pkgs = nixpkgsFor system; in rec {
 
     devShells.default = pkgs.callPackage ./shell.nix { inherit inputs;
       inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
       deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
+      pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
     };
     legacyPackages = pkgs;
 
@@ -104,7 +110,29 @@
           (host: inputs.self.nixosConfigurations.${host}.config.home-manager.users) // {
     };
 
-  })) // (rec {
+    checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+      src = ./.;
+      hooks = {
+        nixpkgs-fmt.enable = true;
+        prettier.enable = true;
+        trailing-whitespace = {
+          enable = true;
+          name = "trim trailing whitespace";
+          entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/trailing-whitespace-fixer";
+          types = [ "text" ];
+          stages = [ "commit" "push" "manual" ];
+        };
+        check-merge-conflict = {
+          enable = true;
+          name = "check for merge conflicts";
+          entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/check-merge-conflict";
+          types = [ "text" ];
+        };
+      };
+    };
+
+  }))
+  (rec {
     overlays.default = final: prev: with final; {
       swayidle = prev.swayidle.overrideAttrs (o: {
         postPatch = (o.postPatch or "") + ''
