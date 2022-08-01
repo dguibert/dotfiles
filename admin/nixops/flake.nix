@@ -51,6 +51,8 @@
   inputs.st-src.flake = false;
   inputs.dwl-src.url = "github:dguibert/dwl/pu-next";
   inputs.dwl-src.flake = false;
+  inputs.somebar-src.url = "git+https://git.sr.ht/~raphi/somebar";
+  inputs.somebar-src.flake = false;
   inputs.yambar-src.url = "git+https://codeberg.org/dnkl/yambar.git";
   inputs.yambar-src.flake = false;
 
@@ -188,6 +190,7 @@
             patches = [ ];
           });
           somebar = prev.somebar.overrideAttrs (o: {
+            src = inputs.somebar-src;
             patches = [
               ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
               ./patches/0002-bigger-occupied-rectangle.patch

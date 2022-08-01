@@ -634,10 +634,27 @@
         "nur_dguibert": "nur_dguibert",
         "nxsession": "nxsession",
         "pre-commit-hooks": "pre-commit-hooks",
+        "somebar-src": "somebar-src",
         "sops-nix": "sops-nix",
         "st-src": "st-src",
         "terranix": "terranix",
         "yambar-src": "yambar-src"
+      }
+    },
+    "somebar-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650570690,
+        "narHash": "sha256-2gp+NO8vJ5c56NyMuGFfSjN232F09dFVExRzC5nkWvI=",
+        "ref": "refs/heads/master",
+        "rev": "85b7b6290aff2c121dc6ced132f3e3d13ebb3ec6",
+        "revCount": 83,
+        "type": "git",
+        "url": "https://git.sr.ht/~raphi/somebar"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.sr.ht/~raphi/somebar"
       }
     },
     "sops-nix": {
