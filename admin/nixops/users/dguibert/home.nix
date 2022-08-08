@@ -89,11 +89,50 @@ let
           '';
           programs.bash.initExtra = ''
             export HISTCONTROL
-            export HISTFILE
             export HISTFILESIZE
             export HISTIGNORE
             export HISTSIZE
-            export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
+            # https://unix.stackexchange.com/a/430128
+            # on every prompt, save new history to dedicated file and recreate full history
+            # by reading all files, always keeping history from current session on top.
+            update_history () {
+              history -a ''${HISTFILE}.$$
+              history -c
+              history -r  # load common history file
+              # load histories of other sessions
+              for f in `ls ''${HISTFILE}.[0-9]* 2>/dev/null | grep -v "''${HISTFILE}.$$\$"`; do
+                history -r $f
+              done
+              history -r "''${HISTFILE}.$$"  # load current session history
+            }
+            if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
+              export PROMPT_COMMAND="update_history''${PROMPT_COMMAND:+;$PROMPT_COMMAND }"
+            fi
+
+            # merge session history into main history file on bash exit
+            merge_session_history () {
+              if [ -e ''${HISTFILE}.$$ ]; then
+                awk '!seen[$0]++' ''${HISTFILE}.$$ >> $HISTFILE
+                \rm ''${HISTFILE}.$$
+              fi
+            }
+            trap merge_session_history EXIT
+
+
+            # detect leftover files from crashed sessions and merge them back
+            active_shells=$(pgrep `ps -p $$ -o comm=`)
+            grep_pattern=`for pid in $active_shells; do echo -n "-e \.''${pid}\$ "; done`
+            orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
+
+            if [ -n "$orphaned_files" ]; then
+              echo Merging orphaned history files:
+              for f in $orphaned_files; do
+                echo "  `basename $f`"
+                cat $f >> $HISTFILE
+                \rm $f
+              done
+              echo "done."
+            fi
             # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
             test "$TERM" != "dumb" || return
 
