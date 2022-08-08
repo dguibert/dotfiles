@@ -112,7 +112,9 @@ let
             # merge session history into main history file on bash exit
             merge_session_history () {
               if [ -e ''${HISTFILE}.$$ ]; then
-                awk '!seen[$0]++' ''${HISTFILE}.$$ >> $HISTFILE
+                # fix wrong history files
+                awk '/^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' ''${HISTFILE}.$$ | \
+                awk '!seen[$0]++' >> $HISTFILE
                 \rm ''${HISTFILE}.$$
               fi
             }
