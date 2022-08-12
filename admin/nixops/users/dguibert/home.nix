@@ -113,8 +113,8 @@ let
             merge_session_history () {
               if [ -e ''${HISTFILE}.$$ ]; then
                 # fix wrong history files
-                awk '/^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' ''${HISTFILE}.$$ | \
-                awk '!seen[$0]++' >> $HISTFILE
+                awk '/^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
+                tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
                 \rm ''${HISTFILE}.$$
               fi
             }
@@ -133,6 +133,7 @@ let
                 cat $f >> $HISTFILE
                 \rm $f
               done
+              tac $HISTFILE | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge $HISTFILE
               echo "done."
             fi
             # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
