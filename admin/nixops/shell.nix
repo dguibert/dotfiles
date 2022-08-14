@@ -42,7 +42,7 @@ mkShell rec {
   #SOPS_PGP_FP = "";
   sopsCreateGPGHome = "";
   shellHook = ''
-    export GIT_DIR=$HOME/.mgit/dotfiles/.git
+    test -e .git || export GIT_DIR=$HOME/.mgit/dotfiles/.git
     ${pre-commit-check-shellHook}
 
     unset NIX_INDENT_MAKE
