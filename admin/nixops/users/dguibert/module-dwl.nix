@@ -16,10 +16,11 @@ let
         QT_QPA_PLATFORM WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       #maybe ~/.local/lib/pulseaudio-watch someblocks &
-      #PATH=~/code/someblocks:$PATH someblocks &
+      PATH=~/code/someblocks:$PATH someblocks &
       #swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
-      #somebar
-      sleep 2 && ${pkgs.yambar}/bin/yambar -c ${yambarConf}&
+      somebar
+      #sleep 2 && ${pkgs.yambar}/bin/yambar -c ${yambarConf} &
+      #cat > ~/.cache/dwltags
 
       # kill any remaining background tasks
       for pid in $(pgrep -g $$); do
@@ -35,7 +36,7 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl > ~/.cache/dwltags |& tee ~/dwl-session.log ; history -n # close standard input
+      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
     fi
   '';
 
@@ -75,6 +76,7 @@ with lib; {
   home.packages = with pkgs; [
     dwl-session
     dwl
+    somebar
     wl-clipboard
     alacritty # Alacritty is the default terminal in the config
     dmenu-wayland # Dmenu is the default in the config but i recommend wofi since its wayland native

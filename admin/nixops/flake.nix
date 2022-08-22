@@ -161,14 +161,14 @@
 
           install-script = drv: with final; writeScript "install-${drv.name}"
             ''#!/usr/bin/env bash
-        set -x
+              set -x
 
-        nixos-install --system ${drv} $@
+              nixos-install --system ${drv} $@
 
-        umount -R /mnt
-        zfs set mountpoint=legacy bt580/nixos
-        zfs set mountpoint=legacy rt580/tmp
-      '';
+              umount -R /mnt
+              zfs set mountpoint=legacy bt580/nixos
+              zfs set mountpoint=legacy rt580/tmp
+            '';
 
           dwm = prev.dwm.overrideAttrs (o: {
             src = inputs.dwm-src;
