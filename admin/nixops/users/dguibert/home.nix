@@ -224,6 +224,7 @@ let
           programs.git.iniContent.diff.renames = "copies";
           programs.git.iniContent.merge.tool = "vimdiff";
           programs.git.iniContent.pull.ff = "only"; # fast-forward only
+          programs.git.extraConfig.safe.directory = "/home/dguibert/sshfs/spartan/work/hpcw";
 
           # http://ubuntuforums.org/showthread.php?t=1150822
           ## Save and reload the history after each command finishes
