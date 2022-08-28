@@ -716,3 +716,16 @@ checkout = git clone 'https://github.com/PapenfussLab/bionix' 'bionix'
 
 [code/pre-commit-hooks.nix]
 checkout = git clone 'https://github.com/cachix/pre-commit-hooks.nix' 'pre-commit-hooks.nix'
+
+[code/dwl]
+checkout = git clone 'https://github.com/djpohly/dwl' 'dwl'
+fixups = git_add_remotes "
+	 dguibert https://github.com/dguibert/dwl
+	 "
+push = git push dguibert +pu
+	      git push dguibert +pu-next
+	      git push dguibert
+
+
+[code/somebar]
+checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'
