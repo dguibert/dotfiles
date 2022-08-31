@@ -9,12 +9,13 @@ let
     url = "https://github.com/anars/blank-audio/blob/master/500-milliseconds-of-silence.mp3";
     sha256 = "sha256-7uonhOBLY9JNQPgNcv1ec92GRoPP3MY7nPj3ygu+n/s=";
   };
-  webroot = pkgs.runCommand "icecast-webroot" {} ''
+  webroot = pkgs.runCommand "icecast-webroot" { } ''
     mkdir $out
     cp -v ${pkgs.icecast}/share/icecast/web/* $out
     cp -v ${silence_mp3} $out/silence.mp3
   '';
-in {
+in
+{
   options = {
     role.mopidy-server = {
       enable = mkEnableOption "Enable a mopidy server";
@@ -29,7 +30,7 @@ in {
       };
       configuration = mkOption {
         type = types.attrsOf (types.attrsOf types.unspecified);
-        default = {};
+        default = { };
         description = ''
           Key-value pairs that convey parameters about the configuration
         '';
@@ -43,11 +44,11 @@ in {
         mixer = "software";
         mixer_volume = "";
         #output = "pulsesink";
-	#output = "pulsesink device=Snapcast";
+        #output = "pulsesink device=Snapcast";
         #output = pulsesink server=127.0.0.1
         # output = "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! pulsesink  device=kind2  stream-properties="props,media.role=music"
         #output = lamemp3enc ! shout2send mount=mopidy ip=192.168.1.24 port=8000 username=source password=hackme
-	output = "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! filesink location=/run/pulse/snap-mopidy-fifo";
+        output = "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! filesink location=/run/pulse/snap-mopidy-fifo";
       };
       mpd = {
         hostname = "${cfg.listenAddress}";
@@ -115,7 +116,7 @@ in {
         #pkgs.mopidy-jellyfin
         #pkgs.mopidy-beets
       ];
-      configuration = lib.generators.toINI {} cfg.configuration;
+      configuration = lib.generators.toINI { } cfg.configuration;
 
       extraConfigFiles = [
         "/etc/mopidy/spotify.conf"
@@ -141,16 +142,16 @@ in {
       type = "pipe";
       location = "/run/snapserver/snapfifo";
       query = {
-        sampleformat="48000:16:2";
-        codec="flac";
-        mode="create";
+        sampleformat = "48000:16:2";
+        codec = "flac";
+        mode = "create";
       };
     };
     services.snapserver.streams.mopidy = {
       type = "pipe";
       location = "/run/pulse/snap-mopidy-fifo";
       query.mode = "read";
-      query.sampleformat="48000:16:2";
+      query.sampleformat = "48000:16:2";
     };
     #services.snapserver.streams.spotify-connect = {
     #  type = "spotify";

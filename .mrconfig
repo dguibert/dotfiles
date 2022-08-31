@@ -4,7 +4,7 @@ git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
 include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
 	         cat $HOME/.config/mr/lib/mgit
-lib = 
+lib =
 	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
@@ -76,7 +76,7 @@ checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remotes "
 	          public_git ~/public_git/dotfiles.git
 	          "
-push = 
+push =
 	       mgit dotfiles push
 	       mgit dotfiles push public_git
 
@@ -716,3 +716,16 @@ checkout = git clone 'https://github.com/PapenfussLab/bionix' 'bionix'
 
 [code/pre-commit-hooks.nix]
 checkout = git clone 'https://github.com/cachix/pre-commit-hooks.nix' 'pre-commit-hooks.nix'
+
+[code/dwl]
+checkout = git clone 'https://github.com/djpohly/dwl' 'dwl'
+fixups = git_add_remotes "
+	 dguibert https://github.com/dguibert/dwl
+	 "
+push = git push dguibert +pu
+	      git push dguibert +pu-next
+	      git push dguibert
+
+
+[code/somebar]
+checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'

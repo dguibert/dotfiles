@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ...}: {
+{ pkgs, config, lib, ... }: {
   users.users.rdolbeau = {
     isNormalUser = true;
     uid = 1501;

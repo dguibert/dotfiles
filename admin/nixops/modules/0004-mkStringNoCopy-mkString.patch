@@ -22,8 +22,8 @@ index ed0010e..35f7e48 100644
 +    mkString(*state.allocAttr(v, state.symbols.create("NIX_CFLAGS_OTHER")), NIX_CFLAGS_OTHER);
 +    mkString(*state.allocAttr(v, state.symbols.create("BOOST_INCLUDE_DIR")), BOOST_INCLUDE_DIR);
  }
- 
+
  static RegisterPrimOp rp2("__nix-cflags", 0,
--- 
+--
 2.29.2
 

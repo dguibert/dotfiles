@@ -3,7 +3,8 @@ let
   cfg = config.role.wireguard-mesh;
 
   readWgPub = file: builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile file);
-in {
+in
+{
   options = {
     role.wireguard-mesh = {
       enable = lib.mkOption {
@@ -29,8 +30,8 @@ in {
           #asus-laptop = "fe80::216:3eff:fe3c:2427/64";
         };
         listenPort = 500;
-        publicKey  = readWgPub ../hosts/rpi31/wg_key.pub;
-        endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        publicKey = readWgPub ../hosts/rpi31/wg_key.pub;
+        endpoint = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       orsine = {
@@ -44,8 +45,8 @@ in {
           #asus-laptop = "fe80::216:3eff:fe5a:d172/64";
         };
         listenPort = 501;
-        publicKey  = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint   = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        publicKey = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+        endpoint = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       titan = {
         ipv4Address = "10.147.27.24/32";
@@ -58,8 +59,8 @@ in {
           #asus-laptop = "fe80::216:3eff:fe06:1aaf/64";
         };
         listenPort = 503;
-        publicKey  = readWgPub ../hosts/titan/wg_key.pub;
-        endpoint   = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        publicKey = readWgPub ../hosts/titan/wg_key.pub;
+        endpoint = "192.168.1.24:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       t580 = {
         ipv4Address = "10.147.27.17/32";
@@ -72,8 +73,8 @@ in {
           #asus-laptop = "fe80::216:3eff:fe6a:64a5/64";
         };
         listenPort = 504;
-        publicKey  = readWgPub ../hosts/t580/wg_key.pub;
-        endpoint   = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        publicKey = readWgPub ../hosts/t580/wg_key.pub;
+        endpoint = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       rpi41 = {
         ipv4Address = "10.147.27.14/32";
@@ -86,8 +87,8 @@ in {
           #asus-laptop = "fe80::216:3eff:fe48:51ce/64";
         };
         listenPort = 505;
-        publicKey  = readWgPub ../hosts/rpi41/wg_key.pub;
-        endpoint   = "192.168.1.14:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        publicKey = readWgPub ../hosts/rpi41/wg_key.pub;
+        endpoint = "192.168.1.14:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       rpi01 = {
@@ -101,7 +102,7 @@ in {
           #asus-laptop = "fe80::216:3eff:fe04:fd86/64";
         };
         listenPort = 506;
-        publicKey  = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
+        publicKey = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
       };
       #asus-laptop = {
       #  ipv4Address = "10.147.27.154/32";
@@ -120,7 +121,15 @@ in {
     sops.secrets."wireguard_key"          .path = "/persist/etc/wireguard_key";
     networking.wireguard-mesh.privateKeyFile = "${config.sops.secrets."wireguard_key".path}";
 
-    networking.firewall.allowedUDPPorts = [ 500 501 502 503 504 505 506 507
+    networking.firewall.allowedUDPPorts = [
+      500
+      501
+      502
+      503
+      504
+      505
+      506
+      507
       6696 /* babeld */
     ];
 

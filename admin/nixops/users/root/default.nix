@@ -2,7 +2,8 @@
 
 let
   cfg = config.users.root.home-manager;
-in {
+in
+{
   options.users.root.home-manager.enable = lib.mkOption {
     default = true;
     description = "Whether to enable Home-Manager for root";

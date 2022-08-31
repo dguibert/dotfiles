@@ -11,21 +11,22 @@ let
     fsType = "migratefs";
     #neededForBoot = true;
     options =
-      [ # Filesystem options
-      "allow_other,lowerdir=${fs1},upperdir=${fs2}"
-      #"nofail"
-      "X-mount.mkdir"
-      "x-systemd.requires-mounts-for=${fs1}"
-      "x-systemd.requires-mounts-for=${fs2}"
-    ];
+      [
+        # Filesystem options
+        "allow_other,lowerdir=${fs1},upperdir=${fs2}"
+        #"nofail"
+        "X-mount.mkdir"
+        "x-systemd.requires-mounts-for=${fs1}"
+        "x-systemd.requires-mounts-for=${fs2}"
+      ];
   };
 in
 rec {
   imports = [
-      ../common.nix
-      #(import <nur_dguibert/modules>).qemu-user
-      #../../modules/wayland-nvidia.nix
-    ];
+    ../common.nix
+    #(import <nur_dguibert/modules>).qemu-user
+    #../../modules/wayland-nvidia.nix
+  ];
   #nesting.clone = [
   #  {
   #    imports = [
@@ -53,35 +54,35 @@ rec {
     #zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
-  fileSystems."/"                                   = { device = "rpool_vanif0/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/" = { device = "rpool_vanif0/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
 
-  fileSystems."/nix"                                = { device = "rpool_vanif0/local/nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
+  fileSystems."/nix" = { device = "rpool_vanif0/local/nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot = true; };
 
-  fileSystems."/root"                               = { device = "rpool_vanif0/safe/home/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/root" = { device = "rpool_vanif0/safe/home/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
 
-  fileSystems."/home/dguibert"                      = { device = "rpool_vanif0/safe/home/dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home/dguibert/Videos"               = { device = "rpool_vanif0/safe/home/dguibert/Videos"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home/dguibert/Maildir/.notmuch"     = { device = "rpool_vanif0/safe/home/dguibert/notmuch"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home/dguibert" = { device = "rpool_vanif0/safe/home/dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home/dguibert/Videos" = { device = "rpool_vanif0/safe/home/dguibert/Videos"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home/dguibert/Maildir/.notmuch" = { device = "rpool_vanif0/safe/home/dguibert/notmuch"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
 
-  fileSystems."/persist"                            = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot=true; };
+  fileSystems."/persist" = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot = true; };
 
-  fileSystems."/boot/efi"  = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi4" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part1"; fsType="vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi4" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
+  fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
 
-  fileSystems."/tmp"                                = { device="tmpfs"; fsType="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot=true; };
+  fileSystems."/tmp" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot = true; };
   # to build robotnix more thant 100G are needed
   # git/... fails with normalization/utf8only of zfs
   #fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
   #fileSystems."/tmp"                                = { label="rpool_vanif0_tmp"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
 
-  fileSystems."/home_nfs/bguibertd/nix"             = { device = "rpool_vanif0/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home_nfs_robin_ib/bguibertd/nix"    = { device = "rpool_vanif0/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/p/project/prcoe08/guibert1/nix"     = { device = "rpool_vanif0/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/cluster/projects/nn9560k/dguibert"  = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home_nfs/bguibertd/nix" = { device = "rpool_vanif0/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home_nfs_robin_ib/bguibertd/nix" = { device = "rpool_vanif0/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/p/project/prcoe08/guibert1/nix" = { device = "rpool_vanif0/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/cluster/projects/nn9560k/dguibert" = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
   systemd.targets.maintenance = {
@@ -96,7 +97,9 @@ rec {
   #systemctl stop systemd-journald systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-audit.socket
   #rsync -aHAXS --delete --one-file-system / /mnt/
 
-  boot.kernelParams = [ "console=console" "console=ttyS1,115200n8"
+  boot.kernelParams = [
+    "console=console"
+    "console=ttyS1,115200n8"
     "loglevel=6"
     #"resume=/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"
     "resume=/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part4"
@@ -134,15 +137,15 @@ rec {
   console.earlySetup = true;
   console.useXkbConfig = true;
 
-  networking.hostId="8425e349";
+  networking.hostId = "8425e349";
   networking.hostName = "titan";
 
   ##qemu-user.aarch64 = true;
   boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
   ##boot.binfmt.registrations."aarch64-linux".preserveArgvZero=true;
-  boot.binfmt.registrations."aarch64-linux".fixBinary=true;
+  boot.binfmt.registrations."aarch64-linux".fixBinary = true;
   ##boot.binfmt.registrations."armv7l-linux".preserveArgvZero=true;
-  boot.binfmt.registrations."armv7l-linux".fixBinary=true;
+  boot.binfmt.registrations."armv7l-linux".fixBinary = true;
 
   services.openssh.enable = true;
 
@@ -173,7 +176,7 @@ rec {
     #MIIMonitorSec=1s
     #LACPTransmitRate=fast
 
-    bondConfig.Mode="802.3ad";
+    bondConfig.Mode = "802.3ad";
     #bondConfig.PrimarySlave="eno1";
   };
   systemd.network.networks."40-bond0" = {
@@ -207,7 +210,7 @@ rec {
 
   # https://nixos.org/nixos/manual/index.html#sec-container-networking
   networking.nat.enable = true;
-  networking.nat.internalInterfaces = ["ve-+"];
+  networking.nat.internalInterfaces = [ "ve-+" ];
   networking.nat.externalInterface = "bond0";
 
   # https://wiki.archlinux.org/index.php/Improving_performance#Input/output_schedulers

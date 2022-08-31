@@ -20,8 +20,10 @@ in
     #security.acme.email = "david.guibert+acme@gmail.com";
     #security.acme.acceptTerms = true;
     ## security.pki.certificateFiles = [ ../secrets/root-ca.crt ../secrets/intermediate_ca.crt ];
-    security.pki.certificateFiles = [ ../online-ca-orsin/certs/root_ca.crt
-                                      ../online-ca-orsin/certs/intermediate_ca.crt ];
+    security.pki.certificateFiles = [
+      ../online-ca-orsin/certs/root_ca.crt
+      ../online-ca-orsin/certs/intermediate_ca.crt
+    ];
 
     ##networking.hosts = {
     ##  "192.168.1.24" = [ "jellyfin.local" ];
@@ -210,9 +212,9 @@ in
     systemd.services."step-ca" = {
       #[Unit]
       unitConfig = {
-        BindTo=[ "dev-yubikey.device" ];
+        BindTo = [ "dev-yubikey.device" ];
       };
-      after= [ "dev-yubikey.device" ];
+      after = [ "dev-yubikey.device" ];
       wantedBy = [ "dev-yubikey.device" ];
     };
     ## $ sudo mkdir /etc/systemd/system/dev-yubikey.device.wants

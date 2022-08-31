@@ -20,27 +20,28 @@ rec {
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B";
-  boot.kernelParams = ["resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
+  boot.kernelParams = [ "resume=/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B-part2" ];
   boot.loader.grub.configurationLimit = 10;
 
   boot.kernelModules = [ "fuse" "kvm-intel" ];
   boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usb_storage" "tm-smapi" ];
   boot.kernelPackages = pkgs.linuxPackages_5_13;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf config.boot.kernelPackages.tp_smapi ];
-#  nixpkgs.config = {pkgs}: (import ../../config/nixpkgs/config.nix { inherit pkgs; }) // {
-#    allowUnfree = true;
-#    packageOverrides.linuxPackages = boot.kernelPackages;
-#  };
+  #  nixpkgs.config = {pkgs}: (import ../../config/nixpkgs/config.nix { inherit pkgs; }) // {
+  #    allowUnfree = true;
+  #    packageOverrides.linuxPackages = boot.kernelPackages;
+  #  };
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/cc74b0e1-c5fb-4bf2-870a-e23363cd7849";
+    {
+      device = "/dev/disk/by-uuid/cc74b0e1-c5fb-4bf2-870a-e23363cd7849";
       fsType = "xfs";
     };
-  fileSystems."/tmp" = { device="tmpfs"; options= [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType="tmpfs"; neededForBoot=true; };
+  fileSystems."/tmp" = { device = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=3G" ]; fsType = "tmpfs"; neededForBoot = true; };
 
-  swapDevices = [ { device = "/dev/sda2"; } ];
+  swapDevices = [{ device = "/dev/sda2"; }];
 
   nix.settings.max-jobs = 2;
 
@@ -72,7 +73,7 @@ rec {
   networking.hostName = "orsine";
 
   #networking.wireless.iwd.enable = true; # wifi usb dongle does show in device list
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
   networking.wireless.interfaces = [ /*"wlp0s29f7u1"*/ "wlp0s26f7u1" ];
   networking.wireless.driver = "nl80211,wext";
   networking.wireless.userControlled.enable = true;
@@ -82,21 +83,21 @@ rec {
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";
-    bondConfig.Mode="active-backup";
-    bondConfig.MIIMonitorSec="100s";
-    bondConfig.PrimaryReselectPolicy="always";
+    bondConfig.Mode = "active-backup";
+    bondConfig.MIIMonitorSec = "100s";
+    bondConfig.PrimaryReselectPolicy = "always";
   };
   systemd.network.networks."40-bond0" = {
     name = "bond0";
     DHCP = "yes";
     networkConfig.BindCarrier = "enp0s25 wlp0s29f7u1";
   };
-#  systemd.network.networks = listToAttrs (flip map [ "enp0s25" "wlp0s26f7u1" ] (bi:
-#    nameValuePair "40-${bi}" {
-#      DHCP = "none";
-#      networkConfig.Bond = "bond0";
-#      networkConfig.IPv6PrivacyExtensions = "kernel";
-#    }));
+  #  systemd.network.networks = listToAttrs (flip map [ "enp0s25" "wlp0s26f7u1" ] (bi:
+  #    nameValuePair "40-${bi}" {
+  #      DHCP = "none";
+  #      networkConfig.Bond = "bond0";
+  #      networkConfig.IPv6PrivacyExtensions = "kernel";
+  #    }));
   #systemd.network.networks."99-main".name = "!zt0 wlp2s0";
   systemd.network.networks."40-enp0s25" = {
     name = "enp0s25";
@@ -144,46 +145,69 @@ rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; let
-      myTexLive = texlive.combine {
-        inherit (texlive) scheme-small beamer pgf algorithms cm-super;
-      };
-    in [
-    vim htop lsof
-    wget telnet
+    myTexLive = texlive.combine {
+      inherit (texlive) scheme-small beamer pgf algorithms cm-super;
+    };
+  in
+  [
+    vim
+    htop
+    lsof
+    wget
+    telnet
     bc
     git
-    gnuplot graphviz imagemagick
-    diffstat diffutils binutils zip unzip
-    unrar cabextract cpio lzma which file
-    acpitool iputils
-    fuse sshfsFuse
-    manpages gnupg tree
-# lsof - shows open files/sockets, including network
+    gnuplot
+    graphviz
+    imagemagick
+    diffstat
+    diffutils
+    binutils
+    zip
+    unzip
+    unrar
+    cabextract
+    cpio
+    lzma
+    which
+    file
+    acpitool
+    iputils
+    fuse
+    sshfsFuse
+    manpages
+    gnupg
+    tree
+    # lsof - shows open files/sockets, including network
     lsof
-    vim ethtool
-    wirelesstools wpa_supplicant_gui
-    alsaPlugins pavucontrol
+    vim
+    ethtool
+    wirelesstools
+    wpa_supplicant_gui
+    alsaPlugins
+    pavucontrol
 
     nixops
     config.boot.kernelPackages.perf
-  ] ++ (with aspellDicts; [en fr]) ++ [
+  ] ++ (with aspellDicts; [ en fr ]) ++ [
     rxvt_unicode
-    pkgs.disnixos pkgs.wireguard-tools
+    pkgs.disnixos
+    pkgs.wireguard-tools
   ];
 
   # for X11.nix
-  services.xserver.resolutions = [{x=1440; y=900;}];
+  services.xserver.resolutions = [{ x = 1440; y = 900; }];
   services.xserver.videoDrivers = [ "intel" ];
   hardware.opengl.extraPackages = [ pkgs.vaapiIntel ];
 
-#  programs.sysdig.enable = true;
+  #  programs.sysdig.enable = true;
 
   programs.bash.enableCompletion = true;
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.ports = [22322];
+  services.openssh.ports = [ 22322 ];
   #services.wakeonlan.interfaces = [
   #  {
   #    interface = "enp0s25";
@@ -210,7 +234,7 @@ rec {
 
   # ChromeCast ports
   # iptables -I INPUT -p udp -m udp --dport 32768:61000 -j ACCEPT
-  networking.firewall.allowedUDPPortRanges = [ { from=32768; to=61000; } ];
+  networking.firewall.allowedUDPPortRanges = [{ from = 32768; to = 61000; }];
 
   # (evince:16653): dconf-WARNING **: failed to commit changes to dconf:
   # GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name

@@ -1,8 +1,9 @@
 { pkgs ? import <nixpkgs> { }
-, inputs ? {}
+, inputs ? { }
 , ssh-to-pgp
 , sops-import-keys-hook
 , deploy-rs
+, pre-commit-check-shellHook
 }:
 with pkgs;
 
@@ -39,8 +40,11 @@ mkShell rec {
     sops-import-keys-hook
   ];
   #SOPS_PGP_FP = "";
-  sopsCreateGPGHome="";
+  sopsCreateGPGHome = "";
   shellHook = ''
+    test -e .git || export GIT_DIR=$HOME/.mgit/dotfiles/.git
+    ${pre-commit-check-shellHook}
+
     unset NIX_INDENT_MAKE
     unset IN_NIX_SHELL NIX_REMOTE
     unset TMP TMPDIR

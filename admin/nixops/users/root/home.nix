@@ -1,12 +1,12 @@
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-{ pkgs, lib , ...}:
+{ pkgs, lib, ... }:
 with lib;
 {
   imports = [
     ../../modules/hm-report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
   ];
-  programs.bash.shellAliases.ls="ls --color";
+  programs.bash.shellAliases.ls = "ls --color";
 
   programs.bash.initExtra = ''
     # Provide a nice prompt.
@@ -44,15 +44,22 @@ with lib;
   programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
   programs.bash.historyIgnore = [ "ls" "cd" "clear" "[bf]g" ];
 
-  home.sessionVariables.PROMPT_COMMAND="history -a; history -c; history -r";
-  home.sessionVariables.EDITOR="vim";
-  home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE=1;
+  home.sessionVariables.PROMPT_COMMAND = "history -a; history -c; history -r";
+  home.sessionVariables.EDITOR = "vim";
+  home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE = 1;
 
   home.packages = with pkgs; [
     (vim_configurable.override {
       guiSupport = "no";
-      libX11=null; libXext=null; libSM=null; libXpm=null; libXt=null; libXaw=null; libXau=null; libXmu=null;
-      libICE=null;
+      libX11 = null;
+      libXext = null;
+      libSM = null;
+      libXpm = null;
+      libXt = null;
+      libXaw = null;
+      libXau = null;
+      libXmu = null;
+      libICE = null;
     })
     editorconfig-core-c
   ];

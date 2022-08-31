@@ -10,7 +10,7 @@
       isSystemUser = true;
     };
     users.users.nixBuild.group = "nixBuild";
-    users.groups.nixBuild = {};
+    users.groups.nixBuild = { };
 
     # on the client machine
     programs.ssh.extraConfig = ''
@@ -24,7 +24,7 @@
     nix.settings = {
       trusted-users = [ "nixBuild" "dguibert" ];
     };
-      # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
+    # 20181219 titan is now able to build aarch64 (binfmt and qemu-user)
     nix.distributedBuilds = true;
     nix.buildMachines = [
       #(lib.mkIf (config.networking.hostName != "rpi31") {
@@ -44,7 +44,7 @@
         system = "aarch64-linux";
         supportedFeatures = [ "big-parallel" ];
       })
-      ];
+    ];
 
     nix.settings.binary-cache-public-keys = [ "titan:dkOH0pvwo9CQMDs/H/Rs4HYEePVmwPf0/uSQi9ZmjxE=" ];
     nix.settings.trusted-binary-caches = [ "ssh-ng://titan" ];

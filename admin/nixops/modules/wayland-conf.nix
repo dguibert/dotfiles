@@ -11,7 +11,7 @@
       ];
     };
     security.polkit.enable = true;
-    security.pam.services.swaylock = {};
+    security.pam.services.swaylock = { };
     hardware.opengl.enable = lib.mkDefault true;
     hardware.opengl.driSupport32Bit = true;
     fonts.enableDefaultFonts = lib.mkDefault true;
@@ -61,8 +61,8 @@
     #};
 
     environment.systemPackages = with pkgs; [
-       pavucontrol
-       pulseaudio
+      pavucontrol
+      pulseaudio
     ];
 
     # Enable sound.

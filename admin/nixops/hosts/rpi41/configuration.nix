@@ -40,8 +40,8 @@ rec {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.listenAddresses = [
-    { addr = "127.0.0.1"; port=22; }
-    { addr = "0.0.0.0"; port=22322; }
+    { addr = "127.0.0.1"; port = 22; }
+    { addr = "0.0.0.0"; port = 22322; }
   ];
 
   environment.systemPackages = [ pkgs.vim ];

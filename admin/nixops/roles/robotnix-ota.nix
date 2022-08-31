@@ -32,10 +32,10 @@ in
       #  { addr="192.168.1.24"; port=443; }
       #];
       extraConfig = ''
-        ssl_protocols       TLSv1.2 TLSv1.3;
-	ssl_ciphers         HIGH:!aNULL:!MD5;
-        autoindex on;
-        autoindex_exact_size off;
+                ssl_protocols       TLSv1.2 TLSv1.3;
+        	ssl_ciphers         HIGH:!aNULL:!MD5;
+                autoindex on;
+                autoindex_exact_size off;
       '';
       #root = "/nix/var/nix/profiles/per-user/dguibert/ota-dir";
       locations."/android/" = {
@@ -49,7 +49,8 @@ in
     security.acme.server = "https://localhost:9443/acme/acme/directory";
 
     networking.firewall.interfaces."bond0".allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      80 443
+      80
+      443
     ];
   };
 }

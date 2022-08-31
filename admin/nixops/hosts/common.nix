@@ -18,14 +18,14 @@
 
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  services.resolved.extraConfig="DNS=8.8.8.8 8.8.4.4";
-  services.resolved.dnssec="false";
+  services.resolved.extraConfig = "DNS=8.8.8.8 8.8.4.4";
+  services.resolved.dnssec = "false";
   # https://github.com/NixOS/nixpkgs/issues/18962
   # Prevent networkd from managing unconfigured links.
   #systemd.network.networks."99-main".enable = false;
   # https://github.com/systemd/systemd/issues/9771
   # https://discourse.nixos.org/t/domain-name-resolve-problem/885
-  networking.resolvconf.dnsExtensionMechanism=false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
+  networking.resolvconf.dnsExtensionMechanism = false; #disable the edns0 option in resolv.conf. (most popular user of that feature is DNSSEC)
   #services.nscd.enable = false; # no real gain (?) on workstations
   # unreachable DNS entries from home
   networking.hosts = {
@@ -43,6 +43,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEX3tOUaRwa9tVXn7GnU561QtklI6d+VuW/0vwoYiltk a0001 connect bot"
   ];
   services.openssh.extraConfig = ''
+    AcceptEnv COLORTERM
     Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
     KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
     MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256

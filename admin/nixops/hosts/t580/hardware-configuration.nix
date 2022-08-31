@@ -4,31 +4,31 @@
 { config, lib, pkgs, ... }:
 
 {
-#  imports =
-#    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-#    ];
+  #  imports =
+  #    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+  #    ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
-  networking.hostId="8425e349"; # - ZFS requires networking.hostId to be set
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call pkgs.linuxPackages.perf ];
+  networking.hostId = "8425e349"; # - ZFS requires networking.hostId to be set
   boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" "i915.enable_fbc=0" ];
-  swapDevices = [ { label = "nvme-swap"; } ];
+  swapDevices = [{ label = "nvme-swap"; }];
 
   fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
   fileSystems."/boot" = { device = "/dev/disk/by-uuid/FE98-E8BD"; fsType = "vfat"; };
-  fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/nix" = { device = "rt580/local/nix"; fsType = "zfs"; neededForBoot = true; };
   fileSystems."/home" = { device = "rt580/safe/home"; fsType = "zfs"; };
   fileSystems."/root" = { device = "rt580/safe/home/root"; fsType = "zfs"; };
-  fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; neededForBoot=true; };
+  fileSystems."/persist" = { device = "rt580/safe/persist"; fsType = "zfs"; neededForBoot = true; };
 
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     zfs rollback -r rt580/local/root@blank
   '';
 
-  boot.kernelPackages = pkgs.linuxPackages_5_15;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   # https://lists.ubuntu.com/archives/kernel-team/2020-November/114986.html
   #boot.kernelPackages = pkgs.linuxPackages_testing;
   # *** ZFS Version: zfs-2.0.4-1
@@ -90,8 +90,8 @@
   services.tlp.enable = lib.mkDefault true;
 
   services.udev.extraRules = ''
-  # Suspend the system when battery level drops to 5% or lower
-  SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl hibernate"
+    # Suspend the system when battery level drops to 5% or lower
+    SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="${pkgs.systemd}/bin/systemctl hibernate"
   '';
 
 }

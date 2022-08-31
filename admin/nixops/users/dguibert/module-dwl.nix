@@ -17,8 +17,10 @@ let
 
       #maybe ~/.local/lib/pulseaudio-watch someblocks &
       PATH=~/code/someblocks:$PATH someblocks &
-      swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
+      #swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
       somebar
+      #sleep 2 && ${pkgs.yambar}/bin/yambar -c ${yambarConf} &
+      #cat > ~/.cache/dwltags
 
       # kill any remaining background tasks
       for pid in $(pgrep -g $$); do
@@ -34,7 +36,7 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log ; history -n # close standard input
+      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
     fi
   '';
 
@@ -56,7 +58,20 @@ let
     wlr-randr $options
   '';
 
-in with lib; {
+  dwlScript = pkgs.substituteAll {
+    src = ./dwl-tags.sh;
+    inotifyTools = pkgs.inotify-tools;
+    postInstall = ''
+      chmod +x $out
+    '';
+  };
+  yambarConf = pkgs.substituteAll {
+    src = ./yambar.yaml;
+    dwlScript = dwlScript;
+  };
+
+in
+with lib; {
 
   home.packages = with pkgs; [
     dwl-session
@@ -223,5 +238,21 @@ in with lib; {
   #    Restart = "always";
   #  };
   #};
+  #systemd.user.services.yambar = {
+  #  Unit = {
+  #    Description = "Modular status panel for X11 and Wayland";
+  #    PartOf = [ "graphical-session.target" ];
+  #  };
+  #  Install = {
+  #    WantedBy = [ "graphical-session.target" ];
+  #  };
+  #  Service = {
+  #    Type = "simple";
+  #    ExecStart = "${pkgs.yambar}/bin/yambar -c ${yambarConf}";
+  #    RestartSec = 5;
+  #    Restart = "always";
+  #  };
+  #};
+
 
 }

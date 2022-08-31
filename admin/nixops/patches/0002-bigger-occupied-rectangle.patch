@@ -1,7 +1,7 @@
 From 92bba189dbc2b1008467fe15b53c9f7d4693643d Mon Sep 17 00:00:00 2001
 From: David Guibert <david.guibert@gmail.com>
 Date: Tue, 3 May 2022 20:42:13 +0200
-Subject: [PATCH 2/2] bigger occupied rectangle
+Subject: [PATCH 2/3] bigger occupied rectangle
 
 ---
  src/bar.cpp | 18 +++++++++++-------
@@ -36,6 +36,6 @@ index fab5a8f..c9d6c30 100644
  			cairo_stroke(_painter);
  		}
  	}
--- 
-2.35.3
+--
+2.37.1
 
