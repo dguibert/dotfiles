@@ -83,14 +83,14 @@
           inherit system;
           overlays = [
             inputs.nix.overlays.default
+            inputs.emacs-overlay.overlay
             inputs.nur.overlay
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-            inputs.self.overlays.default
             inputs.nxsession.overlay
-            inputs.emacs-overlay.overlay
             inputs.nixpkgs-wayland.overlay
+            inputs.self.overlays.default
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -254,6 +254,7 @@
             };
             nixpkgs.overlays = [
               inputs.nix.overlays.default
+              inputs.emacs-overlay.overlay
               inputs.nixpkgs-wayland.overlay
               inputs.nur.overlay
               inputs.nur_dguibert.overlay
@@ -261,7 +262,6 @@
               inputs.nur_dguibert.overlays.emacs
               #nur_dguibert_envs.overlay
               inputs.nxsession.overlay
-              inputs.emacs-overlay.overlay
               inputs.self.overlays.default
             ];
             # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
