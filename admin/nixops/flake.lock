@@ -175,7 +175,9 @@
     "emacs-overlay": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1662258656,
@@ -426,15 +428,18 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1661954342,
-        "narHash": "sha256-KbZ1O7trRay/5kCDsXLlOT3o175eJe6APBQu5fGOWfQ=",
-        "path": "/nix/store/5xvywyixwn4g7znj0g9jm1b7px8jiww7-source",
-        "rev": "2e65f4f0d50c013babfd7b1ca7c4ed4f381d8900",
-        "type": "path"
+        "lastModified": 1663613532,
+        "narHash": "sha256-7mavPUvXtjA6Ty+pTW2yi6u/eaAJjFNxrB+bHwn9suo=",
+        "owner": "dguibert",
+        "repo": "nixpkgs",
+        "rev": "faf95696c38375288d364f9263b3af152a7b9277",
+        "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "owner": "dguibert",
+        "ref": "pu",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-22_05": {
@@ -504,22 +509,6 @@
       "original": {
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1662913009,
-        "narHash": "sha256-Zn1/nsg0ytSk5tNHk7uYuKKfrAHOzasIfxyyxxuOAlM=",
-        "owner": "dguibert",
-        "repo": "nixpkgs",
-        "rev": "63f5ece51a43e97a2572afeff985c18f68edb772",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dguibert",
-        "ref": "pu",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -660,7 +649,7 @@
         "home-manager": "home-manager",
         "hydra": "hydra",
         "nix": "nix",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "nur_dguibert": "nur_dguibert",
