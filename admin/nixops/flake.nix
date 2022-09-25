@@ -60,9 +60,9 @@
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
   inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
+  #inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
   # only needed if you use as a package set:
-  inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
@@ -91,7 +91,7 @@
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
             inputs.nxsession.overlay
-            inputs.nixpkgs-wayland.overlay
+            #inputs.nixpkgs-wayland.overlay
             inputs.self.overlays.default
           ];
           config.allowUnfree = true;
@@ -257,7 +257,7 @@
             nixpkgs.overlays = [
               inputs.nix.overlays.default
               inputs.emacs-overlay.overlay
-              inputs.nixpkgs-wayland.overlay
+              #inputs.nixpkgs-wayland.overlay
               inputs.nur.overlay
               inputs.nur_dguibert.overlay
               inputs.nur_dguibert.overlays.extra-builtins
