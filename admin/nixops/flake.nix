@@ -49,7 +49,7 @@
   inputs.dwm-src.flake = false;
   inputs.st-src.url = "github:dguibert/st/pu";
   inputs.st-src.flake = false;
-  inputs.dwl-src.url = "github:dguibert/dwl/pu-next";
+  inputs.dwl-src.url = "github:dguibert/dwl/pu";
   inputs.dwl-src.flake = false;
   inputs.somebar-src.url = "git+https://git.sr.ht/~raphi/somebar";
   inputs.somebar-src.flake = false;
