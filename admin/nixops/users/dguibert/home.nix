@@ -261,7 +261,7 @@ let
 
             rsync
 
-            gitAndTools.gitRemoteGcrypt
+            gitAndTools.git-remote-gcrypt
             gitAndTools.git-crypt
 
             gnumake
