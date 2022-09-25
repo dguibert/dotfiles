@@ -715,7 +715,7 @@ let
             xorg.xsetroot
             xorg.setxkbmap
             xorg.xmodmap
-            rxvt_unicode
+            rxvt-unicode-unwrapped
             st
             dvtm
             abduco

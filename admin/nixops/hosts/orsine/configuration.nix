@@ -190,7 +190,7 @@ rec {
     nixops
     config.boot.kernelPackages.perf
   ] ++ (with aspellDicts; [ en fr ]) ++ [
-    rxvt_unicode
+    rxvt-unicode-unwrapped
     pkgs.disnixos
     pkgs.wireguard-tools
   ];
