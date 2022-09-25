@@ -687,7 +687,7 @@
               hardware.opengl = {
                 enable = true;
                 setLdLibraryPath = true;
-                package = pkgs.mesa_drivers;
+                package = pkgs.mesa.drivers;
               };
               programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
 
