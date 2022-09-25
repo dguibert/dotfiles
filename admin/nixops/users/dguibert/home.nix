@@ -751,7 +751,7 @@ let
             #bup
             #par2cmdline
 
-            gmailieer
+            lieer
             muchsync
             notmuch-addrlookup
             #firefox-bin
