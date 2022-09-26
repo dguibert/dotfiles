@@ -261,7 +261,7 @@ let
 
             rsync
 
-            gitAndTools.gitRemoteGcrypt
+            gitAndTools.git-remote-gcrypt
             gitAndTools.git-crypt
 
             gnumake
@@ -715,7 +715,7 @@ let
             xorg.xsetroot
             xorg.setxkbmap
             xorg.xmodmap
-            rxvt_unicode
+            rxvt-unicode-unwrapped
             st
             dvtm
             abduco
@@ -751,7 +751,7 @@ let
             #bup
             #par2cmdline
 
-            gmailieer
+            lieer
             muchsync
             notmuch-addrlookup
             #firefox-bin
@@ -779,8 +779,8 @@ let
           ];
           #home.file.".emacs.d/init.el".source = "${inputs.nur_dguibert}/emacs/init.el";
           #home.sessionVariables.EDITOR="vim";
-          programs.bash.shellAliases.e = "emacsclient -t -a \"\"";
-          programs.bash.shellAliases.eg = "emacsclient -n -c -a \"\"";
+          programs.bash.shellAliases.e = "emacsclient -s default -t -a \"\"";
+          programs.bash.shellAliases.eg = "emacsclient -s default -n -c -a \"\"";
           home.sessionVariables.ALTERNATE_EDITOR = "";
           home.sessionVariables.EDITOR = "emacsclient -s default -t"; # $EDITOR opens in terminal
           home.sessionVariables.VISUAL = "emacsclient -s default -c -a emacs"; # $VISUAL opens in GUI mode

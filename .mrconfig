@@ -729,3 +729,6 @@ push = git push dguibert +pu
 
 [code/somebar]
 checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'
+
+[code/emacs-overlay]
+checkout = git clone 'https://github.com/nix-community/emacs-overlay' 'emacs-overlay'

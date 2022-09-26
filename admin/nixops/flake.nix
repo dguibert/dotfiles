@@ -49,7 +49,7 @@
   inputs.dwm-src.flake = false;
   inputs.st-src.url = "github:dguibert/st/pu";
   inputs.st-src.flake = false;
-  inputs.dwl-src.url = "github:dguibert/dwl/pu-next";
+  inputs.dwl-src.url = "github:dguibert/dwl/pu";
   inputs.dwl-src.flake = false;
   inputs.somebar-src.url = "git+https://git.sr.ht/~raphi/somebar";
   inputs.somebar-src.flake = false;
@@ -60,12 +60,14 @@
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
   inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
+  #inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
   # only needed if you use as a package set:
-  inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
+  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.chemacs.url = "github:plexus/chemacs2";
   inputs.chemacs.flake = false;
 
@@ -83,14 +85,14 @@
           inherit system;
           overlays = [
             inputs.nix.overlays.default
+            inputs.emacs-overlay.overlay
             inputs.nur.overlay
             inputs.nur_dguibert.overlay
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
-            inputs.self.overlays.default
             inputs.nxsession.overlay
-            inputs.emacs-overlay.overlay
-            inputs.nixpkgs-wayland.overlay
+            #inputs.nixpkgs-wayland.overlay
+            inputs.self.overlays.default
           ];
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
@@ -254,14 +256,14 @@
             };
             nixpkgs.overlays = [
               inputs.nix.overlays.default
-              inputs.nixpkgs-wayland.overlay
+              inputs.emacs-overlay.overlay
+              #inputs.nixpkgs-wayland.overlay
               inputs.nur.overlay
               inputs.nur_dguibert.overlay
               inputs.nur_dguibert.overlays.extra-builtins
               inputs.nur_dguibert.overlays.emacs
               #nur_dguibert_envs.overlay
               inputs.nxsession.overlay
-              inputs.emacs-overlay.overlay
               inputs.self.overlays.default
             ];
             # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
@@ -685,7 +687,7 @@
               hardware.opengl = {
                 enable = true;
                 setLdLibraryPath = true;
-                package = pkgs.mesa_drivers;
+                package = pkgs.mesa.drivers;
               };
               programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
 

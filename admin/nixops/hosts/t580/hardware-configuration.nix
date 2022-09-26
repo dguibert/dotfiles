@@ -13,7 +13,14 @@
   boot.kernelModules = [ "kvm-intel" "acpi_call" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call pkgs.linuxPackages.perf ];
   networking.hostId = "8425e349"; # - ZFS requires networking.hostId to be set
-  boot.kernelParams = [ "acpi_backlight=vendor" "resume=LABEL=nvme-swap" "elevator=none" "i915.enable_fbc=0" ];
+  boot.kernelParams = [
+    "acpi_backlight=vendor"
+    "resume=LABEL=nvme-swap"
+    # https://github.com/NixOS/nixpkgs/issues/36392
+    "i915.enable_fbc=1"
+    "i915.enable_guc=2"
+    "i915.modeset=1"
+  ];
   swapDevices = [{ label = "nvme-swap"; }];
 
   fileSystems."/" = { device = "rt580/local/root"; fsType = "zfs"; };
