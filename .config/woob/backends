@@ -41,3 +41,6 @@ _module = dpd
 [dhl]
 _module = dhl
 
+[gls]
+_module = gls
+
