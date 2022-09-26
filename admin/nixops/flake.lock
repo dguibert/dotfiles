@@ -125,11 +125,11 @@
     "dwl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1664131732,
-        "narHash": "sha256-/HLApDQHe5PUtaXI/gdi3ZgpRT3cpMP9je5HztHw8VE=",
+        "lastModified": 1664203313,
+        "narHash": "sha256-tOTsOlSiYxCFd2iO1svPqNEtFWzxdDKB7/4h5l36AAs=",
         "owner": "dguibert",
         "repo": "dwl",
-        "rev": "aa4ce7aa542ca618ee1197511e5acd5032fc9df4",
+        "rev": "93f1ccda2b4ba9b64bf8963e1ee7ffbe17db7dcd",
         "type": "github"
       },
       "original": {
