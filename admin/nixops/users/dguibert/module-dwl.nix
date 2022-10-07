@@ -49,7 +49,6 @@ let
     arg=''${1:-}
     export PATH=''${PATH+$PATH:}${pkgs.wlr-randr}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin
     command -v wlr-randr
-    toggle_file=/run/user/$(id -u)/toggle_outputs
 
     outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { print $1; } { next; } ')
     for output in $outputs; do

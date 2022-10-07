@@ -387,13 +387,22 @@ push = git push -v public_git
 checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
 
 [code/eztrace]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace.git' 'eztrace'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace' 'eztrace'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace
+	"
 
 [code/eztrace-plugins]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-plugins.git' 'eztrace-plugins'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace-plugins' 'eztrace-plugins'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace-plugins
+	"
 
 [code/eztrace-tools]
-checkout = git clone 'https://scm.gforge.inria.fr/anonscm/git/eztrace/eztrace-tools.git' 'eztrace-tools'
+checkout = git clone 'https://gitlab.com/eztrace/eztrace-tools' 'eztrace-tools'
+fixups = git_add_remotes "
+	origin https://gitlab.com/eztrace/eztrace-tools
+	"
 
 [code/dysnomia]
 checkout = git clone 'https://github.com/svanderburg/dysnomia' 'dysnomia'
@@ -645,6 +654,7 @@ checkout = git clone 'https://gitlab.com/veprbl/nix-batch-submit' 'nix-batch-sub
 
 [code/wireguard-linux]
 checkout = git clone 'https://git.zx2c4.com/wireguard-linux/' 'wireguard-linux'
+deleted = true
 
 [code/setup.nix]
 checkout = git clone 'https://github.com/nix-community/setup.nix' 'setup.nix'
@@ -706,10 +716,11 @@ fixups = git_add_remotes "
 push = git push -v origin +pu
 	      git push -v origin
 
-
-
 [code/nixos-shell]
 checkout = git clone 'https://github.com/Mic92/nixos-shell' 'nixos-shell'
+
+[code/dydisnix]
+checkout = git clone 'https://github.com/svanderburg/dydisnix' 'dydisnix'
 
 [code/bionix]
 checkout = git clone 'https://github.com/PapenfussLab/bionix' 'bionix'
@@ -723,12 +734,12 @@ fixups = git_add_remotes "
 	 dguibert https://github.com/dguibert/dwl
 	 "
 push = git push dguibert +pu
-	      git push dguibert +pu-next
-	      git push dguibert
-
+       git push dguibert +pu-next
+       git push dguibert
 
 [code/somebar]
 checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'
 
 [code/emacs-overlay]
 checkout = git clone 'https://github.com/nix-community/emacs-overlay' 'emacs-overlay'
+
