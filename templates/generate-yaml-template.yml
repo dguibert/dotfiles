@@ -1,0 +1,10 @@
+---
+# ${sample}
+nats:
+  password: "${nats_password}"
+  username: '${nats_username}'
+  machines: ${nats_machines}
+bosh_exporter:
+  bosh:
+    ca_cert: |
+$(awk '{printf "      %s\n", $0}' < cert.pem)
