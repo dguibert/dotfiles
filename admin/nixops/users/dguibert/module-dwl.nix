@@ -206,8 +206,8 @@ with lib; {
 
   xdg.configFile."kanshi/config".text = ''
     profile {
-      output DVI-D-1 enable mode 1920x1080 position 0,0
-      output HDMI-A-1 enable mode 1920x1080 position 1920,0
+      output "Lenovo Group Limited LEN T24d-10 V5FTW686 (HDMI-A-1)" enable mode 1920x1200 position 0,0
+      output "Lenovo Group Limited LEN T24d-10 V5GG2005 (DVI-D-1)" enable mode 1920x1200 position 1920,0
     }
     profile {
       output eDP-1 enable mode 1920x1080 position 0,0
