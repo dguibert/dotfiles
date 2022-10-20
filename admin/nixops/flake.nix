@@ -242,6 +242,8 @@
               ./roles/wireguard-mesh.nix
 
               ./users/default.nix
+
+              ({ ... }: { documentation.nixos.enable = false; })
             ];
 
             system.nixos.versionSuffix = lib.mkForce

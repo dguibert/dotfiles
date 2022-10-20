@@ -5,6 +5,7 @@ with lib;
   imports = [
     ../../modules/hm-report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
+    ({ ... }: { manual.manpages.enable = false; })
   ];
   programs.bash.shellAliases.ls = "ls --color";
 
