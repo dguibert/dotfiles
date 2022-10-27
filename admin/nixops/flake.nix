@@ -194,9 +194,9 @@
           somebar = prev.somebar.overrideAttrs (o: {
             src = inputs.somebar-src;
             patches = [
-              #./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
+              ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
               ./patches/0002-bigger-occupied-rectangle.patch
-              #./patches/0003-add-net-tapesoftware-dwl-wm-unstable-v1-protocols.patch
+              ./patches/0003-add-net-tapesoftware-dwl-wm-unstable-v1-protocols.patch
             ];
           });
 
