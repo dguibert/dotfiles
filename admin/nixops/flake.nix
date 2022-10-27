@@ -244,6 +244,7 @@
               ./users/default.nix
 
               ({ ... }: { documentation.nixos.enable = false; })
+              ({ ... }: { programs.mosh.enable = true; })
             ];
 
             system.nixos.versionSuffix = lib.mkForce
