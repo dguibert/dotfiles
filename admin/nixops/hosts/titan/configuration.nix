@@ -235,6 +235,10 @@ rec {
     ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS20WGY", ATTR{queue/scheduler}="none"
     ACTION=="add|change", SUBSYSTEM=="block", ATTRS{ID_SERIAL_SHORT}=="WGS1T415", ATTR{queue/scheduler}="none"
 
+    # https://bugzilla.kernel.org/show_bug.cgi?id=203973#c68
+    ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", \
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0324", \
+    ATTR{events_poll_msecs}="800"
   '';
 
   services.sanoid = {
