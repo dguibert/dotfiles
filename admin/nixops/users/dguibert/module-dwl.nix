@@ -269,7 +269,7 @@ with lib; {
         layer = "top";
         output = mon;
         modules-left = [ "custom/dwl_tag#0" "custom/dwl_tag#1" "custom/dwl_tag#2" "custom/dwl_tag#3" "custom/dwl_tag#4" "custom/dwl_tag#5" "custom/dwl_tag#6" "custom/dwl_tag#7" "custom/dwl_tag#8" "custom/dwl_layout" "custom/dwl_title" ];
-        modules-right = [ "battery" "network" "clock" "tray" ];
+        modules-right = [ "pulseaudio" "battery" "network" "clock" "tray" ];
         battery = {
           format = "{capacity}% {icon}";
           format-icons = [ "" "" "" "" "" ];
@@ -278,6 +278,19 @@ with lib; {
         tray = {
           icon-size = 21;
           spacing = 10;
+        };
+        pulseaudio = {
+          format = "{volume}% {icon}";
+          format-bluetooth = "{volume}% {icon}";
+          format-muted = "";
+          format-icons = {
+            headphones = "";
+            phone = "";
+            portable = "";
+            default = [ "" "" ];
+          };
+          scroll-step = 1;
+          on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
         };
         network = {
           interface = "bond0";
