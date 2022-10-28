@@ -16,11 +16,11 @@ let
         QT_QPA_PLATFORM WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       #maybe ~/.local/lib/pulseaudio-watch someblocks &
-      PATH=~/code/someblocks:$PATH someblocks &
+      #PATH=~/code/someblocks:$PATH someblocks &
       #swaybg -i ~/Pictures/wallpaper.png -o '*' -m fit &
-      somebar
+      #somebar
       #sleep 2 && ${pkgs.yambar}/bin/yambar -c ${yambarConf} &
-      #cat > ~/.cache/dwltags
+      cat > ~/.cache/dwltags
 
       # kill any remaining background tasks
       for pid in $(pgrep -g $$); do
@@ -36,7 +36,8 @@ let
       # Start systemd user services for graphical sessions
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
-      exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
+      #exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
+      exec dwl -s "setsid -w $0 startup" |& tee ~/dwl-session.log
     fi
   '';
 
@@ -67,6 +68,16 @@ let
   yambarConf = pkgs.substituteAll {
     src = ./yambar.yaml;
     dwlScript = dwlScript;
+  };
+
+  # https://codeberg.org/fauxmight/waybar-dwl/raw/branch/main/waybar-dwl.sh
+  waybarDwlScript = pkgs.substituteAll {
+    src = ./waybar-dwl.sh;
+    inotifyTools = pkgs.inotify-tools;
+    bash = pkgs.bash;
+    postInstall = ''
+      chmod +x $out
+    '';
   };
 
 in
@@ -206,8 +217,8 @@ with lib; {
 
   xdg.configFile."kanshi/config".text = ''
     profile {
-      output "Lenovo Group Limited LEN T24d-10 V5FTW686 (HDMI-A-1)" enable mode 1920x1200 position 0,0
-      output "Lenovo Group Limited LEN T24d-10 V5GG2005 (DVI-D-1)" enable mode 1920x1200 position 1920,0
+      output HDMI-A-1 enable mode 1920x1200 position 0,0
+      output DVI-D-1 enable mode 1920x1200 position 1920,0
     }
     profile {
       output eDP-1 enable mode 1920x1080 position 0,0
@@ -252,6 +263,76 @@ with lib; {
   #    Restart = "always";
   #  };
   #};
+  xdg.configFile."waybar/config".text =
+    let
+      default_conf = mon: {
+        layer = "top";
+        output = mon;
+        modules-left = [ "custom/dwl_tag#0" "custom/dwl_tag#1" "custom/dwl_tag#2" "custom/dwl_tag#3" "custom/dwl_tag#4" "custom/dwl_tag#5" "custom/dwl_tag#6" "custom/dwl_tag#7" "custom/dwl_tag#8" "custom/dwl_layout" "custom/dwl_title" ];
+        modules-right = [ "battery" "network" "clock" "tray" ];
+        battery = {
+          format = "{capacity}% {icon}";
+          format-icons = [ "" "" "" "" "" ];
+        };
+        clock.format-alt = "{:%a, %d. %b  %H:%M}";
+        tray = {
+          icon-size = 21;
+          spacing = 10;
+        };
+        network = {
+          interface = "bond0";
+          format = "{ifname}";
+          format-wifi = "{essid} ({signalStrength}%) ";
+          format-ethernet = "{bandwidthDownBytes} {bandwidthUpBytes} ";
+          format-disconnected = ""; # An empty format will hide the module.
+          tooltip-format = "{ipaddr}/{cidr} {ifname} via {gwaddr} ";
+          tooltip-format-wifi = "{essid} ({signalStrength}%) ";
+          tooltip-format-ethernet = "{ifname} ";
+          tooltip-format-disconnected = "Disconnected";
+          max-length = 50;
+        };
+        "custom/dwl_layout" = {
+          exec = "${waybarDwlScript} '${mon}' layout";
+          format = "{}";
+          escape = true;
+          return-type = "json";
+        };
+        "custom/dwl_title" = {
+          exec = "${waybarDwlScript} '${mon}' title";
+          format = "{}";
+          escape = true;
+          return-type = "json";
+        };
+      } // (builtins.foldl' (x: y: x // y) { } (builtins.map
+        (tag: {
+          "custom/dwl_tag#${tag}" = {
+            exec = "${waybarDwlScript} '${mon}' ${tag}";
+            format = "{}";
+            return-type = "json";
+          };
+        }) [ "0" "1" "2" "3" "4" "5" "6" "7" "8" ]));
+    in
+    builtins.toJSON
+      [
+        (default_conf "HDMI-A-1")
+        (default_conf "DVI-D-1")
+      ];
+
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Modular status panel for Wayland";
+      PartOf = [ "graphical-session.target" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      RestartSec = 5;
+      Restart = "always";
+    };
+  };
 
 
 }
