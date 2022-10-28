@@ -316,6 +316,7 @@ with lib; {
       [
         (default_conf "HDMI-A-1")
         (default_conf "DVI-D-1")
+        (default_conf "eDP-1")
       ];
 
   systemd.user.services.waybar = {
