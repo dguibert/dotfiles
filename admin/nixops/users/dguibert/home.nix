@@ -801,6 +801,10 @@ let
           programs.emacs.enable = true;
           programs.emacs.package = pkgs.my-emacs;
           services.emacs.enable = true;
+          services.emacs.socketActivation.enable = true;
+          systemd.user.services.emacs.Service.Environment = [
+            "COLORTERM=truecolor"
+          ];
           #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
           home.file.".conkyrc".text = ''
