@@ -335,10 +335,10 @@ with lib; {
   systemd.user.services.waybar = {
     Unit = {
       Description = "Modular status panel for Wayland";
-      PartOf = [ "graphical-session.target" ];
+      PartOf = [ "tray.target" ];
     };
     Install = {
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = [ "tray.target" ];
     };
     Service = {
       Type = "simple";
@@ -348,5 +348,11 @@ with lib; {
     };
   };
 
+  systemd.user.targets.tray = {
+    Unit = {
+      Description = "Home Manager System Tray";
+      Requires = [ "graphical-session-pre.target" ];
+    };
+  };
 
 }
