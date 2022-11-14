@@ -6,6 +6,7 @@ rec {
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../common.nix
+      ({ ... }: { services.udisks2.enable = true; })
     ];
 
   # Use the systemd-boot EFI boot loader.
