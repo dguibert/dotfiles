@@ -117,7 +117,7 @@ readonly fname="$HOME"/.cache/dwltags
 export PATH=@inotifyTools@/bin:/run/current-system/sw/bin:$PATH
 
 tags=( "1" "2" "3" "4" "5" "6" "7" "8" "9" )
-name=( "" "" "" "" "" "" "7" "8" "9" ) # Array of labels for tags
+name=( "1" "2" "3" "4" "5" "6" "7" "8" "" ) # Array of labels for tags
 
 monitor="${1}"
 component="${2}"
