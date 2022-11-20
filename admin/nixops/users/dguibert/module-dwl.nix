@@ -37,7 +37,7 @@ let
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
       #exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
-      dbus-run-session dwl -s "setsid -w $0 startup" |& tee ~/dwl-session.log
+      exec dwl -s "setsid -w $0 startup" |& tee ~/dwl-session.log
     fi
   '';
 
