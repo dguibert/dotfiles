@@ -437,6 +437,7 @@
               #services.nfs.server.enable = true;
               virtualisation.docker.enable = true;
               virtualisation.docker.storageDriver = "zfs";
+              virtualisation.virtualbox.host.enable = true;
 
               programs.singularity.enable = true;
 
