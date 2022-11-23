@@ -29,6 +29,9 @@ rec {
   boot.kernelPackages = pkgs.linuxPackages_5_15;
   #boot.supportedFilesystems = [ "zfs" ];
   boot.supportedFilesystems = mkForce [ /*"btrfs" "reiserfs"*/ "vfat" "f2fs" /*"xfs" "zfs"*/ "ntfs" /*"cifs"*/ ];
+  boot.postBootCommands = ''
+    ${pkgs.nettools}/bin/mii-tool -v -R eth0
+  '';
   #boot.zfs.enableUnstable = true;
   networking.hostId = "8425e349";
   networking.hostName = "rpi31";
