@@ -55,8 +55,8 @@ in
     users.groups.dguibert.gid = 1000;
 
     home-manager.users.dguibert =
-      if (config.x11-conf.enable
-        || config.wayland-conf.enable
+      if ((config.x11-conf.enable or false)
+        || (config.wayland-conf.enable or false)
       )
       then (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withX11
       else (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withoutX11

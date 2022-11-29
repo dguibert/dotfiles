@@ -1,10 +1,16 @@
-{
-  distributed-build-conf = import ./distributed-build-conf.nix;
-  nix-conf = import ./nix-conf.nix;
-  report-changes = import ./report-changes.nix;
-  wayland-conf = import ./wayland-conf.nix;
-  wireguard-mesh = import ./wireguard-mesh.nix;
-  x11-conf = import ./x11-conf.nix;
-  yubikey-gpg-conf = import ./yubikey-gpg-conf.nix;
-  zfs = import ./zfs.nix;
-}
+{ lib, ... }:
+
+with lib;
+
+mapAttrs'
+  (name: type: {
+    name = removeSuffix ".nix" name;
+    value = let file = ./. + "/${name}"; in
+      import file;
+  })
+  (filterAttrs
+    (name: type:
+    (type == "directory" && builtins.pathExists "${toString ./.}/${name}/default.nix") ||
+    (type == "regular" && hasSuffix ".nix" name && ! (name == "default.nix") && ! (name == "overlays.nix"))
+    )
+    (builtins.readDir ./.))

@@ -80,6 +80,7 @@
   outputs = { self, ... }@inputs:
     let
       # Memoize nixpkgs for different platforms for efficiency.
+      inherit (self) outputs;
       nixpkgsFor = system:
         import inputs.nixpkgs {
           inherit system;
@@ -153,137 +154,7 @@
         ##
         ## -
         ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-        nixosModules = (import ./modules) // {
-          defaults = { config, lib, pkgs, resources, ... }: {
-            imports = [
-              {
-                _module.args.inputs = inputs;
-                _module.args.sopsDecrypt_ = pkgs.sopsDecrypt_;
-              }
-              inputs.nixpkgs.nixosModules.notDetected
-              inputs.home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = false;
-                home-manager.extraSpecialArgs.inputs = inputs;
-                home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
-              }
-              inputs.sops-nix.nixosModules.sops
-
-              self.nixosModules.distributed-build-conf
-              ({ config, ... }: { distributed-build-conf.enable = true; })
-              self.nixosModules.nix-conf
-              ({ config, ... }: { nix-conf.enable = true; })
-              self.nixosModules.report-changes
-              self.nixosModules.wayland-conf
-              self.nixosModules.wireguard-mesh
-              self.nixosModules.x11-conf
-              self.nixosModules.yubikey-gpg-conf
-
-              ./roles/dns.nix
-              ./roles/libvirtd.nix
-              ./roles/robotnix-ota.nix
-              ./roles/tiny-ca.nix
-              ./roles/mopidy.nix
-              ./roles/sshguard.nix
-              ./roles/wireguard-mesh.nix
-
-              ./users/default.nix
-
-              ({ ... }: { documentation.nixos.enable = false; })
-              ({ ... }: { programs.mosh.enable = true; })
-            ];
-
-            system.nixos.versionSuffix = lib.mkForce
-              ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
-            system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
-            nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
-              # https://nixos.wiki/wiki/Chromium
-              chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
-              permittedInsecurePackages = [
-                "ffmpeg-3.4.8" # oraclejre
-              ];
-            };
-            nixpkgs.overlays = [
-              inputs.nix.overlays.default
-              inputs.emacs-overlay.overlay
-              #inputs.nixpkgs-wayland.overlay
-              inputs.nur.overlay
-              inputs.nur_dguibert.overlay
-              inputs.nur_dguibert.overlays.extra-builtins
-              inputs.nur_dguibert.overlays.emacs
-              #nur_dguibert_envs.overlay
-              inputs.nxsession.overlay
-              inputs.self.overlays.default
-            ];
-            # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
-            nix.package = inputs.nix.packages."${config.nixpkgs.localSystem.system}".default;
-            nix.registry = lib.mapAttrs
-              (id: flake: {
-                inherit flake;
-                from = { inherit id; type = "indirect"; };
-              })
-              inputs;
-            environment.shellInit = ''
-              export NIX_PATH=nixpkgs=${inputs.nixpkgs}:nur_dguibert=${inputs.nur_dguibert}
-              NIX_OPTIONS=()
-              NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
-              export NIX_OPTIONS
-            '';
-            nix.settings.system-features = [ "recursive-nix" ] ++ # default
-              [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-              lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
-                "gccarch-${builtins.replaceStrings ["_"] ["-"] (builtins.head (builtins.split "-" config.nixpkgs.localSystem.system))}"
-              ] ++
-              lib.optionals (pkgs.hostPlatform ? gcc.arch) (
-                # a builder can run code for `gcc.arch` and inferior architectures
-                [ "gccarch-${pkgs.hostPlatform.gcc.arch}" ] ++
-                  map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
-              );
-
-            programs.gnupg.agent.pinentryFlavor = "gtk2";
-
-            role.wireguard-mesh.enable = true;
-            # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
-            programs.ssh.knownHosts."*" = {
-              certAuthority = true;
-              publicKey = builtins.readFile ./secrets/ssh-ca-home.pub;
-            };
-
-            sops.secrets.id_buildfarm = {
-              sopsFile = ./secrets/defaults.yaml;
-              owner = "root";
-              path = "/etc/nix/id_buildfarm";
-            };
-
-            # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
-            #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
-            sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
-            sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
-            #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
-            sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
-            sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
-
-            services.openssh.extraConfig = lib.mkOrder 100 ''
-              HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
-              HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
-            '';
-            services.openssh.hostKeys = [
-              {
-                #path = config.sops.secrets."ssh_host_ed25519_key".path;
-                path = "/persist/etc/ssh/ssh_host_ed25519_key";
-                type = "ed25519";
-              }
-              {
-                path = "/persist/etc/ssh/ssh_host_rsa_key";
-                type = "rsa";
-                bits = 4096;
-              }
-            ];
-
-            report-changes.enable = true;
-          };
-        };
+        nixosModules = import ./modules { inherit lib; };
 
         #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
         #  modules = [
@@ -323,7 +194,7 @@
         #    ({ config, lib, pkgs, resources, ... }: {
         #      nixpkgs.localSystem.system = "x86_64-linux";
         #      imports = [
-        #        inputs.self.nixosModules.defaults
+        #        outputs.nixosModules.defaults
         #        (import ./hosts/orsine/configuration.nix)
         #      ];
         #    })
@@ -357,6 +228,10 @@
         };
 
         nixosConfigurations.titan = inputs.nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
+          };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
               nixpkgs.localSystem = {
@@ -367,10 +242,13 @@
               imports = [
                 inputs.hydra.nixosModules.hydra
                 (import ./hosts/titan/configuration.nix)
-                inputs.self.nixosModules.defaults
+                outputs.nixosModules.defaults
+                outputs.nixosModules.yubikey-gpg-conf
                 ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+                outputs.nixosModules.x11-conf
                 ({ config, ... }: { x11-conf.enable = false; })
 
+                outputs.nixosModules.wayland-conf
                 ({ config, ... }: { wayland-conf.enable = true; })
               ];
               #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
@@ -523,6 +401,10 @@
         };
 
         nixosConfigurations.rpi31 = inputs.nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
+          };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
               #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
@@ -531,7 +413,7 @@
               imports = [
                 (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
                 (import ./hosts/rpi31/configuration.nix)
-                inputs.self.nixosModules.defaults
+                outputs.nixosModules.defaults
               ];
               nixpkgs.overlays = [
                 inputs.nix.overlays.default
@@ -576,6 +458,10 @@
         #  nixpkgs.config.allowUnsupportedSystem = true;
         #};
         nixosConfigurations.rpi41 = inputs.nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
+          };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
               #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
@@ -584,7 +470,7 @@
               imports = [
                 (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
                 (import ./hosts/rpi41/configuration.nix)
-                inputs.self.nixosModules.defaults
+                outputs.nixosModules.defaults
               ];
               boot.kernelPackages = pkgs.linuxPackages_5_10;
               boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
@@ -647,6 +533,10 @@
           ];
         };
         nixosConfigurations.t580 = inputs.nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
+          };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
               nixpkgs.localSystem = {
@@ -656,10 +546,13 @@
               };
               imports = [
                 (import ./hosts/t580/configuration.nix)
-                inputs.self.nixosModules.defaults
+                outputs.nixosModules.defaults
+                outputs.nixosModules.yubikey-gpg-conf
                 ({ config, ... }: { yubikey-gpg-conf.enable = true; })
+                outputs.nixosModules.x11-conf
                 ({ config, ... }: { x11-conf.enable = false; })
 
+                outputs.nixosModules.wayland-conf
                 ({ config, ... }: { wayland-conf.enable = true; })
               ];
               sops.defaultSopsFile = ./hosts/t580/secrets/secrets.yaml;
