@@ -17,13 +17,13 @@
     outputs.nixosModules.report-changes
     outputs.nixosModules.wireguard-mesh
 
-    ../../roles/dns.nix
-    ../../roles/libvirtd.nix
-    ../../roles/robotnix-ota.nix
-    ../../roles/tiny-ca.nix
-    ../../roles/mopidy.nix
-    ../../roles/sshguard.nix
-    ../../roles/wireguard-mesh.nix
+    outputs.nixosModules.role-dns
+    outputs.nixosModules.role-libvirtd
+    outputs.nixosModules.role-robotnix-ota
+    outputs.nixosModules.role-tiny-ca
+    outputs.nixosModules.role-mopidy
+    outputs.nixosModules.role-sshguard
+    outputs.nixosModules.role-wireguard-mesh
 
     ../../users/default.nix
 
