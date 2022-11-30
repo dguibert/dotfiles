@@ -6,7 +6,7 @@
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = false;
       home-manager.extraSpecialArgs.inputs = inputs;
-      home-manager.extraSpecialArgs.sopsDecrypt_ = pkgs.sopsDecrypt_;
+      home-manager.extraSpecialArgs.outputs = outputs;
     }
     inputs.sops-nix.nixosModules.sops
 

@@ -148,8 +148,11 @@
         ## - hydraJobs: A nested set of derivations built by Hydra.
         ##
         ## -
-        ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
+        ## - NixOS-related outputs such as nixosModules and nixosSystems.
         nixosModules = import ./modules { inherit lib; };
+
+        ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
+        homeManagerModules = import ./hm-modules { inherit lib; };
 
         #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
         #  modules = [
