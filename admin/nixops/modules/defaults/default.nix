@@ -53,7 +53,7 @@
     inputs.nxsession.overlay
     inputs.self.overlays.default
   ];
-  # TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
+  ### TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
   nix.package = inputs.nix.packages."${config.nixpkgs.localSystem.system}".default;
   nix.registry = lib.mapAttrs
     (id: flake: {
