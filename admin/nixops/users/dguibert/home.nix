@@ -1,9 +1,9 @@
-{ sopsDecrypt_, pkgs, inputs, isCentralMailHost ? false, ... }:
+{ pkgs, inputs, isCentralMailHost ? false, ... }:
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
 let
   home-secret =
     let
-      home_sec = sopsDecrypt_ ./home-sec.nix "data";
+      home_sec = pkgs.sopsDecrypt_ ./home-sec.nix "data";
       loaded = home_sec.success or true;
     in
     if loaded
@@ -805,7 +805,7 @@ let
           systemd.user.services.emacs.Service.Environment = [
             "COLORTERM=truecolor"
           ];
-          #home.file.".emacs.d/private.el".source = sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
+          #home.file.".emacs.d/private.el".source = pkgs.sopsDecrypt_ "${inputs.nur_dguibert}/emacs/private-sec.el" "data";
 
           home.file.".conkyrc".text = ''
             conky.config = {

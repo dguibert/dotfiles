@@ -1,4 +1,4 @@
-{ config, lib, sopsDecrypt_, inputs, pkgs, ... }:
+{ config, lib, inputs, pkgs, ... }:
 
 with lib;
 let
@@ -58,8 +58,8 @@ in
       if ((config.x11-conf.enable or false)
         || (config.wayland-conf.enable or false)
       )
-      then (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withX11
-      else (import ./home.nix ({ inherit sopsDecrypt_ inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withoutX11
+      then (import ./home.nix ({ inherit inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withX11
+      else (import ./home.nix ({ inherit inputs pkgs; } // { isCentralMailHost = lib.mkIf (config.networking.hostName == "titan") true; })).withoutX11
     ;
   };
 }

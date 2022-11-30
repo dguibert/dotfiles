@@ -99,11 +99,6 @@
           #config.contentAddressedByDefault = true;
         };
 
-      inherit (nixpkgsFor "x86_64-linux")
-        sopsDecrypt_
-        wgPubKey_
-        extra_builtins_file;
-
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
     in
@@ -230,7 +225,6 @@
         nixosConfigurations.titan = inputs.nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
           };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
@@ -403,7 +397,6 @@
         nixosConfigurations.rpi31 = inputs.nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
           };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
@@ -460,7 +453,6 @@
         nixosConfigurations.rpi41 = inputs.nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
           };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
@@ -535,7 +527,6 @@
         nixosConfigurations.t580 = inputs.nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            sopsDecrypt_ = (nixpkgsFor "x86_64-linux").sopsDecrypt_;
           };
           modules = [
             ({ config, lib, pkgs, resources, ... }: {
