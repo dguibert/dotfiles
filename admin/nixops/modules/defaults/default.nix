@@ -37,9 +37,6 @@
   nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
     # https://nixos.wiki/wiki/Chromium
     chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
-    permittedInsecurePackages = [
-      "ffmpeg-3.4.8" # oraclejre
-    ];
   };
   nixpkgs.overlays = [
     inputs.nix.overlays.default

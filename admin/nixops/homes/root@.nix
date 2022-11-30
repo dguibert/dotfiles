@@ -7,6 +7,9 @@ with lib;
     ({ ... }: { home.report-changes.enable = true; })
     ({ ... }: { manual.manpages.enable = false; })
   ];
+  home.username = "root";
+  home.homeDirectory = "/root";
+
   programs.bash.shellAliases.ls = "ls --color";
 
   programs.bash.initExtra = ''

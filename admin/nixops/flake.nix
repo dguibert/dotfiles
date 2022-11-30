@@ -114,10 +114,6 @@
           };
           legacyPackages = pkgs;
 
-          homeConfigurations = inputs.nixpkgs.lib.genAttrs
-            (builtins.attrNames (builtins.removeAttrs inputs.self.nixosConfigurations [ "iso" ]))
-            (host: inputs.self.nixosConfigurations.${host}.config.home-manager.users) // { };
-
           checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
@@ -199,7 +195,6 @@
         #  ];
         #};
 
-
         nixosConfigurations = import ./hosts {
           inherit lib inputs outputs;
           nixpkgs_to_use = {
@@ -207,31 +202,70 @@
           };
         };
 
-        deploy.nodes = inputs.nixpkgs.lib.recursiveUpdate
+        homeConfigurations = import ./homes {
+          inherit lib inputs outputs;
+          nixpkgs_to_use = {
+            #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
+            default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
+          };
+          systems = {
+            default = "x86_64-linux";
+            "root@aarch64-linux" = "aarch64-linux";
+            "root@x86_64-linux" = "x86_64-linux";
+            "dguibert@rpi31" = "aarch64-linux";
+            "dguibert@rpi41" = "aarch64-linux";
+          };
+        };
+
+        deploy.nodes = builtins.foldl' inputs.nixpkgs.lib.recursiveUpdate { } [
           (inputs.nixpkgs.lib.mapAttrs
-            (host: nixosConfig: {
-              hostname = "${nixosConfig.config.networking.hostName}";
-              profiles.system.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.nixos
-                nixosConfig;
-              profiles.system.user = "root";
-              # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
-              # This defaults to `false`
-              fastConnection = true;
+            (host: nixosConfig:
+              let
+                system = nixosConfig.config.nixpkgs.localSystem.system;
+              in
+              {
+                hostname = "${nixosConfig.config.networking.hostName}";
+                profiles.system.path = inputs.deploy-rs.lib.${system}.activate.nixos nixosConfig;
+                profiles.system.user = "root";
+                # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
+                fastConnection = true;
 
-              # If the previous profile should be re-activated if activation fails.
-              autoRollback = true;
+                # If the previous profile should be re-activated if activation fails.
+                autoRollback = true;
 
-              # See the earlier section about Magic Rollback for more information.
-              # This defaults to `true`
-              magicRollback = false;
+                # See the earlier section about Magic Rollback for more information.
+                # This defaults to `true`
+                magicRollback = false;
 
-              profiles.hm-dguibert.path = inputs.deploy-rs.lib.${nixosConfig.config.nixpkgs.localSystem.system}.activate.custom
-                inputs.self.homeConfigurations.${nixosConfig.config.nixpkgs.localSystem.system}.${host}.dguibert.home.activationPackage
-                "./activate";
-              profiles.hm-dguibert.user = "dguibert";
-            })
+                # root profiles
+                profiles.root.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfigurations."root@${system}".activationPackage "./activate";
+                profiles.root.user = "root";
+                # dguibert profiles
+                #profiles.dguibert.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
+                #profiles.dguibert.user = "dguibert";
+              })
             (builtins.removeAttrs inputs.self.nixosConfigurations [ "iso" ]))
-          ({ });
+          # dguibert profiles
+          (inputs.nixpkgs.lib.mapAttrs
+            (host: homeConfig:
+              let
+                system = nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
+              in
+              {
+                #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
+                profiles.dguibert.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfig.activationPackage "./activate";
+                profiles.dguibert.user = "dguibert";
+              })
+            {
+              rpi31 = homeConfigurations."dguibert@rpi31";
+              rpi41 = homeConfigurations."dguibert@rpi41";
+              titan = homeConfigurations."dguibert@titan";
+              t580 = homeConfigurations."dguibert@t580";
+            }
+          )
+
+          ({ })
+        ];
 
         # This is highly advised, and will prevent many possible mistakes
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy)
