@@ -150,51 +150,6 @@
         ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
         homeManagerModules = import ./hm-modules { inherit lib; };
 
-        #nixosConfigurations.rpi01 = inputs.nixpkgs.lib.nixosSystem {
-        #  modules = [
-        #    ({ config, lib, pkgs, resources, ... }: {
-        #      imports = [
-        #        #(import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
-        #        (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
-        #        #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-        #        #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
-        #        (import ./hosts/rpi01/configuration.nix)
-        #      ];
-        #     #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-        #      nixpkgs.localSystem.system = "x86_64-linux";
-        #      nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
-        #      #nixpkgs.localSystem.system = "armv6l-linux";
-        #      nixpkgs.overlays = [
-        #        nix.overlay
-        #        nur_dguibert.overlays.default
-        #        (final: prev: {
-        #          # don't build qt5
-        #          # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
-        #          pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
-        #          git = prev.git.override { perlSupport = false; };
-        #        })
-        #      ];
-
-        #      documentation.nixos.enable = false;
-        #      fileSystems."/".options = [ "defaults" "discard" ];
-
-        #      #programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
-        #    })
-        #  ];
-        #};
-
-        #nixosConfigurations.orsine = inputs.nixpkgs.lib.nixosSystem {
-        #  modules = [
-        #    ({ config, lib, pkgs, resources, ... }: {
-        #      nixpkgs.localSystem.system = "x86_64-linux";
-        #      imports = [
-        #        outputs.nixosModules.defaults
-        #        (import ./hosts/orsine/configuration.nix)
-        #      ];
-        #    })
-        #  ];
-        #};
-
         nixosConfigurations = import ./hosts {
           inherit lib inputs outputs;
           nixpkgs_to_use = {
