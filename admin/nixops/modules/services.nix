@@ -1,12 +1,18 @@
-{ config, lib, ... }:
+{ config, lib, inputs, outputs, ... }:
 
 let
   cfg = config.empty;
+
+  distribution = {
+    # 443: shadowsocks+ssh
+    haproxy = [ outputs.nixosConfigurations.rpi31 ];
+  };
+
+  dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
 in
 {
   imports = [
-    # 443: shadowsocks+ssh
-    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (config.networking.hostName == "rpi31") {
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.haproxy) {
 
       networking.firewall.allowedTCPPorts = [ 443 22322 2222 ];
       #networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
