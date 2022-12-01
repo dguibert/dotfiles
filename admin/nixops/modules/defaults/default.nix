@@ -25,6 +25,8 @@
     outputs.nixosModules.role-sshguard
     outputs.nixosModules.role-wireguard-mesh
 
+    outputs.nixosModules.services
+
     ../../users/default.nix
 
     ({ ... }: { documentation.nixos.enable = false; })
@@ -84,6 +86,7 @@
     path = "/etc/nix/id_buildfarm";
   };
 
+  services.openssh.enable = true;
   # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
   #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
   sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";

@@ -17,25 +17,10 @@
     })
   ];
 
-  documentation.nixos.enable = false;
-  #fileSystems."/".options = [ "defaults" "discard" ];
-  services.fstrim.enable = true;
-
   programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
   #assertions = lib.singleton {
   #  assertion = pkgs.stdenv.system == "aarch64-linux";
   #  message = "rpi31-configuration.nix can be only built natively on Aarch64 / ARM64; " +
   #    "it cannot be cross compiled";
   #};
-  services.openssh.extraConfig = ''
-    Match Group sftponly
-    ChrootDirectory %h
-    ForceCommand internal-sftp
-    AllowTcpForwarding no
-    X11Forwarding no
-    PasswordAuthentication no
-  '';
-  #  echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
-  sops.secrets.shadowsocks = { };
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
 }

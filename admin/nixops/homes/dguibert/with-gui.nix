@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, outputs, ... }:
 {
   config = lib.mkIf config.withGui.enable {
     programs.browserpass.enable = true;
