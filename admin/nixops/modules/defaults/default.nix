@@ -71,6 +71,15 @@
         map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.gcc.arch}
     );
 
+  environment.systemPackages = [ pkgs.vim pkgs.git ];
+  # Select internationalisation properties.
+  console.font = "Lat2-Terminus16";
+  console.keyMap = lib.mkDefault "fr";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  # Set your time zone.
+  time.timeZone = "Europe/Paris";
+
   programs.gnupg.agent.pinentryFlavor = "gtk2";
 
   role.wireguard-mesh.enable = true;
@@ -87,6 +96,18 @@
   };
 
   services.openssh.enable = true;
+  services.openssh.startWhenNeeded = true;
+  services.openssh.passwordAuthentication = false;
+  services.openssh.extraConfig = ''
+    HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
+    HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
+
+    AcceptEnv COLORTERM
+    Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
+    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+    MACs umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+  '';
+
   # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
   #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
   sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
@@ -95,10 +116,6 @@
   sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
   sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
 
-  services.openssh.extraConfig = lib.mkOrder 100 ''
-    HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
-    HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
-  '';
   services.openssh.hostKeys = [
     {
       #path = config.sops.secrets."ssh_host_ed25519_key".path;

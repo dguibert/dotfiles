@@ -6,10 +6,6 @@ with lib;
 #in
 
 rec {
-  imports = [
-    ../common.nix
-  ];
-
   #sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default

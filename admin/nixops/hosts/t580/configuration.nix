@@ -5,7 +5,6 @@ rec {
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../common.nix
       ({ ... }: { services.udisks2.enable = true; })
     ];
 
@@ -60,9 +59,6 @@ rec {
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

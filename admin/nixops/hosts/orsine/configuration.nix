@@ -15,7 +15,6 @@ rec {
 
   imports = [
     outputs.nixosModules.defaults
-    ../common.nix
   ];
   nixpkgs.localSystem.system = "x86_64-linux";
 

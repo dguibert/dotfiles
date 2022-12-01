@@ -23,7 +23,6 @@ let
 in
 rec {
   imports = [
-    ../common.nix
     ({ ... }: { services.udisks2.enable = true; })
     #(import <nur_dguibert/modules>).qemu-user
     #../../modules/wayland-nvidia.nix

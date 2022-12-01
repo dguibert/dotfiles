@@ -6,11 +6,6 @@ with lib;
 #in
 
 rec {
-  #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
-  imports = [
-    ../common.nix
-  ];
-
   #sdImage.bootSize = 512;
 
   networking.hostName = "rpi41";
