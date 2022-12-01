@@ -57,7 +57,7 @@
   inputs.yambar-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
-  inputs.deploy-rs.url = "github:serokell/deploy-rs";
+  inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
   inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
 
   #inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
