@@ -8,7 +8,6 @@ with lib;
 rec {
   imports = [
     ../common.nix
-    ../../users/rdolbeau
   ];
 
   #sdImage.bootSize = 512;
