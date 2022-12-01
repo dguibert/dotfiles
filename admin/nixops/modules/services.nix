@@ -13,27 +13,7 @@ in
 {
   imports = [
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.haproxy) {
-
       networking.firewall.allowedTCPPorts = [ 443 22322 2222 ];
-      #networking.firewall.allowedTCPPorts = [ config.services.sslh.port 22322 ];
-      #systemd.services.sslh.serviceConfig.User=lib.mkForce "root";
-      #services.sslh = {
-      #  enable=true;
-      #  verbose=true;
-      #  transparent=true;
-      #  port=443;
-      #  ##  { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
-      #  ##  { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
-      #  ##  { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-      #  ##  { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
-      #  appendConfig=''
-      #    protocols:
-      #    (
-      #      { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-      #      { name: "anyprot"; host: "localhost"; port: "${toString config.services.shadowsocks.port}"; probe: "builtin"; }
-      #    );
-      #  '';
-      #};
       services.haproxy.enable = true;
       ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
       services.haproxy.config = ''
@@ -84,40 +64,11 @@ in
           use_backend openssh_t          if !{ req.ssl_hello_type 1 } { req.len 0 }
           use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
 
-        frontend ssh_t
-          mode tcp
-          bind 0.0.0.0:2222 transparent
         backend openssh_t
           mode tcp
           source 0.0.0.0 usesrc clientip
           server openssh 127.0.0.1:22
       '';
-      # https://www.nginx.com/blog/running-non-ssl-protocols-over-ssl-port-nginx-1-15-2/
-      #services.nginx.enable = true;
-      #services.nginx.streamConfig = ''
-      #  upstream ssh {
-      #    server 127.0.0.1:22;
-      #  }
-
-      #  upstream shadowsocks {
-      #    server 127.0.0.1:${toString config.services.shadowsocks.port};
-      #  }
-
-      #  map $ssl_preread_protocol $upstream {
-      #    "" ssh;
-      #    "TLSv1*"   shadowsocks;
-      #    default    shadowsocks;
-      #  }
-
-      #  # SSH and SSL on the same port
-      #  server {
-      #    listen 443;
-
-      #    proxy_pass $upstream;
-      #    ssl_preread on;
-      #  }
-      #'';
-
       # Enable the OpenSSH daemon.
       services.openssh.enable = true;
       services.openssh.listenAddresses = [
@@ -135,9 +86,6 @@ in
       };
 
 
-    })
-    ({ config, lib, pkgs, inputs, outputs, ... }: {
-      imports = [ ];
     })
   ];
 }
