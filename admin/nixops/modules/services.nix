@@ -3,9 +3,16 @@
 let
   cfg = config.empty;
 
-  distribution = {
+  distribution = with outputs.nixosConfigurations; {
     # 443: shadowsocks+ssh
-    haproxy = [ outputs.nixosConfigurations.rpi31 ];
+    haproxy = [ rpi31 ];
+    adb = [ titan t580 ];
+    jellyfin = [ titan ];
+    role-libvirtd = [ titan ];
+    role-tinyca = [ titan ];
+    role-robotnix-ota-server = [ titan ];
+    role-mopidy = [ ];
+    desktop = [ titan t580 ];
   };
 
   dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
@@ -86,6 +93,94 @@ in
       };
 
 
+    })
+    # adb
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.adb) {
+      programs.adb.enable = true;
+    })
+    # jellyfin
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.jellyfin) {
+      services.jellyfin.enable = true;
+      systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
+        serviceConfig.PrivateUsers = lib.mkForce false;
+        serviceConfig.PermissionsStartOnly = true;
+        preStart = ''
+          set -x
+          #${pkgs.acl}/bin/setfacl -Rm u:jellyfin:rwX,m:rw-,g:jellyfin:rwX,d:u:jellyfin:rwX,d:g:jellyfin:rwX,o:---,d:o:---,d:m:rwx,m;rwx /home/dguibert/Videos/Series/ /home/dguibert/Videos/Movies/
+          ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert
+          ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert/Videos
+          ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Series
+          ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Movies
+          ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert
+          ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert/Videos
+          ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Series
+          ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Movies
+          set +x
+        '';
+        unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
+      };
+      networking.firewall.interfaces."bond0".allowedTCPPorts = [
+        8096 /*http*/
+        8920 /*https*/
+        config.services.step-ca.port
+      ];
+      systemd.tmpfiles.rules = [
+        "L /var/lib/jellyfin/config - - - - /persist/var/lib/jellyfin/config"
+        "L /var/lib/jellyfin/data   - - - - /persist/var/lib/jellyfin/data"
+      ];
+
+    })
+    # role-libvirtd
+    outputs.nixosModules.role-libvirtd
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.role-libvirtd) {
+      # https://nixos.org/nixops/manual/#idm140737318329504
+      role.libvirtd.enable = true;
+      #virtualisation.anbox.enable = true;
+      #services.nfs.server.enable = true;
+      virtualisation.docker.enable = true;
+      virtualisation.docker.storageDriver = "zfs";
+
+      programs.singularity.enable = true;
+    })
+    # role-tinyca
+    outputs.nixosModules.role-tiny-ca
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.role-tinyca) {
+      role.tiny-ca.enable = true;
+      services.step-ca.intermediatePasswordFile = config.sops.secrets.orsin-ca-intermediatePassword.path;
+      sops.secrets.orsin-ca-intermediatePassword = {
+        sopsFile = ../secrets/defaults.yaml;
+      };
+      networking.firewall.interfaces."bond0".allowedTCPPorts = [
+        config.services.step-ca.port
+      ];
+    })
+    # role-robotnix-ota-server
+    outputs.nixosModules.role-robotnix-ota
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.role-robotnix-ota-server) {
+      role.robotnix-ota-server.enable = true;
+      role.robotnix-ota-server.openFirewall = true;
+    })
+    # mopidy-server
+    outputs.nixosModules.role-mopidy
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.role-mopidy) {
+      role.mopidy-server.enable = true; # TODO migrate to pipewire
+      role.mopidy-server.listenAddress = "192.168.1.24";
+      role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
+      role.mopidy-server.configuration.m3u = {
+        enabled = true;
+        playlists_dir = "/home/dguibert/Music/playlists";
+        base_dir = config.role.mopidy-server.configuration.local.media_dir;
+        default_extension = ".m3u8";
+      };
+      role.mopidy-server.configuration.local.scan_follow_symlinks = true;
+      role.mopidy-server.configuration.iris.country = "FR";
+      role.mopidy-server.configuration.iris.locale = "FR";
+    })
+    outputs.nixosModules.wayland-conf
+    outputs.nixosModules.yubikey-gpg-conf
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.desktop) {
+      wayland-conf.enable = true;
+      yubikey-gpg-conf.enable = true;
     })
   ];
 }

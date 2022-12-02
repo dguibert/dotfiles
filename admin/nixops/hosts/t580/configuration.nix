@@ -123,7 +123,6 @@ rec {
   # should.
   system.stateVersion = "20.03"; # Did you read the comment?
 
-  programs.adb.enable = true;
   programs.light.enable = true;
 
   services.udev.extraRules = with pkgs; ''

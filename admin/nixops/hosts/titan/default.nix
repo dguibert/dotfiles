@@ -8,91 +8,16 @@
     inputs.hydra.nixosModules.hydra
     (import ./configuration.nix)
     outputs.nixosModules.defaults
-    outputs.nixosModules.yubikey-gpg-conf
-    ({ config, ... }: { yubikey-gpg-conf.enable = true; })
-    outputs.nixosModules.x11-conf
-    ({ config, ... }: { x11-conf.enable = false; })
-
-    outputs.nixosModules.wayland-conf
-    ({ config, ... }: { wayland-conf.enable = true; })
   ];
   #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
 
   environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 
-  # https://nixos.org/nixops/manual/#idm140737318329504
-  role.libvirtd.enable = true;
-  #virtualisation.libvirtd.enable = true;
-  #virtualisation.anbox.enable = true;
-  #services.nfs.server.enable = true;
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
-  virtualisation.virtualbox.host.enable = true;
-
-  programs.singularity.enable = true;
-
   networking.firewall.checkReversePath = false;
-
-  programs.adb.enable = true;
-
-  services.jellyfin.enable = true;
-  systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
-    serviceConfig.PrivateUsers = lib.mkForce false;
-    serviceConfig.PermissionsStartOnly = true;
-    preStart = ''
-      set -x
-      #${pkgs.acl}/bin/setfacl -Rm u:jellyfin:rwX,m:rw-,g:jellyfin:rwX,d:u:jellyfin:rwX,d:g:jellyfin:rwX,o:---,d:o:---,d:m:rwx,m;rwx /home/dguibert/Videos/Series/ /home/dguibert/Videos/Movies/
-      ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert
-      ${pkgs.acl}/bin/setfacl -m user:jellyfin:r-x /home/dguibert/Videos
-      ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Series
-      ${pkgs.acl}/bin/setfacl -m user:jellyfin:rwx /home/dguibert/Videos/Movies
-      ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert
-      ${pkgs.acl}/bin/setfacl -m group:jellyfin:r-x /home/dguibert/Videos
-      ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Series
-      ${pkgs.acl}/bin/setfacl -m group:jellyfin:rwx /home/dguibert/Videos/Movies
-      set +x
-    '';
-    unitConfig.RequiresMountsFor = "/home/dguibert/Videos";
-  };
-  networking.firewall.interfaces."bond0".allowedTCPPorts = [
-    8096 /*http*/
-    8920 /*https*/
-    config.services.step-ca.port
-  ];
-  systemd.tmpfiles.rules = [
-    "L /var/lib/jellyfin/config - - - - /persist/var/lib/jellyfin/config"
-    "L /var/lib/jellyfin/data   - - - - /persist/var/lib/jellyfin/data"
-  ];
 
   systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
-  role.mopidy-server.enable = false; # TODO migrate to pipewire
-  role.mopidy-server.listenAddress = "192.168.1.24";
-  role.mopidy-server.configuration.local.media_dir = "/home/dguibert/Music/mopidy";
-  role.mopidy-server.configuration.m3u = {
-    enabled = true;
-    playlists_dir = "/home/dguibert/Music/playlists";
-    base_dir = config.role.mopidy-server.configuration.local.media_dir;
-    default_extension = ".m3u8";
-  };
-  role.mopidy-server.configuration.local.scan_follow_symlinks = true;
-  role.mopidy-server.configuration.iris.country = "FR";
-  role.mopidy-server.configuration.iris.locale = "FR";
-
-  role.tiny-ca.enable = true;
-  services.step-ca.intermediatePasswordFile = config.sops.secrets.orsin-ca-intermediatePassword.path;
-  sops.secrets.orsin-ca-intermediatePassword = {
-    sopsFile = ../../secrets/defaults.yaml;
-  };
-  role.robotnix-ota-server.enable = true;
-  role.robotnix-ota-server.openFirewall = true;
-
-  hardware.pulseaudio = {
-    support32Bit = true;
-    tcp.enable = true;
-    tcp.anonymousClients.allowAll = true;
-    tcp.anonymousClients.allowedIpRanges = [ "127.0.0.1" "192.168.1.0/24" ];
-  };
+  virtualisation.virtualbox.host.enable = true;
 
   #services.hydra-dev = {
   #  enable = true;

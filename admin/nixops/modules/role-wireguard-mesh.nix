@@ -1,10 +1,14 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, outputs, ... }:
 let
   cfg = config.role.wireguard-mesh;
 
   readWgPub = file: builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile file);
 in
 {
+  imports = [
+    outputs.nixosModules.wireguard-mesh
+  ];
+
   options = {
     role.wireguard-mesh = {
       enable = lib.mkOption {

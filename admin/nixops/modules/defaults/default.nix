@@ -15,13 +15,8 @@
     outputs.nixosModules.nix-conf
     ({ config, ... }: { nix-conf.enable = true; })
     outputs.nixosModules.report-changes
-    outputs.nixosModules.wireguard-mesh
 
     outputs.nixosModules.role-dns
-    outputs.nixosModules.role-libvirtd
-    outputs.nixosModules.role-robotnix-ota
-    outputs.nixosModules.role-tiny-ca
-    outputs.nixosModules.role-mopidy
     outputs.nixosModules.role-sshguard
     outputs.nixosModules.role-wireguard-mesh
 
