@@ -167,6 +167,7 @@ rec {
   system.stateVersion = "20.09"; # Did you read the comment?
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
   systemd.network.netdevs."40-bond0" = {

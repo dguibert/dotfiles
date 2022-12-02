@@ -30,6 +30,7 @@ rec {
   #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
 

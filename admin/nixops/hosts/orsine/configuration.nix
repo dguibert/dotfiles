@@ -79,6 +79,7 @@ rec {
   networking.wireless.userControlled.enable = true;
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";

@@ -20,7 +20,16 @@ rec {
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;
   # !!! Otherwise (even if you have a Raspberry Pi 2 or 3), pick this:
-  boot.kernelPackages = pkgs.linuxPackages_5_15;
+  #boot.kernelPackages = pkgs.linuxPackages_rpi3;
+  #nixpkgs.overlays = [
+  #  (final: prev: {
+  #    makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }: prev.makeModulesClosure
+  #      {
+  #        inherit kernel firmware rootModules;
+  #        allowMissing = true;
+  #      };
+  #  })
+  #];
   #boot.supportedFilesystems = [ "zfs" ];
   boot.supportedFilesystems = mkForce [ /*"btrfs" "reiserfs"*/ "vfat" "f2fs" /*"xfs" "zfs"*/ "ntfs" /*"cifs"*/ ];
   boot.postBootCommands = ''
@@ -50,8 +59,9 @@ rec {
   nix.settings.max-jobs = 4;
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
-  systemd.network.networks."eth0" = {
+  systemd.network.networks."10-eth0" = {
     name = "eth0";
     DHCP = "yes";
   };

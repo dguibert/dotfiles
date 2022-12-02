@@ -91,6 +91,10 @@
   };
 
   services.openssh.enable = true;
+  services.openssh.listenAddresses = [
+    { addr = "0.0.0.0"; port = 22322; }
+  ];
+  networking.firewall.allowedTCPPorts = [ 22322 ];
   services.openssh.startWhenNeeded = true;
   services.openssh.passwordAuthentication = false;
   services.openssh.extraConfig = ''

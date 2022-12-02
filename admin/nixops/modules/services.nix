@@ -20,7 +20,7 @@ in
 {
   imports = [
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.haproxy) {
-      networking.firewall.allowedTCPPorts = [ 443 22322 2222 ];
+      networking.firewall.allowedTCPPorts = [ 443 ];
       services.haproxy.enable = true;
       ### https://datamakes.com/2018/02/17/high-intensity-port-sharing-with-haproxy/
       services.haproxy.config = ''
@@ -74,13 +74,12 @@ in
         backend openssh_t
           mode tcp
           source 0.0.0.0 usesrc clientip
-          server openssh 127.0.0.1:22
+          server openssh 127.0.0.1:44322
       '';
       # Enable the OpenSSH daemon.
       services.openssh.enable = true;
       services.openssh.listenAddresses = [
-        { addr = "127.0.0.1"; port = 22; }
-        { addr = "0.0.0.0"; port = 22322; }
+        { addr = "127.0.0.1"; port = 44322; }
       ];
 
       #echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
