@@ -36,6 +36,10 @@ in
     src = inputs.st-src;
     patches = [ ];
   });
+  mako = prev.mako.overrideAttrs (o: {
+    src = inputs.mako-src;
+    patches = [ ];
+  });
   dwl = prev.dwl.overrideAttrs (o: {
     version = "0.3.1-custom";
     src = inputs.dwl-src;

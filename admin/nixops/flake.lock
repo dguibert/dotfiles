@@ -303,6 +303,23 @@
         "type": "github"
       }
     },
+    "mako-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666359044,
+        "narHash": "sha256-YRCS+6or/Z6KJ0wRfZDkvwbjAH2FwL5muQfVoFtq/lI=",
+        "owner": "emersion",
+        "repo": "mako",
+        "rev": "5eca7d58bf9eb658ece1b32da586627118f00642",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emersion",
+        "ref": "master",
+        "repo": "mako",
+        "type": "github"
+      }
+    },
     "newNixpkgs": {
       "locked": {
         "lastModified": 1647380550,
@@ -494,6 +511,7 @@
         "gitignore": "gitignore",
         "home-manager": "home-manager",
         "hydra": "hydra",
+        "mako-src": "mako-src",
         "nix": "nix",
         "nixpkgs": "nixpkgs",
         "nur": "nur",

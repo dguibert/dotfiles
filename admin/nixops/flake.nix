@@ -51,6 +51,8 @@
   inputs.st-src.flake = false;
   inputs.dwl-src.url = "github:dguibert/dwl/pu";
   inputs.dwl-src.flake = false;
+  inputs.mako-src.url = "github:emersion/mako/master";
+  inputs.mako-src.flake = false;
   inputs.somebar-src.url = "git+https://git.sr.ht/~raphi/somebar";
   inputs.somebar-src.flake = false;
   inputs.yambar-src.url = "git+https://codeberg.org/dnkl/yambar.git";
