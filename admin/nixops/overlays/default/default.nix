@@ -1,5 +1,12 @@
 final: prev: with final; let
   inputs = prev.inputs;
+
+  pkg_from_flake = pkg: prev.${pkg}.overrideAttrs (o: {
+    src = inputs."${pkg}-src";
+    version = "${lib.substring 0 8 (inputs."${pkg}-src".lastModifiedDate or inputs."${pkg}-src".lastModified or "19700101")}.${inputs."${pkg}-src".shortRev or "dirty"}";
+    patches = [ ];
+  });
+
 in
 {
   swayidle = prev.swayidle.overrideAttrs (o: {
@@ -28,31 +35,22 @@ in
       zfs set mountpoint=legacy rt580/tmp
     '';
 
-  dwm = prev.dwm.overrideAttrs (o: {
-    src = inputs.dwm-src;
+  dwm = (pkg_from_flake "dwm").overrideAttrs (_: {
     patches = [ ];
   });
-  st = prev.st.overrideAttrs (o: {
-    src = inputs.st-src;
+  st = (pkg_from_flake "st").overrideAttrs (_: {
     patches = [ ];
   });
-  mako = prev.mako.overrideAttrs (o: {
-    src = inputs.mako-src;
-    patches = [ ];
-  });
-  dwl = prev.dwl.overrideAttrs (o: {
-    version = "0.3.1-custom";
-    src = inputs.dwl-src;
+  mako = pkg_from_flake "mako";
+  dwl = (pkg_from_flake "dwl").overrideAttrs (o: {
     buildInputs = o.buildInputs ++ [
       xorg.xcbutilwm
     ];
   });
-  yambar = prev.yambar.overrideAttrs (o: {
-    src = inputs.yambar-src;
+  yambar = (pkg_from_flake "yambar").overrideAttrs (_: {
     patches = [ ];
   });
-  somebar = prev.somebar.overrideAttrs (o: {
-    src = inputs.somebar-src;
+  somebar = (pkg_from_flake "somebar").overrideAttrs (o: {
     patches = [
       ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
       ./patches/0002-bigger-occupied-rectangle.patch
