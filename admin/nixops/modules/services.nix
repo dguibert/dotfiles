@@ -186,6 +186,7 @@ in
     outputs.nixosModules.server-3Dprinting
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.server-3Dprinting) {
       server-3Dprinting.enable = true;
+      networking.firewall.interfaces."eth0".allowedTCPPorts = [ 80 ];
     })
   ];
 }

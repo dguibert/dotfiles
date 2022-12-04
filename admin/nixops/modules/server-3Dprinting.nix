@@ -41,8 +41,9 @@ in
           microsteps = 16;
           endstop_pin = "^PB4";
           full_steps_per_rotation = 200; # 1.8 stepper motor
-          position_endstop = 120;
-          position_max = 120;
+          position_endstop = 118;
+          position_max = 118;
+          position_Min = 2;
           homing_speed = 20;
           homing_retract_dist = 5;
           homing_positive_dir = true;
@@ -65,8 +66,8 @@ in
           rotation_distance = 40;
           microsteps = 16;
           endstop_pin = "^PC8";
-          position_endstop = 120;
-          position_max = 120;
+          position_endstop = 118;
+          position_max = 118;
           homing_speed = 20;
           homing_retract_dist = 5;
           homing_positive_dir = true;
@@ -90,7 +91,7 @@ in
           #rotation_distance = 2; # for T8x2 lead screan
           microsteps = 16;
           endstop_pin = "^PB1";
-          #position_endstop = -0.10;
+          position_endstop = -0.175; # msut be defined?
           position_max = 120;
           position_min = -1.5;
           homing_speed = 10; # max 100
@@ -121,9 +122,12 @@ in
           sensor_type = "Generic 3950";
           sensor_pin = "PC4";
           control = "pid"; # Do PID calibration
-          pid_Kp = 28.182;
-          pid_Ki = 1.978;
-          pid_Kd = 100.397;
+          # M106 S64
+          # PID_CALIBRATE HEATER=extruder TARGET=245
+          # pid_Kp=20.292 pid_Ki=1.313 pid_Kd=78.378
+          pid_Kp = 20.292;
+          pid_Ki = 1.313;
+          pid_Kd = 78.378;
           min_temp = 0;
           max_temp = 270;
           min_extrude_temp = 170;
@@ -144,6 +148,14 @@ in
         };
         heater_bed = {
           heater_pin = "PC7";
+          ### Sensor Types
+          ###   "EPCOS 100K B57560G104F"
+          ###   "ATC Semitec 104GT-2"
+          ###   "NTC 100K beta 3950" (Keenovo Heater Pad)
+          ###   "Honeywell 100K 135-104LAG-J01"
+          ###   "NTC 100K MGB18-104F39050L32"
+          ###   "AD595"
+          ###   "PT100 INA826"
           sensor_type = "NTC 100K beta 3950"; # Verify yours
           ###sensor_type: NTC 100K MGB18-104F39050L32
           sensor_pin = "PC5";
@@ -152,9 +164,11 @@ in
           min_temp = 0;
           max_temp = 120;
           control = "pid"; # Do PID calibration
-          pid_kp = 68.453;
-          pid_ki = 2.749;
-          pid_kd = 426.122;
+          # PID_CALIBRATE HEATER=heater_bed TARGET=100
+          # pid_Kp=50.563 pid_Ki=2.654 pid_Kd=240.808
+          pid_kp = 50.563;
+          pid_ki = 2.654;
+          pid_kd = 240.808;
         };
         "heater_fan hotend_fan" = {
           # FAN1 Connector
@@ -176,25 +190,25 @@ in
           #off_below="0";.13
           cycle_time = 0.010;
         };
-        idle_timeouti.timeout = 1800;
+        idle_timeout.timeout = 1800;
 
-        board_pins.aliases = "
-          # EXP1 header
-          EXP1_1=<5V>,  EXP1_3=<RST>, EXP1_5=PA7,  EXP1_7=PA4,  EXP1_9=PA5,
-          EXP1_2=<GND>, EXP1_4=PC3,   EXP1_6=PC11, EXP1_8=PC10, EXP1_10=PA6,
+        board_pins.aliases =
+          "    # EXP1 header
+             EXP1_1=<5V>,  EXP1_3=<RST>, EXP1_5=PA7,  EXP1_7=PA4,  EXP1_9=PA5,
+             EXP1_2=<GND>, EXP1_4=PC3,   EXP1_6=PC11, EXP1_8=PC10, EXP1_10=PA6,
 
-          # EXP2 header
-          EXP2_1=<5V>,  EXP2_3=PB7, EXP2_5=PB14, EXP2_7=PB12, EXP2_9=PC12,
-          EXP2_2=<GND>, EXP2_4=PB6, EXP2_6=PB13, EXP2_8=PB15, EXP2_10=PC9,
+             # EXP2 header
+             EXP2_1=<5V>,  EXP2_3=PB7, EXP2_5=PB14, EXP2_7=PB12, EXP2_9=PC12,
+             EXP2_2=<GND>, EXP2_4=PB6, EXP2_6=PB13, EXP2_8=PB15, EXP2_10=PC9,
 
-          # EXP3 header
-          EXP3_1=PC9,  EXP3_3=PC10, EXP3_5=PC11, EXP3_7=PB12, EXP3_9=<GND>,
-          EXP3_2=PC12, EXP3_4=PB14, EXP3_6=PB13, EXP3_8=PB15, EXP3_10=<5V>
-          # Pins EXP3_4, EXP3_8, EXP3_6 are also MISO, MOSI, SCK of bus \"spi2\"
+             # EXP3 header
+             EXP3_1=PC9,  EXP3_3=PC10, EXP3_5=PC11, EXP3_7=PB12, EXP3_9=<GND>,
+             EXP3_2=PC12, EXP3_4=PB14, EXP3_6=PB13, EXP3_8=PB15, EXP3_10=<5V>
+             # Pins EXP3_4, EXP3_8, EXP3_6 are also MISO, MOSI, SCK of bus \"spi2\"
         ";
 
         safe_z_home = {
-          home_xy_position = "120,120";
+          home_xy_position = "118,118";
           speed = 50.0;
           z_hop = 5;
         };
@@ -202,85 +216,77 @@ in
         ### [bed_screws] config section to enable a BED_SCREWS_ADJUST g-code
         ### command.
         bed_screws = {
-          screw1 = "65,5";
+          screw1 = "58,5";
           screw1_name = "front screw";
-          screw2 = "10,110";
+          screw2 = "9,110";
           screw2_name = "back left";
-          screw3 = "120,110";
+          screw3 = "118,110";
           screw3_name = "back right";
         };
         #######################################################################
         ###	Macros
         #######################################################################
         ###   Use PRINT_START for the slicer starting script - please customize for your slicer of choice
-        "gcode_macro PRINT_START".gcode = "
-          G28                            ; home all axes
-          G1 Z20 F3000                   ; move nozzle away from bed
+        "gcode_macro PRINT_START".gcode =
+          "    G28                            ; home all axes
+             G1 Z20 F3000                   ; move nozzle away from bed
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
-        "gcode_macro PRINT_END".gcode = ''
-          M400                           ; wait for buffer to clear
-          G92 E0                         ; zero the extruder
-          G1 E-4.0 F3600                 ; retract filament
-          G91                            ; relative positioning
+        "gcode_macro PRINT_END".gcode =
+          ''    M400                           ; wait for buffer to clear
+              G92 E0                         ; zero the extruder
+              G1 E-4.0 F3600                 ; retract filament
+              G91                            ; relative positioning
 
-          #   Get Boundaries
-          {% set max_x = printer.configfile.config["stepper_x"]["position_max"]|float %}
-          {% set max_y = printer.configfile.config["stepper_y"]["position_max"]|float %}
-          {% set max_z = printer.configfile.config["stepper_z"]["position_max"]|float %}
+              #   Get Boundaries
+              {% set max_x = printer.configfile.config["stepper_x"]["position_max"]|float %}
+              {% set max_y = printer.configfile.config["stepper_y"]["position_max"]|float %}
+              {% set max_z = printer.configfile.config["stepper_z"]["position_max"]|float %}
 
-          #   Check end position to determine safe direction to move
-          {% if printer.toolhead.position.x < (max_x - 20) %}
-              {% set x_safe = 20.0 %}
-          {% else %}
-              {% set x_safe = -20.0 %}
-          {% endif %}
+              #   Check end position to determine safe direction to move
+              {% if printer.toolhead.position.x < (max_x - 20) %}
+                  {% set x_safe = 20.0 %}
+              {% else %}
+                  {% set x_safe = -20.0 %}
+              {% endif %}
 
-          {% if printer.toolhead.position.y < (max_y - 20) %}
-              {% set y_safe = 20.0 %}
-          {% else %}
-              {% set y_safe = -20.0 %}
-          {% endif %}
+              {% if printer.toolhead.position.y < (max_y - 20) %}
+                  {% set y_safe = 20.0 %}
+              {% else %}
+                  {% set y_safe = -20.0 %}
+              {% endif %}
 
-          {% if printer.toolhead.position.z < (max_z - 2) %}
-              {% set z_safe = 2.0 %}
-          {% else %}
-              {% set z_safe = max_z - printer.toolhead.position.z %}
-          {% endif %}
+              {% if printer.toolhead.position.z < (max_z - 2) %}
+                  {% set z_safe = 2.0 %}
+              {% else %}
+                  {% set z_safe = max_z - printer.toolhead.position.z %}
+              {% endif %}
 
-          G0 Z{z_safe} F3600    ; move nozzle up
-          G0 X{x_safe} Y{y_safe} F20000    ; move nozzle to remove stringing
-          TURN_OFF_HEATERS
-          M107                           ; turn off fan
-          G90                            ; absolute positioning
-          G0 X60 Y{max_y} F3600          ; park nozzle at rear
+              G0 Z{z_safe} F3600    ; move nozzle up
+              G0 X{x_safe} Y{y_safe} F20000    ; move nozzle to remove stringing
+              TURN_OFF_HEATERS
+              M107                           ; turn off fan
+              G90                            ; absolute positioning
+              G0 X60 Y{max_y} F3600          ; park nozzle at rear
         '';
 
-        "gcode_macro LOAD_FILAMENT".gcode = "
-          M83                            ; set extruder to relative
-          G1 E30 F300                    ; load
-          G1 E15 F150                    ; prime nozzle with filament
-          M82                            ; set extruder to absolute
+        "gcode_macro LOAD_FILAMENT".gcode =
+          "    M83                            ; set extruder to relative
+             G1 E30 F300                    ; load
+             G1 E15 F150                    ; prime nozzle with filament
+             M82                            ; set extruder to absolute
         ";
 
-        "gcode_macro UNLOAD_FILAMENT".gcode = "
-          M83                            ; set extruder to relative
-          G1 E10 F300                    ; extrude a little to soften tip
-          G1 E-40 F1800                  ; retract some, but not too much or it will jam
-          M82                            ; set extruder to absolute
+        "gcode_macro UNLOAD_FILAMENT".gcode =
+          "    M83                            ; set extruder to relative
+             G1 E10 F300                    ; extrude a little to soften tip
+             G1 E-40 F1800                  ; retract some, but not too much or it will jam
+             M82                            ; set extruder to absolute
         ";
         ##
         ###[include v0_display.cfg]
         ###[include bedScrewMenu.cfg]
         ##
-        ### Sensor Types
-        ###   "EPCOS 100K B57560G104F"
-        ###   "ATC Semitec 104GT-2"
-        ###   "NTC 100K beta 3950" (Keenovo Heater Pad)
-        ###   "Honeywell 100K 135-104LAG-J01"
-        ###   "NTC 100K MGB18-104F39050L32"
-        ###   "AD595"
-        ###   "PT100 INA826"
 
       };
     };
