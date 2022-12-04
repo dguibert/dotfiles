@@ -5,7 +5,7 @@ let
 
   distribution = with outputs.nixosConfigurations; {
     # 443: shadowsocks+ssh
-    haproxy = [ rpi31 ];
+    haproxy = [ rpi41 ];
     adb = [ titan t580 ];
     jellyfin = [ titan ];
     role-libvirtd = [ titan ];
@@ -13,6 +13,7 @@ let
     role-robotnix-ota-server = [ titan ];
     role-mopidy = [ ];
     desktop = [ titan t580 ];
+    server-3Dprinting = [ rpi31 ];
   };
 
   dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
@@ -83,7 +84,7 @@ in
       ];
 
       #echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
-      sops.secrets.shadowsocks.sopsFile = ../hosts/rpi31/secrets/secrets.yaml;
+      sops.secrets.shadowsocks.sopsFile = ../hosts/rpi41/secrets/secrets.yaml;
       services.shadowsocks = {
         enable = true;
         localAddress = [ "127.0.0.1" ];
@@ -180,6 +181,11 @@ in
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.desktop) {
       wayland-conf.enable = true;
       yubikey-gpg-conf.enable = true;
+    })
+    # server-3dprinting
+    outputs.nixosModules.server-3Dprinting
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.server-3Dprinting) {
+      server-3Dprinting.enable = true;
     })
   ];
 }
