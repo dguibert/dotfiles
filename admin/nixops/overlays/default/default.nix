@@ -42,7 +42,7 @@ in
     patches = [ ];
   });
   mako = pkg_from_flake "mako";
-  dwl = (pkg_from_flake "dwl").overrideAttrs (o: {
+  dwl = ((pkg_from_flake "dwl").override { wlroots = wlroots_0_16; }).overrideAttrs (o: {
     buildInputs = o.buildInputs ++ [
       xorg.xcbutilwm
     ];
