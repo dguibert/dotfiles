@@ -162,17 +162,17 @@
 
     programs.direnv.enable = true;
     programs.direnv.nix-direnv.enable = true;
-    programs.bash.shellAliases.e = "emacsclient -s default -t -a \"\"";
-    programs.bash.shellAliases.eg = "emacsclient -s default -n -c -a \"\"";
+    programs.bash.shellAliases.e = "emacsclient -s server -t -a \"\"";
+    programs.bash.shellAliases.eg = "emacsclient -s server -n -c -a \"\"";
     home.sessionVariables.ALTERNATE_EDITOR = "";
-    home.sessionVariables.EDITOR = "emacsclient -s default -t"; # $EDITOR opens in terminal
-    home.sessionVariables.VISUAL = "emacsclient -s default -c -a emacs"; # $VISUAL opens in GUI mode
+    home.sessionVariables.EDITOR = "emacsclient -s server -t"; # $EDITOR opens in terminal
+    home.sessionVariables.VISUAL = "emacsclient -s server -c -a emacs"; # $VISUAL opens in GUI mode
     home.file.".emacs.d".source = inputs.chemacs;
     home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
     home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
     home.file.".emacs-profiles.el".text = ''
       (("default" . ((user-emacs-directory . "~/.emacs.default")
-                     (server-name . "default")
+                     (server-name . "server")
                     ))
        ("dev"     . ((user-emacs-directory . "~/nur-packages/emacs/emacs.d")
                      (server-name . "dev")
