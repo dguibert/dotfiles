@@ -182,6 +182,7 @@
               in
               {
                 hostname = "${nixosConfig.config.networking.hostName}";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
                 profiles.system.path = inputs.deploy-rs.lib.${system}.activate.nixos nixosConfig;
                 profiles.system.user = "root";
                 # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
