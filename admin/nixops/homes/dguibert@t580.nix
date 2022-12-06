@@ -2,6 +2,7 @@
 {
   imports = [
     ./dguibert/home.nix
+    ./dguibert/emacs.nix
   ];
   withGui.enable = true;
 

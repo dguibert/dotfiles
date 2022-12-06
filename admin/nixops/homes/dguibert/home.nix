@@ -43,7 +43,6 @@ in
     home-secret
 
     ./bash.nix
-    ./emacs.nix
     ./git.nix
     ./gpg.nix
     ./htop.nix
