@@ -4,6 +4,7 @@ set -x
 host=$1; shift
 regenerate=false
 host_sops_file=hosts/$host/secrets/secrets.yaml
+key_supplied=false
 
 command -v sops
 
@@ -60,7 +61,7 @@ while true; do
     shift
 done
 
-if ! ${key_supplied:-true}; then
+if ! ${key_supplied}; then
     keys=($(nix eval .\#nixosConfigurations.$host.config.sops.secrets --json | jq -r '.[].key') )
 fi
 
