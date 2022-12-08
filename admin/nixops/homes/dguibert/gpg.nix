@@ -1,6 +1,9 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
-  services.gpg-agent.pinentryFlavor = lib.mkForce "curses";
+  services.gpg-agent.pinentryFlavor =
+    if config.withGui.enable
+    then "gnome3"
+    else "curses";
 
   services.gpg-agent.enable = true;
   services.gpg-agent.enableSshSupport = true;
