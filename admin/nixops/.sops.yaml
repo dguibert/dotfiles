@@ -43,7 +43,7 @@ creation_rules:
           - *dguibert
           - *t580
   # dguibert
-  - path_regex: ./secrets/[^/]+\.yaml$
+  - path_regex: secrets/[^/]+\.yaml$
     key_groups:
       - pgp:
           - *dguibert

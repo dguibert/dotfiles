@@ -12,7 +12,7 @@ d=$(mktemp -d)
 trap "rm -r $d" EXIT
 keyfile=$d/key
 
-options=""
+ssh_options=""
 
 declare -a keys
 #keys+=(wireguard_key)
@@ -30,7 +30,7 @@ realms[rpi31]="rpi31,192.168.1.13,10.147.27.13,82.64.121.168"
 realms[rpi41]="rpi41,192.168.1.14,10.147.27.14"
 
 # Call getopt to validate the provided input.
-options=$(getopt -o rkf: --long key:,file: -- "$@")
+options=$(getopt -o rk:f: --long key:,file: -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     exit 1
@@ -75,7 +75,7 @@ for key in ${@:-${keys[@]}}; do
         fi
     else
         case "$(nix eval .\#nixosConfigurations.$host.config.sops.secrets --json | jq -r '.["'$key'"].sopsFile')" in
-            *-defaults.yaml)
+            */defaults.yaml)
                 sops_file=./secrets/defaults.yaml
                 ;;
             *)
@@ -98,13 +98,13 @@ for key in ${@:-${keys[@]}}; do
                     ;;
                 ssh_host_rsa_key)
                     ssh $host "sudo cat /persist/etc/ssh/ssh_host_rsa_key" > $keyfile
-                    #ssh-keygen -t $type $options -f $f -N "" -C ""
+                    #ssh-keygen -t $type $ssh_options -f $f -N "" -C ""
                     ;;
                 ssh_host_rsa_key.pub)
                     ssh-keygen -y -f <(sops --extract '["ssh_host_rsa_key"]' -d $sops_file) > $keyfile
                     ;;
                 ssh_host_ed25519_key)
-                    ssh-keygen -t ed25519 $options -f $keyfile -N "" -C ""
+                    ssh-keygen -t ed25519 $ssh_options -f $keyfile -N "" -C ""
                     ;;
                 ssh_host_ed25519_key.pub)
                     ssh-keygen -y -f <(sops --extract '["ssh_host_ed25519_key"]' -d $sops_file) > $keyfile
@@ -137,15 +137,18 @@ for key in ${@:-${keys[@]}}; do
                     ;;
                 id_buildfarm)
                     rm -f $keyfile
-                    ssh-keygen -t ed25519 $options -f $keyfile -N "" -C ""
+                    ssh-keygen -t ed25519 $ssh_options -f $keyfile -N "" -C ""
                     ssh-keygen -y -f $keyfile # generate pub
+                    ;;
+                cache-priv-key.pem)
+                    echo "WARNING: no update for key '$key'"
                     ;;
                 *)
                     echo "ERROR: unknown key '$key'"
                     exit 1
             esac
             # put the key value in the SOPS file
-            sops --set '["'$key'"] "'"$(cat $keyfile)"'"' $sops_file
+            sops --set '["'$key'"] "'"$(cat $keyfile | sed -z 's/\n/\\n/g')"'"' $sops_file
         fi
     fi
 done
