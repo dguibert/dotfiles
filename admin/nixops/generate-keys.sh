@@ -5,6 +5,7 @@ host=$1; shift
 regenerate=false
 host_sops_file=hosts/$host/secrets/secrets.yaml
 key_supplied=false
+rotate=false
 
 command -v sops
 
@@ -30,7 +31,7 @@ realms[rpi31]="rpi31,192.168.1.13,10.147.27.13,82.64.121.168"
 realms[rpi41]="rpi41,192.168.1.14,10.147.27.14"
 
 # Call getopt to validate the provided input.
-options=$(getopt -o rk:f: --long key:,file: -- "$@")
+options=$(getopt -o rk:f: --long key:,file:,rotate -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     exit 1
@@ -52,6 +53,9 @@ while true; do
             key_supplied=true
         fi
         keys+=($1)
+        ;;
+    --rotate)
+        rotate=true
         ;;
     --)
         shift
@@ -89,6 +93,10 @@ for key in ${@:-${keys[@]}}; do
         case "$key" in
             *)
                 regenerate_=$regenerate
+                if $rotate; then
+                    command -v sponge
+                    sops -r $sops_file | sponge $sops_file
+                fi
         esac
         if $regenerate_; then
             case "$key" in
