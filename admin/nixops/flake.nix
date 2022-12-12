@@ -79,6 +79,8 @@
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
 
+  nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
+
   outputs = { self, ... }@inputs:
     let
       # Memoize nixpkgs for different platforms for efficiency.
@@ -90,7 +92,7 @@
             inputs.nix.overlays.default
             inputs.emacs-overlay.overlay
             inputs.nur.overlay
-            inputs.nur_dguibert.overlay
+            inputs.nur_dguibert.overlays.default
             inputs.nur_dguibert.overlays.extra-builtins
             #nur_dguibert_envs.overlay
             inputs.nxsession.overlay
@@ -101,12 +103,23 @@
           #config.contentAddressedByDefault = true;
         };
 
+      nixpkgsForSpartan = system:
+        (nixpkgsFor system).appendOverlays [
+          inputs.nur_dguibert.overlays.cluster
+          inputs.nur_dguibert.overlays.spartan
+        ];
+
+
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
     in
     inputs.nixpkgs.lib.recursiveUpdate
       (inputs.flake-utils.lib.eachSystem supportedSystems (system:
-        let pkgs = nixpkgsFor system; in rec {
+        let
+          pkgs = nixpkgsFor system;
+          pkgs4spartan = nixpkgsForSpartan system;
+        in
+        rec {
 
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit inputs;
@@ -115,6 +128,17 @@
             pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
           };
           legacyPackages = pkgs;
+          legacyPackagesSpartan = pkgs4spartan;
+
+          apps = import ./apps {
+            inherit (outputs) lib;
+            inherit inputs outputs;
+            nixpkgs_to_use = {
+              #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
+              default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
+              "nix4spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
+            };
+          };
 
           checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
@@ -164,6 +188,7 @@
           nixpkgs_to_use = {
             #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
             default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
+            "bguibertd@spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
           };
           systems = {
             default = "x86_64-linux";
