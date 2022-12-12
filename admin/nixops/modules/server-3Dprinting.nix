@@ -32,18 +32,21 @@ in
           square_corner_velocity = 6.0;
         };
         mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+        # https://docs.fluidd.xyz/configuration/initial_setup
+        virtual_sdcard.path = "/gcodes";
+        display_status = { };
+        pause_resume = { };
         stepper_x = {
           step_pin = "PC0";
           ## Refer to https://docs.vorondesign.com/build/startup/#v0
           dir_pin = "PC1";
           enable_pin = "!PA8";
           rotation_distance = 40;
-          microsteps = 16;
+          microsteps = 128;
           endstop_pin = "^PB4";
-          full_steps_per_rotation = 200; # 1.8 stepper motor
-          position_endstop = 118;
-          position_max = 118;
-          position_Min = 2;
+          #full_steps_per_rotation = 200; # 1.8 stepper motor
+          position_endstop = 120;
+          position_max = 120;
           homing_speed = 20;
           homing_retract_dist = 5;
           homing_positive_dir = true;
@@ -52,11 +55,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 0;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
-          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          #stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
         };
         stepper_y = {
           step_pin = "PC14";
@@ -64,10 +67,11 @@ in
           dir_pin = "PC13";
           enable_pin = "!PC15";
           rotation_distance = 40;
-          microsteps = 16;
+          microsteps = 128;
           endstop_pin = "^PC8";
-          position_endstop = 118;
-          position_max = 118;
+          #full_steps_per_rotation = 200; # 1.8 stepper motor
+          position_endstop = 120;
+          position_max = 120;
           homing_speed = 20;
           homing_retract_dist = 5;
           homing_positive_dir = true;
@@ -76,11 +80,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 2;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
-          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          #stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
         };
         stepper_z = {
           step_pin = "PB9";
@@ -89,9 +93,9 @@ in
           enable_pin = "!PC2";
           rotation_distance = 8; # for T8x8 lead screan
           #rotation_distance = 2; # for T8x2 lead screan
-          microsteps = 16;
+          microsteps = 64;
           endstop_pin = "^PB1";
-          position_endstop = -0.175; # msut be defined?
+          position_endstop = -0.250; # must be defined?
           position_max = 120;
           position_min = -1.5;
           homing_speed = 10; # max 100
@@ -102,18 +106,18 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 1;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
           hold_current = 0.35;
           sense_resistor = 0.110;
-          stealthchop_threshold = 500; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          #stealthchop_threshold = 500; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
         };
         extruder = {
           step_pin = "PB2";
           dir_pin = "PA15"; # Add ! if moving opposite direction
           enable_pin = "!PD2";
           full_steps_per_rotation = 200; # 1.8 degree motor
-          rotation_distance = 22.23; # See calibrating rotation_distance on extruders doc
+          rotation_distance = 21.54087; # See calibrating rotation_distance on extruders doc
           gear_ratio = "50:10"; # For Mini Afterburner
           microsteps = 16;
           nozzle_diameter = 0.400;
@@ -125,6 +129,7 @@ in
           # M106 S64
           # PID_CALIBRATE HEATER=extruder TARGET=245
           # pid_Kp=20.292 pid_Ki=1.313 pid_Kd=78.378
+          # pid_Kp=20.431 pid_Ki=1.273 pid_Kd=81.977
           pid_Kp = 20.292;
           pid_Ki = 1.313;
           pid_Kd = 78.378;
@@ -166,6 +171,7 @@ in
           control = "pid"; # Do PID calibration
           # PID_CALIBRATE HEATER=heater_bed TARGET=100
           # pid_Kp=50.563 pid_Ki=2.654 pid_Kd=240.808
+          # pid_Kp=50.657 pid_Ki=2.502 pid_Kd=256.449
           pid_kp = 50.563;
           pid_ki = 2.654;
           pid_kd = 240.808;
@@ -173,10 +179,10 @@ in
         "heater_fan hotend_fan" = {
           # FAN1 Connector
           pin = "PA13";
-          ##max_power: 1.0
-          ##kick_start_time: 0.5
-          ##heater: extruder
-          ##heater_temp: 50.0
+          max_power = 1.0;
+          kick_start_time = 0.5;
+          heater = "extruder";
+          heater_temp = 50.0;
           ###fan_speed: 1.0                         # You can't PWM the delta fan unless using blue wire
         };
 
@@ -208,7 +214,7 @@ in
         ";
 
         safe_z_home = {
-          home_xy_position = "118,118";
+          home_xy_position = "120,120";
           speed = 50.0;
           z_hop = 5;
         };
@@ -216,20 +222,105 @@ in
         ### [bed_screws] config section to enable a BED_SCREWS_ADJUST g-code
         ### command.
         bed_screws = {
-          screw1 = "58,5";
+          screw1 = "65,5";
           screw1_name = "front screw";
-          screw2 = "9,110";
+          screw2 = "10,110";
           screw2_name = "back left";
-          screw3 = "118,110";
+          screw3 = "120,110";
           screw3_name = "back right";
         };
         #######################################################################
         ###	Macros
         #######################################################################
+        "gcode_macro PAUSE" = {
+          description = "Pause the actual running print";
+          rename_existing = "PAUSE_BASE";
+          # change this if you need more or less extrusion
+          variable_extrude = 1.0;
+          gcode =
+            ''    ##### read E from pause macro #####
+              {% set E = printer["gcode_macro PAUSE"].extrude|float %}
+              ##### set park positon for x and y #####
+              # default is your max posion from your printer.cfg
+              {% set x_park = printer.toolhead.axis_maximum.x|float - 5.0 %}
+              {% set y_park = printer.toolhead.axis_maximum.y|float - 5.0 %}
+              ##### calculate save lift position #####
+              {% set max_z = printer.toolhead.axis_maximum.z|float %}
+              {% set act_z = printer.toolhead.position.z|float %}
+              {% if act_z < (max_z - 2.0) %}
+                  {% set z_safe = 2.0 %}
+              {% else %}
+                  {% set z_safe = max_z - act_z %}
+              {% endif %}
+              ##### end of definitions #####
+              PAUSE_BASE
+              G91
+              {% if printer.extruder.can_extrude|lower == 'true' %}
+                G1 E-{E} F2100
+              {% else %}
+                {action_respond_info("Extruder not hot enough")}
+              {% endif %}
+              {% if "xyz" in printer.toolhead.homed_axes %}
+                G1 Z{z_safe} F900
+                G90
+                G1 X{x_park} Y{y_park} F6000
+              {% else %}
+                {action_respond_info("Printer not homed")}
+              {% endif %}
+        '';
+        };
+        "gcode_macro RESUME" = {
+          description = "Resume the actual running print";
+          rename_existing = "RESUME_BASE";
+          gcode =
+            ''    ##### read E from pause macro #####
+             {% set E = printer["gcode_macro PAUSE"].extrude|float %}
+             #### get VELOCITY parameter if specified ####
+             {% if 'VELOCITY' in params|upper %}
+               {% set get_params = ('VELOCITY=' + params.VELOCITY)  %}
+             {%else %}
+               {% set get_params = "" %}
+             {% endif %}
+             ##### end of definitions #####
+             {% if printer.extruder.can_extrude|lower == 'true' %}
+               G91
+               G1 E{E} F2100
+             {% else %}
+               {action_respond_info("Extruder not hot enough")}
+             {% endif %}
+             RESUME_BASE {get_params}
+        '';
+        };
+
+        "gcode_macro CANCEL_PRINT" = {
+          description = "Cancel the actual running print";
+          rename_existing = "CANCEL_PRINT_BASE";
+          gcode = ''   TURN_OFF_HEATERS
+            CANCEL_PRINT_BASE
+         '';
+        };
+
         ###   Use PRINT_START for the slicer starting script - please customize for your slicer of choice
+        # https://github.com/Klipper3d/klipper/blob/master/config/sample-macros.cfg
         "gcode_macro PRINT_START".gcode =
-          "    G28                            ; home all axes
-             G1 Z20 F3000                   ; move nozzle away from bed
+          "    # Use absolute coordinates
+             G90
+             # Reset the G-Code Z offset (adjust Z offset if needed)
+             SET_GCODE_OFFSET Z=0.0
+             # Home the printer
+             G28
+             G0 Y5 X5             ;
+             G1 Z0.2 F500.0       ; move bed to nozzle
+             G92 E0.0             ; reset extruder
+             G1 E4.0 F500.0       ; pre-purge prime LENGTH SHOULD MATCH YOUR PRINT_END RETRACT
+             G1 Z2 E10.0 F500.0     ;
+             G1 Z5 E20.0 F500.0     ;
+             G92 E0.0             ; reset extruder
+             G1 Z2.0              ; move nozzle to prevent scratch
+             ### Move the nozzle near the bed
+             ##G1 Z5 F3000
+             ### Move the nozzle very close to the bed
+             ##G1 Z0.15 F300
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
         "gcode_macro PRINT_END".gcode =
@@ -265,9 +356,15 @@ in
               G0 Z{z_safe} F3600    ; move nozzle up
               G0 X{x_safe} Y{y_safe} F20000    ; move nozzle to remove stringing
               TURN_OFF_HEATERS
+              # Turn off bed, extruder, and fan
+              M140 S0
+              M104 S0
+              M106 S0
               M107                           ; turn off fan
               G90                            ; absolute positioning
               G0 X60 Y{max_y} F3600          ; park nozzle at rear
+              # Disable steppers
+              M84
         '';
 
         "gcode_macro LOAD_FILAMENT".gcode =
@@ -316,6 +413,7 @@ in
       };
     };
     services.fluidd.enable = true;
+    security.polkit.enable = true;
     ##services.fluidd.nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
     ### Increase max upload size for uploading .gcode files from PrusaSlicer
     ##services.nginx.clientMaxBodySize = "1000m";
