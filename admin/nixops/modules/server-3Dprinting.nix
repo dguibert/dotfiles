@@ -29,7 +29,7 @@ in
           max_accel = 4000;
           max_z_velocity = 15;
           max_z_accel = 45;
-          square_corner_velocity = 6.0;
+          square_corner_velocity = 5.0;
         };
         mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
         # https://docs.fluidd.xyz/configuration/initial_setup
@@ -55,11 +55,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 0;
-          interpolate = false;
+          interpolate = true;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
-          #stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
         };
         stepper_y = {
           step_pin = "PC14";
@@ -80,11 +80,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 2;
-          interpolate = false;
+          interpolate = true;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
-          #stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
         };
         stepper_z = {
           step_pin = "PB9";
@@ -306,7 +306,8 @@ in
           "    # Use absolute coordinates
              G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
-             SET_GCODE_OFFSET Z=0.0
+             # https://www.klipper3d.org/Bed_Level.html
+             SET_GCODE_OFFSET Z=-0.020
              # Home the printer
              G28
              G0 Y5 X5             ;
