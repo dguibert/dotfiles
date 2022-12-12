@@ -653,7 +653,6 @@ checkout = git clone 'https://github.com/oxedions/bluebanquise' 'bluebanquise'
 checkout = git clone 'https://gitlab.com/veprbl/nix-batch-submit' 'nix-batch-submit'
 
 [code/wireguard-linux]
-checkout = git clone 'https://git.zx2c4.com/wireguard-linux/' 'wireguard-linux'
 deleted = true
 
 [code/setup.nix]
