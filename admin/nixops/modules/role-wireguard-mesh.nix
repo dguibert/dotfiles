@@ -35,7 +35,7 @@ in
         };
         listenPort = 500;
         publicKey = readWgPub ../hosts/rpi31/wg_key.pub;
-        endpoint = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        endpoint = "82.64.121.168:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       orsine = {
@@ -78,7 +78,7 @@ in
         };
         listenPort = 504;
         publicKey = readWgPub ../hosts/t580/wg_key.pub;
-        endpoint = "orsin.freeboxos.fr:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        endpoint = "82.64.121.168:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
       };
       rpi41 = {
         ipv4Address = "10.147.27.14/32";
