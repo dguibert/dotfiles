@@ -246,6 +246,15 @@
               t580 = homeConfigurations."dguibert@t580";
             }
           )
+          ({
+            spartan = {
+              fastConnection = true;
+              autoRollback = true;
+
+              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage "./activate";
+              profiles.bguibertd.user = "bguibertd";
+            };
+          })
 
           ({ })
         ];
