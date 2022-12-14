@@ -26,7 +26,7 @@ in
         printer = {
           kinematics = "corexy";
           max_velocity = 300;
-          max_accel = 4000;
+          max_accel = 3500;
           max_z_velocity = 15;
           max_z_accel = 45;
           square_corner_velocity = 5.0;
@@ -95,7 +95,7 @@ in
           #rotation_distance = 2; # for T8x2 lead screan
           microsteps = 64;
           endstop_pin = "^PB1";
-          position_endstop = -0.250; # must be defined?
+          position_endstop = -0.225; # must be defined?
           position_max = 120;
           position_min = -1.5;
           homing_speed = 10; # max 100
@@ -198,6 +198,10 @@ in
         };
         idle_timeout.timeout = 1800;
 
+        input_shaper.shaper_freq_x = 72.972972; #90*3/3.7;
+        input_shaper.shaper_freq_y = 90; #90*3/3;
+        input_shaper.shaper_type = "ei";
+
         board_pins.aliases =
           "    # EXP1 header
              EXP1_1=<5V>,  EXP1_3=<RST>, EXP1_5=PA7,  EXP1_7=PA4,  EXP1_9=PA5,
@@ -222,11 +226,11 @@ in
         ### [bed_screws] config section to enable a BED_SCREWS_ADJUST g-code
         ### command.
         bed_screws = {
-          screw1 = "65,5";
+          screw1 = "60,5";
           screw1_name = "front screw";
           screw2 = "10,110";
           screw2_name = "back left";
-          screw3 = "120,110";
+          screw3 = "110,110";
           screw3_name = "back right";
         };
         #######################################################################
@@ -310,18 +314,6 @@ in
              SET_GCODE_OFFSET Z=-0.020
              # Home the printer
              G28
-             G0 Y5 X5             ;
-             G1 Z0.2 F500.0       ; move bed to nozzle
-             G92 E0.0             ; reset extruder
-             G1 E4.0 F500.0       ; pre-purge prime LENGTH SHOULD MATCH YOUR PRINT_END RETRACT
-             G1 Z2 E10.0 F500.0     ;
-             G1 Z5 E20.0 F500.0     ;
-             G92 E0.0             ; reset extruder
-             G1 Z2.0              ; move nozzle to prevent scratch
-             ### Move the nozzle near the bed
-             ##G1 Z5 F3000
-             ### Move the nozzle very close to the bed
-             ##G1 Z0.15 F300
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
         "gcode_macro PRINT_END".gcode =
