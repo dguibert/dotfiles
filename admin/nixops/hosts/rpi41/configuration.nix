@@ -6,11 +6,6 @@ with lib;
 #in
 
 rec {
-  #imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix> ];
-  imports = [
-    ../common.nix
-  ];
-
   #sdImage.bootSize = 512;
 
   networking.hostName = "rpi41";
@@ -37,18 +32,12 @@ rec {
   # !!! Adding a swap file is optional, but strongly recommended!
   #swapDevices = [ { device = "/swapfile"; size = 1024; } ];
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.listenAddresses = [
-    { addr = "127.0.0.1"; port = 22; }
-    { addr = "0.0.0.0"; port = 22322; }
-  ];
-
   environment.systemPackages = [ pkgs.vim ];
 
   nix.settings.max-jobs = 4;
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.networks."eth0" = {
     name = "eth0";
@@ -60,6 +49,4 @@ rec {
   security.pam.services.su.forwardXAuth = lib.mkForce false;
 
   fonts.fontconfig.enable = false;
-
-  networking.firewall.allowedTCPPorts = [ 22322 ];
 }

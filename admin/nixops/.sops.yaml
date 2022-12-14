@@ -9,7 +9,7 @@ keys:
   - &t580 CE0DA0A123AA2DC1E7AA38E0011B75E24664FD1E
 creation_rules:
   # dguibert
-  - path_regex: users/dguibert/[^/]+-sec\.nix$
+  - path_regex: homes/dguibert/[^/]+-sec\.nix$
     key_groups:
       - pgp:
           - *dguibert
@@ -43,7 +43,7 @@ creation_rules:
           - *dguibert
           - *t580
   # dguibert
-  - path_regex: ./secrets/[^/]+\.yaml$
+  - path_regex: secrets/[^/]+\.yaml$
     key_groups:
       - pgp:
           - *dguibert
@@ -52,7 +52,7 @@ creation_rules:
           - *rpi41_age
           - *rpi31
           - *t580
-  - path_regex: ./users/dguibert/[^/]+-sec\.el$
+  - path_regex: homes/dguibert/[^/]+-sec\.el$
     key_groups:
       - pgp:
           - *dguibert

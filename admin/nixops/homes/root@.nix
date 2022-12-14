@@ -1,12 +1,15 @@
 # https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-{ pkgs, lib, ... }:
+{ pkgs, lib, outputs, ... }:
 with lib;
 {
   imports = [
-    ../../modules/hm-report-changes.nix
+    outputs.homeManagerModules.report-changes
     ({ ... }: { home.report-changes.enable = true; })
     ({ ... }: { manual.manpages.enable = false; })
   ];
+  home.username = "root";
+  home.homeDirectory = "/root";
+
   programs.bash.shellAliases.ls = "ls --color";
 
   programs.bash.initExtra = ''

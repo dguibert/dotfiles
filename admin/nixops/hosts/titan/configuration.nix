@@ -23,7 +23,6 @@ let
 in
 rec {
   imports = [
-    ../common.nix
     ({ ... }: { services.udisks2.enable = true; })
     #(import <nur_dguibert/modules>).qemu-user
     #../../modules/wayland-nvidia.nix
@@ -158,6 +157,9 @@ rec {
   # *** Compatible Kernels: 3.10 - 5.11
   boot.zfs.enableUnstable = false;
 
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.interval = "monthly";
+  services.zfs.trim.enable = true;
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -165,6 +167,7 @@ rec {
   system.stateVersion = "20.09"; # Did you read the comment?
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
   systemd.network.netdevs."40-bond0" = {

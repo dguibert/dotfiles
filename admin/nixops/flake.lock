@@ -109,15 +109,16 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1668797197,
-        "narHash": "sha256-0w6iD3GSSQbIeSFVDzAAQZB+hDq670ZTms3d9XI+BtM=",
-        "owner": "serokell",
+        "lastModified": 1669928674,
+        "narHash": "sha256-sqlQjpUiMuZRJoXfErhFKlZXhU0bOlqvpeq+4ugXsk4=",
+        "owner": "dguibert",
         "repo": "deploy-rs",
-        "rev": "2a3c5f70eee04a465aa534d8bd4fcc9bb3c4a8ce",
+        "rev": "06b0679de55d2a8c14320dccfea53b1f12664f7c",
         "type": "github"
       },
       "original": {
-        "owner": "serokell",
+        "owner": "dguibert",
+        "ref": "pu",
         "repo": "deploy-rs",
         "type": "github"
       }
@@ -125,11 +126,11 @@
     "dwl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1668614576,
-        "narHash": "sha256-0D2ia3ld21YYvJb/KVjMjREMmU3RhIYJkR/wpayxYYw=",
+        "lastModified": 1670963623,
+        "narHash": "sha256-1CTnhftPdNXGVn03zkr9UeE8HqSd9ihTzP8Tc+PdEvk=",
         "owner": "dguibert",
         "repo": "dwl",
-        "rev": "d451f7cd89e3479cf9f8565248ccec00d0d2933a",
+        "rev": "ca3b1e22fb86342533dba1c0903ab8e59c54ccf9",
         "type": "github"
       },
       "original": {
@@ -302,6 +303,23 @@
         "type": "github"
       }
     },
+    "mako-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666359044,
+        "narHash": "sha256-YRCS+6or/Z6KJ0wRfZDkvwbjAH2FwL5muQfVoFtq/lI=",
+        "owner": "emersion",
+        "repo": "mako",
+        "rev": "5eca7d58bf9eb658ece1b32da586627118f00642",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emersion",
+        "ref": "master",
+        "repo": "mako",
+        "type": "github"
+      }
+    },
     "newNixpkgs": {
       "locked": {
         "lastModified": 1647380550,
@@ -343,11 +361,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1669196524,
-        "narHash": "sha256-ALt8demJAC0UoUbPDpceVKRn6/3duQNZqiajYGPxZqc=",
+        "lastModified": 1669730914,
+        "narHash": "sha256-RIYz7ygMwf8So85Ef/kD92URW5DmXKV4LsU1sFR5pIA=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "9807940882bf65302e08de4a5f46288bb33c19f8",
+        "rev": "1bbccdb537be9265d8867108b97e70ce11c7d8c8",
         "type": "github"
       },
       "original": {
@@ -493,6 +511,7 @@
         "gitignore": "gitignore",
         "home-manager": "home-manager",
         "hydra": "hydra",
+        "mako-src": "mako-src",
         "nix": "nix",
         "nixpkgs": "nixpkgs",
         "nur": "nur",

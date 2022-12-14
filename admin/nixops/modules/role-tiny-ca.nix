@@ -1,4 +1,4 @@
-{ config, lib, pkgs, sopsDecrypt_, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.role.tiny-ca;
 in
@@ -176,7 +176,7 @@ in
               type = "OIDC";
               name = "Google";
               clientID = "811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
-              clientSecret = sopsDecrypt_ ../secrets/defaults.yaml "orsin-ca-811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
+              clientSecret = pkgs.sopsDecrypt_ ../secrets/defaults.yaml "orsin-ca-811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
               configurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
               admins = [ "david.guibert@gmail.com" ];
               domains = [ "gmail.com" ];

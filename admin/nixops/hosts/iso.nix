@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, outputs, ... }:
 let
   inherit (lib) concatMapStrings concatMapStringsSep head;
   disks_st1000lm049 = [
@@ -105,6 +105,26 @@ let
 
 in
 {
+  imports = [
+    (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+    outputs.nixosModules.zfs
+    ({ config, ... }: { zfs-conf.enable = true; })
+    ({ config, lib, pkgs, resources, ... }: {
+      nixpkgs.localSystem.system = "x86_64-linux";
+    })
+    ({ lib, ... }: {
+      networking.wireless.interfaces = [ "wlan0" ];
+    })
+    ({ pkgs, ... }: {
+      environment.systemPackages = [
+        (pkgs.writeScriptBin "nixos-install-t580" ''
+          #!${pkgs.stdenv.shell}
+          set -eux -o pipefail
+          echo nixos-install --system {outputs.nixosConfigurations.t580.config.system.build.toplevel}
+        '')
+      ];
+    })
+  ];
   boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.supportedFilesystems = [ "zfs" ];
   users.extraUsers.root.initialPassword = lib.mkForce "OhPha3gu";

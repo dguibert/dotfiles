@@ -9,12 +9,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, outputs, ... }:
 
 rec {
 
   imports = [
-    ../common.nix
+    outputs.nixosModules.defaults
   ];
   nixpkgs.localSystem.system = "x86_64-linux";
 
@@ -79,6 +79,7 @@ rec {
   networking.wireless.userControlled.enable = true;
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";

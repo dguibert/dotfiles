@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, inputs, ... }:
 
 with lib;
 
@@ -6,7 +6,10 @@ mapAttrs'
   (name: type: {
     name = removeSuffix ".nix" name;
     value = let file = ./. + "/${name}"; in
-      import file;
+      (final: prev: import file final (prev // {
+        inherit inputs;
+      }
+      ));
   })
   (filterAttrs
     (name: type:

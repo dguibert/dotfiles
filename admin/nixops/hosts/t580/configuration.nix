@@ -5,7 +5,6 @@ rec {
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../common.nix
       ({ ... }: { services.udisks2.enable = true; })
     ];
 
@@ -31,6 +30,7 @@ rec {
   #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
 
   networking.useNetworkd = lib.mkForce false;
+  systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
@@ -60,9 +60,6 @@ rec {
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -127,7 +124,6 @@ rec {
   # should.
   system.stateVersion = "20.03"; # Did you read the comment?
 
-  programs.adb.enable = true;
   programs.light.enable = true;
 
   services.udev.extraRules = with pkgs; ''

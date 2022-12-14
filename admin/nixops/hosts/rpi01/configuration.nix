@@ -1,13 +1,27 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, outputs, ... }:
 
 with lib;
 
 rec {
-  networking.hostName = "rpi01";
-
-  services.openssh.enable = true;
-
+  imports = [
+    #(import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
+    (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
+    #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
+    #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
+  ];
+  nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+  nixpkgs.localSystem.system = "x86_64-linux";
+  nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
+  #nixpkgs.localSystem.system = "armv6l-linux";
   nixpkgs.overlays = [
+    inputs.nix.overlay
+    inputs.nur_dguibert.overlays.default
+    (final: prev: {
+      # don't build qt5
+      # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
+      pinentry = prev.pinentry.override { enabledFlavors = [ "curses" "tty" ]; };
+      git = prev.git.override { perlSupport = false; };
+    })
     (self: super: {
       ## Restrict drivers built by mesa to just the ones we need This
       ## reduces the install size a bit.
@@ -26,6 +40,10 @@ rec {
       #libcec = super.libcec.override { inherit (super) libraspberrypi; };
     })
   ];
+
+  networking.hostName = "rpi01";
+
+  services.openssh.enable = true;
 
   boot.loader.grub.enable = false;
   boot.loader.raspberryPi.enable = true;
