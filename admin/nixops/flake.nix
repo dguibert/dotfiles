@@ -248,11 +248,25 @@
           )
           ({
             spartan = {
+              hostname = "spartan";
               fastConnection = true;
               autoRollback = true;
 
-              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage "./activate";
-              profiles.bguibertd.user = "bguibertd";
+              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage
+                ''
+                  set -x
+                  export NIX_STATE_DIR=${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix
+                  export NIX_PROFILE=${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/profile
+                  export PATH=${homeConfigurations."bguibertd@spartan".pkgs.nix}/bin:$PATH
+                  rm $HOME/.nix-profile
+                  ln -sf $NIX_PROFILE $HOME/.nix-profile
+                  export HOME_MANAGER_BACKUP_EXT=bak
+                  nix-env --set-flag priority 80 nix || true
+                  ./activate
+                  set +x
+                '';
+              profiles.bguibertd.sshUser = "bguibertd";
+              profiles.bguibertd.profilePath = "${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/hm-x86_64";
             };
           })
 
