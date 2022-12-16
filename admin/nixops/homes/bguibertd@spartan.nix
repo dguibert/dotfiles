@@ -14,4 +14,8 @@
   home.username = "bguibertd";
   home.homeDirectory = "/home_nfs/bguibertd";
   home.stateVersion = "22.11";
+
+  home.packages = with pkgs; [
+    xpra
+  ];
 }
