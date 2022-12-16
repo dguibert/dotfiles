@@ -311,7 +311,7 @@ in
              G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=-0.020
+             SET_GCODE_OFFSET Z=-0.025
              # Home the printer
              G28
         ";
