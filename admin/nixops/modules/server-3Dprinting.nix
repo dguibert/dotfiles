@@ -161,8 +161,7 @@ in
           ###   "NTC 100K MGB18-104F39050L32"
           ###   "AD595"
           ###   "PT100 INA826"
-          sensor_type = "NTC 100K beta 3950"; # Verify yours
-          ###sensor_type: NTC 100K MGB18-104F39050L32
+          sensor_type = "Generic 3950";
           sensor_pin = "PC5";
           smooth_time = 3.0;
           #max_power=0.6;                         # Only need this for 100w pads
