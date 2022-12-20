@@ -39,6 +39,7 @@
     export HISTFILESIZE
     export HISTIGNORE
     export HISTSIZE
+    unset HISTTIMEFORMAT
     # https://unix.stackexchange.com/a/430128
     # on every prompt, save new history to dedicated file and recreate full history
     # by reading all files, always keeping history from current session on top.
