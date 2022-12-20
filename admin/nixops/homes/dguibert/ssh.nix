@@ -29,7 +29,7 @@
     let
       matchexec_host = host: ip: port: {
         inherit host port;
-        exec = "nc -w 1 -z ${ip} ${toString port} 1>&2 >/dev/null";
+        match = "originalhost ${host} Exec nc -w 1 -z ${ip} ${toString port} 1>&2 >/dev/null";
         hostname = ip;
         proxyCommand = "none";
         extraOptions.HostKeyAlias = host;
@@ -38,14 +38,12 @@
       home_host = host: ip: port: vpn_ip: mac: {
         ## Coming from localhost.
         "${host}_0" = {
-          matchHeader = "originalhost ${host} exec \"[ %h = %L ]\"";
+          match = "originalhost ${host} exec \"[ %h = %L ]\"";
           extraOptions.LocalCommand = "echo \"SSH %n: To localhost\" >&2";
-          host = "${host}";
         };
         ## Coming from outside home network.
         "${host}_1" = lib.hm.dag.entryAfter [ "${host}_0" ] {
-          host = "${host}";
-          matchHeader = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" !exec \"ip route | grep ${vpn_ip}\"";
+          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" !exec \"ip route | grep ${vpn_ip}\"";
           extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
           proxyJump = lib.mkIf (host != "rpi31") "rpi31";
           hostname = lib.mkIf (host == "rpi31") "82.64.121.168";
@@ -54,8 +52,7 @@
         };
         ## Coming from VPN
         "${host}_2" = lib.hm.dag.entryAfter [ "${host}_1" ] {
-          host = "${host}";
-          matchHeader = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
+          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
           extraOptions.PermitLocalCommand = "yes";
           extraOptions.LocalCommand = "echo \"SSH %n: From VPN network, to %h\" >&2";
           proxyCommand = "none";
@@ -92,7 +89,7 @@
 
       matchBlocks = {
         "*" = {
-          exec = "test -e ~/.ssh/extra_config";
+          match = "Host * Exec test -e ~/.ssh/extra_config";
           extraOptions.Include = "~/.ssh/extra_config";
         };
         "127.0.0.1 | localhost" = {
