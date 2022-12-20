@@ -85,29 +85,35 @@
     let
       # Memoize nixpkgs for different platforms for efficiency.
       inherit (self) outputs;
+      commonOverlays = [
+        inputs.nix.overlays.default
+        inputs.emacs-overlay.overlay
+        inputs.nur.overlay
+        inputs.nur_dguibert.overlays.default
+        inputs.nur_dguibert.overlays.extra-builtins
+        #nur_dguibert_envs.overlay
+        inputs.nxsession.overlay
+        #inputs.nixpkgs-wayland.overlay
+        inputs.self.overlays.default
+      ];
       nixpkgsFor = system:
         import inputs.nixpkgs {
           inherit system;
-          overlays = [
-            inputs.nix.overlays.default
-            inputs.emacs-overlay.overlay
-            inputs.nur.overlay
-            inputs.nur_dguibert.overlays.default
-            inputs.nur_dguibert.overlays.extra-builtins
-            #nur_dguibert_envs.overlay
-            inputs.nxsession.overlay
-            #inputs.nixpkgs-wayland.overlay
-            inputs.self.overlays.default
-          ];
+          overlays = commonOverlays;
           config.allowUnfree = true;
           #config.contentAddressedByDefault = true;
         };
 
       nixpkgsForSpartan = system:
-        (nixpkgsFor system).appendOverlays [
-          inputs.nur_dguibert.overlays.cluster
-          inputs.nur_dguibert.overlays.spartan
-        ];
+        import inputs.nixpkgs {
+          inherit system;
+          overlays = commonOverlays ++ [
+            inputs.nur_dguibert.overlays.cluster
+            inputs.nur_dguibert.overlays.spartan
+          ];
+          config.allowUnfree = true;
+          config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
+        };
 
 
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -249,22 +255,15 @@
           ({
             spartan = {
               hostname = "spartan";
+              sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
               fastConnection = true;
               autoRollback = true;
 
-              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage
-                ''
-                  set -x
-                  export NIX_STATE_DIR=${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix
-                  export NIX_PROFILE=${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/profile
-                  export PATH=${homeConfigurations."bguibertd@spartan".pkgs.nix}/bin:$PATH
-                  rm $HOME/.nix-profile
-                  ln -sf $NIX_PROFILE $HOME/.nix-profile
-                  export HOME_MANAGER_BACKUP_EXT=bak
-                  nix-env --set-flag priority 80 nix || true
-                  ./activate
-                  set +x
-                '';
+              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage ''
+                export NIX_STATE_DIR=${homeConfigurations."bguibertd@spartan".config.home.sessionVariables.NIX_STATE_DIR}
+                export NIX_PROFILE=${homeConfigurations."bguibertd@spartan".config.home.sessionVariables.NIX_PROFILE}
+                ./activate
+              '';
               profiles.bguibertd.sshUser = "bguibertd";
               profiles.bguibertd.profilePath = "${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/hm-x86_64";
             };

@@ -71,6 +71,12 @@ in
 with lib; {
 
   config = lib.mkIf config.withGui.enable {
+    programs.bash.bashrcExtra = ''
+      if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
+      exec dwl-session
+      fi
+    '';
+
     home.packages = with pkgs; [
       dwl-session
       dwl

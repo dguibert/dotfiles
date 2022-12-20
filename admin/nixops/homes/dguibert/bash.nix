@@ -25,12 +25,6 @@
 
   programs.bash.shellAliases.ls = "ls --color";
 
-  programs.bash.bashrcExtra = ''
-    if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
-      exec dwl-session
-    fi
-  '';
-
   home.sessionVariables.PATH = "$HOME/bin:$PATH";
   home.sessionVariables.MANPATH = "$HOME/man:$MANPATH:/share/man:/usr/share/man";
   home.sessionVariables.PAGER = "less -R";
@@ -38,6 +32,9 @@
   home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE = 1;
 
   programs.bash.initExtra = ''
+    # pruge previously defined PROMPT_COMMAND
+    export PROMPT_COMMAND=
+
     export HISTCONTROL
     export HISTFILESIZE
     export HISTIGNORE
@@ -59,17 +56,6 @@
       export PROMPT_COMMAND="update_history''${PROMPT_COMMAND:+;$PROMPT_COMMAND }"
     fi
 
-    # merge session history into main history file on bash exit
-    merge_session_history () {
-      if [ -e ''${HISTFILE}.$$ ]; then
-        # fix wrong history files
-        awk '/^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
-        tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
-        \rm ''${HISTFILE}.$$
-      fi
-    }
-    trap merge_session_history EXIT
-
     # detect leftover files from crashed sessions and merge them back
     active_shells=$(pgrep `ps -p $$ -o comm=`)
     grep_pattern=`for pid in $active_shells; do echo -n "-e \.''${pid}\$ "; done`
@@ -80,7 +66,7 @@
       for f in $orphaned_files; do
         echo "  `basename $f`"
         cat $f >> $HISTFILE
-        \rm $f
+        \rm -f $f
       done
       tac $HISTFILE | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge $HISTFILE
       echo "done."
@@ -100,10 +86,10 @@
                     esac
             done
     }
-    osc7_cwd() {
-            printf '\e]7;file://%s%s\a' "$HOSTNAME" "$(_urlencode "$PWD")"
-    }
-    PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
+    #osc7_cwd() {
+    #        printf '\e]7;file://%s%s\a' "$HOSTNAME" "$(_urlencode "$PWD")"
+    #}
+    #PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
 
     # Provide a nice prompt.
     PS1=""
