@@ -88,9 +88,9 @@
       commonOverlays = [
         inputs.nix.overlays.default
         inputs.emacs-overlay.overlay
-        inputs.nur.overlay
         inputs.nur_dguibert.overlays.default
         inputs.nur_dguibert.overlays.extra-builtins
+        inputs.nur_dguibert.overlays.emacs
         #nur_dguibert_envs.overlay
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay

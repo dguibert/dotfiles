@@ -435,11 +435,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1671023277,
-        "narHash": "sha256-uZbqeKryp6w0+PILN5mDyWXBpXa6lccdjZ3OWhQHk+E=",
+        "lastModified": 1671526785,
+        "narHash": "sha256-+PIAR7NfBjk+plCdx1zyjgR5JNdDIFj/YNk6fuX+F/w=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "415d6aa2f4159de491f1e80c87ccf108a062a249",
+        "rev": "1f82791720fa9c732550556cacfdfd132de2e97e",
         "type": "github"
       },
       "original": {
