@@ -409,7 +409,7 @@ in
     security.polkit.enable = true;
     ##services.fluidd.nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
     ### Increase max upload size for uploading .gcode files from PrusaSlicer
-    ##services.nginx.clientMaxBodySize = "1000m";
+    services.nginx.clientMaxBodySize = "1000m";
 
     ##systemd.services.ustreamer = {
     ##  wantedBy = [ "multi-user.target" ];
