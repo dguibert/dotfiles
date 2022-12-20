@@ -57,6 +57,17 @@
       export PROMPT_COMMAND="update_history''${PROMPT_COMMAND:+;$PROMPT_COMMAND }"
     fi
 
+    # merge session history into main history file on bash exit
+    merge_session_history () {
+      if [ -e ''${HISTFILE}.$$ ]; then
+        # fix wrong history files
+        awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
+        tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
+        \rm ''${HISTFILE}.$$
+      fi
+    }
+    trap merge_session_history EXIT
+
     # detect leftover files from crashed sessions and merge them back
     active_shells=$(pgrep `ps -p $$ -o comm=`)
     grep_pattern=`for pid in $active_shells; do echo -n "-e \.''${pid}\$ "; done`
@@ -66,7 +77,8 @@
       echo Merging orphaned history files:
       for f in $orphaned_files; do
         echo "  `basename $f`"
-        cat $f >> $HISTFILE
+        awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE $f | \
+        tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
         \rm -f $f
       done
       tac $HISTFILE | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge $HISTFILE
