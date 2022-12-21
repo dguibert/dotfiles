@@ -126,11 +126,11 @@
     "dwl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1670963623,
-        "narHash": "sha256-1CTnhftPdNXGVn03zkr9UeE8HqSd9ihTzP8Tc+PdEvk=",
+        "lastModified": 1671628475,
+        "narHash": "sha256-psDJKx2wGSQ1RyX8Gv4+djFHPeRi0XsusA8xkRR20cE=",
         "owner": "dguibert",
         "repo": "dwl",
-        "rev": "ca3b1e22fb86342533dba1c0903ab8e59c54ccf9",
+        "rev": "c6a236b2996bd75fffda94596d2b54d18beac9e0",
         "type": "github"
       },
       "original": {
@@ -361,11 +361,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1669730914,
-        "narHash": "sha256-RIYz7ygMwf8So85Ef/kD92URW5DmXKV4LsU1sFR5pIA=",
+        "lastModified": 1671628376,
+        "narHash": "sha256-uFjm3+XPCjv0rBsNf7yK2gGn1c2lLZvttIOQjD/URS8=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "1bbccdb537be9265d8867108b97e70ce11c7d8c8",
+        "rev": "83bddfc50c2511da50d85c48f8eb0a65a46eb084",
         "type": "github"
       },
       "original": {
