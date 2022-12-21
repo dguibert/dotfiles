@@ -29,7 +29,7 @@
     let
       matchexec_host = host: ip: port: {
         inherit host port;
-        match = "originalhost ${host} Exec nc -w 1 -z ${ip} ${toString port} 1>&2 >/dev/null";
+        match = "originalhost ${host} Exec \"nc -w 1 -z ${ip} ${toString port} 1>&2 >/dev/null\"";
         hostname = ip;
         proxyCommand = "none";
         extraOptions.HostKeyAlias = host;
@@ -89,7 +89,7 @@
 
       matchBlocks = {
         "*" = {
-          match = "Host * Exec test -e ~/.ssh/extra_config";
+          match = "Host * Exec \"test -e ~/.ssh/extra_config\"";
           extraOptions.Include = "~/.ssh/extra_config";
         };
         "127.0.0.1 | localhost" = {
