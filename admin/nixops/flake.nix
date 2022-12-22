@@ -195,6 +195,7 @@
             #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
             default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
             "bguibertd@spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
+            "bguibertd@genji" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
           };
           systems = {
             default = "x86_64-linux";
@@ -253,6 +254,20 @@
             }
           )
           ({
+            genji = {
+              hostname = "genji";
+              sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              fastConnection = true;
+              autoRollback = true;
+
+              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@genji".activationPackage ''
+                export NIX_STATE_DIR=${homeConfigurations."bguibertd@genji".config.home.sessionVariables.NIX_STATE_DIR}
+                export NIX_PROFILE=${homeConfigurations."bguibertd@genji".config.home.sessionVariables.NIX_PROFILE}
+                ./activate
+              '';
+              profiles.bguibertd.sshUser = "bguibertd";
+              profiles.bguibertd.profilePath = "${homeConfigurations."bguibertd@genji".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/hm-x86_64";
+            };
             spartan = {
               hostname = "spartan";
               sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
