@@ -133,7 +133,20 @@ in
   ] ++ optionals config.withGui.enable [
     pandoc
 
-    (pass.withExtensions (extensions: with extensions; [ pass-audit pass-update pass-otp pass-import pass-checkup ]))
+    (pass.withExtensions (extensions: with extensions; [
+      pass-audit
+      pass-update
+      pass-otp
+      pass-import
+      (pass-checkup.overrideAttrs (_: {
+        preBuild = ''
+          # unreachable
+          sed -i -e 's@RETURNCODE=0@#RETURNCODE=0"@' checkup.bash
+          sed -i -e 's@RETURNCODE=2@#RETURNCODE=2"@' checkup.bash
+          sed -i -e 's@exit $RETURNCODE@#exit "$RETURNCODE"@' checkup.bash
+        '';
+      }))
+    ]))
     gitAndTools.git-credential-password-store
 
     perlPackages.GitAutofixup
