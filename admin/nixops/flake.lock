@@ -126,11 +126,11 @@
     "dwl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1670963623,
-        "narHash": "sha256-1CTnhftPdNXGVn03zkr9UeE8HqSd9ihTzP8Tc+PdEvk=",
+        "lastModified": 1672646419,
+        "narHash": "sha256-Qp0ltJMCSXmslJ1FsLqnKIaRka9aQROYMyFWetvtj60=",
         "owner": "dguibert",
         "repo": "dwl",
-        "rev": "ca3b1e22fb86342533dba1c0903ab8e59c54ccf9",
+        "rev": "936d6ac4d0556833ddb3656b2d81e0d98789f7a4",
         "type": "github"
       },
       "original": {
@@ -345,11 +345,11 @@
         "nixpkgs-regression": "nixpkgs-regression"
       },
       "locked": {
-        "lastModified": 1668422642,
-        "narHash": "sha256-CpXhHs0szsA2IL6K46l8Zvwivyxsceru4GNDYfVKzaE=",
+        "lastModified": 1671696784,
+        "narHash": "sha256-nZ8foWVEOEGbihQSx0qKy/h7sKx1kEPNTqjJkzDzISY=",
         "owner": "dguibert",
         "repo": "nix",
-        "rev": "ef633be6453f2ba4fb4fd35f9a6d9aeec8ffa071",
+        "rev": "f582a4354d48d499fdfc52607c7b6b7260adbac4",
         "type": "github"
       },
       "original": {
@@ -361,11 +361,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1669730914,
-        "narHash": "sha256-RIYz7ygMwf8So85Ef/kD92URW5DmXKV4LsU1sFR5pIA=",
+        "lastModified": 1672586101,
+        "narHash": "sha256-NP5UuVuLcigwPlnBRrP8XklHYNjhTRaja9GpFg5/tdI=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "1bbccdb537be9265d8867108b97e70ce11c7d8c8",
+        "rev": "1ca3e9910a0cc44e57f50c97ad37d9e48c3ae118",
         "type": "github"
       },
       "original": {

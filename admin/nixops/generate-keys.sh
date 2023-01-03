@@ -126,9 +126,11 @@ for key in ${@:-${keys[@]}}; do
 
                     case "$key" in
                         ssh_host_rsa_key-cert.pub)
-                            ssh-keygen -y -f <(sops --extract '["ssh_host_rsa_key"]' -d $sops_file) > $d/priv_key;;
+                            ssh-keygen -y -f <(sops --extract '["ssh_host_rsa_key"]' -d $sops_file) > $d/priv_key
+                            serial=$(ssh-keygen -L -f <(sops --extract '["ssh_host_rsa_key-cert.pub"]' -d $sops_file) | grep Serial: | awk '{print $NF }');;
                         ssh_host_ed25519_key-cert.pub)
-                            ssh-keygen -y -f <(sops --extract '["ssh_host_ed25519_key"]' -d $sops_file) > $d/priv_key;;
+                            ssh-keygen -y -f <(sops --extract '["ssh_host_ed25519_key"]' -d $sops_file) > $d/priv_key
+                            serial=$(ssh-keygen -L -f <(sops --extract '["ssh_host_ed25519_key-cert.pub"]' -d $sops_file) | grep Serial: | awk '{print $NF }');;
                         *)
                             echo "ERROR: unknown key '$key'"
                             exit 11
@@ -138,6 +140,7 @@ for key in ${@:-${keys[@]}}; do
                         -I "$host host key" \
                         -n "$realms_" \
                         -V -5m:+$(( 365 * 1))d \
+                        -z $(( ${serial:--1} + 1 )) \
                         -h \
                         $d/priv_key
                     mv $d/priv_key-cert.pub $keyfile

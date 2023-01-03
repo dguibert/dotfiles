@@ -45,8 +45,8 @@ in
     };
 
     security.acme.acceptTerms = true;
-    security.acme.email = "david.guibert+certs@gmail.com";
-    security.acme.server = "https://localhost:9443/acme/acme/directory";
+    security.acme.defaults.email = "david.guibert+certs@gmail.com";
+    security.acme.defaults.server = "https://localhost:9443/acme/acme/directory";
 
     networking.firewall.interfaces."bond0".allowedTCPPorts = lib.mkIf cfg.openFirewall [
       80
