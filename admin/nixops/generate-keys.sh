@@ -95,6 +95,7 @@ for key in ${@:-${keys[@]}}; do
                 regenerate_=$regenerate
                 if $rotate; then
                     command -v sponge
+                    sops updatekeys $sops_file
                     sops -r $sops_file | sponge $sops_file
                 fi
         esac
