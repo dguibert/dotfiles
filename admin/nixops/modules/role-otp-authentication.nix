@@ -11,7 +11,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    security.pam.oath.enable = true;
+    security.pam.oath.enable = false;
+    security.pam.services.sshd = { oathAuth = true; };
     security.pam.oath.usersFile = config.sops.secrets."oath-users-file".path;
 
     sops.secrets.oath-users-file = {
