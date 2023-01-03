@@ -19,6 +19,8 @@
     outputs.nixosModules.role-dns
     outputs.nixosModules.role-sshguard
     outputs.nixosModules.role-wireguard-mesh
+    outputs.nixosModules.role-otp-authentication
+    ({ config, ... }: { role-otp-authentication.enable = true; })
 
     outputs.nixosModules.services
 
