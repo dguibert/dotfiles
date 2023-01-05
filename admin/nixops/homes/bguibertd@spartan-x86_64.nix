@@ -14,22 +14,9 @@
   home.username = "bguibertd";
   home.homeDirectory = "/home_nfs/bguibertd";
   home.stateVersion = "22.11";
-  #home.activation.setNixVariables = lib.hm.dag.entryBefore ["writeBoundary"]
+
   home.sessionVariables.NIX_STATE_DIR = "${pkgs.nixStore}/var/nix";
-  home.sessionVariables.NIX_PROFILE = "${pkgs.nixStore}/var/nix/profiles/per-user/${config.home.username}/profile";
-  programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
-    export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
-    export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
-    export PATH=$NIX_PROFILE/bin:$PATH:${pkgs.nix}/bin
-    # support for x86_64/aarch64
-    # include .bashrc if it exists
-    [[ -f ~/.bashrc.$(uname -m) ]] && . ~/.bashrc.$(uname -m)
-  '';
-  programs.bash.profileExtra = ''
-    # support for x86_64/aarch64
-    # include .profile if it exists
-    [[ -f ~/.profile.$(uname -m) ]] && . ~/.profile.$(uname -m)
-  '';
+  home.sessionVariables.NIX_PROFILE = "${pkgs.nixStore}/var/nix/profiles/per-user/${config.home.username}/profile-x86_64";
   home.activation.setNixVariables = lib.hm.dag.entryBefore [ "writeBoundary" "checkLinkTargets" "checkFilesChanges" ]
     ''
       set -x
@@ -42,16 +29,17 @@
       nix-env --set-flag priority 80 nix || true
       set +x
     '';
-  home.sessionPath = [
-    "${pkgs.nix}/bin"
-  ];
+  # [[ -f ~/.profile.$(uname -m) ]] && . ~/.profile.$(uname -m)
+  programs.bash.bashProfileFile = ".bash_profile.x86_64";
+  programs.bash.bashrcFile = ".bashrc.x86_64";
+  programs.bash.profileFile = ".profile.x86_64";
+  programs.bash.bashLogoutFile = ".bash_logout.x86_64";
 
-  home.packages = with pkgs; [
-    xpra
-    bashInteractive
+  home.profileDirectory = lib.mkForce "${config.home.homeDirectory}/.nix-profile-x86_64";
 
-    datalad
-    git-annex
-  ];
-
+  home.sessionVariablesFileName = "hm-x86_64-session-vars.sh";
+  home.sessionVariablesGuardVar = "__HM_X86_64_SESS_VARS_SOURCED";
+  home.pathName = "home-manager-x86_64_path";
+  home.gcLinkName = "current-home-x86_64";
+  home.generationLinkNamePrefix = "home-manager-x86_64";
 }

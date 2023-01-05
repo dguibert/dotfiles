@@ -109,7 +109,7 @@
           inherit system;
           overlays = commonOverlays ++ [
             inputs.nur_dguibert.overlays.cluster
-            inputs.nur_dguibert.overlays.spartan
+            inputs.nur_dguibert.overlays.store-spartan
           ];
           config.allowUnfree = true;
           config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
@@ -195,6 +195,7 @@
             #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
             default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
             "bguibertd@spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
+            "bguibertd@spartan-x86_64" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
             "bguibertd@genji" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
           };
           systems = {
@@ -253,36 +254,40 @@
               t580 = homeConfigurations."dguibert@t580";
             }
           )
-          ({
-            genji = {
-              hostname = "genji";
-              sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              fastConnection = true;
-              autoRollback = true;
+          (
+            let
+              genProfile = name: profile: {
+                path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."${name}".activationPackage ''
+                  export NIX_STATE_DIR=${homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
+                  export NIX_PROFILE=${homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
+                  ./activate
+                '';
+                sshUser = "bguibertd";
+                profilePath = "${homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/${profile}";
+              };
+            in
+            {
+              genji = {
+                hostname = "genji";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@genji".activationPackage ''
-                export NIX_STATE_DIR=${homeConfigurations."bguibertd@genji".config.home.sessionVariables.NIX_STATE_DIR}
-                export NIX_PROFILE=${homeConfigurations."bguibertd@genji".config.home.sessionVariables.NIX_PROFILE}
-                ./activate
-              '';
-              profiles.bguibertd.sshUser = "bguibertd";
-              profiles.bguibertd.profilePath = "${homeConfigurations."bguibertd@genji".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/hm-x86_64";
-            };
-            spartan = {
-              hostname = "spartan";
-              sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              fastConnection = true;
-              autoRollback = true;
+                profiles.bguibertd = genProfile "bguibertd@genji" "hm-x86_64";
+              };
+              spartan = {
+                hostname = "spartan";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              profiles.bguibertd.path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."bguibertd@spartan".activationPackage ''
-                export NIX_STATE_DIR=${homeConfigurations."bguibertd@spartan".config.home.sessionVariables.NIX_STATE_DIR}
-                export NIX_PROFILE=${homeConfigurations."bguibertd@spartan".config.home.sessionVariables.NIX_PROFILE}
-                ./activate
-              '';
-              profiles.bguibertd.sshUser = "bguibertd";
-              profiles.bguibertd.profilePath = "${homeConfigurations."bguibertd@spartan".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/hm-x86_64";
-            };
-          })
+                profiles.bguibertd = genProfile "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd@spartan-x86_64" "hm-x86_64";
+              };
+            }
+          )
 
           ({ })
         ];

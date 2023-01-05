@@ -9,7 +9,7 @@
 
   nixpkgs.overlays = [
     inputs.nur_dguibert.overlays.cluster
-    inputs.nur_dguibert.overlays.spartan
+    inputs.nur_dguibert.overlays.store-genji
   ];
   home.username = "bguibertd";
   home.homeDirectory = "/home_nfs/bguibertd";
