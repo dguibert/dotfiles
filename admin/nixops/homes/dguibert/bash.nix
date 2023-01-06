@@ -18,12 +18,9 @@
       "cd -"
       "history"
       "history -*"
-      "man"
-      "man *"
       "pwd"
       "exit"
       "date"
-      "* --help:"
     ];
 
     programs.bash.shellAliases.ls = "ls --color";
