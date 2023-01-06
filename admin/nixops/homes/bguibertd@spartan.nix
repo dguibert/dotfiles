@@ -17,6 +17,10 @@
   home.homeDirectory = "/home_nfs/bguibertd";
   home.stateVersion = "22.11";
   #home.activation.setNixVariables = lib.hm.dag.entryBefore ["writeBoundary"]
+
+  # don't use full bash config
+  withBash.enable = false;
+  programs.bash.enable = true;
   programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
     # support for x86_64/aarch64
     # include .bashrc if it exists

@@ -22,43 +22,41 @@ let
   davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
 in
 {
+  imports = [
+    # import the base16.nix module
+    inputs.base16.nixosModule
+    # set system's scheme to nord by setting `config.scheme`
+    { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
+
+    outputs.homeManagerModules.report-changes
+    ({ ... }: { home.report-changes.enable = true; })
+    ({ ... }: {
+      options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
+      config.centralMailHost.enable = lib.mkDefault false;
+    })
+
+    home-secret
+
+    ({ ... }: {
+      options.withGui.enable = mkEnableOption "Host running with X11 or Wayland";
+      config.withGui.enable = lib.mkDefault false;
+    })
+    ({ ... }: { manual.manpages.enable = false; })
+
+    ./bash.nix
+    ./emacs.nix
+    ./git.nix
+    ./gpg.nix
+    ./htop.nix
+    ./module-dwl.nix
+    ./ssh.nix
+    ./with-gui.nix
+
+  ];
+
   options = { };
 
   config = {
-    imports = [
-      # import the base16.nix module
-      inputs.base16.nixosModule
-      # set system's scheme to nord by setting `config.scheme`
-      { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
-
-      outputs.homeManagerModules.report-changes
-      ({ ... }: { home.report-changes.enable = true; })
-      ({ ... }: {
-        options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
-        config.centralMailHost.enable = lib.mkDefault false;
-      })
-      ({ ... }: {
-        options.withGui.enable = mkEnableOption "Host running with X11 or Wayland";
-        config.withGui.enable = lib.mkDefault false;
-      })
-      ({ ... }: { manual.manpages.enable = false; })
-
-      home-secret
-
-      ({ ... }: {
-        options.withGui.enable = mkEnableOption "Host running with X11 or Wayland";
-        config.withGui.enable = lib.mkDefault false;
-      })
-
-      ./bash.nix
-      ./git.nix
-      ./gpg.nix
-      ./htop.nix
-      ./module-dwl.nix
-      ./ssh.nix
-      ./with-gui.nix
-      ./emacs.nix
-    ];
     programs.home-manager.enable = true;
 
     nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
