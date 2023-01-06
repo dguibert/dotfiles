@@ -2,13 +2,13 @@
 {
   imports = [
     ./dguibert/home.nix
-    ./dguibert/emacs.nix
     ./dguibert/custom-profile.nix
   ];
   centralMailHost.enable = false;
   withGui.enable = false;
   withCustomProfile.enable = true;
   withCustomProfile.suffix = "x86_64";
+  withEmacs.enable = true;
 
   nixpkgs.overlays = [
     inputs.nur_dguibert.overlays.cluster

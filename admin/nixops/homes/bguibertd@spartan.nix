@@ -2,7 +2,6 @@
 {
   imports = [
     ./dguibert/home.nix
-    ./dguibert/emacs.nix
     ./dguibert/custom-profile.nix
   ];
   centralMailHost.enable = false;
