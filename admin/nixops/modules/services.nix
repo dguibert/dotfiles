@@ -53,7 +53,7 @@ in
 
         backend openssh
           mode tcp
-          server openssh 127.0.0.1:22
+          server openssh 127.0.0.1:44322
         backend shadowsocks
           mode tcp
           server socks 127.0.0.1:${toString config.services.shadowsocks.port}
