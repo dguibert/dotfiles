@@ -115,6 +115,17 @@
           config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
         };
 
+      nixpkgsForLevante = system:
+        import inputs.nixpkgs {
+          inherit system;
+          overlays = commonOverlays ++ [
+            inputs.nur_dguibert.overlays.cluster
+            inputs.nur_dguibert.overlays.store-levante
+          ];
+          config.allowUnfree = true;
+          config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
+        };
+
 
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
@@ -124,6 +135,7 @@
         let
           pkgs = nixpkgsFor system;
           pkgs4spartan = nixpkgsForSpartan system;
+          pkgs4levante = nixpkgsForLevante system;
         in
         rec {
 
@@ -134,6 +146,7 @@
             pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
           };
           legacyPackages = pkgs;
+          legacyPackagesLevante = pkgs4levante;
           legacyPackagesSpartan = pkgs4spartan;
 
           apps = import ./apps {
@@ -142,7 +155,8 @@
             nixpkgs_to_use = {
               #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
               default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-              "nix4spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
+              "nix4spartan" = builtins.trace "using spartan nixpkgs" outputs.legacyPackagesSpartan;
+              "nix4levante" = builtins.trace "using levante nixpkgs" outputs.legacyPackagesLevante;
             };
           };
 
@@ -197,6 +211,7 @@
             "bguibertd@spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
             "bguibertd@spartan-x86_64" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
             "bguibertd@genji" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
+            "dguibert@levante" = builtins.trace "using levante nixpkgs" outputs.legacyPackagesLevante;
           };
           systems = {
             default = "x86_64-linux";
@@ -285,6 +300,16 @@
 
                 profiles.bguibertd = genProfile "bguibertd@spartan" "hm";
                 profiles.bguibertd-x86_64 = genProfile "bguibertd@spartan-x86_64" "hm-x86_64";
+              };
+              levante = {
+                hostname = "levante";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
+
+                profiles.dguibert = genProfile "dguibert@levante" "hm";
+
               };
             }
           )
