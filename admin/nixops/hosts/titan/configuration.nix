@@ -24,7 +24,6 @@ in
 rec {
   imports = [
     ({ ... }: { services.udisks2.enable = true; })
-    #(import <nur_dguibert/modules>).qemu-user
     #../../modules/wayland-nvidia.nix
   ];
   #nesting.clone = [

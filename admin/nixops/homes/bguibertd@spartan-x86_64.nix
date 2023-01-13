@@ -10,10 +10,6 @@
   withCustomProfile.suffix = "x86_64";
   withEmacs.enable = true;
 
-  nixpkgs.overlays = [
-    inputs.nur_dguibert.overlays.cluster
-    inputs.nur_dguibert.overlays.store-spartan
-  ];
   home.username = "bguibertd";
   home.homeDirectory = "/home_nfs/bguibertd";
   home.stateVersion = "22.11";

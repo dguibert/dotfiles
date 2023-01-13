@@ -50,13 +50,5 @@ in
   yambar = (pkg_from_flake "yambar").overrideAttrs (_: {
     patches = [ ];
   });
-  somebar = (pkg_from_flake "somebar").overrideAttrs (o: {
-    patches = [
-      ./patches/0001-Replaces-somebar-s-channel-to-dwl-from-stdin-to-a-wa.patch
-      ./patches/0002-bigger-occupied-rectangle.patch
-      ./patches/0003-add-net-tapesoftware-dwl-wm-unstable-v1-protocols.patch
-    ];
-  });
-
 }
 

@@ -1,6 +1,6 @@
 { config, lib, pkgs, resources, inputs, outputs, ... }: {
   imports = [
-    inputs.nixpkgs.nixosModules.notDetected
+    inputs.nixpkgs.inputs.nixpkgs.inputs.nixpkgs.nixosModules.notDetected
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -33,22 +33,11 @@
   system.nixos.versionSuffix = lib.mkForce
     ".${lib.substring 0 8 (inputs.self.lastModifiedDate or inputs.self.lastModified or "19700101")}.${inputs.self.shortRev or "dirty"}";
   system.nixos.revision = lib.mkIf (inputs.self ? rev) (lib.mkForce inputs.self.rev);
-  nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+  nixpkgs.config = {
     # https://nixos.wiki/wiki/Chromium
     chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
   };
-  nixpkgs.overlays = [
-    inputs.nix.overlays.default
-    inputs.emacs-overlay.overlay
-    #inputs.nixpkgs-wayland.overlay
-    inputs.nur.overlay
-    inputs.nur_dguibert.overlays.default
-    inputs.nur_dguibert.overlays.extra-builtins
-    inputs.nur_dguibert.overlays.emacs
-    #nur_dguibert_envs.overlay
-    inputs.nxsession.overlay
-    inputs.self.overlays.default
-  ];
+  #nixpkgs.overlays = inputs.self.legacyPackages.${pkgs.system}.overlays;
   ### TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
   nix.package = inputs.nix.packages."${config.nixpkgs.localSystem.system}".default;
   nix.registry = lib.mapAttrs

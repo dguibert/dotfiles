@@ -24,11 +24,11 @@ mapAttrs'
       builtins.trace "evaluating home-manager for ${name'} (${system_})"
         inputs.home-manager.lib.homeManagerConfiguration
         {
-          pkgs = nixpkgs_.${system_}; # Home-manager requires 'pkgs' instance
+          pkgs = nixpkgs_.legacyPackages.${system_}; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = {
             inputs = inputs // { nixpkgs = nixpkgs_; };
             inherit outputs;
-            sopsDecrypt_ = nixpkgs_.${system_}.sopsDecrypt_;
+            sopsDecrypt_ = nixpkgs_.legacyPackages.${system_}.sopsDecrypt_;
           };
           modules = [
             # > Our main home-manager configuration file <

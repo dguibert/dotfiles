@@ -59,23 +59,12 @@ in
   config = {
     programs.home-manager.enable = true;
 
-    nixpkgs.config = pkgs: (import "${inputs.nur_dguibert}/config.nix" pkgs) // {
+    nixpkgs.config = {
       # https://nixos.wiki/wiki/Chromium
       chromium.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
     };
 
-    nixpkgs.overlays = [
-      #(final: prev: builtins.trace "nix overlay" inputs.nix.overlays.default final prev)
-      inputs.emacs-overlay.overlay
-      #inputs.nixpkgs-wayland.overlay
-      inputs.nur.overlay
-      inputs.nur_dguibert.overlays.default
-      inputs.nur_dguibert.overlays.extra-builtins
-      inputs.nur_dguibert.overlays.emacs
-      #nur_dguibert_envs.overlay
-      inputs.nxsession.overlay
-      inputs.self.overlays.default
-    ];
+    #nixpkgs.overlays = inputs.nixpkgs.legacyPackages.${pkgs.system}.overlays;
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
     home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;

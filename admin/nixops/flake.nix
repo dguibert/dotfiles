@@ -5,30 +5,26 @@
   # To update all inputs:
   # $ nix flake update --recreate-lock-file
   inputs.home-manager.url = "github:dguibert/home-manager/pu";
-  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   inputs.hydra.url = "github:dguibert/hydra/pu";
   inputs.hydra.inputs.nix.follows = "nix";
-  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs";
-
-  inputs.nixpkgs.url = "github:dguibert/nixpkgs/pu";
+  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   inputs.nix.url = "github:dguibert/nix/pu";
-  inputs.nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nix.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   inputs.nur.url = "github:nix-community/NUR";
   inputs.sops-nix.url = "github:Mic92/sops-nix";
-  inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs-pu";
 
-  inputs.nur_dguibert.url = "github:dguibert/nur-packages/pu";
-  inputs.nur_dguibert.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.nur_dguibert.inputs.nix.follows = "nix";
-  inputs.nur_dguibert.inputs.flake-utils.follows = "flake-utils";
+  inputs.nixpkgs-pu.url = "github:dguibert/nixpkgs/pu";
 
-  #inputs.nur_dguibert_envs.url= "github:dguibert/nur-packages/pu?dir=envs";
-  #inputs.nur_dguibert_envs.url= "git+file:///home/dguibert/nur-packages?dir=envs";
-  #inputs.nur_dguibert_envs.inputs.nixpkgs.follows = "nixpkgs";
-  #inputs.nur_dguibert_envs.inputs.nix.follows     = "nix";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages/pu";
+  inputs.nixpkgs.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.nixpkgs.inputs.nix.follows = "nix";
+  inputs.nixpkgs.inputs.flake-utils.follows = "flake-utils";
+
   inputs.terranix = { url = "github:mrVanDalo/terranix"; flake = false; };
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
@@ -42,7 +38,7 @@
   inputs.gitignore = { url = "github:hercules-ci/gitignore"; flake = false; };
 
   inputs.nxsession.url = "github:dguibert/nxsession";
-  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs-pu";
   inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
 
   inputs.dwm-src.url = "github:dguibert/dwm/pu";
@@ -53,14 +49,12 @@
   inputs.dwl-src.flake = false;
   inputs.mako-src.url = "github:emersion/mako/master";
   inputs.mako-src.flake = false;
-  inputs.somebar-src.url = "git+https://git.sr.ht/~raphi/somebar";
-  inputs.somebar-src.flake = false;
   inputs.yambar-src.url = "git+https://codeberg.org/dnkl/yambar.git";
   inputs.yambar-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
-  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   #inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
   # only needed if you use as a package set:
@@ -68,7 +62,7 @@
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
-  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   inputs.chemacs.url = "github:plexus/chemacs2";
   inputs.chemacs.flake = false;
@@ -77,7 +71,7 @@
 
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
-  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs-pu";
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
@@ -86,46 +80,19 @@
       # Memoize nixpkgs for different platforms for efficiency.
       inherit (self) outputs;
       commonOverlays = [
-        inputs.nix.overlays.default
         inputs.emacs-overlay.overlay
-        inputs.nur_dguibert.overlays.default
-        inputs.nur_dguibert.overlays.extra-builtins
-        inputs.nur_dguibert.overlays.emacs
-        #nur_dguibert_envs.overlay
+        inputs.nixpkgs.overlays.emacs
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
         inputs.self.overlays.default
       ];
       nixpkgsFor = system:
-        import inputs.nixpkgs {
+        import inputs.nixpkgs-pu {
           inherit system;
-          overlays = commonOverlays;
-          config.allowUnfree = true;
+          overlays = inputs.nixpkgs.legacyPackages.${system}.overlays ++ commonOverlays;
+          config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;
           #config.contentAddressedByDefault = true;
         };
-
-      nixpkgsForSpartan = system:
-        import inputs.nixpkgs {
-          inherit system;
-          overlays = commonOverlays ++ [
-            inputs.nur_dguibert.overlays.cluster
-            inputs.nur_dguibert.overlays.store-spartan
-          ];
-          config.allowUnfree = true;
-          config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
-        };
-
-      nixpkgsForLevante = system:
-        import inputs.nixpkgs {
-          inherit system;
-          overlays = commonOverlays ++ [
-            inputs.nur_dguibert.overlays.cluster
-            inputs.nur_dguibert.overlays.store-levante
-          ];
-          config.allowUnfree = true;
-          config.replaceStdenv = import "${inputs.nur_dguibert}/stdenv.nix";
-        };
-
 
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
@@ -134,8 +101,6 @@
       (inputs.flake-utils.lib.eachSystem supportedSystems (system:
         let
           pkgs = nixpkgsFor system;
-          pkgs4spartan = nixpkgsForSpartan system;
-          pkgs4levante = nixpkgsForLevante system;
         in
         rec {
 
@@ -146,8 +111,6 @@
             pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
           };
           legacyPackages = pkgs;
-          legacyPackagesLevante = pkgs4levante;
-          legacyPackagesSpartan = pkgs4spartan;
 
           apps = import ./apps {
             inherit (outputs) lib;
@@ -155,8 +118,6 @@
             nixpkgs_to_use = {
               #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
               default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-              "nix4spartan" = builtins.trace "using spartan nixpkgs" outputs.legacyPackagesSpartan;
-              "nix4levante" = builtins.trace "using levante nixpkgs" outputs.legacyPackagesLevante;
             };
           };
 
@@ -199,7 +160,7 @@
         nixosConfigurations = import ./hosts {
           inherit lib inputs outputs;
           nixpkgs_to_use = {
-            default = inputs.nixpkgs;
+            default = self;
           };
         };
 
@@ -207,11 +168,7 @@
           inherit lib inputs outputs;
           nixpkgs_to_use = {
             #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-            default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-            "bguibertd@spartan" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
-            "bguibertd@spartan-x86_64" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
-            "bguibertd@genji" = builtins.trace "using cluster nixpkgs" outputs.legacyPackagesSpartan;
-            "dguibert@levante" = builtins.trace "using levante nixpkgs" outputs.legacyPackagesLevante;
+            default = builtins.trace "using default nixpkgs" self;
           };
           systems = {
             default = "x86_64-linux";

@@ -10,8 +10,8 @@
     home.sessionVariables.VISUAL = "emacsclient -s server -c -a emacs"; # $VISUAL opens in GUI mode
 
     home.file.".emacs.d".source = inputs.chemacs;
-    home.file.".emacs.default/init.el".source = "${inputs.nur_dguibert}/emacs/emacs.d/init.el";
-    home.file.".emacs.default/site-lisp".source = "${inputs.nur_dguibert}/emacs/emacs.d/site-lisp";
+    home.file.".emacs.default/init.el".source = "${inputs.nixpkgs}/emacs/emacs.d/init.el";
+    home.file.".emacs.default/site-lisp".source = "${inputs.nixpkgs}/emacs/emacs.d/site-lisp";
     home.file.".emacs-profiles.el".text = ''
       (("default" . ((user-emacs-directory . "~/.emacs.default")
                   (server-name . "server")

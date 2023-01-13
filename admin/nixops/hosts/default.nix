@@ -2,6 +2,7 @@
 , inputs
 , outputs
 , nixpkgs_to_use ? { default = inputs.nixpkgs; }
+, systems ? { }
 , ...
 }:
 
@@ -14,11 +15,14 @@ mapAttrs'
       let
         file = ./. + "/${name}";
         nixpkgs_ = nixpkgs_to_use.${name} or nixpkgs_to_use.default;
+        system = systems.${name} or "x86_64-linux";
       in
       builtins.trace "evaluating nixosSystem for ${name}"
-        nixpkgs_.lib.nixosSystem
+        nixpkgs_.inputs.nixpkgs.lib.nixosSystem
         {
+          inherit system;
           specialArgs = {
+            pkgs = inputs.self.legacyPackages.${system};
             inputs = inputs // { nixpkgs = nixpkgs_; };
             inherit outputs;
           };

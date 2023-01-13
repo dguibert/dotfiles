@@ -10,10 +10,6 @@
   withCustomProfile.enable = true;
   withCustomProfile.suffix = "";
 
-  nixpkgs.overlays = [
-    inputs.nur_dguibert.overlays.cluster
-    inputs.nur_dguibert.overlays.store-levante
-  ];
   home.username = "b381115";
   home.homeDirectory = "/home/b/b381115";
   home.stateVersion = "22.11";
