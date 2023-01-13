@@ -147,11 +147,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 3;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.35;
           hold_current = 0.2;
           sense_resistor = 0.110;
-          stealthchop_threshold = 500;
+          stealthchop_threshold = 0;
         };
         heater_bed = {
           heater_pin = "PC7";
@@ -229,9 +229,9 @@ in
         bed_screws = {
           screw1 = "60,5";
           screw1_name = "front screw";
-          screw2 = "10,110";
+          screw2 = "5,115";
           screw2_name = "back left";
-          screw3 = "110,110";
+          screw3 = "115,115";
           screw3_name = "back right";
         };
         #######################################################################
