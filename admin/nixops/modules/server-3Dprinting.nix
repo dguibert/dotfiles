@@ -55,7 +55,7 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 0;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
@@ -80,7 +80,7 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 2;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
