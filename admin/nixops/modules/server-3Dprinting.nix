@@ -95,7 +95,7 @@ in
           #rotation_distance = 2; # for T8x2 lead screan
           microsteps = 64;
           endstop_pin = "^PB1";
-          position_endstop = -0.225; # must be defined?
+          position_endstop = -0.175; # must be defined?
           position_max = 120;
           position_min = -1.5;
           homing_speed = 10; # max 100
