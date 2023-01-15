@@ -162,6 +162,11 @@
           nixpkgs_to_use = {
             default = self;
           };
+          systems = {
+            default = "x86_64-linux";
+            "rpi31" = "aarch64-linux";
+            "rpi41" = "aarch64-linux";
+          };
         };
 
         homeConfigurations = import ./homes {
