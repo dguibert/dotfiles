@@ -1,7 +1,6 @@
 {
   description = "Configurations of my systems";
 
-
   # To update all inputs:
   # $ nix flake update --recreate-lock-file
   inputs.home-manager.url = "github:dguibert/home-manager/pu";
@@ -20,7 +19,7 @@
 
   inputs.nixpkgs-pu.url = "github:dguibert/nixpkgs/pu";
 
-  inputs.nixpkgs.url = "github:dguibert/nur-packages/pu";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
   inputs.nixpkgs.inputs.nixpkgs.follows = "nixpkgs-pu";
   inputs.nixpkgs.inputs.nix.follows = "nix";
   inputs.nixpkgs.inputs.flake-utils.follows = "flake-utils";
@@ -40,17 +39,6 @@
   inputs.nxsession.url = "github:dguibert/nxsession";
   inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs-pu";
   inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
-
-  inputs.dwm-src.url = "github:dguibert/dwm/pu";
-  inputs.dwm-src.flake = false;
-  inputs.st-src.url = "github:dguibert/st/pu";
-  inputs.st-src.flake = false;
-  inputs.dwl-src.url = "github:dguibert/dwl/pu";
-  inputs.dwl-src.flake = false;
-  inputs.mako-src.url = "github:emersion/mako/master";
-  inputs.mako-src.flake = false;
-  inputs.yambar-src.url = "git+https://codeberg.org/dnkl/yambar.git";
-  inputs.yambar-src.flake = false;
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
@@ -159,13 +147,13 @@
 
         nixosConfigurations = import ./hosts {
           inherit lib inputs outputs;
-          nixpkgs_to_use = {
-            default = self;
-          };
           systems = {
             default = "x86_64-linux";
-            "rpi31" = "aarch64-linux";
+            "rpi30" = "aarch64-linux";
             "rpi41" = "aarch64-linux";
+          };
+          pkgs_to_use = {
+            rpi01 = self.legacyPackages.x86_64-linux.pkgsCross.raspberryPi;
           };
         };
 
