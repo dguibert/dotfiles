@@ -1,6 +1,6 @@
 { config, lib, pkgs, resources, inputs, outputs, ... }: {
   imports = [
-    inputs.nixpkgs.inputs.nixpkgs.inputs.nixpkgs.nixosModules.notDetected
+    inputs.nixpkgs.inputs.nixpkgs.nixosModules.notDetected
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;

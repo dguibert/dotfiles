@@ -4,25 +4,19 @@
   # To update all inputs:
   # $ nix flake update --recreate-lock-file
   inputs.home-manager.url = "github:dguibert/home-manager/pu";
-  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.hydra.url = "github:dguibert/hydra/pu";
   inputs.hydra.inputs.nix.follows = "nix";
-  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.hydra.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  inputs.nix.url = "github:dguibert/nix/pu";
-  inputs.nix.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.nix.follows = "nixpkgs/nix";
 
   inputs.nur.url = "github:nix-community/NUR";
   inputs.sops-nix.url = "github:Mic92/sops-nix";
-  inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs-pu";
-
-  inputs.nixpkgs-pu.url = "github:dguibert/nixpkgs/pu";
+  inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
-  inputs.nixpkgs.inputs.nixpkgs.follows = "nixpkgs-pu";
-  inputs.nixpkgs.inputs.nix.follows = "nix";
-  inputs.nixpkgs.inputs.flake-utils.follows = "flake-utils";
 
   inputs.terranix = { url = "github:mrVanDalo/terranix"; flake = false; };
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
@@ -37,12 +31,12 @@
   inputs.gitignore = { url = "github:hercules-ci/gitignore"; flake = false; };
 
   inputs.nxsession.url = "github:dguibert/nxsession";
-  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
   inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
-  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.deploy-rs.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   #inputs.nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
   # only needed if you use as a package set:
@@ -50,16 +44,16 @@
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
-  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.chemacs.url = "github:plexus/chemacs2";
   inputs.chemacs.flake = false;
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
-  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs-pu";
+  inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
@@ -75,7 +69,7 @@
         inputs.self.overlays.default
       ];
       nixpkgsFor = system:
-        import inputs.nixpkgs-pu {
+        import inputs.nixpkgs.inputs.nixpkgs {
           inherit system;
           overlays = inputs.nixpkgs.legacyPackages.${system}.overlays ++ commonOverlays;
           config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;

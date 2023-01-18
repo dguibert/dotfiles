@@ -3,7 +3,7 @@
   #nixpkgs.localSystem.system = "x86_64-linux";
   nixpkgs.localSystem.system = "aarch64-linux";
   imports = [
-    (import "${inputs.nixpkgs-pu}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
     (import ./configuration.nix)
     outputs.nixosModules.defaults
   ];

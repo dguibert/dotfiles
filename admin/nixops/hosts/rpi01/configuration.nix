@@ -4,7 +4,7 @@ with lib;
 
 rec {
   imports = [
-    (import "${inputs.nixpkgs-pu}/nixos/modules/installer/sd-card/sd-image.nix")
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
   ];
   #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
   #nixpkgs.localSystem.system = "x86_64-linux";
