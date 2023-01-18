@@ -84,6 +84,7 @@ rec {
   fileSystems."/cluster/projects/nn9560k/dguibert" = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/scratch/work/guibertd/nix" = { device = "rpool_vanif0/local/nix--scratch-work-guibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/home/b/b381115/nix" = { device = "rpool_vanif0/local/nix--home-b-b381115-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/users/dguibert/nix" = { device = "rpool_vanif0/local/nix--users-dguibert-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
   systemd.targets.maintenance = {
