@@ -64,6 +64,7 @@
       commonOverlays = [
         inputs.emacs-overlay.overlay
         inputs.nixpkgs.overlays.emacs
+        inputs.deploy-rs.overlay
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
         inputs.self.overlays.default
@@ -89,7 +90,7 @@
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit inputs;
             inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
-            deploy-rs = inputs.deploy-rs.packages.${system}.deploy-rs;
+            deploy-rs = self.legacyPackages.${system}.deploy-rs.deploy-rs;
             pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
           };
           legacyPackages = pkgs;
@@ -175,7 +176,7 @@
               {
                 hostname = "${nixosConfig.config.networking.hostName}";
                 sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                profiles.system.path = inputs.deploy-rs.lib.${system}.activate.nixos nixosConfig;
+                profiles.system.path = self.legacyPackages.${system}.deploy-rs.lib.activate.nixos nixosConfig;
                 profiles.system.user = "root";
                 # Fast connection to the node. If this is true, copy the whole closure instead of letting the node substitute.
                 fastConnection = true;
@@ -188,10 +189,10 @@
                 magicRollback = false;
 
                 # root profiles
-                profiles.root.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfigurations."root@${system}".activationPackage "./activate";
+                profiles.root.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfigurations."root@${system}".activationPackage "./activate";
                 profiles.root.user = "root";
                 # dguibert profiles
-                #profiles.dguibert.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
+                #profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
                 #profiles.dguibert.user = "dguibert";
               })
             (builtins.removeAttrs inputs.self.nixosConfigurations [ "iso" ]))
@@ -203,7 +204,7 @@
               in
               {
                 #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
-                profiles.dguibert.path = inputs.deploy-rs.lib.${system}.activate.custom homeConfig.activationPackage "./activate";
+                profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfig.activationPackage "./activate";
                 profiles.dguibert.user = "dguibert";
               })
             {
@@ -216,7 +217,7 @@
           (
             let
               genProfile = name: profile: {
-                path = inputs.deploy-rs.lib.x86_64-linux.activate.custom homeConfigurations."${name}".activationPackage ''
+                path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom homeConfigurations."${name}".activationPackage ''
                   export NIX_STATE_DIR=${homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
                   export NIX_PROFILE=${homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
                   ./activate
@@ -263,7 +264,7 @@
 
         # This is highly advised, and will prevent many possible mistakes
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy)
-          (inputs.nixpkgs.lib.getAttrs supportedSystems inputs.deploy-rs.lib);
+          (inputs.nixpkgs.lib.genAttrs supportedSystems (system: self.legacyPackages.${system}.deploy-rs.lib));
 
       });
 }

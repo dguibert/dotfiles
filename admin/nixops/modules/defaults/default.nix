@@ -81,6 +81,9 @@
     path = "/etc/nix/id_buildfarm";
   };
 
+  # time.cloudflare.com
+  services.resolved.extraConfig = "FallbackNTP=162.159.200.1 2606:4700:f1::1";
+
   services.openssh.enable = true;
   services.openssh.listenAddresses = [
     { addr = "0.0.0.0"; port = 22322; }
