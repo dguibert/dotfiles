@@ -144,7 +144,7 @@
           inherit lib inputs outputs;
           systems = {
             default = "x86_64-linux";
-            "rpi30" = "aarch64-linux";
+            "rpi31" = "aarch64-linux";
             "rpi41" = "aarch64-linux";
           };
           pkgs_to_use = {
