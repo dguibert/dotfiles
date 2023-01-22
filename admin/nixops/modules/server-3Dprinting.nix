@@ -147,11 +147,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 3;
-          interpolate = false;
+          interpolate = true;
           run_current = 0.35;
           hold_current = 0.2;
           sense_resistor = 0.110;
-          stealthchop_threshold = 0;
+          stealthchop_threshold = 500;
         };
         heater_bed = {
           heater_pin = "PC7";
