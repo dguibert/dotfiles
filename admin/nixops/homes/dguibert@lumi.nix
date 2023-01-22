@@ -18,12 +18,15 @@
     "${pkgs.nix}/bin"
   ];
 
-  # additional programs
-  home.packages = with pkgs; [
-    xpra
-    bashInteractive
+  home.sessionVariables.NIX_IGNORE_SYMLINK_STORE = 1;
 
-    datalad
-    git-annex
-  ];
+  # additional programs
+  home.packages = with pkgs;
+    [
+      xpra
+      bashInteractive
+
+      datalad
+      git-annex
+    ];
 }
