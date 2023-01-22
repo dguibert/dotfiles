@@ -10,8 +10,8 @@
   withCustomProfile.enable = true;
   withCustomProfile.suffix = "";
 
-  home.username = "b381115";
-  home.homeDirectory = "/home/b/b381115";
+  home.username = "dguibert";
+  home.homeDirectory = "/users/dguibert";
   home.stateVersion = "22.11";
   #home.activation.setNixVariables = lib.hm.dag.entryBefore ["writeBoundary"]
   home.sessionPath = [

@@ -256,6 +256,16 @@
                 profiles.dguibert = genProfile "dguibert@levante" "hm";
 
               };
+              lumi = {
+                hostname = "lumi";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
+
+                profiles.dguibert = genProfile "dguibert@lumi" "hm";
+
+              };
             }
           )
 
