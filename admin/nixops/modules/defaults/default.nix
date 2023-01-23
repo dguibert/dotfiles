@@ -82,7 +82,7 @@
   };
 
   # time.cloudflare.com
-  services.resolved.extraConfig = "FallbackNTP=162.159.200.1 2606:4700:f1::1";
+  services.timesyncd.extraConfig = "FallbackNTP=162.159.200.1 2606:4700:f1::1";
 
   services.openssh.enable = true;
   services.openssh.listenAddresses = [
