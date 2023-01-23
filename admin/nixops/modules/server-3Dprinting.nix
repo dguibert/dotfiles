@@ -140,7 +140,7 @@ in
           min_extrude_temp = 170;
           max_extrude_only_distance = 780.0;
           max_extrude_cross_section = 0.8;
-          pressure_advance = 0.075; # For ABS 15*0.005 See tuning pressure advance doc
+          pressure_advance = 0.04; # For ABS 15*0.005 See tuning pressure advance doc
           pressure_advance_smooth_time = 0.040;
         };
         "tmc2209 extruder" = {
