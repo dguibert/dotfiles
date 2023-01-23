@@ -297,7 +297,7 @@ rec {
   services.syncoid = {
     enable = true;
     #sshKey = "/root/.ssh/id_ecdsa";
-    commonArgs = [ "--no-sync-snap" "--debug" /*"--create-bookmark"*/ ];
+    commonArgs = [ "--no-sync-snap" "--debug" "--quiet" /*"--create-bookmark"*/ ];
     #commands."pool/test".target = "root@target:pool/test";
     commands."rpool_vanif0/local/root".target = "st4000dm004-1/backup/rpool_vanif0/local/root";
     commands."rpool_vanif0/safe".target = "st4000dm004-1/backup/rpool_vanif0/safe";
