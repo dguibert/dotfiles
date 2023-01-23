@@ -216,14 +216,14 @@
           )
           (
             let
-              genProfile = name: profile: {
+              genProfile = user: name: profile: {
                 path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom homeConfigurations."${name}".activationPackage ''
                   export NIX_STATE_DIR=${homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
                   export NIX_PROFILE=${homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
                   ./activate
                 '';
-                sshUser = "bguibertd";
-                profilePath = "${homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/bguibertd/${profile}";
+                sshUser = user;
+                profilePath = "${homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
               };
             in
             {
@@ -234,7 +234,7 @@
                 autoRollback = false;
                 magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd@genji" "hm-x86_64";
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
               };
               spartan = {
                 hostname = "spartan";
@@ -243,8 +243,8 @@
                 autoRollback = false;
                 magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd@spartan" "hm";
-                profiles.bguibertd-x86_64 = genProfile "bguibertd@spartan-x86_64" "hm-x86_64";
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
               };
               levante = {
                 hostname = "levante";
@@ -253,7 +253,7 @@
                 autoRollback = false;
                 magicRollback = false;
 
-                profiles.dguibert = genProfile "dguibert@levante" "hm";
+                profiles.dguibert = genProfile "dguibert" "dguibert@levante" "hm";
 
               };
               lumi = {
@@ -263,7 +263,7 @@
                 autoRollback = false;
                 magicRollback = false;
 
-                profiles.dguibert = genProfile "dguibert@lumi" "hm";
+                profiles.dguibert = genProfile "dguibert" "dguibert@lumi" "hm";
 
               };
             }
