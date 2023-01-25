@@ -26,8 +26,7 @@ mapAttrs'
         {
           pkgs = nixpkgs_.legacyPackages.${system_}; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = {
-            inputs = inputs // { nixpkgs = nixpkgs_; };
-            inherit outputs;
+            inherit inputs outputs;
             sopsDecrypt_ = nixpkgs_.legacyPackages.${system_}.sopsDecrypt_;
           };
           modules = [
