@@ -28,5 +28,7 @@
 
       datalad
       git-annex
+
+      git-nomad
     ];
 }
