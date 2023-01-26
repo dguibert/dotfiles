@@ -18,6 +18,9 @@
     "${pkgs.nix}/bin"
   ];
 
+  programs.bash.bashrcExtra = ''
+    export NIX_IGNORE_SYMLINK_STORE=1
+  '';
   home.sessionVariables.NIX_IGNORE_SYMLINK_STORE = 1;
 
   # additional programs
