@@ -412,8 +412,8 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1674932554,
-        "narHash": "sha256-EZmw9aXcGAKdDLNZ7GVxTSP5ug3HDWnHYKju/9gK8SY=",
+        "lastModified": 1674934568,
+        "narHash": "sha256-0D4T1f/Xs1MCdj5/rix6wIzrr4Di0ER3cIiNB99JjLk=",
         "type": "git",
         "url": "file:///home/dguibert/nur-packages"
       },
@@ -473,11 +473,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1674932275,
-        "narHash": "sha256-po+5r62yIZjV+xhTDq4bBAJQYnm0sFIHixYw589NFbg=",
+        "lastModified": 1674934510,
+        "narHash": "sha256-UIqCc457eE841HXQyIjdqymstblAbEC1cWejjeDqhEU=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "571edb826f5b896f0d4978b5fcdb7435dc4d7b22",
+        "rev": "21acd7a762a8d89154756e402bca93b778ac79d8",
         "type": "github"
       },
       "original": {
