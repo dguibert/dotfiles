@@ -14,6 +14,7 @@ let
     role-mopidy = [ ];
     desktop = [ titan t580 ];
     server-3Dprinting = [ rpi31 ];
+    zigbee = [ rpi41 ];
   };
 
   dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
@@ -187,6 +188,10 @@ in
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.server-3Dprinting) {
       server-3Dprinting.enable = true;
       networking.firewall.interfaces."eth0".allowedTCPPorts = [ 80 ];
+    })
+    # zigbee
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.zigbee) {
+      role.zigbee.enable = true;
     })
   ];
 }

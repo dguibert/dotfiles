@@ -21,6 +21,7 @@
     outputs.nixosModules.role-wireguard-mesh
     outputs.nixosModules.role-otp-authentication
     ({ config, ... }: { role-otp-authentication.enable = true; })
+    outputs.nixosModules.role-zigbee
 
     outputs.nixosModules.services
 
