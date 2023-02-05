@@ -47,29 +47,6 @@ in
       external_converters = [
         girier_js
       ];
-      groups = {
-        "1" = {
-          friendly_name = "cuisine";
-          devices = [
-            "0x84fd27fffe523559/1"
-            "0xb4e3f9fffe6b6fa2/1"
-          ];
-        };
-        "2" = {
-          friendly_name = "salon";
-          devices = [
-            "0x70b3d52b6001b6dd/1"
-            "0x70b3d52b6001b568/1"
-          ];
-        };
-        "3" = {
-          friendly_name = "bureau";
-          devices = [
-            "0x70b3d52b6001b40f/1"
-            "0x70b3d52b6001b52e/1"
-          ];
-        };
-      };
     };
 
     services.mosquitto.enable = true;
