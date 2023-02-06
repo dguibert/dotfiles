@@ -49,6 +49,7 @@ in
     ./gpg.nix
     ./htop.nix
     ./module-dwl.nix
+    ./nix.nix
     ./ssh.nix
     ./with-gui.nix
 
