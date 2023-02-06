@@ -14,6 +14,7 @@ let
     role-mopidy = [ ];
     desktop = [ titan t580 ];
     server-3Dprinting = [ rpi31 ];
+    zigbee = [ rpi41 ];
   };
 
   dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
@@ -53,7 +54,7 @@ in
 
         backend openssh
           mode tcp
-          server openssh 127.0.0.1:22
+          server openssh 127.0.0.1:44322
         backend shadowsocks
           mode tcp
           server socks 127.0.0.1:${toString config.services.shadowsocks.port}
@@ -192,6 +193,11 @@ in
     # platypush
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on (with outputs.nixosConfigurations; [ titan ])) {
       services.redis.enable = true;
+    })
+
+    # zigbee
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.zigbee) {
+      role.zigbee.enable = true;
     })
   ];
 }

@@ -1,6 +1,6 @@
 { inputs, pkgs, ... }:
 inputs.flake-utils.lib.mkApp {
-  drv = pkgs.writeScriptBin "nix-spartan" (with pkgs; let
+  drv = pkgs.writeScriptBin "nix4" (with pkgs; let
     name = "nix-${builtins.replaceStrings [ "/" ] [ "-" ] nixStore}";
     NIX_CONF_DIR =
       let

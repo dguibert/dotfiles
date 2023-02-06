@@ -165,7 +165,6 @@ fixups = git_add_remotes "
 	        git config --get-all remote.origin.push "/tags/*" &>/dev/null || git config --add remote.origin.push refs/tags/*:refs/tags/*
 	        git config --get-all remote.origin.push "/heads/pu" &>/dev/null || git config --add remote.origin.push +refs/heads/pu:refs/heads/pu
 	        #git config --get-all remote.github.fetch "/heads/pr/" &>/dev/null || git config --add remote.github.fetch +refs/pull/*/head:refs/heads/pr/*
-
 update = git remote update
 push = git push origin +pu
 	      git push origin +pu-cluster
@@ -732,6 +731,7 @@ checkout = git clone 'https://github.com/djpohly/dwl' 'dwl'
 fixups = git_add_remotes "
 	 dguibert https://github.com/dguibert/dwl
 	 "
+update = git remote update
 push = git push dguibert +pu
        git push dguibert +pu-next
        git push dguibert

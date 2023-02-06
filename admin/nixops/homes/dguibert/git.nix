@@ -31,6 +31,10 @@
   programs.git.iniContent.merge.tool = "vimdiff";
   programs.git.iniContent.pull.ff = "only"; # fast-forward only
 
+  programs.git.iniContent.notes.rewrite.amend = true;
+  programs.git.iniContent.notes.rewrite.rebase = true;
+  programs.git.iniContent.notes.rewriteRefs = "refs/notes/commits";
+
   home.packages = with pkgs; [
     gitAndTools.git-remote-gcrypt
     gitAndTools.git-crypt

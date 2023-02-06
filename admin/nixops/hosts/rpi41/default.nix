@@ -3,7 +3,7 @@
   #nixpkgs.localSystem.system = "x86_64-linux";
   nixpkgs.localSystem.system = "aarch64-linux";
   imports = [
-    (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
     (import ./configuration.nix)
     outputs.nixosModules.defaults
   ];
@@ -20,8 +20,6 @@
   #boot.loader.raspberryPi.version = 4;
 
   nixpkgs.overlays = [
-    inputs.nix.overlays.default
-    inputs.nur_dguibert.overlays.default
     (final: prev: {
       # don't build qt5
       # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]

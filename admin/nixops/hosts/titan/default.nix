@@ -1,9 +1,4 @@
 { config, lib, pkgs, inputs, outputs, ... }: {
-  nixpkgs.localSystem = {
-    #gcc.arch = "broadwell"; #E5-2690v4
-    #gcc.tune = "broadwell";
-    system = "x86_64-linux";
-  };
   imports = [
     inputs.hydra.nixosModules.hydra
     (import ./configuration.nix)

@@ -106,7 +106,7 @@ let
 in
 {
   imports = [
-    (import "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
     outputs.nixosModules.zfs
     ({ config, ... }: { zfs-conf.enable = true; })
     ({ config, lib, pkgs, resources, ... }: {

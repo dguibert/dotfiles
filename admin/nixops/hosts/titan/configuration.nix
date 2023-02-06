@@ -24,7 +24,6 @@ in
 rec {
   imports = [
     ({ ... }: { services.udisks2.enable = true; })
-    #(import <nur_dguibert/modules>).qemu-user
     #../../modules/wayland-nvidia.nix
   ];
   #nesting.clone = [
@@ -84,6 +83,8 @@ rec {
   fileSystems."/p/project/prcoe08/guibert1/nix" = { device = "rpool_vanif0/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/cluster/projects/nn9560k/dguibert" = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   fileSystems."/scratch/work/guibertd/nix" = { device = "rpool_vanif0/local/nix--scratch-work-guibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/home/b/b381115/nix" = { device = "rpool_vanif0/local/nix--home-b-b381115-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/users/dguibert/nix" = { device = "rpool_vanif0/local/nix--users-dguibert-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
   systemd.targets.maintenance = {
@@ -166,9 +167,9 @@ rec {
   # should.
   system.stateVersion = "20.09"; # Did you read the comment?
 
+  networking.dhcpcd.enable = false;
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce true;
-  networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
@@ -296,7 +297,7 @@ rec {
   services.syncoid = {
     enable = true;
     #sshKey = "/root/.ssh/id_ecdsa";
-    commonArgs = [ "--no-sync-snap" "--debug" /*"--create-bookmark"*/ ];
+    commonArgs = [ "--no-sync-snap" "--debug" "--quiet" /*"--create-bookmark"*/ ];
     #commands."pool/test".target = "root@target:pool/test";
     commands."rpool_vanif0/local/root".target = "st4000dm004-1/backup/rpool_vanif0/local/root";
     commands."rpool_vanif0/safe".target = "st4000dm004-1/backup/rpool_vanif0/safe";

@@ -55,7 +55,7 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 0;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
@@ -80,7 +80,7 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 2;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.85;
           hold_current = 0.5;
           sense_resistor = 0.110;
@@ -95,7 +95,7 @@ in
           #rotation_distance = 2; # for T8x2 lead screan
           microsteps = 64;
           endstop_pin = "^PB1";
-          position_endstop = -0.225; # must be defined?
+          position_endstop = -0.175; # must be defined?
           position_max = 120;
           position_min = -1.5;
           homing_speed = 10; # max 100
@@ -117,7 +117,9 @@ in
           dir_pin = "PA15"; # Add ! if moving opposite direction
           enable_pin = "!PD2";
           full_steps_per_rotation = 200; # 1.8 degree motor
-          rotation_distance = 21.54087; # See calibrating rotation_distance on extruders doc
+          # See calibrating rotation_distance on extruders doc
+          #rotation_distance = 21.54087;
+          rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
           microsteps = 16;
           nozzle_diameter = 0.400;
@@ -138,7 +140,7 @@ in
           min_extrude_temp = 170;
           max_extrude_only_distance = 780.0;
           max_extrude_cross_section = 0.8;
-          pressure_advance = 0.075; # For ABS 15*0.005 See tuning pressure advance doc
+          pressure_advance = 0.04; # For ABS 15*0.005 See tuning pressure advance doc
           pressure_advance_smooth_time = 0.040;
         };
         "tmc2209 extruder" = {
@@ -227,9 +229,9 @@ in
         bed_screws = {
           screw1 = "60,5";
           screw1_name = "front screw";
-          screw2 = "10,110";
+          screw2 = "5,115";
           screw2_name = "back left";
-          screw3 = "110,110";
+          screw3 = "115,115";
           screw3_name = "back right";
         };
         #######################################################################
@@ -310,7 +312,7 @@ in
              G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=-0.025
+             SET_GCODE_OFFSET Z=0.0
              # Home the printer
              G28
         ";

@@ -1,209 +1,210 @@
-{ config, pkgs, inputs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 {
-  programs.bash.enable = true;
+  options.withBash.enable = (lib.mkEnableOption "Enable bash config") // { default = true; };
 
-  programs.bash.historySize = -1; # no truncation
-  programs.bash.historyFile = "$HOME/.bash_history";
-  programs.bash.historyFileSize = -1; # no truncation
-  programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
-  programs.bash.historyIgnore = [
-    "ls"
-    "cd"
-    "clear"
-    "[bf]g"
-    " *"
-    "cd -"
-    "history"
-    "history -*"
-    "man"
-    "man *"
-    "pwd"
-    "exit"
-    "date"
-    "* --help:"
-  ];
+  config = lib.mkIf config.withBash.enable {
+    programs.bash.enable = true;
 
-  programs.bash.shellAliases.ls = "ls --color";
+    programs.bash.historySize = -1; # no truncation
+    programs.bash.historyFile = "$HOME/.bash_history";
+    programs.bash.historyFileSize = -1; # no truncation
+    programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+    programs.bash.historyIgnore = [
+      "ls"
+      "cd"
+      "clear"
+      "[bf]g"
+      " *"
+      "cd -"
+      "history"
+      "history -*"
+      "pwd"
+      "exit"
+      "date"
+    ];
 
-  home.sessionVariables.PATH = "$HOME/bin:$PATH";
-  home.sessionVariables.MANPATH = "$HOME/man:$MANPATH:/share/man:/usr/share/man";
-  home.sessionVariables.PAGER = "less -R";
-  home.sessionVariables.LESS = "RFX";
-  home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE = 1;
+    programs.bash.shellAliases.ls = "ls --color";
 
-  programs.bash.initExtra = ''
-    # pruge previously defined PROMPT_COMMAND
-    export PROMPT_COMMAND=
+    home.sessionVariables.PATH = "$HOME/bin:$PATH";
+    home.sessionVariables.MANPATH = "$HOME/man:$MANPATH:/share/man:/usr/share/man";
+    home.sessionVariables.PAGER = "less -R";
+    home.sessionVariables.LESS = "RFX";
+    home.sessionVariables.GIT_PS1_SHOWDIRTYSTATE = 1;
 
-    export HISTCONTROL
-    export HISTFILESIZE
-    export HISTIGNORE
-    export HISTSIZE
-    unset HISTTIMEFORMAT
-    # https://unix.stackexchange.com/a/430128
-    # on every prompt, save new history to dedicated file and recreate full history
-    # by reading all files, always keeping history from current session on top.
-    update_history () {
+    programs.bash.initExtra = ''
+      # pruge previously defined PROMPT_COMMAND
+      export PROMPT_COMMAND=
+
+      export HISTCONTROL
+      export HISTFILESIZE
+      export HISTIGNORE
+      export HISTSIZE
+      unset HISTTIMEFORMAT
+      # https://unix.stackexchange.com/a/430128
+      # on every prompt, save new history to dedicated file and recreate full history
+      # by reading all files, always keeping history from current session on top.
+      update_history () {
       history -a ''${HISTFILE}.$$
       history -c
       history -r  # load common history file
       # load histories of other sessions
       for f in `ls ''${HISTFILE}.[0-9]* 2>/dev/null | grep -v "''${HISTFILE}.$$\$"`; do
-        history -r $f
+          history -r $f
       done
       history -r "''${HISTFILE}.$$"  # load current session history
-    }
-    if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
+      }
+      if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
       export PROMPT_COMMAND="update_history''${PROMPT_COMMAND:+;$PROMPT_COMMAND }"
-    fi
-
-    # merge session history into main history file on bash exit
-    merge_session_history () {
-      if [ -e ''${HISTFILE}.$$ ]; then
-        # fix wrong history files
-        awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
-        tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
-        \rm ''${HISTFILE}.$$
       fi
-    }
-    trap merge_session_history EXIT
 
-    # detect leftover files from crashed sessions and merge them back
-    active_shells=$(pgrep `ps -p $$ -o comm=`)
-    grep_pattern=`for pid in $active_shells; do echo -n "-e \.''${pid}\$ "; done`
-    orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
+      # merge session history into main history file on bash exit
+      merge_session_history () {
+      if [ -e ''${HISTFILE}.$$ ]; then
+          # fix wrong history files
+          awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
+          tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
+          \rm ''${HISTFILE}.$$
+      fi
+      }
+      trap merge_session_history EXIT
 
-    if [ -n "$orphaned_files" ]; then
+      # detect leftover files from crashed sessions and merge them back
+      active_shells=$(pgrep `ps -p $$ -o comm=`)
+      grep_pattern=`for pid in $active_shells; do echo -n "-e \.''${pid}\$ "; done`
+      orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
+
+      if [ -n "$orphaned_files" ]; then
       echo Merging orphaned history files:
       for f in $orphaned_files; do
-        echo "  `basename $f`"
-        awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE $f | \
-        tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
-        \rm -f $f
+          echo "  `basename $f`"
+          awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE $f | \
+          tac | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge  $HISTFILE
+          \rm -f $f
       done
       tac $HISTFILE | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge $HISTFILE
       echo "done."
-    fi
-    # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
-    test "$TERM" != "dumb" || return
-
-    # https://codeberg.org/dnkl/foot/issues/86
-    # https://codeberg.org/dnkl/foot/wiki#user-content-how-to-configure-my-shell-to-emit-the-osc-7-escape-sequence
-    _urlencode() {
-            local length="''${#1}"
-            for (( i = 0; i < length; i++ )); do
-                    local c="''${1:$i:1}"
-                    case $c in
-                            %) printf '%%%02X' "'$c" ;;
-                            *) printf "%s" "$c" ;;
-                    esac
-            done
-    }
-    #osc7_cwd() {
-    #        printf '\e]7;file://%s%s\a' "$HOSTNAME" "$(_urlencode "$PWD")"
-    #}
-    #PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
-
-    # Provide a nice prompt.
-    PS1=""
-    PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
-    PS1+='$(ip netns identify 2>/dev/null)' # sudo setfacl -m u:$USER:rx /var/run/netns
-    PS1+=' ''${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
-    PS1+=' ''${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
-    PS1+=' ''${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
-    PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
-    if !  command -v __git_ps1 >/dev/null; then
-      if [ -e $HOME/code/git-prompt.sh ]; then
-        source $HOME/code/git-prompt.sh
       fi
-    fi
-    if command -v __git_ps1 >/dev/null; then
+      # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
+      test "$TERM" != "dumb" || return
+
+      # https://codeberg.org/dnkl/foot/issues/86
+      # https://codeberg.org/dnkl/foot/wiki#user-content-how-to-configure-my-shell-to-emit-the-osc-7-escape-sequence
+      _urlencode() {
+              local length="''${#1}"
+              for (( i = 0; i < length; i++ )); do
+                      local c="''${1:$i:1}"
+                      case $c in
+                              %) printf '%%%02X' "'$c" ;;
+                              *) printf "%s" "$c" ;;
+                      esac
+              done
+      }
+      #osc7_cwd() {
+      #        printf '\e]7;file://%s%s\a' "$HOSTNAME" "$(_urlencode "$PWD")"
+      #}
+      #PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
+
+      # Provide a nice prompt.
+      PS1=""
+      PS1+='\[\033[01;37m\]$(exit=$?; if [[ $exit == 0 ]]; then echo "\[\033[01;32m\]✓"; else echo "\[\033[01;31m\]✗ $exit"; fi)'
+      PS1+='$(ip netns identify 2>/dev/null)' # sudo setfacl -m u:$USER:rx /var/run/netns
+      PS1+=' ''${GIT_DIR:+ \[\033[00;32m\][$(basename $GIT_DIR)]}'
+      PS1+=' ''${ENVRC:+ \[\033[00;33m\]env:$ENVRC}'
+      PS1+=' ''${SLURM_NODELIST:+ \[\033[01;34m\][$SLURM_NODELIST]\[\033[00m\]}'
+      PS1+=' \[\033[00;32m\]\u@\h\[\033[01;34m\] \W '
+      if !  command -v __git_ps1 >/dev/null; then
+      if [ -e $HOME/code/git-prompt.sh ]; then
+          source $HOME/code/git-prompt.sh
+      fi
+      fi
+      if command -v __git_ps1 >/dev/null; then
       PS1+='$(__git_ps1 "|%s|")'
-    fi
-    PS1+='$\[\033[00m\] '
+      fi
+      PS1+='$\[\033[00m\] '
 
-    export PS1
-    case $TERM in
+      export PS1
+      case $TERM in
       dvtm*|st*|rxvt|*term)
-        trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
-        PS1+='\[\033]0;\u@\h: \w\007\]'
+          trap 'echo -ne "\e]0;$BASH_COMMAND\007"' DEBUG
+          PS1+='\[\033]0;\u@\h: \w\007\]'
       ;;
-    esac
+      esac
 
-    eval "$(${pkgs.coreutils}/bin/dircolors)"
-    source ${config.scheme inputs.base16-shell}
+      eval "$(${pkgs.coreutils}/bin/dircolors)"
+      source ${config.scheme inputs.base16-shell}
 
-    export TODOTXT_DEFAULT_ACTION=ls
-    alias t='todo.sh'
+      export TODOTXT_DEFAULT_ACTION=ls
+      alias t='todo.sh'
 
-    tput smkx
-  '';
+      tput smkx
+    '';
 
-  home.file.".inputrc".text = ''
-    set show-all-if-ambiguous on
-    set visible-stats on
-    set page-completions off
-    # https://git.suckless.org/st/file/FAQ.html
-    set enable-keypad on
-    # http://www.caliban.org/bash/
-    #set editing-mode vi
-    #set keymap vi
-    #Control-o: ">&sortie"
-    "\e[A": history-search-backward
-    "\e[B": history-search-forward
-    "\e[1;5A": history-search-backward
-    "\e[1;5B": history-search-forward
+    home.file.".inputrc".text = ''
+      set show-all-if-ambiguous on
+      set visible-stats on
+      set page-completions off
+      # https://git.suckless.org/st/file/FAQ.html
+      set enable-keypad on
+      # http://www.caliban.org/bash/
+      #set editing-mode vi
+      #set keymap vi
+      #Control-o: ">&sortie"
+      "\e[A": history-search-backward
+      "\e[B": history-search-forward
+      "\e[1;5A": history-search-backward
+      "\e[1;5B": history-search-forward
 
-    # Arrow keys in keypad mode
-    "\C-[OA": history-search-backward
-    "\C-[OB": history-search-forward
-    "\C-[OC": forward-char
-    "\C-[OD": backward-char
+      # Arrow keys in keypad mode
+      "\C-[OA": history-search-backward
+      "\C-[OB": history-search-forward
+      "\C-[OC": forward-char
+      "\C-[OD": backward-char
 
-    # Arrow keys in ANSI mode
-    "\C-[[A": history-search-backward
-    "\C-[[B": history-search-forward
-    "\C-[[C": forward-char
-    "\C-[[D": backward-char
+      # Arrow keys in ANSI mode
+      "\C-[[A": history-search-backward
+      "\C-[[B": history-search-forward
+      "\C-[[C": forward-char
+      "\C-[[D": backward-char
 
-    # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
-    "\e[1;5C": forward-word
-    "\e[1;5D": backward-word
-    #"\e[5C": forward-word
-    #"\e[5D": backward-word
-    "\e\e[C": forward-word
-    "\e\e[D": backward-word
+      # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
+      "\e[1;5C": forward-word
+      "\e[1;5D": backward-word
+      #"\e[5C": forward-word
+      #"\e[5D": backward-word
+      "\e\e[C": forward-word
+      "\e\e[D": backward-word
 
-    $if mode=emacs
+      $if mode=emacs
 
-    # for linux console and RH/Debian xterm
-    "\e[1~": beginning-of-line
-    "\e[4~": end-of-line
-    "\e[5~": beginning-of-history
-    "\e[6~": end-of-history
-    "\e[7~": beginning-of-line
-    "\e[3~": delete-char
-    "\e[2~": quoted-insert
-    "\e[5C": forward-word
-    "\e[5D": backward-word
-    "\e\e[C": forward-word
-    "\e\e[D": backward-word
-    "\e[1;5C": forward-word
-    "\e[1;5D": backward-word
+      # for linux console and RH/Debian xterm
+      "\e[1~": beginning-of-line
+      "\e[4~": end-of-line
+      "\e[5~": beginning-of-history
+      "\e[6~": end-of-history
+      "\e[7~": beginning-of-line
+      "\e[3~": delete-char
+      "\e[2~": quoted-insert
+      "\e[5C": forward-word
+      "\e[5D": backward-word
+      "\e\e[C": forward-word
+      "\e\e[D": backward-word
+      "\e[1;5C": forward-word
+      "\e[1;5D": backward-word
 
-    # for rxvt
-    "\e[8~": end-of-line
+      # for rxvt
+      "\e[8~": end-of-line
 
-    # for non RH/Debian xterm, can't hurt for RH/DEbian xterm
-    "\eOH": beginning-of-line
-    "\eOF": end-of-line
+      # for non RH/Debian xterm, can't hurt for RH/DEbian xterm
+      "\eOH": beginning-of-line
+      "\eOF": end-of-line
 
-    # for freebsd console
-    "\e[H": beginning-of-line
-    "\e[F": end-of-line
-    $endif
-  '';
+      # for freebsd console
+      "\e[H": beginning-of-line
+      "\e[F": end-of-line
+      $endif
+    '';
 
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
+    programs.direnv.enable = true;
+    programs.direnv.nix-direnv.enable = true;
+  };
 }

@@ -4,18 +4,13 @@ with lib;
 
 rec {
   imports = [
-    #(import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
-    (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
-    #(import "${nixpkgs}/nixos/modules/profiles/minimal.nix")
-    #(import "${nixpkgs}/nixos/modules/profiles/base.nix")
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix")
   ];
-  nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
-  nixpkgs.localSystem.system = "x86_64-linux";
-  nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
+  #nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.aarch64-multiplatform;
+  #nixpkgs.localSystem.system = "x86_64-linux";
+  #nixpkgs.crossSystem = { config = "armv6l-unknown-linux-gnueabihf"; };
   #nixpkgs.localSystem.system = "armv6l-linux";
   nixpkgs.overlays = [
-    inputs.nix.overlay
-    inputs.nur_dguibert.overlays.default
     (final: prev: {
       # don't build qt5
       # enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]

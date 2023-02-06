@@ -16,7 +16,6 @@ rec {
   imports = [
     outputs.nixosModules.defaults
   ];
-  nixpkgs.localSystem.system = "x86_64-linux";
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S12PNEAD231035B";
@@ -27,10 +26,6 @@ rec {
   boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usb_storage" "tm-smapi" ];
   boot.kernelPackages = pkgs.linuxPackages_5_13;
   boot.extraModulePackages = [ pkgs.linuxPackages.perf config.boot.kernelPackages.tp_smapi ];
-  #  nixpkgs.config = {pkgs}: (import ../../config/nixpkgs/config.nix { inherit pkgs; }) // {
-  #    allowUnfree = true;
-  #    packageOverrides.linuxPackages = boot.kernelPackages;
-  #  };
   boot.supportedFilesystems = [ "zfs" ];
   #boot.zfs.enableUnstable = true; # Linux v4.18.1 is not yet supported by zfsonlinux v0.7.9
 
@@ -142,7 +137,6 @@ rec {
   };
   services.tlp.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; let

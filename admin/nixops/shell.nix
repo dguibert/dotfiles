@@ -57,12 +57,6 @@ mkShell rec {
     '') (builtins.attrNames inputs) }
     export NIX_PATH
 
-    NIX_OPTIONS=()
-    NIX_OPTIONS+=("--option extra-builtins-file ${extra_builtins_file}")
-    export NIX_OPTIONS
-
-    export EXTRA_NIX_OPTS="''${NIX_OPTIONS[@]}"
-
     export PASSWORD_STORE_DIR=$PWD/secrets
   '';
 }

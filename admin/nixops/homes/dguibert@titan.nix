@@ -2,10 +2,10 @@
 {
   imports = [
     ./dguibert/home.nix
-    ./dguibert/emacs.nix
   ];
   centralMailHost.enable = true;
   withGui.enable = true;
+  withEmacs.enable = true;
 
   home.username = "dguibert";
   home.homeDirectory = "/home/dguibert";
