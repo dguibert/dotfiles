@@ -188,5 +188,10 @@ in
       server-3Dprinting.enable = true;
       networking.firewall.interfaces."eth0".allowedTCPPorts = [ 80 ];
     })
+
+    # platypush
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on (with outputs.nixosConfigurations; [ titan ])) {
+      services.redis.enable = true;
+    })
   ];
 }
