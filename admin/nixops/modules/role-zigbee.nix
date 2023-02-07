@@ -34,6 +34,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.zigbee2mqtt.enable = true;
+    systemd.services.zigbee2mqtt.unitConfig.ConditionPathExists = "/dev/ttyACM0";
     services.zigbee2mqtt.settings = {
       permit_join = true;
       serial.port = "/dev/ttyACM0";
