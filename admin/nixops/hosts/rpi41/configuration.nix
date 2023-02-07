@@ -39,10 +39,40 @@ rec {
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
-  systemd.network.networks."eth0" = {
-    name = "eth0";
-    DHCP = "yes";
+  systemd.network.wait-online.anyInterface = true;
+
+  systemd.network.netdevs."40-bond0" = {
+    netdevConfig.Name = "bond0";
+    netdevConfig.Kind = "bond";
+    bondConfig.Mode = "active-backup";
+    bondConfig.MIIMonitorSec = "100s";
+    bondConfig.PrimaryReselectPolicy = "always";
   };
+  systemd.network.networks = {
+    "40-bond0" = {
+      name = "bond0";
+      DHCP = "yes";
+      networkConfig.BindCarrier = "end0 wlan0";
+      linkConfig.MACAddress = "DC:A6:32:67:DD:9F";
+    };
+  } // listToAttrs (flip map [ "end0" "wlan0" ] (bi:
+    nameValuePair "40-${bi}" {
+      name = "${bi}";
+      DHCP = "no";
+      networkConfig.Bond = "bond0";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+      linkConfig.MACAddress = "DC:A6:32:67:DD:9F";
+    }));
+  networking.supplicant.wlan0 = {
+    configFile.path = "/persist/etc/wpa_supplicant.conf";
+    userControlled.group = "network";
+    extraConf = ''
+      ap_scan=1
+      p2p_disabled=1
+    '';
+    extraCmdArgs = "-u";
+  };
+
 
   environment.noXlibs = false; #https://github.com/NixOS/nixpkgs/issues/102137
   programs.ssh.setXAuthLocation = false;
