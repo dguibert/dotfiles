@@ -52,7 +52,7 @@ in
     ./nix.nix
     ./ssh.nix
     ./with-gui.nix
-
+    ./zellij.nix
   ];
 
   options = { };

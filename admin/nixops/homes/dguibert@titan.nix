@@ -6,6 +6,7 @@
   centralMailHost.enable = true;
   withGui.enable = true;
   withEmacs.enable = true;
+  withZellij.enable = true;
 
   home.username = "dguibert";
   home.homeDirectory = "/home/dguibert";
