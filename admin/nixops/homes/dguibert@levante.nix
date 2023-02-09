@@ -20,7 +20,7 @@
 
   # additional programs
   home.packages = with pkgs; [
-    xpra
+    # xpra
     bashInteractive
 
     datalad
