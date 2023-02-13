@@ -46,7 +46,7 @@ in
       #  config.secrets.zigbee2mqtt.secretFile
       #];
       external_converters = [
-        girier_js
+        #girier_js
       ];
     };
 

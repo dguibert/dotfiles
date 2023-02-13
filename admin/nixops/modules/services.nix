@@ -15,6 +15,7 @@ let
     desktop = [ titan t580 ];
     server-3Dprinting = [ rpi31 ];
     zigbee = [ rpi41 ];
+    platypush = [ titan rpi41 ];
   };
 
   dispatch_on = hosts: builtins.any (x: x.config.networking.hostName == config.networking.hostName) hosts;
@@ -191,7 +192,7 @@ in
     })
 
     # platypush
-    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on (with outputs.nixosConfigurations; [ titan ])) {
+    ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.platypush) {
       services.redis.enable = true;
     })
 
