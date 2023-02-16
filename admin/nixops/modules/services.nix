@@ -77,13 +77,18 @@ in
         backend openssh_t
           mode tcp
           source 0.0.0.0 usesrc clientip
-          server openssh 127.0.0.1:44322
+          server openssh ${config.systemd.network.networks."01-lo-ssh".networkConfig.Address}:44322
       '';
       # Enable the OpenSSH daemon.
       services.openssh.enable = true;
       services.openssh.listenAddresses = [
         { addr = "127.0.0.1"; port = 44322; }
+        { addr = config.systemd.network.networks."01-lo-ssh".networkConfig.Address; port = 44322; }
       ];
+      systemd.network.networks."01-lo-ssh" = {
+        name = "lo";
+        networkConfig.Address = "172.16.0.22";
+      };
 
       #echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
       sops.secrets.shadowsocks.sopsFile = ../hosts/rpi41/secrets/secrets.yaml;

@@ -46,8 +46,13 @@ in
       #  config.secrets.zigbee2mqtt.secretFile
       #];
       external_converters = [
-        #girier_js
+        girier_js
       ];
+      availability = {
+        active.timeout = 10;
+        passive.timeout = 10;
+      };
+      channel = 26; # https://haade.fr/fr/blog/interference-zigbee-wifi-2-4ghz-a-savoir
     };
 
     services.mosquitto.enable = true;
