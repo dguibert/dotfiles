@@ -91,7 +91,7 @@
   ];
   networking.firewall.allowedTCPPorts = [ 22322 ];
   services.openssh.startWhenNeeded = true;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.passwordAuthentication = false;
   services.openssh.extraConfig = ''
     HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
     HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
