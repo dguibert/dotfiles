@@ -198,7 +198,7 @@ in
 
     # platypush
     ({ config, lib, pkgs, inputs, outputs, ... }: lib.mkIf (dispatch_on distribution.platypush) {
-      services.redis.enable = true;
+      services.redis.servers."".enable = true;
     })
 
     # zigbee
