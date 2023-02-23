@@ -14,7 +14,7 @@
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call pkgs.linuxPackages.perf ];
   networking.hostId = "8425e349"; # - ZFS requires networking.hostId to be set
   boot.kernelParams = [
-    "acpi_backlight=vendor"
+    "acpi_backlight=video"
     "resume=LABEL=nvme-swap"
     # https://github.com/NixOS/nixpkgs/issues/36392
     "i915.enable_fbc=1"
