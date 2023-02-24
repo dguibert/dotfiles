@@ -28,4 +28,7 @@
     [[ -f ~/.profile.$(uname -m) ]] && . ~/.profile.$(uname -m)
   '';
 
+  home.packages = with pkgs; [
+    subversion
+  ];
 }
