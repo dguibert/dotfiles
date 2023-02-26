@@ -23,6 +23,17 @@ let
 in
 {
   imports = [
+    inputs.sops-nix.homeManagerModules.sops
+    ({ ... }: {
+      sops.age.sshKeyPaths = [ "/home/dguibert/.ssh/id_ed25519" ];
+      sops.defaultSopsFile = ./secrets.yaml;
+
+      sops.secrets.netrc = { };
+      sops.secrets.pass-email1 = { };
+      sops.secrets.pass-email2 = { };
+
+      #home.file.".netrc".source = config.sops.secrets.netrc.path;
+    })
     # import the base16.nix module
     inputs.base16.nixosModule
     # set system's scheme to nord by setting `config.scheme`
