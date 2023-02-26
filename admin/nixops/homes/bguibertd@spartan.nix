@@ -30,5 +30,6 @@
 
   home.packages = with pkgs; [
     subversion
+    dtach
   ];
 }
