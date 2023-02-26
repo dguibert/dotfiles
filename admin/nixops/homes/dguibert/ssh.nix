@@ -1,22 +1,22 @@
 { lib, ... }:
 {
-  #systemd.user.sockets.socks-rpi31 = {
-  #  Unit.Description = "Socks tunnel on 33328 via my rpi31";
+  #systemd.user.sockets.socks-rpi41 = {
+  #  Unit.Description = "Socks tunnel on 33328 via my rpi41";
   #  Socket = {
   #    ListenStream = "127.0.0.1:33328";
   #    Accept=true;
   #  };
   #  Install.WantedBy = [ "sockets.target" ];
   #};
-  #systemd.user.services.socks-rpi31 = {
+  #systemd.user.services.socks-rpi41 = {
   #  Unit = {
-  #    Description = "Socks tunnel on 33328 via my rpi31";
-  #    #Requires = "socks-rpi31.socket";
-  #    #After = "socks-rpi31.socket";
+  #    Description = "Socks tunnel on 33328 via my rpi41";
+  #    #Requires = "socks-rpi41.socket";
+  #    #After = "socks-rpi41.socket";
   #    ## This is a socket-activated service:
   #    #RefuseManualStart = true;
   #  };
-  #  Service.ExecStart = "${pkgs.openssh}/bin/ssh -N -D 33328 rpi31";
+  #  Service.ExecStart = "${pkgs.openssh}/bin/ssh -N -D 33328 rpi41";
   #  Service.StandardInput= "socket";
   #};
   # ssh -F ssh_config $host -o PubkeyAuthentication=yes -Nf
@@ -43,16 +43,16 @@
         };
         ## Coming from outside home network.
         "${host}_1" = lib.hm.dag.entryAfter [ "${host}_0" ] {
-          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" !exec \"ip route | grep ${vpn_ip}\"";
+          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \" ip neigh | grep REACHABLE | grep -Fw ${mac}\" !exec \"ip route | grep ${vpn_ip}\"";
           extraOptions.LocalCommand = "echo \"SSH %n: From outside network, to %h\" >&2";
-          proxyJump = lib.mkIf (host != "rpi31") "rpi31";
-          hostname = lib.mkIf (host == "rpi31") "82.64.121.168";
-          port = lib.mkIf (host == "rpi31") 443;
+          proxyJump = lib.mkIf (host != "rpi41") "rpi41";
+          hostname = lib.mkIf (host == "rpi41") "82.64.121.168";
+          port = lib.mkIf (host == "rpi41") 443;
 
         };
         ## Coming from VPN
         "${host}_2" = lib.hm.dag.entryAfter [ "${host}_1" ] {
-          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \"{ ip neigh; ip link; }|grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
+          match = "originalhost ${host} !exec \"[ %h = %L ]\" !exec \" ip neigh | grep REACHABLE | grep -Fw ${mac}\" exec \"ip route | grep ${vpn_ip}\"";
           extraOptions.PermitLocalCommand = "yes";
           extraOptions.LocalCommand = "echo \"SSH %n: From VPN network, to %h\" >&2";
           proxyCommand = "none";
