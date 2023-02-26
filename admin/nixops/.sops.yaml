@@ -7,6 +7,7 @@ keys:
   - &rpi41_age age1lml6xd6l7ntypmtmv7rsqxzguln5puynzlv2yf3k99hrr48l3ppq6nw3t3
   - &rpi31 F7368E72F15D95927F685CD0A264BDA92AE79515
   - &t580 CE0DA0A123AA2DC1E7AA38E0011B75E24664FD1E
+  - &t580_age age1e6up3vv3av0tlsp9lcmfxqga07r6d3ccahzzdp7een7facm5ps0qztps7l
 creation_rules:
   # dguibert
   - path_regex: homes/dguibert/[^/]+-sec\.nix$
@@ -27,6 +28,7 @@ creation_rules:
       - pgp:
           - *dguibert
           - *rpi41
+        age:
           - *rpi41_age
   # dguibert
   # rpi31
@@ -37,11 +39,13 @@ creation_rules:
           - *rpi31
   # dguibert
   # t580
-  - path_regex: hosts/laptop-s93efa6b/secrets/[^/]+\.yaml$
+  - path_regex: hosts/t580/secrets/[^/]+\.yaml$
     key_groups:
       - pgp:
           - *dguibert
           - *t580
+        age:
+          - *t580_age
   # dguibert
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
@@ -49,15 +53,19 @@ creation_rules:
           - *dguibert
           - *titan
           - *rpi41
-          - *rpi41_age
           - *rpi31
           - *t580
+        age:
+          - *rpi41_age
+          - *t580_age
   - path_regex: homes/dguibert/[^/]+-sec\.el$
     key_groups:
       - pgp:
           - *dguibert
           - *titan
           - *rpi41
-          - *rpi41_age
           - *rpi31
           - *t580
+        age:
+          - *rpi41_age
+          - *t580_age
