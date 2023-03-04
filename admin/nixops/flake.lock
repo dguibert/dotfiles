@@ -124,6 +124,26 @@
         "type": "github"
       }
     },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1677721686,
+        "narHash": "sha256-Kywcpy69QspTcs4pq9lJlIzSN63vs565CYvkEQbfaRY=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "efc8dd8083da15433ad226baad110aea4fca634b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "dwl-src": {
       "flake": false,
       "locked": {
@@ -564,6 +584,7 @@
         "base16-vim": "base16-vim",
         "chemacs": "chemacs",
         "deploy-rs": "deploy-rs",
+        "disko": "disko",
         "emacs-overlay": "emacs-overlay",
         "flake-utils": [
           "nixpkgs",

@@ -18,6 +18,9 @@
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
 
+  inputs.disko.url = github:nix-community/disko;
+  inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.terranix = { url = "github:mrVanDalo/terranix"; flake = false; };
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
