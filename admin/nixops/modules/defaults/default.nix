@@ -94,7 +94,6 @@
   services.openssh.settings.passwordAuthentication = false;
   services.openssh.extraConfig = ''
     HostCertificate ${config.sops.secrets."ssh_host_ed25519_key-cert.pub".path}
-    HostCertificate ${config.sops.secrets."ssh_host_rsa_key-cert.pub".path}
 
     AcceptEnv COLORTERM
     Ciphers chacha20-poly1305@openssh.com,aes256-cbc,aes256-gcm@openssh.com,aes256-ctr
@@ -103,9 +102,6 @@
   '';
 
   # don't set ssh_host_rsa_key since userd by sops to decrypt secrets
-  #sops.secrets."ssh_host_rsa_key"              .path = "/persist/etc/ssh/ssh_host_rsa_key";
-  sops.secrets."ssh_host_rsa_key.pub"          .path = "/persist/etc/ssh/ssh_host_rsa_key.pub";
-  sops.secrets."ssh_host_rsa_key-cert.pub"     .path = "/persist/etc/ssh/ssh_host_rsa_key-cert.pub";
   #sops.secrets."ssh_host_ed25519_key"          .path = "/persist/etc/ssh/ssh_host_ed25519_key";
   sops.secrets."ssh_host_ed25519_key.pub"      .path = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
   sops.secrets."ssh_host_ed25519_key-cert.pub" .path = "/persist/etc/ssh/ssh_host_ed25519_key-cert.pub";
@@ -115,11 +111,7 @@
       #path = config.sops.secrets."ssh_host_ed25519_key".path;
       path = "/persist/etc/ssh/ssh_host_ed25519_key";
       type = "ed25519";
-    }
-    {
-      path = "/persist/etc/ssh/ssh_host_rsa_key";
-      type = "rsa";
-      bits = 4096;
+      round = 100;
     }
   ];
 
