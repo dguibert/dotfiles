@@ -1,24 +1,5 @@
 { lib, ... }:
 {
-  #systemd.user.sockets.socks-rpi41 = {
-  #  Unit.Description = "Socks tunnel on 33328 via my rpi41";
-  #  Socket = {
-  #    ListenStream = "127.0.0.1:33328";
-  #    Accept=true;
-  #  };
-  #  Install.WantedBy = [ "sockets.target" ];
-  #};
-  #systemd.user.services.socks-rpi41 = {
-  #  Unit = {
-  #    Description = "Socks tunnel on 33328 via my rpi41";
-  #    #Requires = "socks-rpi41.socket";
-  #    #After = "socks-rpi41.socket";
-  #    ## This is a socket-activated service:
-  #    #RefuseManualStart = true;
-  #  };
-  #  Service.ExecStart = "${pkgs.openssh}/bin/ssh -N -D 33328 rpi41";
-  #  Service.StandardInput= "socket";
-  #};
   # ssh -F ssh_config $host -o PubkeyAuthentication=yes -Nf
   # ssh -F ssh_config $host -O check
   # ssh -F ssh_config $host -O exit
