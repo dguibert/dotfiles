@@ -9,6 +9,7 @@
       home-manager.extraSpecialArgs.outputs = outputs;
     }
     inputs.sops-nix.nixosModules.sops
+    inputs.disko.nixosModules.disko
 
     outputs.nixosModules.distributed-build-conf
     ({ config, ... }: { distributed-build-conf.enable = true; })
