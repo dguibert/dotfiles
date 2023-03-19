@@ -49,6 +49,11 @@
           zfs_type = "filesystem";
           mountpoint = "/backup2/Videos";
           options.mountpoint = "legacy";
+          mountOptions = [
+            "defaults"
+            "x-systemd.automount"
+            "noauto"
+          ];
         };
       };
     };
