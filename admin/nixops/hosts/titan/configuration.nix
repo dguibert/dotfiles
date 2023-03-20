@@ -26,14 +26,9 @@ rec {
     ({ ... }: { services.udisks2.enable = true; })
     #../../modules/wayland-nvidia.nix
   ];
-  #nesting.clone = [
-  #  {
-  #    imports = [
-  #      ../../modules/wayland-nvidia.nix
-  #    ];
-  #    boot.loader.grub.configurationName = "Wayland NVIDIA";
-  #  }
-  #];
+  disko.devices = import ./disk-config.nix {
+    inherit lib;
+  };
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "isci" "usbhid" "usb_storage" "sd_mod" "nvme" ];
   boot.kernelModules = [ "kvm-intel" ];
@@ -53,42 +48,15 @@ rec {
     #zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
-  fileSystems."/" = { device = "rpool_vanif0/local/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
+  fileSystems."/tmp".neededForBoot = true;
+  fileSystems."/nix".neededForBoot = true;
+  fileSystems."/persist".neededForBoot = true;
 
-  fileSystems."/nix" = { device = "rpool_vanif0/local/nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot = true; };
-
-  fileSystems."/root" = { device = "rpool_vanif0/safe/home/root"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-
-  fileSystems."/home/dguibert" = { device = "rpool_vanif0/safe/home/dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home/dguibert/Videos" = { device = "rpool_vanif0/safe/home/dguibert/Videos"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home/dguibert/Maildir/.notmuch" = { device = "rpool_vanif0/safe/home/dguibert/notmuch"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-
-  fileSystems."/persist" = { device = "rpool_vanif0/safe/persist"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; neededForBoot = true; };
-
-  fileSystems."/boot/efi" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi2" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi3" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi4" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi5" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-  fileSystems."/boot/efi6" = { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part1"; fsType = "vfat"; options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" "X-mount.mkdir" ]; };
-
-  fileSystems."/tmp" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot = true; };
+  #fileSystems."/tmp" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot = true; };
   # to build robotnix more thant 100G are needed
   # git/... fails with normalization/utf8only of zfs
   #fileSystems."/tmp"                                = { device="rpool_vanif0/local/tmp"; fsType="zfs"; options= [ "defaults" "noatime" "mode=1777" ]; neededForBoot=true; };
-  #fileSystems."/tmp"                                = { label="rpool_vanif0_tmp"; fsType="ext4"; options= [ "defaults" "noatime" ]; neededForBoot=true; };
 
-  fileSystems."/home_nfs/bguibertd/nix" = { device = "rpool_vanif0/local/nix--home_nfs-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home_nfs_robin_ib/bguibertd/nix" = { device = "rpool_vanif0/local/nix--home_nfs_robin_ib-bguibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/p/project/prcoe08/guibert1/nix" = { device = "rpool_vanif0/local/nix--p-project-prcoe08-guibert1-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/cluster/projects/nn9560k/dguibert" = { device = "rpool_vanif0/local/nix--cluster-projects-nn9560k-dguibert"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/scratch/work/guibertd/nix" = { device = "rpool_vanif0/local/nix--scratch-work-guibertd-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/home/b/b381115/nix" = { device = "rpool_vanif0/local/nix--home-b-b381115-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-  fileSystems."/users/dguibert/nix" = { device = "rpool_vanif0/local/nix--users-dguibert-nix"; fsType = "zfs"; options = [ "X-mount.mkdir" ]; };
-
-  disko.devices = import ./disk-config.nix {
-    lib = nixpkgs.lib;
-  };
   # Maintenance target for later
   # https://www.immae.eu/blog/tag/nixos.html
   systemd.targets.maintenance = {
@@ -117,16 +85,6 @@ rec {
     "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
   ];
   boot.zfs.devNodes = "/dev/disk/by-id";
-  swapDevices = [
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part4"; randomEncryption.enable = true; }
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD0-part4"; randomEncryption.enable = true; }
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDDAD3-part4"; randomEncryption.enable = true; }
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3940-part4"; randomEncryption.enable = true; }
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3947-part4"; randomEncryption.enable = true; }
-    { device = "/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DE3994-part4"; randomEncryption.enable = true; }
-
-    #{ device="/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"; }
-  ];
 
   nix.settings.max-jobs = lib.mkDefault 8;
   nix.settings.build-cores = lib.mkDefault 24;
