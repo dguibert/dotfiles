@@ -239,17 +239,11 @@
         #./lib
         ./apps
         ./checks
-        #./shells
+        ./shells
         ({ ... }: { perSystem = { system, ... }: { _module.args.pkgs = nixpkgsFor system; }; })
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-        devShells.default = pkgs.callPackage ./shell.nix {
-          inherit inputs;
-          inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
-          deploy-rs = self.legacyPackages.${system}.deploy-rs.deploy-rs;
-          pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
-        };
         legacyPackages = pkgs;
         # This is highly advised, and will prevent many possible mistakes
         checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
