@@ -237,7 +237,7 @@
         #./hosts
         #./modules/all-modules.nix
         #./lib
-        #./apps
+        ./apps
         #./checks
         #./shells
         ({ ... }: { perSystem = { system, ... }: { _module.args.pkgs = nixpkgsFor system; }; })
@@ -251,15 +251,6 @@
           pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
         };
         legacyPackages = pkgs;
-        apps = import ./apps {
-          inherit (outputs) lib;
-          inherit inputs outputs;
-          nixpkgs_to_use = {
-            #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-            default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-          };
-        };
-
         checks = {
           pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
