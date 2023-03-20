@@ -238,7 +238,7 @@
         #./modules/all-modules.nix
         #./lib
         ./apps
-        #./checks
+        ./checks
         #./shells
         ({ ... }: { perSystem = { system, ... }: { _module.args.pkgs = nixpkgsFor system; }; })
       ];
@@ -251,31 +251,8 @@
           pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
         };
         legacyPackages = pkgs;
-        checks = {
-          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              nixpkgs-fmt.enable = true;
-              prettier.enable = true;
-              trailing-whitespace = {
-                enable = true;
-                name = "trim trailing whitespace";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/trailing-whitespace-fixer";
-                types = [ "text" ];
-                stages = [ "commit" "push" "manual" ];
-              };
-              check-merge-conflict = {
-                enable = true;
-                name = "check for merge conflicts";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/check-merge-conflict";
-                types = [ "text" ];
-              };
-            };
-          };
-        }
-        //
         # This is highly advised, and will prevent many possible mistakes
-        (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
+        checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
         ;
 
       };
