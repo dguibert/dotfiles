@@ -60,7 +60,7 @@
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, flake-parts, nixpkgs, ... }@inputs:
     let
       # Memoize nixpkgs for different platforms for efficiency.
       inherit (self) outputs;
@@ -79,61 +79,13 @@
           config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;
           #config.contentAddressedByDefault = true;
         };
-
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      lib = nixpkgs.lib;
 
     in
-    inputs.nixpkgs.lib.recursiveUpdate
-      (inputs.flake-utils.lib.eachSystem supportedSystems (system:
-        let
-          pkgs = nixpkgsFor system;
-        in
-        rec {
-
-          devShells.default = pkgs.callPackage ./shell.nix {
-            inherit inputs;
-            inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
-            deploy-rs = self.legacyPackages.${system}.deploy-rs.deploy-rs;
-            pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
-          };
-          legacyPackages = pkgs;
-
-          apps = import ./apps {
-            inherit (outputs) lib;
-            inherit inputs outputs;
-            nixpkgs_to_use = {
-              #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-              default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-            };
-          };
-
-          checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              nixpkgs-fmt.enable = true;
-              prettier.enable = true;
-              trailing-whitespace = {
-                enable = true;
-                name = "trim trailing whitespace";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/trailing-whitespace-fixer";
-                types = [ "text" ];
-                stages = [ "commit" "push" "manual" ];
-              };
-              check-merge-conflict = {
-                enable = true;
-                name = "check for merge conflicts";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/check-merge-conflict";
-                types = [ "text" ];
-              };
-            };
-          };
-
-        }))
-      (rec {
-        lib = inputs.nixpkgs.lib;
-
-        overlays = import ./overlays { inherit lib inputs; };
-
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      flake = {
+        lib = nixpkgs.lib;
+        overlays = import ./overlays { inherit inputs; lib = inputs.nixpkgs.lib; };
         ## - hydraJobs: A nested set of derivations built by Hydra.
         ##
         ## -
@@ -192,18 +144,18 @@
                 magicRollback = false;
 
                 # root profiles
-                profiles.root.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfigurations."root@${system}".activationPackage "./activate";
+                profiles.root.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom self.homeConfigurations."root@${system}".activationPackage "./activate";
                 profiles.root.user = "root";
                 # dguibert profiles
                 #profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
                 #profiles.dguibert.user = "dguibert";
               })
-            (builtins.removeAttrs inputs.self.nixosConfigurations [ "iso" ]))
+            (builtins.removeAttrs self.nixosConfigurations [ "iso" ]))
           # dguibert profiles
           (inputs.nixpkgs.lib.mapAttrs
             (host: homeConfig:
               let
-                system = nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
+                system = self.nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
               in
               {
                 #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
@@ -211,22 +163,22 @@
                 profiles.dguibert.user = "dguibert";
               })
             {
-              rpi31 = homeConfigurations."dguibert@rpi31";
-              rpi41 = homeConfigurations."dguibert@rpi41";
-              titan = homeConfigurations."dguibert@titan";
-              t580 = homeConfigurations."dguibert@t580";
+              rpi31 = self.homeConfigurations."dguibert@rpi31";
+              rpi41 = self.homeConfigurations."dguibert@rpi41";
+              titan = self.homeConfigurations."dguibert@titan";
+              t580 = self.homeConfigurations."dguibert@t580";
             }
           )
           (
             let
               genProfile = user: name: profile: {
-                path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom homeConfigurations."${name}".activationPackage ''
-                  export NIX_STATE_DIR=${homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
-                  export NIX_PROFILE=${homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
+                path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom self.homeConfigurations."${name}".activationPackage ''
+                  export NIX_STATE_DIR=${self.homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
+                  export NIX_PROFILE=${self.homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
                   ./activate
                 '';
                 sshUser = user;
-                profilePath = "${homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
+                profilePath = "${self.homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
               };
             in
             {
@@ -275,9 +227,67 @@
           ({ })
         ];
 
-        # This is highly advised, and will prevent many possible mistakes
-        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy)
-          (inputs.nixpkgs.lib.genAttrs supportedSystems (system: self.legacyPackages.${system}.deploy-rs.lib));
+      };
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      imports = [
+        #./home/profiles
+        #./hosts
+        #./modules/all-modules.nix
+        #./lib
+        #./apps
+        #./checks
+        #./shells
+        ({ ... }: { perSystem = { system, ... }: { _module.args.pkgs = nixpkgsFor system; }; })
+      ];
 
-      });
+      perSystem = { config, self', inputs', pkgs, system, ... }: {
+        devShells.default = pkgs.callPackage ./shell.nix {
+          inherit inputs;
+          inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
+          deploy-rs = self.legacyPackages.${system}.deploy-rs.deploy-rs;
+          pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
+        };
+        legacyPackages = pkgs;
+        apps = import ./apps {
+          inherit (outputs) lib;
+          inherit inputs outputs;
+          nixpkgs_to_use = {
+            #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
+            default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
+          };
+        };
+
+        checks = {
+          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              nixpkgs-fmt.enable = true;
+              prettier.enable = true;
+              trailing-whitespace = {
+                enable = true;
+                name = "trim trailing whitespace";
+                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/trailing-whitespace-fixer";
+                types = [ "text" ];
+                stages = [ "commit" "push" "manual" ];
+              };
+              check-merge-conflict = {
+                enable = true;
+                name = "check for merge conflicts";
+                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/check-merge-conflict";
+                types = [ "text" ];
+              };
+            };
+          };
+        }
+        //
+        # This is highly advised, and will prevent many possible mistakes
+        (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
+        ;
+
+      };
+    };
+
 }
