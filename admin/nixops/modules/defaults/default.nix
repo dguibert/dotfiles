@@ -1,30 +1,23 @@
-{ config, lib, pkgs, resources, inputs, outputs, ... }: {
+{ config, lib, pkgs, resources, inputs, ... }: {
   imports = [
     inputs.nixpkgs.inputs.nixpkgs.nixosModules.notDetected
-    inputs.home-manager.nixosModules.home-manager
-    {
-      home-manager.useGlobalPkgs = true;
-      home-manager.useUserPackages = false;
-      home-manager.extraSpecialArgs.inputs = inputs;
-      home-manager.extraSpecialArgs.outputs = outputs;
-    }
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
 
-    outputs.nixosModules.distributed-build-conf
+    ../../modules/distributed-build-conf.nix
     ({ config, ... }: { distributed-build-conf.enable = true; })
-    outputs.nixosModules.nix-conf
+    ../../modules/nix-conf.nix
     ({ config, ... }: { nix-conf.enable = true; })
-    outputs.nixosModules.report-changes
+    ../../modules/report-changes.nix
 
-    outputs.nixosModules.role-dns
-    outputs.nixosModules.role-sshguard
-    outputs.nixosModules.role-wireguard-mesh
-    outputs.nixosModules.role-otp-authentication
+    ../../modules/role-dns.nix
+    ../../modules/role-sshguard.nix
+    ../../modules/role-wireguard-mesh.nix
+    ../../modules/role-otp-authentication.nix
     ({ config, ... }: { role-otp-authentication.enable = true; })
-    outputs.nixosModules.role-zigbee
+    ../../modules/role-zigbee.nix
 
-    outputs.nixosModules.services
+    #../../modules/services.nix
 
     ../../users/default.nix
 

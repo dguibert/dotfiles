@@ -95,17 +95,21 @@
         ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
         homeManagerModules = import ./hm-modules { inherit lib; };
 
-        nixosConfigurations = import ./hosts {
-          inherit lib inputs outputs;
-          systems = {
-            default = "x86_64-linux";
-            "rpi31" = "aarch64-linux";
-            "rpi41" = "aarch64-linux";
-          };
-          pkgs_to_use = {
-            rpi01 = self.legacyPackages.x86_64-linux.pkgsCross.raspberryPi;
-          };
-        };
+        #nixosConfigurations = import ./hosts {
+        #  inherit lib inputs outputs;
+        #  systems = {
+        #    default = "x86_64-linux";
+        #    "rpi31" = "aarch64-linux";
+        #    "rpi41" = "aarch64-linux";
+        #  };
+        #  pkgs_to_use = {
+        #    rpi01 = self.legacyPackages.x86_64-linux.pkgsCross.raspberryPi;
+        #  };
+        #};
+        modules.hosts.titan = [
+          # adb
+          ({ ... }: { programs.adb.enable = true; })
+        ];
 
         homeConfigurations = import ./homes {
           inherit lib inputs outputs;
@@ -234,7 +238,7 @@
       ];
       imports = [
         #./home/profiles
-        #./hosts
+        ./hosts
         #./modules/all-modules.nix
         #./lib
         ./apps

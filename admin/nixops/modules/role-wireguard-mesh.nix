@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, outputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 let
   cfg = config.role.wireguard-mesh;
 
@@ -6,7 +6,7 @@ let
 in
 {
   imports = [
-    outputs.nixosModules.wireguard-mesh
+    ./wireguard-mesh.nix
   ];
 
   options = {
