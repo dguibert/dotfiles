@@ -29,10 +29,10 @@ git_add_new_remote () {
     remote="$1"
     url="$2"
     if git remote add "$remote" "$url"; then
-        info "Added remote $remote -> $url"
+        echo "+ Added remote $remote -> $url"
         return 0
     else
-        error "Failed to add remote $remote"
+        error "! Failed to add remote $remote"
         return 1
     fi
 }
@@ -42,10 +42,10 @@ git_set_remote () {
     url="$2"
     existing_url="$3"
     if git remote set-url "$remote" "$url"; then
-        info "Repointed remote $remote -> $url (was $existing_url)"
+        info "+ Repointed remote $remote -> $url (was $existing_url)"
         return 0
     else
-        error "Failed to repoint remote $remote"
+        error "! Failed to repoint remote $remote"
         return 1
     fi
 }
@@ -57,7 +57,7 @@ git_add_remote () {
     existing_url=$( git config "remote.$remote.url" ) || true
     if [ -n "$existing_url" ]; then
         if [ "$url" = "$existing_url" ]; then
-            info "Remote $remote already points to $url"
+            #info ". Remote $remote already points to $url"
             return
         fi
 
@@ -65,8 +65,8 @@ git_add_remote () {
             git_set_remote "$remote" "$url" "$existing_url"
             return
         else
-            warning "Remote $remote already points to $existing_url not $url"
-            warning "Use MR_OVERWRITE_REMOTES=y to rewrite URL."
+            warning "! Remote $remote already points to $existing_url not $url"
+            warning "! Use MR_OVERWRITE_REMOTES=y to rewrite URL."
             return
         fi
     fi
@@ -99,10 +99,124 @@ git_add_remotes () {
             exception="$remote"
         fi
         if [ "$LOCALHOST_NICKNAME" = "$exception" ]; then
-            info "Won't add remote $url for $exception"
+            #info "Won't add remote $url for $exception"
             continue
         fi
 
         git_add_remote "$remote" "$url"
+    done
+}
+
+# git_rm_remote REMOTE-NAME
+git_rm_remote () {
+    remote="$1"
+    if git config remote."$remote".url >/dev/null; then
+        if git remote remove "$remote"; then
+            echo "- Removed remote $remote"
+        else
+            echo >&2 "WARNING: Failed to remove remote $remote"
+        fi
+    else
+        echo ". $remote remote was already removed"
+    fi
+}
+
+# git_rm_remotes REMOTES
+#
+# REMOTES is a multi-line string with one remote per line.
+# Invokes git_rm_remote for each line.
+git_rm_remotes () {
+    cd "$MR_REPO"
+    read_localhost_nickname
+    # Needs to be exported to while-read subshell
+    export LOCALHOST_NICKNAME="$localhost_nickname"
+    echo "$*" | while read remote; do
+        if [ -z "$remote$url" ]; then
+            # presumably got a blank line
+            continue
+        fi
+
+        git_rm_remote "$remote"
+    done
+}
+
+# git_ignore_remotes REMOTES
+#
+# REMOTES is a multi-line string with one remote per line.
+# Tells git annex to ignore the list of remotes.
+git_ignore_remotes () {
+    cd "$MR_REPO"
+
+    if ! [ -d .git/annex ]; then
+        return
+    fi
+
+    read_localhost_nickname
+    # Needs to be exported to while-read subshell
+    export LOCALHOST_NICKNAME="$localhost_nickname"
+    echo "$*" | while read remote; do
+        if [ -z "$remote$url" ]; then
+            # presumably got a blank line
+            continue
+        fi
+
+        if [ "$LOCALHOST_NICKNAME" = "$remote" ]; then
+            info ". (Won't ignore self)"
+            continue
+        fi
+
+        if ! git remote | grep -q "$remote"; then
+            # Don't set annex-ignore if the remote doesn't exist
+            continue
+        fi
+
+        if git config --bool remote."$remote".annex-ignore | grep -q true
+        then
+            echo ". $remote remote already had annex-ignore set to true"
+        else
+            git config remote."$remote".annex-ignore true
+            echo "- Set $remote remote annex-ignore to true"
+        fi
+    done
+}
+
+# git_ping_remotes REMOTES
+#
+# REMOTES is a multi-line string with one remote per line.
+# Tells auto-sync-daemon to check whether these remotes are reachable
+# before an annex sync, and if not, exclude them from the sync.
+git_ping_remotes () {
+    cd "$MR_REPO"
+
+    if ! [ -d .git/annex ]; then
+        return
+    fi
+
+    read_localhost_nickname
+    # Needs to be exported to while-read subshell
+    export LOCALHOST_NICKNAME="$localhost_nickname"
+    echo "$*" | while read remote; do
+        if [ -z "$remote$url" ]; then
+            # presumably got a blank line
+            continue
+        fi
+
+        if [ "$LOCALHOST_NICKNAME" = "$remote" ]; then
+            info ". (Won't ping self)"
+            continue
+        fi
+
+        if ! git remote | grep -q "$remote"; then
+            # Don't set annex-ping if the remote doesn't exist
+            continue
+        fi
+
+        if git config --bool remote."$remote".annex-ping | grep -q true
+        then
+            echo ". $remote remote already had annex-ping set to true"
+        else
+            git config remote."$remote".annex-ping true
+            echo "- Set $remote remote annex-ping to true"
+        fi
     done
 }
