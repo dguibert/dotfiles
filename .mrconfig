@@ -1,11 +1,16 @@
+# -*- mode: sh -*-
 [DEFAULT]
+include =
+    if [ -e ~/.config/mr/library-loaders ]; then
+        # mr-config already checked out
+        . ~/.config/mr/library-loaders
+        load_libraries ~/.config/mr/sh.d/*
+        include_lib_dirs ~/.config/mr/lib.d
+    fi
 git_gc = git gc "$@"
 git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
-include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
-	         cat $HOME/.config/mr/lib/mgit
 lib =
-	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
 	       else
@@ -43,7 +48,6 @@ lib =
 	       wantarchives() {
 	               test "$whoami" = dguibert && on titan orsine t580
 	       }
-	       source $HOME/.config/mr/lib/git-remotes
 git_push = echo "$MR_REPO has to be manually pushed"
 
 #include = cat $HOME/.config/mr/config.d/*
@@ -73,19 +77,14 @@ git_push = echo "$MR_REPO has to be manually pushed"
 [$HOME/.mgit/dotfiles/.git]
 order = 1
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
-fixups = git_add_remotes "
-	          public_git ~/public_git/dotfiles.git
-	          "
+fixups = git_add_remote origin https://github.com/dguibert/dotfiles.git
+         git_rm_remote public_git
 push =
 	       mgit dotfiles push
-	       mgit dotfiles push public_git
 
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
-fixups = git_add_remotes "
-	          public_git ~/public_git/nix-easybuild.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public
 
 [code/bedrocklinux-userland]
 checkout = git clone 'https://github.com/paradigm/bedrocklinux-userland' 'bedrocklinux-userland'
@@ -145,21 +144,21 @@ checkout = git clone 'git://github.com/kmcallister/shqq' 'shqq'
 [code/spack]
 checkout = git clone 'https://github.com/spack/spack' 'spack'
 fixups = git_add_remotes "
-	          origin https://github.com/spack/spack
+	          spack https://github.com/spack/spack
 	          dguibert git@github.com:dguibert/spack.git
 	          flatironinstitute https://github.com/flatironinstitute/spack
+            gitlab https://castle.frec.bull.fr:24443/bguibertd/spack
 	          "
+         git_rm_remote origin
 push = git push -v dguibert
-
+       git push -v gitlab
 
 [code/training-gerrit]
 checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training-gerrit'
 
 [code/nixpkgs]
 checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
-fixups = git_add_remotes "
-	          github https://github.com/NixOS/nixpkgs
-	        "
+fixups = git_add_remotes github https://github.com/NixOS/nixpkgs
 	        git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
 	        git config --get-all remote.origin.push "/heads/*" &>/dev/null || git config --add remote.origin.push refs/heads/*:refs/heads/*
 	        git config --get-all remote.origin.push "/tags/*" &>/dev/null || git config --add remote.origin.push refs/tags/*:refs/tags/*
@@ -176,11 +175,9 @@ checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegra
 
 [code/dwm]
 checkout = git clone 'http://git.suckless.org/dwm' 'dwm'
-fixups = git_add_remotes "
-	          dguibert https://github.com/dguibert/dwm.git
-	          "
+fixups = git_add_remote dguibert https://github.com/dguibert/dwm.git
 push = git push -v dguibert +pu
-	      git push -v dguibert
+      git push -v dguibert
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
@@ -190,7 +187,6 @@ checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
 
 [code/nix]
 checkout = git clone 'https://github.com/NixOS/nix' 'nix'
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 fixups = git_add_remotes "
@@ -206,18 +202,14 @@ checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph
 
 [code/st]
 checkout = git clone 'git://git.suckless.org/st' 'st'
-fixups = git_add_remotes "
-	          dguibert https://github.com/dguibert/st.git
-	          "
+fixups = git_add_remote dguibert https://github.com/dguibert/st.git
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
 
 [code/myrepos]
 checkout = git clone 'https://git.joeyh.name/git/myrepos.git' 'myrepos'
-fixups = git_add_remotes "
-	       origin https://git.joeyh.name/git/myrepos.git/
-	       "
+fixups = git_add_remote origin https://git.joeyh.name/git/myrepos.git/
 
 [code/dvtm]
 checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
@@ -225,10 +217,9 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 [.password-store]
 checkout = git init '.password-store'
 fixups = git_add_remotes "
-	          genji gcrypt::ssh://genji/~/public_git/password-store
-	          spartan gcrypt::ssh://spartan/~/public_git/password-store
+	          genji   gcrypt::ssh://REMOTE/~/public_git/password-store
+	          spartan gcrypt::ssh://REMOTE/~/public_git/password-store
 	          "
-update = git remote update
 push = git remote -v | grep push | awk '{print $1}' | xargs --verbose -i git push --all {}
 
 [code/git-subrepo]
@@ -363,7 +354,6 @@ push = git push -v dguibert
 
 [code/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
-update = git remote update
 push = git push -v dguibert +pu
 	git push -v dguibert
 fixups = git_add_remotes "
@@ -441,7 +431,6 @@ checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks
 
 [code/nixops]
 checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
@@ -476,7 +465,6 @@ fixups = git_add_remotes "
 	          nixos https://github.com/nixos/mobile-nixos
 	          dguibert https://github.com/dguibert/mobile-nixos
 	        "
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
@@ -708,8 +696,8 @@ checkout = git clone 'https://github.com/Mic92/sops-nix' 'sops-nix'
 checkout = git clone 'https://github.com/dguibert/nixpack' 'nixpack'
 fixups = git_add_remotes "
 	       flatironinstitute  https://github.com/flatironinstitute/nixpack
-	genji genji:software-cepp-spack/nixpack
-	spartan spartan:software-cepp-spack/nixpack
+         genji REMOTE:software-cepp-spack/nixpack
+         spartan REMOTE:software-cepp-spack/nixpack
 	        "
 push = git push -v origin +pu
 	      git push -v origin
