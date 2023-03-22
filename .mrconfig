@@ -82,6 +82,12 @@ fixups = git_add_remote origin https://github.com/dguibert/dotfiles.git
 push =
 	       mgit dotfiles push
 
+[$HOME/.mgit/git-config/.git]
+order = 2
+checkout = mgit clone https://github.com/dguibert/git-config
+fixups = git_add_remote aspiers https://github.com/aspiers/git-config
+push = mgit dotfiles push
+
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
 fixups = git_rm_remote public
