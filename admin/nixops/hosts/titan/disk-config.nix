@@ -189,9 +189,9 @@ in
           zfs_type = "filesystem";
           options.mountpoint = "none";
         };
-        "backup2/videos" = {
+        "backup2/ria" = {
           zfs_type = "filesystem";
-          mountpoint = "/backup2/Videos";
+          mountpoint = "/backup2/ria";
           options.mountpoint = "legacy";
           mountOptions = [
             "defaults"
