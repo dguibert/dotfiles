@@ -87,7 +87,7 @@ push =
 order = 2
 checkout = mgit clone https://github.com/dguibert/git-config
 fixups = git_add_remote aspiers https://github.com/aspiers/git-config
-push = mgit dotfiles push
+push = mgit git-config push
 
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
