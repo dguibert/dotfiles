@@ -1,4 +1,5 @@
 # -*- mode: sh -*-
+# vim: ft=sh :
 [DEFAULT]
 include =
     if [ -e ~/.config/mr/library-loaders ]; then
@@ -215,7 +216,6 @@ push = git push -v dguibert +pu
 
 [code/myrepos]
 checkout = git clone 'https://git.joeyh.name/git/myrepos.git' 'myrepos'
-fixups = git_add_remote origin https://git.joeyh.name/git/myrepos.git/
 
 [code/dvtm]
 checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
@@ -230,36 +230,23 @@ push = git remote -v | grep push | awk '{print $1}' | xargs --verbose -i git pus
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
-push = git push -v public_git
-fixups = git_add_remotes "
-	          public_git ~/public_git/git-subrepo.git
-	          "
+fixups = git_rm_remote public_git
 
 [$HOME/work]
+lib = MR_NAME=Documents
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	                 genji genji:work
-	                 spartan spartan:work
-	                 genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
-	          "
-	        git remote remove manny_lustre_na 2>/dev/null || true
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
+fixups = auto_work_remotes
 
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
 
 [code/git-crypt]
 checkout = git clone 'https://github.com/AGWA/git-crypt' 'git-crypt'
-fixups = git_add_remotes "
-	          public_git ~/public_git/git-crypt.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/git-ftp]
 checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
@@ -273,10 +260,7 @@ checkout = git clone 'https://github.com/nextflow-io/nextflow' 'nextflow'
 
 [code/multigit]
 checkout = git clone 'https://github.com/capr/multigit' 'multigit'
-fixups = git_add_remotes "
-	          public_git ~/public_git/multigit.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/git-appraise]
 checkout = git clone 'https://github.com/google/git-appraise' 'git-appraise'
@@ -286,11 +270,8 @@ checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-
 
 [code/nt2]
 checkout = git clone 'https://github.com/jtlap/nt2' 'nt2'
-fixups = git_add_remotes "
-	          picanumber https://github.com/picanumber/nt2
-	          public_git ~/public_git/nt2.git
-	          "
-push = git push -v public_git
+fixups = git_add_remote picanumber https://github.com/picanumber/nt2
+         git_rm_remote public_git
 
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
@@ -304,10 +285,7 @@ checkout = git clone 'https://github.com/cylc/cylc' 'cylc'
 
 [code/gitolite]
 checkout = git clone 'git://github.com/sitaramc/gitolite' 'gitolite'
-fixups = git_add_remotes "
-	          public_git ~/public_git/gitolite.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/nixos-weekly]
 checkout = git clone 'https://github.com/NixOS/nixos-weekly' 'nixos-weekly'
@@ -364,7 +342,7 @@ push = git push -v dguibert +pu
 	git push -v dguibert
 fixups = git_add_remotes "
 	dguibert git@github.com:dguibert/home-manager.git
-	nrdxp https://github.com/nrdxp/home-manager
+	nrdxp https://github.com/REMOTE/home-manager
 	"
 
 [code/charliecloud]
@@ -374,30 +352,24 @@ checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
 deleted = true
 
 [nixpkgs-overlays]
-checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
-push = git push -v public_git
-	      git push -v origin
+deleted = true
+#checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
+#push = git push -v origin
 
 [code/vite]
 checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
 
 [code/eztrace]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace' 'eztrace'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace
 
 [code/eztrace-plugins]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace-plugins' 'eztrace-plugins'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace-plugins
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace-plugins
 
 [code/eztrace-tools]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace-tools' 'eztrace-tools'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace-tools
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace-tools
 
 [code/dysnomia]
 checkout = git clone 'https://github.com/svanderburg/dysnomia' 'dysnomia'
@@ -467,9 +439,8 @@ checkout = git clone 'https://github.com/svanderburg/nix-patchtools' 'nix-patcht
 [code/mobile-nixos]
 checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
 fixups = git_add_remotes "
-	          origin https://github.com/samueldr/mobile-nixos
-	          nixos https://github.com/nixos/mobile-nixos
-	          dguibert https://github.com/dguibert/mobile-nixos
+	          nixos https://github.com/REMOTE/mobile-nixos
+	          dguibert https://github.com/REMOTE/mobile-nixos
 	        "
 push = git push -v dguibert +pu
 	      git push -v dguibert
@@ -491,20 +462,13 @@ checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-
 checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
 
 [$HOME/Documents]
+lib = MR_NAME=Documents
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Documents
-	          transfer /run/media/dguibert/esiwace_key/Documents
-	          "
-	        #bluray_1 /run/media/dguibert/bluray_1/Documents/
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
 skip = ! on titan t580
 
 [/run/media/dguibert/esiwace_key/Documents]
@@ -518,18 +482,13 @@ update = git annex sync
 fullupdate = git annex sync --content
 
 [$HOME/Videos]
+lib = MR_NAME=Videos
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Videos
-	          "
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
 skip = ! wantmedia
 
 [$HOME/Music]
@@ -538,13 +497,7 @@ checkout = git init $MR_REPO
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Music
-	          "
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
 skip = ! wantmedia
 
 
