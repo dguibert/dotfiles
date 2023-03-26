@@ -507,6 +507,15 @@ fullupdate = git annex sync --content
 fixups = auto_personal_remotes
 skip = ! wantmedia
 
+[$HOME/Pictures]
+checkout = git init $MR_REPO
+	          cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = auto_personal_remotes
+skip = ! wantmedia
+
 
 [$HOME/archives]
 checkout = git init $MR_REPO
