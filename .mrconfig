@@ -5,9 +5,11 @@ include =
     if [ -e ~/.config/mr/library-loaders ]; then
         # mr-config already checked out
         . ~/.config/mr/library-loaders
-        load_libraries ~/.config/mr/sh.d/*
+        include_lib_dirs $(dirname $(dirname $(type -P mr)))/share/mr
         include_lib_dirs ~/.config/mr/lib.d
+        load_libraries ~/.config/mr/sh.d/*
     fi
+git_test = test -e $MR_REPO/.git -a ! -e $MR_REPO/.git/annex
 git_gc = git gc "$@"
 git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
@@ -50,6 +52,11 @@ lib =
 	               test "$whoami" = dguibert && on titan orsine t580
 	       }
 git_push = echo "$MR_REPO has to be manually pushed"
+git_annex_push = git_annex_sync "$@"
+git_annex_annex = git annex-clean "$@"
+# backup2-storage "--not --in here --and --not --copies offline_t:1"
+#git_annex_move2 = git annex find $2 --print0 | xargs -0 --verbose -i bash -cx "git annex-clean get {}; git annex-clean move --to $1 {}"
+git_annex_move2 = git annex find $2 --print0 | xargs -0 -P4 --verbose -i bash -cx "git annex get \"{}\"; git annex move --to $1 \"{}\""
 
 #include = cat $HOME/.config/mr/config.d/*
 

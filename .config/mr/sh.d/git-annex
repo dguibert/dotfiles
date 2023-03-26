@@ -38,6 +38,12 @@ ensure_git_annex () {
     if ! [ -d "$MR_REPO/.git/annex" ]; then
         cd "$MR_REPO"
         git annex init
-        git_annex_no_smudge
+        #git_annex_no_smudge
     fi
 }
+
+git_annex_sync() {
+    #git annex-clean --quiet sync --content "$@"
+    git annex-clean sync --content "$@"
+}
+
