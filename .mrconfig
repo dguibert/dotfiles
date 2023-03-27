@@ -56,7 +56,8 @@ git_annex_push = git_annex_sync "$@"
 git_annex_annex = git annex-clean "$@"
 # backup2-storage "--not --in here --and --not --copies offline_t:1"
 #git_annex_move2 = git annex find $2 --print0 | xargs -0 --verbose -i bash -cx "git annex-clean get {}; git annex-clean move --to $1 {}"
-git_annex_move2 = git annex find $2 --print0 | xargs -0 -P4 --verbose -i bash -cx "git annex get \"{}\"; git annex move --to $1 \"{}\""
+#git_annex_move2 = git annex find $2 --print0 | xargs -0 -P4 --verbose -i bash -cx "git annex get \"{}\"; git annex move --to $1 \"{}\""
+git_annex_move2 = git annex find $2 --json | jq -r ' select( .success == true ) | .file' | git annex-clean move --to $1 --batch
 
 #include = cat $HOME/.config/mr/config.d/*
 
