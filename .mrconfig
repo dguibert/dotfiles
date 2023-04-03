@@ -1,11 +1,19 @@
+# -*- mode: sh -*-
+# vim: ft=sh :
 [DEFAULT]
+include =
+    if [ -e ~/.config/mr/library-loaders ]; then
+        # mr-config already checked out
+        . ~/.config/mr/library-loaders
+        include_lib_dirs $(dirname $(dirname $(type -P mr)))/share/mr
+        include_lib_dirs ~/.config/mr/lib.d
+        load_libraries ~/.config/mr/sh.d/*
+    fi
+git_test = test -e $MR_REPO/.git -a ! -e $MR_REPO/.git/annex
 git_gc = git gc "$@"
 git_allupdate = git remote update --prune
 git_fullupdate = mr -n up
-include = cat $(dirname $(dirname $(type -P mr)))/share/mr/git-annex;
-	         cat $HOME/.config/mr/lib/mgit
 lib =
-	       source $HOME/.config/mr/lib/git-remotes
 	       if [ -n "$HOSTNAME" ]; then
 	               hostname="$HOSTNAME"
 	       else
@@ -43,8 +51,13 @@ lib =
 	       wantarchives() {
 	               test "$whoami" = dguibert && on titan orsine t580
 	       }
-	       source $HOME/.config/mr/lib/git-remotes
 git_push = echo "$MR_REPO has to be manually pushed"
+git_annex_push = git_annex_sync "$@"
+git_annex_annex = git annex-clean "$@"
+# backup2-storage "--not --in here --and --not --copies offline_t:1"
+#git_annex_move2 = git annex find $2 --print0 | xargs -0 --verbose -i bash -cx "git annex-clean get {}; git annex-clean move --to $1 {}"
+#git_annex_move2 = git annex find $2 --print0 | xargs -0 -P4 --verbose -i bash -cx "git annex get \"{}\"; git annex move --to $1 \"{}\""
+git_annex_move2 = git annex find $2 --json | jq -r ' select( .success == true ) | .file' | git annex-clean move --to $1 --batch
 
 #include = cat $HOME/.config/mr/config.d/*
 
@@ -73,19 +86,20 @@ git_push = echo "$MR_REPO has to be manually pushed"
 [$HOME/.mgit/dotfiles/.git]
 order = 1
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
-fixups = git_add_remotes "
-	          public_git ~/public_git/dotfiles.git
-	          "
+fixups = git_add_remote origin https://github.com/dguibert/dotfiles.git
+         git_rm_remote public_git
 push =
 	       mgit dotfiles push
-	       mgit dotfiles push public_git
+
+[$HOME/.mgit/git-config/.git]
+order = 2
+checkout = mgit clone https://github.com/dguibert/git-config
+fixups = git_add_remote aspiers https://github.com/aspiers/git-config
+push = mgit git-config push
 
 [admin/nix-easybuild]
 checkout = git clone 'https://github.com/rjeschmi/nix-easybuild' 'nix-easybuild'
-fixups = git_add_remotes "
-	          public_git ~/public_git/nix-easybuild.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public
 
 [code/bedrocklinux-userland]
 checkout = git clone 'https://github.com/paradigm/bedrocklinux-userland' 'bedrocklinux-userland'
@@ -145,21 +159,21 @@ checkout = git clone 'git://github.com/kmcallister/shqq' 'shqq'
 [code/spack]
 checkout = git clone 'https://github.com/spack/spack' 'spack'
 fixups = git_add_remotes "
-	          origin https://github.com/spack/spack
+	          spack https://github.com/spack/spack
 	          dguibert git@github.com:dguibert/spack.git
 	          flatironinstitute https://github.com/flatironinstitute/spack
+            gitlab https://castle.frec.bull.fr:24443/bguibertd/spack
 	          "
+         git_rm_remote origin
 push = git push -v dguibert
-
+       git push -v gitlab
 
 [code/training-gerrit]
 checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training-gerrit'
 
 [code/nixpkgs]
 checkout = git clone 'git@github.com:dguibert/nixpkgs.git' 'nixpkgs'
-fixups = git_add_remotes "
-	          github https://github.com/NixOS/nixpkgs
-	        "
+fixups = git_add_remotes github https://github.com/NixOS/nixpkgs
 	        git config --get-all remote.origin.fetch "/heads/dg/" &>/dev/null || git config --add remote.origin.fetch refs/heads/dg/*:refs/heads/dg/*
 	        git config --get-all remote.origin.push "/heads/*" &>/dev/null || git config --add remote.origin.push refs/heads/*:refs/heads/*
 	        git config --get-all remote.origin.push "/tags/*" &>/dev/null || git config --add remote.origin.push refs/tags/*:refs/tags/*
@@ -176,11 +190,9 @@ checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegra
 
 [code/dwm]
 checkout = git clone 'http://git.suckless.org/dwm' 'dwm'
-fixups = git_add_remotes "
-	          dguibert https://github.com/dguibert/dwm.git
-	          "
+fixups = git_add_remote dguibert https://github.com/dguibert/dwm.git
 push = git push -v dguibert +pu
-	      git push -v dguibert
+      git push -v dguibert
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
@@ -190,7 +202,6 @@ checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
 
 [code/nix]
 checkout = git clone 'https://github.com/NixOS/nix' 'nix'
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 fixups = git_add_remotes "
@@ -206,18 +217,13 @@ checkout = git clone 'https://github.com/lindenb/makefile2graph' 'makefile2graph
 
 [code/st]
 checkout = git clone 'git://git.suckless.org/st' 'st'
-fixups = git_add_remotes "
-	          dguibert https://github.com/dguibert/st.git
-	          "
+fixups = git_add_remote dguibert https://github.com/dguibert/st.git
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
 
 [code/myrepos]
 checkout = git clone 'https://git.joeyh.name/git/myrepos.git' 'myrepos'
-fixups = git_add_remotes "
-	       origin https://git.joeyh.name/git/myrepos.git/
-	       "
 
 [code/dvtm]
 checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
@@ -225,44 +231,30 @@ checkout = git clone 'https://github.com/martanne/dvtm.git' 'dvtm'
 [.password-store]
 checkout = git init '.password-store'
 fixups = git_add_remotes "
-	          genji gcrypt::ssh://genji/~/public_git/password-store
-	          spartan gcrypt::ssh://spartan/~/public_git/password-store
+	          genji   gcrypt::ssh://REMOTE/~/public_git/password-store
+	          spartan gcrypt::ssh://REMOTE/~/public_git/password-store
 	          "
-update = git remote update
 push = git remote -v | grep push | awk '{print $1}' | xargs --verbose -i git push --all {}
 
 [code/git-subrepo]
 checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
-push = git push -v public_git
-fixups = git_add_remotes "
-	          public_git ~/public_git/git-subrepo.git
-	          "
+fixups = git_rm_remote public_git
 
 [$HOME/work]
+lib = MR_NAME=Documents
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	                 genji genji:work
-	                 spartan spartan:work
-	                 genji_lustre_DDN7k genji:/scratch_lustre_DDN7k/bguibertd
-	          "
-	        git remote remove manny_lustre_na 2>/dev/null || true
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
+fixups = auto_work_remotes
 
 [code/slock]
 checkout = git clone 'git://git.suckless.org/slock' 'slock'
 
 [code/git-crypt]
 checkout = git clone 'https://github.com/AGWA/git-crypt' 'git-crypt'
-fixups = git_add_remotes "
-	          public_git ~/public_git/git-crypt.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/git-ftp]
 checkout = git clone 'https://github.com/git-ftp/git-ftp' 'git-ftp'
@@ -276,10 +268,7 @@ checkout = git clone 'https://github.com/nextflow-io/nextflow' 'nextflow'
 
 [code/multigit]
 checkout = git clone 'https://github.com/capr/multigit' 'multigit'
-fixups = git_add_remotes "
-	          public_git ~/public_git/multigit.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/git-appraise]
 checkout = git clone 'https://github.com/google/git-appraise' 'git-appraise'
@@ -289,11 +278,8 @@ checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-
 
 [code/nt2]
 checkout = git clone 'https://github.com/jtlap/nt2' 'nt2'
-fixups = git_add_remotes "
-	          picanumber https://github.com/picanumber/nt2
-	          public_git ~/public_git/nt2.git
-	          "
-push = git push -v public_git
+fixups = git_add_remote picanumber https://github.com/picanumber/nt2
+         git_rm_remote public_git
 
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
@@ -307,10 +293,7 @@ checkout = git clone 'https://github.com/cylc/cylc' 'cylc'
 
 [code/gitolite]
 checkout = git clone 'git://github.com/sitaramc/gitolite' 'gitolite'
-fixups = git_add_remotes "
-	          public_git ~/public_git/gitolite.git
-	          "
-push = git push -v public_git
+fixups = git_rm_remote public_git
 
 [code/nixos-weekly]
 checkout = git clone 'https://github.com/NixOS/nixos-weekly' 'nixos-weekly'
@@ -363,12 +346,11 @@ push = git push -v dguibert
 
 [code/home-manager]
 checkout = git clone 'https://github.com/rycee/home-manager' 'home-manager'
-update = git remote update
 push = git push -v dguibert +pu
 	git push -v dguibert
 fixups = git_add_remotes "
 	dguibert git@github.com:dguibert/home-manager.git
-	nrdxp https://github.com/nrdxp/home-manager
+	nrdxp https://github.com/REMOTE/home-manager
 	"
 
 [code/charliecloud]
@@ -378,30 +360,24 @@ checkout = git clone 'https://github.com/hpc/charliecloud' 'charliecloud'
 deleted = true
 
 [nixpkgs-overlays]
-checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
-push = git push -v public_git
-	      git push -v origin
+deleted = true
+#checkout = git clone 'git@github.com:dguibert/nixpkgs-overlays.git' 'nixpkgs-overlays'
+#push = git push -v origin
 
 [code/vite]
 checkout = git clone 'https://gitlab.inria.fr/solverstack/vite.git' 'vite'
 
 [code/eztrace]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace' 'eztrace'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace
 
 [code/eztrace-plugins]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace-plugins' 'eztrace-plugins'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace-plugins
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace-plugins
 
 [code/eztrace-tools]
 checkout = git clone 'https://gitlab.com/eztrace/eztrace-tools' 'eztrace-tools'
-fixups = git_add_remotes "
-	origin https://gitlab.com/eztrace/eztrace-tools
-	"
+fixups = git_add_remote origin https://gitlab.com/eztrace/eztrace-tools
 
 [code/dysnomia]
 checkout = git clone 'https://github.com/svanderburg/dysnomia' 'dysnomia'
@@ -441,7 +417,6 @@ checkout = git clone 'https://github.com/actor-framework/benchmarks' 'benchmarks
 
 [code/nixops]
 checkout = git clone 'https://github.com/NixOS/nixops' 'nixops'
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
@@ -472,11 +447,9 @@ checkout = git clone 'https://github.com/svanderburg/nix-patchtools' 'nix-patcht
 [code/mobile-nixos]
 checkout = git clone 'https://github.com/samueldr/mobile-nixos' 'mobile-nixos'
 fixups = git_add_remotes "
-	          origin https://github.com/samueldr/mobile-nixos
-	          nixos https://github.com/nixos/mobile-nixos
-	          dguibert https://github.com/dguibert/mobile-nixos
+	          nixos https://github.com/REMOTE/mobile-nixos
+	          dguibert https://github.com/REMOTE/mobile-nixos
 	        "
-update = git remote update
 push = git push -v dguibert +pu
 	      git push -v dguibert
 
@@ -497,20 +470,13 @@ checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-
 checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
 
 [$HOME/Documents]
+lib = MR_NAME=Documents
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Documents
-	          transfer /run/media/dguibert/esiwace_key/Documents
-	          "
-	        #bluray_1 /run/media/dguibert/bluray_1/Documents/
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
 skip = ! on titan t580
 
 [/run/media/dguibert/esiwace_key/Documents]
@@ -524,18 +490,13 @@ update = git annex sync
 fullupdate = git annex sync --content
 
 [$HOME/Videos]
+lib = MR_NAME=Videos
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Videos
-	          "
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
 skip = ! wantmedia
 
 [$HOME/Music]
@@ -544,13 +505,16 @@ checkout = git init $MR_REPO
 commit = git add --verbose --all && git annex sync
 update = git annex sync
 fullupdate = git annex sync --content
-fixups = git_add_remotes "
-	          titan titan:Music
-	          "
-	        git remote remove orsine 2>/dev/null || true
-	        git remote remove orsine-backupwd 2>/dev/null || true
-	        git remote remove vbox-57nvj72 2>/dev/null || true
-	        git remote remove transfer 2>/dev/null || true
+fixups = auto_personal_remotes
+skip = ! wantmedia
+
+[$HOME/Pictures]
+checkout = git init $MR_REPO
+	          cd $MR_REPO; git annex init
+commit = git add --verbose --all && git annex sync
+update = git annex sync
+fullupdate = git annex sync --content
+fixups = auto_personal_remotes
 skip = ! wantmedia
 
 
@@ -708,8 +672,8 @@ checkout = git clone 'https://github.com/Mic92/sops-nix' 'sops-nix'
 checkout = git clone 'https://github.com/dguibert/nixpack' 'nixpack'
 fixups = git_add_remotes "
 	       flatironinstitute  https://github.com/flatironinstitute/nixpack
-	genji genji:software-cepp-spack/nixpack
-	spartan spartan:software-cepp-spack/nixpack
+         genji REMOTE:software-cepp-spack/nixpack
+         spartan REMOTE:software-cepp-spack/nixpack
 	        "
 push = git push -v origin +pu
 	      git push -v origin
