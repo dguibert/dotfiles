@@ -4,22 +4,22 @@
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
 
-    ../../modules/distributed-build-conf.nix
+    ../distributed-build-conf.nix
     ({ config, ... }: { distributed-build-conf.enable = true; })
-    ../../modules/nix-conf.nix
+    ../nix-conf.nix
     ({ config, ... }: { nix-conf.enable = true; })
-    ../../modules/report-changes.nix
+    ../report-changes.nix
 
-    ../../modules/role-dns.nix
-    ../../modules/role-sshguard.nix
-    ../../modules/role-wireguard-mesh.nix
-    ../../modules/role-otp-authentication.nix
+    ../role-dns.nix
+    ../role-sshguard.nix
+    ../role-wireguard-mesh.nix
+    ../role-otp-authentication.nix
     ({ config, ... }: { role-otp-authentication.enable = true; })
-    ../../modules/role-zigbee.nix
+    ../role-zigbee.nix
 
     #../../modules/services.nix
 
-    ../../users/default.nix
+    ../../../users/default.nix
 
     ({ ... }: { documentation.nixos.enable = false; })
     ({ ... }: { programs.mosh.enable = true; })
@@ -67,11 +67,11 @@
   # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
   programs.ssh.knownHosts."*" = {
     certAuthority = true;
-    publicKey = builtins.readFile ../../secrets/ssh-ca-home.pub;
+    publicKey = builtins.readFile ../../../secrets/ssh-ca-home.pub;
   };
 
   sops.secrets.id_buildfarm = {
-    sopsFile = ../../secrets/defaults.yaml;
+    sopsFile = ../../../secrets/defaults.yaml;
     owner = "root";
     path = "/etc/nix/id_buildfarm";
   };

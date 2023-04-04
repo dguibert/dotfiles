@@ -3,7 +3,7 @@
 with lib;
 {
   imports = [
-    outputs.homeManagerModules.report-changes
+    ../hm-modules/report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
     ({ ... }: { manual.manpages.enable = false; })
   ];

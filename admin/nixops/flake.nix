@@ -64,21 +64,6 @@
     let
       # Memoize nixpkgs for different platforms for efficiency.
       inherit (self) outputs;
-      commonOverlays = [
-        inputs.emacs-overlay.overlay
-        inputs.nixpkgs.overlays.emacs
-        inputs.deploy-rs.overlay
-        inputs.nxsession.overlay
-        #inputs.nixpkgs-wayland.overlay
-        inputs.self.overlays.default
-      ];
-      nixpkgsFor = system:
-        import inputs.nixpkgs.inputs.nixpkgs {
-          inherit system;
-          overlays = inputs.nixpkgs.legacyPackages.${system}.overlays ++ commonOverlays;
-          config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;
-          #config.contentAddressedByDefault = true;
-        };
       lib = nixpkgs.lib;
 
     in
@@ -86,30 +71,6 @@
       flake = {
         lib = nixpkgs.lib;
         overlays = import ./overlays { inherit inputs; lib = inputs.nixpkgs.lib; };
-        ## - hydraJobs: A nested set of derivations built by Hydra.
-        ##
-        ## -
-        ## - NixOS-related outputs such as nixosModules and nixosSystems.
-        nixosModules = import ./modules { inherit lib; };
-
-        ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-        homeManagerModules = import ./hm-modules { inherit lib; };
-
-        #nixosConfigurations = import ./hosts {
-        #  inherit lib inputs outputs;
-        #  systems = {
-        #    default = "x86_64-linux";
-        #    "rpi31" = "aarch64-linux";
-        #    "rpi41" = "aarch64-linux";
-        #  };
-        #  pkgs_to_use = {
-        #    rpi01 = self.legacyPackages.x86_64-linux.pkgsCross.raspberryPi;
-        #  };
-        #};
-        modules.hosts.titan = [
-          # adb
-          ({ ... }: { programs.adb.enable = true; })
-        ];
 
         homeConfigurations = import ./homes {
           inherit lib inputs outputs;
@@ -239,12 +200,11 @@
       imports = [
         #./home/profiles
         ./hosts
-        #./modules/all-modules.nix
+        ./modules/all-modules.nix
         #./lib
         ./apps
         ./checks
         ./shells
-        ({ ... }: { perSystem = { system, ... }: { _module.args.pkgs = nixpkgsFor system; }; })
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {

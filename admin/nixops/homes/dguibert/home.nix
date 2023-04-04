@@ -39,7 +39,7 @@ in
     # set system's scheme to nord by setting `config.scheme`
     { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
 
-    outputs.homeManagerModules.report-changes
+    ../../hm-modules/report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
     ({ ... }: {
       options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";

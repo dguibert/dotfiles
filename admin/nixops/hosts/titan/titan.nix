@@ -2,9 +2,12 @@
   imports = [
     inputs.hydra.nixosModules.hydra
     ./configuration.nix
-    ../../modules/defaults
+    ../../modules/nixos/defaults
   ];
   #hardware.opengl.extraPackages = [ pkgs.vaapiVdpau /*pkgs.libvdpau-va-gl*/ ];
+  systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
+    serviceConfig.PrivateUsers = lib.mkForce false;
+  };
 
   environment.systemPackages = [ pkgs.pavucontrol pkgs.ipmitool pkgs.ntfs3g ];
 

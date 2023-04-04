@@ -19,10 +19,10 @@ in
     #security.acme.server = "https://localhost:9443/acme/acme/directory";
     #security.acme.email = "david.guibert+acme@gmail.com";
     #security.acme.acceptTerms = true;
-    ## security.pki.certificateFiles = [ ../secrets/root-ca.crt ../secrets/intermediate_ca.crt ];
+    ## security.pki.certificateFiles = [ ../../secrets/root-ca.crt ../../secrets/intermediate_ca.crt ];
     security.pki.certificateFiles = [
-      ../online-ca-orsin/certs/root_ca.crt
-      ../online-ca-orsin/certs/intermediate_ca.crt
+      ../../online-ca-orsin/certs/root_ca.crt
+      ../../online-ca-orsin/certs/intermediate_ca.crt
     ];
 
     ##networking.hosts = {
@@ -154,8 +154,8 @@ in
         #root = ../../../secrets/root_ca.crt;
         #crt = ../../../secrets/intermediate_ca.crt;
         #key = ../../../secrets/intermediate_ca.key;
-        root = ../online-ca-orsin/certs/root_ca.crt;
-        crt = ../online-ca-orsin/certs/intermediate_ca.crt;
+        root = ../../online-ca-orsin/certs/root_ca.crt;
+        crt = ../../online-ca-orsin/certs/intermediate_ca.crt;
         key = "yubikey:slot-id=9c";
         kms = {
           type = "yubikey";
@@ -176,7 +176,7 @@ in
               type = "OIDC";
               name = "Google";
               clientID = "811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
-              clientSecret = pkgs.sopsDecrypt_ ../secrets/defaults.yaml "orsin-ca-811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
+              clientSecret = pkgs.sopsDecrypt_ ../../secrets/defaults.yaml "orsin-ca-811353294591-gv6ma78sa72vaiap6qmak2cqgq1sleqb.apps.googleusercontent.com";
               configurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
               admins = [ "david.guibert@gmail.com" ];
               domains = [ "gmail.com" ];

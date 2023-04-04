@@ -6,6 +6,7 @@ rec {
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ({ ... }: { services.udisks2.enable = true; })
+      ../../modules/nixos/defaults
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -23,6 +24,8 @@ rec {
     '';
     extraCmdArgs = "-u";
   };
+
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
 
   services.fwupd.enable = true;
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

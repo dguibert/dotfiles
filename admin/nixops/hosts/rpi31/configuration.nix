@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 with lib;
 #let
@@ -6,6 +6,10 @@ with lib;
 #in
 
 rec {
+  imports = [
+    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    ../../modules/nixos/defaults
+  ];
   #sdImage.bootSize = 512;
 
   # NixOS wants to enable GRUB by default
