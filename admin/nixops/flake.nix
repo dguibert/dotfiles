@@ -69,23 +69,7 @@
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       flake = {
-        lib = nixpkgs.lib;
         overlays = import ./overlays { inherit inputs; lib = inputs.nixpkgs.lib; };
-
-        homeConfigurations = import ./homes {
-          inherit lib inputs outputs;
-          nixpkgs_to_use = {
-            #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-            default = builtins.trace "using default nixpkgs" self;
-          };
-          systems = {
-            default = "x86_64-linux";
-            "root@aarch64-linux" = "aarch64-linux";
-            "root@x86_64-linux" = "x86_64-linux";
-            "dguibert@rpi31" = "aarch64-linux";
-            "dguibert@rpi41" = "aarch64-linux";
-          };
-        };
 
         deploy.nodes = builtins.foldl' inputs.nixpkgs.lib.recursiveUpdate { } [
           (inputs.nixpkgs.lib.mapAttrs
@@ -107,15 +91,26 @@
                 # See the earlier section about Magic Rollback for more information.
                 # This defaults to `true`
                 magicRollback = false;
-
-                # root profiles
-                profiles.root.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom self.homeConfigurations."root@${system}".activationPackage "./activate";
-                profiles.root.user = "root";
-                # dguibert profiles
-                #profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
-                #profiles.dguibert.user = "dguibert";
               })
             (builtins.removeAttrs self.nixosConfigurations [ "iso" ]))
+          # root profiles
+          (inputs.nixpkgs.lib.mapAttrs
+            (host: homeConfig:
+              let
+                system = self.nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
+              in
+              {
+                #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
+                profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfig.activationPackage "./activate";
+                profiles.dguibert.user = "root";
+              })
+            {
+              rpi31 = self.homeConfigurations."root@rpi31";
+              rpi41 = self.homeConfigurations."root@rpi41";
+              titan = self.homeConfigurations."root@titan";
+              t580 = self.homeConfigurations."root@t580";
+            }
+          )
           # dguibert profiles
           (inputs.nixpkgs.lib.mapAttrs
             (host: homeConfig:
@@ -147,45 +142,45 @@
               };
             in
             {
-              genji = {
-                hostname = "genji";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #genji = {
+              #  hostname = "genji";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
-              };
-              spartan = {
-                hostname = "spartan";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
+              #};
+              #spartan = {
+              #  hostname = "spartan";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              };
-              levante = {
-                hostname = "levante";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+              #};
+              #levante = {
+              #  hostname = "levante";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.dguibert = genProfile "b381115" "dguibert@levante" "hm";
+              #  profiles.dguibert = genProfile "b381115" "dguibert@levante" "hm";
 
-              };
-              lumi = {
-                hostname = "lumi";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #};
+              #lumi = {
+              #  hostname = "lumi";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.dguibert = genProfile "dguibert" "dguibert@lumi" "hm";
+              #  profiles.dguibert = genProfile "dguibert" "dguibert@lumi" "hm";
 
-              };
+              #};
             }
           )
 
@@ -199,9 +194,9 @@
       ];
       imports = [
         #./home/profiles
+        ./homes
         ./hosts
         ./modules/all-modules.nix
-        #./lib
         ./apps
         ./checks
         ./shells
