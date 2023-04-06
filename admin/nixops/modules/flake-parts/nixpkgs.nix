@@ -10,6 +10,7 @@ let
         inputs.deploy-rs.overlay
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
+        inputs.hyprland.overlays.default
         (final: prev: import ../../overlays/default final prev)
       ];
       config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;

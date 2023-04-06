@@ -60,6 +60,13 @@
 
   inputs.hyprland.url = "github:hyprwm/Hyprland";
   inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.eww = {
+  #  url = "github:elkowar/eww";
+  #  inputs.nixpkgs.follows = "nixpkgs";
+  #  inputs.rust-overlay.follows = "rust-overlay";
+  #};
+
+
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 

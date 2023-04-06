@@ -35,10 +35,11 @@ in
   ];
 
   modules.homes."dguibert@t580" = [
+    ../modules/homes/dguibert/home.nix
+    inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
-      imports = [
-        ../modules/homes/dguibert/home.nix
-      ];
+      wayland.windowManager.hyprland.enable = true;
+      wayland.windowManager.hyprland.package = pkgs.hyprland;
       withGui.enable = true;
       withEmacs.enable = true;
       home.username = "dguibert";
@@ -48,10 +49,10 @@ in
   ];
 
   modules.homes."dguibert@titan" = [
+    ../modules/homes/dguibert/home.nix
+    inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
-      imports = [
-        ../modules/homes/dguibert/home.nix
-      ];
+      #wayland.windowManager.hyprland.enable = true;
       centralMailHost.enable = true;
       withGui.enable = true;
       withEmacs.enable = true;
