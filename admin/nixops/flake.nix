@@ -58,6 +58,9 @@
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
+  inputs.hyprland.url = "github:hyprwm/Hyprland";
+  inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, flake-parts, nixpkgs, ... }@inputs:
