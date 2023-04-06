@@ -23,32 +23,48 @@ in
         };
       };
       settings = {
+        "temperature_sensor mcu_temp" = {
+          sensor_type = "temperature_mcu";
+          min_temp = 0;
+          max_temp = 100;
+        };
+        "temperature_sensor raspberry_pi" = {
+          sensor_type = "temperature_host";
+          min_temp = 0;
+          max_temp = 100;
+        };
         printer = {
           kinematics = "corexy";
           max_velocity = 300;
           max_accel = 3500;
           max_z_velocity = 15;
           max_z_accel = 45;
-          square_corner_velocity = 5.0;
+          square_corner_velocity = 6.0;
         };
         mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
         # https://docs.fluidd.xyz/configuration/initial_setup
         virtual_sdcard.path = "/gcodes";
         display_status = { };
         pause_resume = { };
+        ## fysetc-cheetah-v2.0i
+        # https://github.com/VoronDesign/Voron-0/blob/Voron0.2/Firmware/fysetc-cheetah-v2.0.cfg
+        #####################################################################
+        #      X/Y Stepper Settings
+        #####################################################################
         stepper_x = {
           step_pin = "PC0";
           ## Refer to https://docs.vorondesign.com/build/startup/#v0
           dir_pin = "PC1";
           enable_pin = "!PA8";
           rotation_distance = 40;
-          microsteps = 128;
-          endstop_pin = "^PB4";
+          microsteps = 32;
+          full_steps_per_rotation = 200;
+          endstop_pin = "tmc2209_stepper_x:virtual_endstop";
           #full_steps_per_rotation = 200; # 1.8 stepper motor
           position_endstop = 120;
           position_max = 120;
-          homing_speed = 20;
-          homing_retract_dist = 5;
+          homing_speed = 40;
+          homing_retract_dist = 0;
           homing_positive_dir = true;
         };
         "tmc2209 stepper_x" = {
@@ -57,9 +73,10 @@ in
           uart_address = 0;
           interpolate = false;
           run_current = 0.85;
-          hold_current = 0.5;
           sense_resistor = 0.110;
-          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          stealthchop_threshold = 0;
+          diag_pin = "^PB4"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          driver_SGTHRS = 255;
         };
         stepper_y = {
           step_pin = "PC14";
@@ -67,13 +84,14 @@ in
           dir_pin = "PC13";
           enable_pin = "!PC15";
           rotation_distance = 40;
-          microsteps = 128;
-          endstop_pin = "^PC8";
+          microsteps = 32;
+          full_steps_per_rotation = 200;
+          endstop_pin = "tmc2209_stepper_y:virtual_endstop";
           #full_steps_per_rotation = 200; # 1.8 stepper motor
           position_endstop = 120;
           position_max = 120;
-          homing_speed = 20;
-          homing_retract_dist = 5;
+          homing_speed = 40;
+          homing_retract_dist = 0;
           homing_positive_dir = true;
         };
         "tmc2209 stepper_y" = {
@@ -82,9 +100,10 @@ in
           uart_address = 2;
           interpolate = false;
           run_current = 0.85;
-          hold_current = 0.5;
           sense_resistor = 0.110;
-          stealthchop_threshold = 999999; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          stealthchop_threshold = 0;
+          diag_pin = "^PC8"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          driver_SGTHRS = 255;
         };
         stepper_z = {
           step_pin = "PB9";
@@ -93,13 +112,13 @@ in
           enable_pin = "!PC2";
           rotation_distance = 8; # for T8x8 lead screan
           #rotation_distance = 2; # for T8x2 lead screan
-          microsteps = 64;
+          microsteps = 32;
           endstop_pin = "^PB1";
-          position_endstop = -0.175; # must be defined?
+          position_endstop = 120;
           position_max = 120;
           position_min = -1.5;
-          homing_speed = 10; # max 100
-          second_homing_speed = 10; # max 100
+          homing_speed = 20; # max 100
+          second_homing_speed = 3.0; # max 100
           homing_retract_dist = 3.0;
         };
         "tmc2209 stepper_z" = {
@@ -108,9 +127,8 @@ in
           uart_address = 1;
           interpolate = false;
           run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
-          hold_current = 0.35;
           sense_resistor = 0.110;
-          #stealthchop_threshold = 500; #250            # Set to 999999 to turn stealthchop on, and 0 to use spreadcycle
+          stealthchop_threshold = 0;
         };
         extruder = {
           step_pin = "PB2";
@@ -138,7 +156,7 @@ in
           min_temp = 0;
           max_temp = 270;
           min_extrude_temp = 170;
-          max_extrude_only_distance = 780.0;
+          max_extrude_only_distance = 150.0;
           max_extrude_cross_section = 0.8;
           pressure_advance = 0.04; # For ABS 15*0.005 See tuning pressure advance doc
           pressure_advance_smooth_time = 0.040;
@@ -149,9 +167,8 @@ in
           uart_address = 3;
           interpolate = true;
           run_current = 0.35;
-          hold_current = 0.2;
           sense_resistor = 0.110;
-          stealthchop_threshold = 500;
+          stealthchop_threshold = 0;
         };
         heater_bed = {
           heater_pin = "PC7";
@@ -199,29 +216,30 @@ in
         };
         idle_timeout.timeout = 1800;
 
-        input_shaper.shaper_freq_x = 72.972972; #90*3/3.7;
-        input_shaper.shaper_freq_y = 90; #90*3/3;
-        input_shaper.shaper_type = "ei";
+        #input_shaper.shaper_freq_x = 72.972972; #90*3/3.7;
+        #input_shaper.shaper_freq_y = 90; #90*3/3;
+        #input_shaper.shaper_type = "ei";
 
-        board_pins.aliases =
-          "    # EXP1 header
-             EXP1_1=<5V>,  EXP1_3=<RST>, EXP1_5=PA7,  EXP1_7=PA4,  EXP1_9=PA5,
-             EXP1_2=<GND>, EXP1_4=PC3,   EXP1_6=PC11, EXP1_8=PC10, EXP1_10=PA6,
+        homing_override = {
+          axes = "xyz";
+          set_position_z = 0;
+          gcode =
+            ''   G90
+              G0 Z5 F600
+              {% set home_all = 'X' not in params and 'Y' not in params and 'Z' not in params %}
 
-             # EXP2 header
-             EXP2_1=<5V>,  EXP2_3=PB7, EXP2_5=PB14, EXP2_7=PB12, EXP2_9=PC12,
-             EXP2_2=<GND>, EXP2_4=PB6, EXP2_6=PB13, EXP2_8=PB15, EXP2_10=PC9,
+              {% if home_all or 'X' in params %}
+                _HOME_X
+              {% endif %}
 
-             # EXP3 header
-             EXP3_1=PC9,  EXP3_3=PC10, EXP3_5=PC11, EXP3_7=PB12, EXP3_9=<GND>,
-             EXP3_2=PC12, EXP3_4=PB14, EXP3_6=PB13, EXP3_8=PB15, EXP3_10=<5V>
-             # Pins EXP3_4, EXP3_8, EXP3_6 are also MISO, MOSI, SCK of bus \"spi2\"
-        ";
+              {% if home_all or 'Y' in params %}
+                _HOME_Y
+              {% endif %}
 
-        safe_z_home = {
-          home_xy_position = "120,120";
-          speed = 50.0;
-          z_hop = 5;
+              {% if home_all or 'Z' in params %}
+                _HOME_Z
+              {% endif %}
+        '';
         };
         ### Tool to help adjust bed leveling screws. One may define a
         ### [bed_screws] config section to enable a BED_SCREWS_ADJUST g-code
@@ -307,14 +325,13 @@ in
 
         ###   Use PRINT_START for the slicer starting script - please customize for your slicer of choice
         # https://github.com/Klipper3d/klipper/blob/master/config/sample-macros.cfg
-        "gcode_macro PRINT_START".gcode =
-          "    # Use absolute coordinates
-             G90
+        "gcode_macro PRINT_START".gcode = "
+             G28                            ; home all axes
+             G90                            ; absolute positioning
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
              SET_GCODE_OFFSET Z=0.0
-             # Home the printer
-             G28
+             G1 Z20 F3000                   ; move nozzle away from bed
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
         "gcode_macro PRINT_END".gcode =
@@ -356,9 +373,7 @@ in
               M106 S0
               M107                           ; turn off fan
               G90                            ; absolute positioning
-              G0 X60 Y{max_y} F3600          ; park nozzle at rear
-              # Disable steppers
-              M84
+              G0 X60 Y{max_y-10} F3600          ; park nozzle at rear
         '';
 
         "gcode_macro LOAD_FILAMENT".gcode =
@@ -373,6 +388,60 @@ in
              G1 E10 F300                    ; extrude a little to soften tip
              G1 E-40 F1800                  ; retract some, but not too much or it will jam
              M82                            ; set extruder to absolute
+        ";
+        "gcode_macro _HOME_X".gcode =
+          "    # Always use consistent run_current on A/B steppers during sensorless homing
+             {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
+             {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
+             {% set HOME_CURRENT = 0.7 %}
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT    }
+
+             # Home
+             G28 X
+             # Move away
+             G91
+             G1 X-10 F1200
+
+             # Wait just a second… (give StallGuard registers time to clear)
+             G4 P1000
+             G90
+             # Set current during print
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={RUN_CURRENT_Y}
+        ";
+
+        "gcode_macro _HOME_Y".gcode =
+          "     # Set current for sensorless homing
+             {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
+             {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
+             {% set HOME_CURRENT = 0.7 %}
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT}
+
+             # Home
+             G28 Y
+             # Move away
+             G91
+             G1 Y-10 F1200
+
+             # Wait just a second… (give StallGuard registers time to clear)
+             G4 P1000
+             G90
+             # Set current during print
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={RUN_CURRENT_Y}
+        ";
+
+        "gcode_macro _HOME_Z".gcode =
+          "    {% set th = printer.toolhead %}
+             {% set RUN_CURRENT_Z = printer.configfile.settings['tmc2209 stepper_z'].run_current|float %}
+             {% set HOME_CURRENT = 0.7 %}
+             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={HOME_CURRENT}
+             G90
+             G28 Z
+             G1 Z30
+             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={RUN_CURRENT_Z}
         ";
         ##
         ###[include v0_display.cfg]
