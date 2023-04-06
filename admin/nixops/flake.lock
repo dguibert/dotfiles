@@ -325,11 +325,11 @@
         "utils": "utils_2"
       },
       "locked": {
-        "lastModified": 1680722934,
-        "narHash": "sha256-C26Llg52K1zhsuJupMNsx9FOh4E1n9zAAILlHXUxfBs=",
+        "lastModified": 1680811323,
+        "narHash": "sha256-2IMpmlHsRnGkCgNMnZcpbd2KDLoe9KETxjXxY0O4gRo=",
         "owner": "dguibert",
         "repo": "home-manager",
-        "rev": "9853b37f160a2c603145678a76ddf23f1c09086c",
+        "rev": "4b5e29cf510ff59bc6db50937519bf8ce3bccc33",
         "type": "github"
       },
       "original": {
