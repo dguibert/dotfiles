@@ -58,6 +58,16 @@
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
+  inputs.hyprland.url = "github:hyprwm/Hyprland";
+  inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.eww = {
+  #  url = "github:elkowar/eww";
+  #  inputs.nixpkgs.follows = "nixpkgs";
+  #  inputs.rust-overlay.follows = "rust-overlay";
+  #};
+
+
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, ... }@inputs:
@@ -70,6 +80,7 @@
         inputs.deploy-rs.overlay
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
+        inputs.hyprland.overlays.default
         inputs.self.overlays.default
       ];
       nixpkgsFor = system:

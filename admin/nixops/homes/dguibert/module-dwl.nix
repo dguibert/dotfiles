@@ -179,21 +179,21 @@ with lib; {
       };
     };
 
-    systemd.user.services.swayidle = {
-      Unit = {
-        Description = "Idle display configuration";
-        PartOf = [ "graphical-session.target" ];
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${wlr-toggle}/bin/wlr-toggle off' resume '${wlr-toggle}/bin/wlr-toggle on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
-        RestartSec = 5;
-        Restart = "always";
-      };
-    };
+    #systemd.user.services.swayidle = {
+    #  Unit = {
+    #    Description = "Idle display configuration";
+    #    PartOf = [ "graphical-session.target" ];
+    #  };
+    #  Install = {
+    #    WantedBy = [ "graphical-session.target" ];
+    #  };
+    #  Service = {
+    #    Type = "simple";
+    #    ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${wlr-toggle}/bin/wlr-toggle off' resume '${wlr-toggle}/bin/wlr-toggle on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
+    #    RestartSec = 5;
+    #    Restart = "always";
+    #  };
+    #};
 
     systemd.user.services.kanshi = {
       Unit = {
