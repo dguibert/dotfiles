@@ -14,14 +14,15 @@ in
     flake = mkSubmoduleOptions {
       homeConfigurations = mkOption {
         type = types.lazyAttrsOf types.raw;
+        #type = types.attrsOf types.raw;
         default = { };
         description = ''
           Instantiated Home-Manager configurations. Used by `home-rebiuld`.
 
           `homeConfigurations` is for specific user homes. If you want to expose
-          reusable configurations, add them to [`nixosModules`](#opt-flake.nixosModules)
-          in the form of modules (no `lib.nixosSystem`), so that you can reference
-          them in this or another flake's `nixosConfigurations`.
+          reusable configurations, add them to [`hmModules`](#opt-flake.hmModules)
+          in the form of modules (no `lib.homeManagerConfiguration`), so that you can reference
+          them in this or another flake's `homeManagerConfiguration`.
         '';
         example = literalExpression ''
           {

@@ -1,7 +1,7 @@
 { lib }:
 system: name: { config, lib, inputs, withSystem, self, ... }: {
   options.modules.homes."${name}" = lib.mkOption {
-    type = lib.types.listOf lib.types.anything;
+    type = lib.types.listOf lib.types.raw;
     default = [ ];
   };
 
