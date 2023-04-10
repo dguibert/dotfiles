@@ -13,7 +13,7 @@ in
   modules.homes."dguibert@rpi31" = [
     ({ config, pkgs, ... }: {
       imports = [
-        ../modules/homes/dguibert/home.nix
+        ../modules/home-manager/dguibert.nix
       ];
       withGui.enable = false;
       home.username = "dguibert";
@@ -25,7 +25,7 @@ in
   modules.homes."dguibert@rpi41" = [
     ({ config, pkgs, ... }: {
       imports = [
-        ../modules/homes/dguibert/home.nix
+        ../modules/home-manager/dguibert.nix
       ];
       withGui.enable = false;
       home.username = "dguibert";
@@ -35,7 +35,7 @@ in
   ];
 
   modules.homes."dguibert@t580" = [
-    ../modules/homes/dguibert/home.nix
+    ../modules/home-manager/dguibert.nix
     inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
       wayland.windowManager.hyprland.enable = true;
@@ -49,7 +49,7 @@ in
   ];
 
   modules.homes."dguibert@titan" = [
-    ../modules/homes/dguibert/home.nix
+    ../modules/home-manager/dguibert.nix
     inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
       #wayland.windowManager.hyprland.enable = true;

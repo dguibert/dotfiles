@@ -10,8 +10,8 @@ in
     (genHomeManagerConfiguration "x86_64-linux" "root@titan")
   ];
 
-  modules.homes."root@rpi31" = [ ({ ... }: { imports = [ ../modules/homes/root.nix ]; }) ];
-  modules.homes."root@rpi41" = [ ({ ... }: { imports = [ ../modules/homes/root.nix ]; }) ];
-  modules.homes."root@t580" = [ ({ ... }: { imports = [ ../modules/homes/root.nix ]; }) ];
-  modules.homes."root@titan" = [ ({ ... }: { imports = [ ../modules/homes/root.nix ]; }) ];
+  modules.homes."root@rpi31" = [ ({ ... }: { imports = [ ../modules/home-manager/root.nix ]; }) ];
+  modules.homes."root@rpi41" = [ ({ ... }: { imports = [ ../modules/home-manager/root.nix ]; }) ];
+  modules.homes."root@t580" = [ ({ ... }: { imports = [ ../modules/home-manager/root.nix ]; }) ];
+  modules.homes."root@titan" = [ ({ ... }: { imports = [ ../modules/home-manager/root.nix ]; }) ];
 }

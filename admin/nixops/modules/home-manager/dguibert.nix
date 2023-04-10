@@ -10,7 +10,7 @@ with lib;
 let
   home-secret =
     let
-      home_sec = sopsDecrypt_ ./home-sec.nix "data";
+      home_sec = sopsDecrypt_ ./dguibert/home-sec.nix "data";
       loaded = home_sec.success or true;
     in
     if loaded
@@ -26,7 +26,7 @@ in
     inputs.sops-nix.homeManagerModules.sops
     ({ ... }: {
       sops.age.sshKeyPaths = [ "/home/dguibert/.ssh/id_ed25519" ];
-      sops.defaultSopsFile = ./secrets.yaml;
+      sops.defaultSopsFile = ./dguibert/secrets.yaml;
 
       sops.secrets.netrc = { };
       sops.secrets.pass-email1 = { };
@@ -39,7 +39,7 @@ in
     # set system's scheme to nord by setting `config.scheme`
     { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
 
-    ../../../hm-modules/report-changes.nix
+    ./report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
     ({ ... }: {
       options.centralMailHost.enable = mkEnableOption "Host running liier/mbsync";
@@ -54,16 +54,16 @@ in
     })
     ({ ... }: { manual.manpages.enable = false; })
 
-    ./bash.nix
-    ./emacs.nix
-    ./git.nix
-    ./gpg.nix
-    ./htop.nix
-    ./module-dwl.nix
-    ./nix.nix
-    ./ssh.nix
-    ./with-gui.nix
-    ./zellij.nix
+    ./dguibert/bash.nix
+    ./dguibert/emacs.nix
+    ./dguibert/git.nix
+    ./dguibert/gpg.nix
+    ./dguibert/htop.nix
+    ./dguibert/module-dwl.nix
+    ./dguibert/nix.nix
+    ./dguibert/ssh.nix
+    ./dguibert/with-gui.nix
+    ./dguibert/zellij.nix
   ];
 
   options = { };
