@@ -104,8 +104,7 @@ let
       config = {
         services.jellyfin.enable = true;
         systemd.services.jellyfin = lib.mkIf config.services.jellyfin.enable {
-          serviceConfig.PrivateUsers = lib.mkForce false; # FIXME for some raeson need to be put in ../../hosts/titan/configuration.nix
-          #serviceConfig.PrivateUsers = lib.mkOverride 0 false;
+          serviceConfig.PrivateUsers = lib.mkForce false;
           serviceConfig.PermissionsStartOnly = true;
           preStart = ''
             set -x

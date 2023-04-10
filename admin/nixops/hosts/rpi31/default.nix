@@ -1,7 +1,7 @@
 { config, lib, inputs, withSystem, self, ... }:
 {
   options.modules.hosts.rpi31 = lib.mkOption {
-    type = lib.types.listOf lib.types.anything;
+    type = lib.types.listOf lib.types.raw;
     default = [ ];
   };
 
