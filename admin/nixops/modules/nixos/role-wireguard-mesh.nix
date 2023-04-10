@@ -35,7 +35,7 @@ in
         };
         listenPort = 500;
         publicKey = readWgPub ../../hosts/rpi31/wg_key.pub;
-        endpoint = "82.64.121.168:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        endpoint = "192.168.1.13:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       orsine = {
@@ -92,7 +92,7 @@ in
         };
         listenPort = 505;
         publicKey = readWgPub ../../hosts/rpi41/wg_key.pub;
-        endpoint = "192.168.1.14:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+        endpoint = "82.64.121.168:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
       rpi01 = {
