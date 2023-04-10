@@ -232,6 +232,22 @@
         "type": "github"
       }
     },
+    "flake-compat_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673956053,
+        "narHash": "sha256-4gtG9iQuiKITOjNQQeQIpoIB6b16fm+504Ch3sNKLd8=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "35bb57c0c8d8b62bbfd284272c928ceb64ddbde9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -460,6 +476,7 @@
     },
     "nix": {
       "inputs": {
+        "flake-compat": "flake-compat_2",
         "lowdown-src": "lowdown-src",
         "nixpkgs": [
           "nixpkgs",
@@ -468,11 +485,11 @@
         "nixpkgs-regression": "nixpkgs-regression"
       },
       "locked": {
-        "lastModified": 1677092839,
-        "narHash": "sha256-eOYtGasgCak3b0c77YMiDovE+vTontdCIMvXqvd99Rk=",
+        "lastModified": 1680867894,
+        "narHash": "sha256-m8iKwNRhvpbb+rSookvNBo+tpcSiKNuNMCJjgBIZvus=",
         "owner": "dguibert",
         "repo": "nix",
-        "rev": "61474bf035754b394886f6aeada0cba3a2f1666a",
+        "rev": "ae65635db1a3227bca71b8f2feddf930f80c12a5",
         "type": "github"
       },
       "original": {
@@ -493,11 +510,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1680697586,
-        "narHash": "sha256-557edy7dYLwdEsULfVbXDt3u6nGXg8fbc3mYVGnq0Z4=",
+        "lastModified": 1680982059,
+        "narHash": "sha256-BAteTLU6hfdMa2sCDYE6EHP5A04hHNR/yN2GYA7wK48=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "daa85f74bec7e9e712cb3dff8e75b6cdd4735664",
+        "rev": "52af59e2d5e0378bf02acad9640e9b72c037a43d",
         "type": "github"
       },
       "original": {
@@ -574,11 +591,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1680530263,
-        "narHash": "sha256-7dARpYaiK/h8ZCooU7y/o5PrvW0ngfq7WbY0jnYwSyo=",
+        "lastModified": 1680980592,
+        "narHash": "sha256-r1XENp/bZUDo/G3xtNNJ2uIfzxrvZAwYnbuFgXuWXHc=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "592eb189ef154a2ee2d0f199d8a7d0191b5e92f1",
+        "rev": "22ac7f0a3c00b38007a0fa81b7a850402bb7e7e1",
         "type": "github"
       },
       "original": {
@@ -629,7 +646,7 @@
     },
     "pre-commit-hooks": {
       "inputs": {
-        "flake-compat": "flake-compat_2",
+        "flake-compat": "flake-compat_3",
         "flake-utils": [
           "flake-utils"
         ],
