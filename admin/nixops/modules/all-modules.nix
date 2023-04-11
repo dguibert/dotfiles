@@ -12,7 +12,9 @@ let
           (lib.removeSuffix ".nix" fn)
           (modulesDir + "/${kind}/${fn}"))
       (lib.filterAttrs
-        (modName: _: modName != "all-modules.nix")
+        (modName: type:
+          (type == "regular" && lib.hasSuffix ".nix" modName && modName != "all-modules.nix")
+        )
         (builtins.readDir (modulesDir + "/${kind}")));
 
   flakePartsModules = lib.attrValues (
