@@ -16,7 +16,7 @@
   inputs.sops-nix.url = "github:Mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=dg/flake-parts";
 
   inputs.disko.url = github:nix-community/disko;
   inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -70,116 +70,16 @@
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, flake-parts, nixpkgs, ... }@inputs:
     let
       # Memoize nixpkgs for different platforms for efficiency.
       inherit (self) outputs;
-      commonOverlays = [
-        inputs.emacs-overlay.overlay
-        inputs.nixpkgs.overlays.emacs
-        inputs.deploy-rs.overlay
-        inputs.nxsession.overlay
-        #inputs.nixpkgs-wayland.overlay
-        inputs.hyprland.overlays.default
-        inputs.self.overlays.default
-      ];
-      nixpkgsFor = system:
-        import inputs.nixpkgs.inputs.nixpkgs {
-          inherit system;
-          overlays = inputs.nixpkgs.legacyPackages.${system}.overlays ++ commonOverlays;
-          config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;
-          #config.contentAddressedByDefault = true;
-        };
-
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      lib = nixpkgs.lib;
 
     in
-    inputs.nixpkgs.lib.recursiveUpdate
-      (inputs.flake-utils.lib.eachSystem supportedSystems (system:
-        let
-          pkgs = nixpkgsFor system;
-        in
-        rec {
-
-          devShells.default = pkgs.callPackage ./shell.nix {
-            inherit inputs;
-            inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
-            deploy-rs = self.legacyPackages.${system}.deploy-rs.deploy-rs;
-            pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
-          };
-          legacyPackages = pkgs;
-
-          apps = import ./apps {
-            inherit (outputs) lib;
-            inherit inputs outputs;
-            nixpkgs_to_use = {
-              #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-              default = builtins.trace "using default nixpkgs" outputs.legacyPackages;
-            };
-          };
-
-          checks.pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              nixpkgs-fmt.enable = true;
-              prettier.enable = true;
-              trailing-whitespace = {
-                enable = true;
-                name = "trim trailing whitespace";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/trailing-whitespace-fixer";
-                types = [ "text" ];
-                stages = [ "commit" "push" "manual" ];
-              };
-              check-merge-conflict = {
-                enable = true;
-                name = "check for merge conflicts";
-                entry = "${pkgs.python3.pkgs.pre-commit-hooks}/bin/check-merge-conflict";
-                types = [ "text" ];
-              };
-            };
-          };
-
-        }))
-      (rec {
-        lib = inputs.nixpkgs.lib;
-
-        overlays = import ./overlays { inherit lib inputs; };
-
-        ## - hydraJobs: A nested set of derivations built by Hydra.
-        ##
-        ## -
-        ## - NixOS-related outputs such as nixosModules and nixosSystems.
-        nixosModules = import ./modules { inherit lib; };
-
-        ## - TODO: NixOS-related outputs such as nixosModules and nixosSystems.
-        homeManagerModules = import ./hm-modules { inherit lib; };
-
-        nixosConfigurations = import ./hosts {
-          inherit lib inputs outputs;
-          systems = {
-            default = "x86_64-linux";
-            "rpi31" = "aarch64-linux";
-            "rpi41" = "aarch64-linux";
-          };
-          pkgs_to_use = {
-            rpi01 = self.legacyPackages.x86_64-linux.pkgsCross.raspberryPi;
-          };
-        };
-
-        homeConfigurations = import ./homes {
-          inherit lib inputs outputs;
-          nixpkgs_to_use = {
-            #default = builtins.trace "using default nixpkgs" inputs.nixpkgs;
-            default = builtins.trace "using default nixpkgs" self;
-          };
-          systems = {
-            default = "x86_64-linux";
-            "root@aarch64-linux" = "aarch64-linux";
-            "root@x86_64-linux" = "x86_64-linux";
-            "dguibert@rpi31" = "aarch64-linux";
-            "dguibert@rpi41" = "aarch64-linux";
-          };
-        };
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      flake = {
+        overlays = import ./overlays { inherit inputs; lib = inputs.nixpkgs.lib; };
 
         deploy.nodes = builtins.foldl' inputs.nixpkgs.lib.recursiveUpdate { } [
           (inputs.nixpkgs.lib.mapAttrs
@@ -201,20 +101,31 @@
                 # See the earlier section about Magic Rollback for more information.
                 # This defaults to `true`
                 magicRollback = false;
-
-                # root profiles
-                profiles.root.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfigurations."root@${system}".activationPackage "./activate";
-                profiles.root.user = "root";
-                # dguibert profiles
-                #profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.${system}.activate.custom homeConfigurations."dguibert@${system}".activationPackage "./activate";
-                #profiles.dguibert.user = "dguibert";
               })
-            (builtins.removeAttrs inputs.self.nixosConfigurations [ "iso" ]))
+            (builtins.removeAttrs self.nixosConfigurations [ "iso" ]))
+          # root profiles
+          (inputs.nixpkgs.lib.mapAttrs
+            (host: homeConfig:
+              let
+                system = self.nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
+              in
+              {
+                #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
+                profiles.dguibert.path = self.legacyPackages.${system}.deploy-rs.lib.activate.custom homeConfig.activationPackage "./activate";
+                profiles.dguibert.user = "root";
+              })
+            {
+              rpi31 = self.homeConfigurations."root@rpi31";
+              rpi41 = self.homeConfigurations."root@rpi41";
+              titan = self.homeConfigurations."root@titan";
+              t580 = self.homeConfigurations."root@t580";
+            }
+          )
           # dguibert profiles
           (inputs.nixpkgs.lib.mapAttrs
             (host: homeConfig:
               let
-                system = nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
+                system = self.nixosConfigurations.${host}.config.nixpkgs.localSystem.system;
               in
               {
                 #profiles.root.path = inputs.deploy-rs.lib.aarch64-linux.activate.custom
@@ -222,73 +133,92 @@
                 profiles.dguibert.user = "dguibert";
               })
             {
-              rpi31 = homeConfigurations."dguibert@rpi31";
-              rpi41 = homeConfigurations."dguibert@rpi41";
-              titan = homeConfigurations."dguibert@titan";
-              t580 = homeConfigurations."dguibert@t580";
+              rpi31 = self.homeConfigurations."dguibert@rpi31";
+              rpi41 = self.homeConfigurations."dguibert@rpi41";
+              titan = self.homeConfigurations."dguibert@titan";
+              t580 = self.homeConfigurations."dguibert@t580";
             }
           )
           (
             let
               genProfile = user: name: profile: {
-                path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom homeConfigurations."${name}".activationPackage ''
-                  export NIX_STATE_DIR=${homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
-                  export NIX_PROFILE=${homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
+                path = self.legacyPackages.x86_64-linux.deploy-rs.lib.activate.custom self.homeConfigurations."${name}".activationPackage ''
+                  export NIX_STATE_DIR=${self.homeConfigurations."${name}".config.home.sessionVariables.NIX_STATE_DIR}
+                  export NIX_PROFILE=${self.homeConfigurations."${name}".config.home.sessionVariables.NIX_PROFILE}
                   ./activate
                 '';
                 sshUser = user;
-                profilePath = "${homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
+                profilePath = "${self.homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
               };
             in
             {
-              genji = {
-                hostname = "genji";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #genji = {
+              #  hostname = "genji";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
-              };
-              spartan = {
-                hostname = "spartan";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
+              #};
+              #spartan = {
+              #  hostname = "spartan";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              };
-              levante = {
-                hostname = "levante";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+              #};
+              #levante = {
+              #  hostname = "levante";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.dguibert = genProfile "b381115" "dguibert@levante" "hm";
+              #  profiles.dguibert = genProfile "b381115" "dguibert@levante" "hm";
 
-              };
-              lumi = {
-                hostname = "lumi";
-                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-                fastConnection = true;
-                autoRollback = false;
-                magicRollback = false;
+              #};
+              #lumi = {
+              #  hostname = "lumi";
+              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+              #  fastConnection = true;
+              #  autoRollback = false;
+              #  magicRollback = false;
 
-                profiles.dguibert = genProfile "dguibert" "dguibert@lumi" "hm";
+              #  profiles.dguibert = genProfile "dguibert" "dguibert@lumi" "hm";
 
-              };
+              #};
             }
           )
 
           ({ })
         ];
 
-        # This is highly advised, and will prevent many possible mistakes
-        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy)
-          (inputs.nixpkgs.lib.genAttrs supportedSystems (system: self.legacyPackages.${system}.deploy-rs.lib));
+      };
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      imports = [
+        #./home/profiles
+        ./homes
+        ./hosts
+        ./modules/all-modules.nix
+        ./apps
+        ./checks
+        ./shells
+      ];
 
-      });
+      perSystem = { config, self', inputs', pkgs, system, ... }: {
+        legacyPackages = pkgs;
+        # This is highly advised, and will prevent many possible mistakes
+        checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
+        ;
+
+      };
+    };
+
 }

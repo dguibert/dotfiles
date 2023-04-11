@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 #let
@@ -6,33 +6,9 @@ with lib;
 #in
 
 rec {
-  imports = [
-    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
-    ../../modules/nixos/defaults
-  ];
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
-  #sdImage.bootSize = 511;
+  #sdImage.bootSize = 512;
 
   networking.hostName = "rpi41";
-
-  boot.kernelPackages = pkgs.linuxPackages_5_10;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
-  boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
-  #fileSystems."/".options = [ "defaults" "discard" ];
-  services.fstrim.enable = true;
-
-  ##boot.loader.generic-extlinux-compatible.enable = true;
-  boot.loader.generic-extlinux-compatible.configurationLimit = 10;
-
-  sdImage.compressImage = false;
-  documentation.nixos.enable = false;
-
-  hardware.opengl = {
-    enable = true;
-    setLdLibraryPath = true;
-    package = pkgs.mesa.drivers;
-  };
-  programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.
   #nix.binaryCaches = lib.mkForce [ "http://nixos-arm.dezgeg.me/channel" ];

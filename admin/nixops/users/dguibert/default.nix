@@ -18,7 +18,7 @@ in
         uid = 1000;
         description = "David Guibert";
         home = "/home/dguibert";
-        hashedPassword = "$6$h1H22Nd9YDRVlAt$YqlyCmQXuFiVAtecebSjvlmJM0WoZmLaaTLF52PuMH6Wz3mYKtWioNcWe2pQJOOoEq68Im7ZJZo9TsZnvcG5h1";
+        hashedPassword = "$y$j9T$HqIvPhkUMjaJIflbF/Ozp1$TuOSm8QQBXgQdEl0gGle5xB7WoB1mNBKXjmnW3OEc2D"; # mkpasswd
         group = "dguibert";
         extraGroups = [
           "dguibert"

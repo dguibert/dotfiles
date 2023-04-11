@@ -9,7 +9,7 @@ keys:
   - &t580_age age1e6up3vv3av0tlsp9lcmfxqga07r6d3ccahzzdp7een7facm5ps0qztps7l
 creation_rules:
   # dguibert
-  - path_regex: homes/dguibert/[^/]+-sec\.nix$
+  - path_regex: modules/home-manager/dguibert/[^/]+-sec\.nix$
     key_groups:
       - pgp:
           - *dguibert
@@ -54,7 +54,7 @@ creation_rules:
           - *rpi41_age
           - *t580_age
           - *titan_age
-  - path_regex: homes/dguibert/[^/]+-sec\.el$
+  - path_regex: modules/home-manager/dguibert/[^/]+-sec\.el$
     key_groups:
       - pgp:
           - *dguibert
@@ -63,7 +63,7 @@ creation_rules:
           - *rpi41_age
           - *t580_age
           - *titan_age
-  - path_regex: homes/dguibert/[^/]+\.yaml$
+  - path_regex: modules/home-manager/dguibert/[^/]+\.yaml$
     key_groups:
       - pgp:
           - *dguibert

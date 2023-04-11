@@ -11,8 +11,7 @@ with lib;
     (filterAttrs
       (name: type:
         (type == "directory" && builtins.pathExists "${toString ./.}/${name}/default.nix") ||
-        (type == "regular" && lib.hasSuffix ".nix" name && ! (lib.hasSuffix "@.nix" name) && ! (name == "default.nix") && ! (name == "overlays.nix")) ||
-        (type == "symlink" && lib.hasSuffix ".nix" name && ! (name == "default.nix") && ! (name == "overlays.nix") && ! (name == "common.nix"))
+        (type == "regular" && hasSuffix ".nix" name && ! (name == "default.nix") && ! (name == "overlays.nix"))
       )
       (builtins.readDir ./.)));
 }
