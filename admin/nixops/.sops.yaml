@@ -5,7 +5,7 @@ keys:
   - &titan_age age1ejsy39scvjujs392lrrx99cs7qx8j746wcasau2z8jp6h27l3dfsrne8w9
   #rpi41           00064376b1bf4617928161cd5b5318afcd030f01 (20201218)
   - &rpi41_age age1lml6xd6l7ntypmtmv7rsqxzguln5puynzlv2yf3k99hrr48l3ppq6nw3t3
-  - &rpi31 F7368E72F15D95927F685CD0A264BDA92AE79515
+  - &rpi31_age age1wv2t950m6rw5a5jl2qfg0ejrlpdxyn8x4nykhpqv00476cd299rqnutzkd
   - &t580_age age1e6up3vv3av0tlsp9lcmfxqga07r6d3ccahzzdp7een7facm5ps0qztps7l
 creation_rules:
   # dguibert
@@ -35,7 +35,8 @@ creation_rules:
     key_groups:
       - pgp:
           - *dguibert
-          - *rpi31
+        age:
+          - *rpi31_age
   # dguibert
   # t580
   - path_regex: hosts/t580/secrets/[^/]+\.yaml$
@@ -49,8 +50,8 @@ creation_rules:
     key_groups:
       - pgp:
           - *dguibert
-          - *rpi31
         age:
+          - *rpi31_age
           - *rpi41_age
           - *t580_age
           - *titan_age
@@ -58,8 +59,8 @@ creation_rules:
     key_groups:
       - pgp:
           - *dguibert
-          - *rpi31
         age:
+          - *rpi31_age
           - *rpi41_age
           - *t580_age
           - *titan_age

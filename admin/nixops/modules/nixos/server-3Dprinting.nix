@@ -23,11 +23,6 @@ in
         };
       };
       settings = {
-        "temperature_sensor mcu_temp" = {
-          sensor_type = "temperature_mcu";
-          min_temp = 0;
-          max_temp = 100;
-        };
         "temperature_sensor raspberry_pi" = {
           sensor_type = "temperature_host";
           min_temp = 0;
@@ -42,6 +37,8 @@ in
           square_corner_velocity = 6.0;
         };
         mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+        mcu.restart_method = "command";
+
         # https://docs.fluidd.xyz/configuration/initial_setup
         virtual_sdcard.path = "/gcodes";
         display_status = { };
@@ -76,7 +73,7 @@ in
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
           diag_pin = "^PB4"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
-          driver_SGTHRS = 255;
+          driver_SGTHRS = 120;
         };
         stepper_y = {
           step_pin = "PC14";
@@ -103,7 +100,7 @@ in
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
           diag_pin = "^PC8"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
-          driver_SGTHRS = 255;
+          driver_SGTHRS = 120;
         };
         stepper_z = {
           step_pin = "PB9";
@@ -116,7 +113,7 @@ in
           endstop_pin = "^PB1";
           position_endstop = 120;
           position_max = 120;
-          position_min = -1.5;
+          position_min = 0;
           homing_speed = 20; # max 100
           second_homing_speed = 3.0; # max 100
           homing_retract_dist = 3.0;
@@ -447,6 +444,20 @@ in
         ###[include v0_display.cfg]
         ###[include bedScrewMenu.cfg]
         ##
+        board_pins.aliases =
+          "    # EXP1 header
+             EXP1_1=<5V>,  EXP1_3=<RST>, EXP1_5=PA7,  EXP1_7=PA4,  EXP1_9=PA5,
+             EXP1_2=<GND>, EXP1_4=PC3,   EXP1_6=PC11, EXP1_8=PC10, EXP1_10=PA6,
+
+             # EXP2 header
+             EXP2_1=<5V>,  EXP2_3=PB7, EXP2_5=PB14, EXP2_7=PB12, EXP2_9=PC12,
+             EXP2_2=<GND>, EXP2_4=PB6, EXP2_6=PB13, EXP2_8=PB15, EXP2_10=PC9,
+
+             # EXP3 header
+             EXP3_1=PC9,  EXP3_3=PC10, EXP3_5=PC11, EXP3_7=PB12, EXP3_9=<GND>,
+             EXP3_2=PC12, EXP3_4=PB14, EXP3_6=PB13, EXP3_8=PB15, EXP3_10=<5V>
+             # Pins EXP3_4, EXP3_8, EXP3_6 are also MISO, MOSI, SCK of bus \"spi2\"
+        ";
 
       };
     };
