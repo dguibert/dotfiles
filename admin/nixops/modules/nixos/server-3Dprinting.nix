@@ -147,9 +147,10 @@ in
           # PID_CALIBRATE HEATER=extruder TARGET=245
           # pid_Kp=20.292 pid_Ki=1.313 pid_Kd=78.378
           # pid_Kp=20.431 pid_Ki=1.273 pid_Kd=81.977
-          pid_Kp = 20.292;
-          pid_Ki = 1.313;
-          pid_Kd = 78.378;
+          #pid_Kp=20.040 pid_Ki=0.961 pid_Kd=104.459 # 20230418 V0.2
+          pid_Kp = 20.040;
+          pid_Ki = 0.961;
+          pid_Kd = 104.459;
           min_temp = 0;
           max_temp = 270;
           min_extrude_temp = 170;
@@ -187,7 +188,8 @@ in
           # PID_CALIBRATE HEATER=heater_bed TARGET=100
           # pid_Kp=50.563 pid_Ki=2.654 pid_Kd=240.808
           # pid_Kp=50.657 pid_Ki=2.502 pid_Kd=256.449
-          # pid_Kp=51.159 pid_Ki=2.624 pid_Kd=249.400
+          # pid_Kp=51.159 pid_Ki=2.624 pid_Kd=249.400 # 20230418 V0.2
+          # pid_Kp=51.007 pid_Ki=2.538 pid_Kd=256.311 # 20230418 V0.2
           pid_kp = 51.159;
           pid_ki = 2.624;
           pid_kd = 249.400;
