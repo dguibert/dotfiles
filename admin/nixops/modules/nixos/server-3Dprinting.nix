@@ -187,9 +187,10 @@ in
           # PID_CALIBRATE HEATER=heater_bed TARGET=100
           # pid_Kp=50.563 pid_Ki=2.654 pid_Kd=240.808
           # pid_Kp=50.657 pid_Ki=2.502 pid_Kd=256.449
-          pid_kp = 50.563;
-          pid_ki = 2.654;
-          pid_kd = 240.808;
+          # pid_Kp=51.159 pid_Ki=2.624 pid_Kd=249.400
+          pid_kp = 51.159;
+          pid_ki = 2.624;
+          pid_kd = 249.400;
         };
         "heater_fan hotend_fan" = {
           # FAN1 Connector
