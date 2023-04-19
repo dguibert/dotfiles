@@ -5,8 +5,6 @@ let
       inherit system;
       overlays = inputs.nixpkgs.legacyPackages.${system}.overlays
         ++ [
-        inputs.emacs-overlay.overlay
-        inputs.nixpkgs.overlays.emacs
         inputs.deploy-rs.overlay
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
