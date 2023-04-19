@@ -139,7 +139,11 @@ in
       pandoc
 
       (pass.withExtensions (extensions: with extensions; [
-        pass-audit
+        # pass-audit #20230419 Error in tests.test_audit.TestPassAudit.test_zxcvbn_strong
+        (pass-audit.overrideAttrs (_: {
+          doCheck = false;
+          doInstallCheck = false;
+        }))
         pass-update
         pass-otp
         pass-import
