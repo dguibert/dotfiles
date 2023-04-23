@@ -136,7 +136,7 @@ in
           #rotation_distance = 21.54087;
           rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
-          microsteps = 16;
+          microsteps = 32;
           nozzle_diameter = 0.400;
           filament_diameter = 1.750;
           heater_pin = "PC6";
@@ -153,7 +153,7 @@ in
           pid_Kd = 104.459;
           min_temp = 0;
           max_temp = 270;
-          min_extrude_temp = 170;
+          min_extrude_temp = 0;
           max_extrude_only_distance = 150.0;
           max_extrude_cross_section = 0.8;
           pressure_advance = 0.04; # For ABS 15*0.005 See tuning pressure advance doc
@@ -163,7 +163,7 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 3;
-          interpolate = true;
+          interpolate = false;
           run_current = 0.35;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
