@@ -136,7 +136,7 @@ in
           #rotation_distance = 21.54087;
           rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
-          microsteps = 32;
+          microsteps = 16;
           nozzle_diameter = 0.400;
           filament_diameter = 1.750;
           heater_pin = "PC6";
@@ -163,10 +163,11 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 3;
-          interpolate = false;
-          run_current = 0.35;
+          interpolate = true;
+          run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
+          hold_current = 0.35;
           sense_resistor = 0.110;
-          stealthchop_threshold = 0;
+          stealthchop_threshold = 500;
         };
         heater_bed = {
           heater_pin = "PC7";
