@@ -209,12 +209,13 @@
         ]
       },
       "locked": {
-        "lastModified": 1682073345,
-        "narHash": "sha256-YvDFqY65Vcvxce2i07bUHhPvZ7YGZ/cVWEtsgBGnkIg=",
-        "owner": "nix-community",
-        "repo": "emacs-overlay",
-        "rev": "372c8287a251f2a4dc7a1929f6368ba78582c3a2",
-        "type": "github"
+        "lastModified": 1681819035,
+        "narHash": "sha256-o5P0lER7damSYdZEuQ0NYYDfKsLZBu1Hue9mjjyRq4M=",
+        "ref": "744db3a02be17b79681b6d50cbd8591bd193656f",
+        "rev": "744db3a02be17b79681b6d50cbd8591bd193656f",
+        "revCount": 9659,
+        "type": "git",
+        "url": "file:///home/dguibert/code/emacs-overlay"
       },
       "original": {
         "owner": "nix-community",
@@ -589,11 +590,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1682268943,
-        "narHash": "sha256-/muD0Hcwt6YWkQX8lkHpdfeeHvLP2k3z94r4wcnnDiM=",
+        "lastModified": 1682686951,
+        "narHash": "sha256-SFBqFKBzNaCTZlwTzjL6X04yDXpAPZSjf+6VRp0Xr+0=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "4d6b7a98203c590322d50cc6df991cedc53abde7",
+        "rev": "89f4837885f741c9ed03645bd8a9a291c9b63915",
         "type": "github"
       },
       "original": {
@@ -688,11 +689,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1682268696,
-        "narHash": "sha256-4dcc2c6Rdjfer8QTn5TEAUzC8Tu2L55qKGd8oaLsfJ0=",
+        "lastModified": 1682686856,
+        "narHash": "sha256-puNzlUe9y6fCLkD8pzdSL96J5hTXCvF0emG2SgYSAyE=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "78a4e4c1e62c5cb9119c4292e594b9e8a32c8b3e",
+        "rev": "b518b69d8b0c0dbb5c3c799e4d93ef08d1a175f8",
         "type": "github"
       },
       "original": {
