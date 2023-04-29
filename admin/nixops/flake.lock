@@ -587,11 +587,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1682081380,
-        "narHash": "sha256-Z7Ed5BgB46pLb6F/zoGDX1wplBn45QaCCkvP36I8vqs=",
+        "lastModified": 1682770458,
+        "narHash": "sha256-qv+JxEuWLKm2UeuhIcxF7WAC1jYwdPx/9IyRcIEpBs0=",
         "ref": "refs/heads/host/spartan",
-        "rev": "7bce8429d3aad7d7dd367abf63b66ab3750aee92",
-        "revCount": 1091,
+        "rev": "8f1b0271817a10a2fdb9d8c57d1a6be98cca29d4",
+        "revCount": 1092,
         "type": "git",
         "url": "file:///home_nfs/bguibertd/nur-packages"
       },
