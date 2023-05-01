@@ -66,10 +66,10 @@ in
         };
         "tmc2209 stepper_x" = {
           uart_pin = "PA3";
-          tx_pin = "PA2";
+          #tx_pin = "PA2";
           uart_address = 0;
           interpolate = false;
-          run_current = 0.85;
+          run_current = 0.7;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
           diag_pin = "^PB4"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
@@ -93,10 +93,10 @@ in
         };
         "tmc2209 stepper_y" = {
           uart_pin = "PA3";
-          tx_pin = "PA2";
+          #tx_pin = "PA2";
           uart_address = 2;
           interpolate = false;
-          run_current = 0.85;
+          run_current = 0.7;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
           diag_pin = "^PC8"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
@@ -120,10 +120,10 @@ in
         };
         "tmc2209 stepper_z" = {
           uart_pin = "PA3";
-          tx_pin = "PA2";
+          #tx_pin = "PA2";
           uart_address = 1;
           interpolate = false;
-          run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
+          run_current = 0.3; # For FYSETC 42HSC1404B-200N8
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
         };
@@ -136,7 +136,7 @@ in
           #rotation_distance = 21.54087;
           rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
-          microsteps = 16;
+          microsteps = 128;
           nozzle_diameter = 0.400;
           filament_diameter = 1.750;
           heater_pin = "PC6";
@@ -161,13 +161,12 @@ in
         };
         "tmc2209 extruder" = {
           uart_pin = "PA3";
-          tx_pin = "PA2";
+          #tx_pin = "PA2";
           uart_address = 3;
-          interpolate = true;
-          run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
-          hold_current = 0.35;
+          interpolate = false;
+          run_current = 0.7;
           sense_resistor = 0.110;
-          stealthchop_threshold = 500;
+          stealthchop_threshold = 0; # Set to 0 for spreadcycle, avoid using stealthchop on extruder
         };
         heater_bed = {
           heater_pin = "PC7";
