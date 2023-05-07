@@ -28,7 +28,7 @@ datalad_add_ria () {
             return 0
         fi
 
-        if [ -n "$MR_OVERWRITE_REMOTES" ]; then
+        if [ -n "${MR_OVERWRITE_REMOTES-}" ]; then
             datalad create-sibling-ria -s "$remote" "ria+$url" --existing reconfigure --new-store-ok
             return 0
         else
@@ -109,7 +109,7 @@ datalad_add_sibling () {
             return
         fi
 
-        if [ -n "$MR_OVERWRITE_REMOTES" ]; then
+        if [ -n "${MR_OVERWRITE_REMOTES-}" ]; then
             datalad_add_new_sibling "$remote" "$url"
             return
         else
