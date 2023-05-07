@@ -326,12 +326,33 @@ in
         ###   Use PRINT_START for the slicer starting script - please customize for your slicer of choice
         # https://github.com/Klipper3d/klipper/blob/master/config/sample-macros.cfg
         "gcode_macro PRINT_START".gcode = "
-             G28                            ; home all axes
-             G90                            ; absolute positioning
+             # Parameters
+             {% set BED_TEMP = params.BED|float %}
+             {% set EXTRUDER_TEMP = params.EXTRUDER|float %}
+             # Use absolute coordinates
+             G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
              SET_GCODE_OFFSET Z=0.0
-             G1 Z20 F3000                   ; move nozzle away from bed
+             M140 S{BED_TEMP}       ; set for bed to reach temp
+             M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
+             # Home the printer
+             G28
+             M190 S{BED_TEMP}            ; set and wait for bed to reach temp
+             M109 S{EXTRUDER_TEMP}       ; set and wait for hot end to reach temp
+
+             G0 Y5 X5             ;
+             G1 Z0.2 F500.0       ; move bed to nozzle
+             G92 E0.0             ; reset extruder
+             G1 E4.0 F500.0       ; pre-purge prime LENGTH SHOULD MATCH YOUR PRINT_END RETRACT
+             G1 Z2 E10.0 F500.0     ;
+             G1 Z5 E20.0 F500.0     ;
+             G92 E0.0             ; reset extruder
+             G1 Z2.0              ; move nozzle to prevent scratch
+             ### Move the nozzle near the bed
+             ##G1 Z5 F3000
+             ### Move the nozzle very close to the bed
+             ##G1 Z0.15 F300
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
         "gcode_macro PRINT_END".gcode =
