@@ -204,6 +204,20 @@ in
           ###fan_speed: 1.0                         # You can't PWM the delta fan unless using blue wire
         };
 
+        # SET_FAN_SPEED fan=exhaust_fan SPEED="number between 0 and 1"
+        #  For example, to put the fan speed at 30% use,
+        #
+        #  SET_FAN_SPEED fan=exhaust_fan SPEED=0.3
+        #
+        #  Running the fan at 30% speed during a print has lead to a dramatic decrease in ABS fumes and pretty much made them unnoticeable. I also run the fan at 100% speed at the end of a print to fully exhaust the print chamber. Adding foam tape to seal up any gaps between panels and the top-hat will also greatly increase the reduction of fumes.
+        "fan_generic exhaust_fan" = {
+          # Exhaust Fan
+          pin = "PA1";
+          max_power = 1.0;
+          shutdown_speed = 0;
+          kick_start_time = 0.5;
+        };
+
         fan = {
           # Print Cooling Fan: FAN0 Connector
           pin = "PA14";
@@ -211,7 +225,7 @@ in
           kick_start_time = 0.5;
           ###depending on your fan, you may need to increase or reduce this value
           ###if your fan will not start
-          #off_below="0";.13
+          off_below = "0.4";
           cycle_time = 0.010;
         };
         idle_timeout.timeout = 1800;
@@ -333,7 +347,7 @@ in
              G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=0.0
+             SET_GCODE_OFFSET Z=+.010
              M140 S{BED_TEMP}       ; set for bed to reach temp
              M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
              # Home the printer
