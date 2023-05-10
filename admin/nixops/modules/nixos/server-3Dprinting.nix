@@ -216,6 +216,7 @@ in
           max_power = 1.0;
           shutdown_speed = 0;
           kick_start_time = 0.5;
+          off_below = 0.4;
         };
 
         fan = {
@@ -225,7 +226,7 @@ in
           kick_start_time = 0.5;
           ###depending on your fan, you may need to increase or reduce this value
           ###if your fan will not start
-          off_below = "0.4";
+          #off_below = "0.4";
           cycle_time = 0.010;
         };
         idle_timeout.timeout = 1800;
