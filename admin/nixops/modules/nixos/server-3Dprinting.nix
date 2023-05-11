@@ -210,13 +210,13 @@ in
         #  SET_FAN_SPEED fan=exhaust_fan SPEED=0.3
         #
         #  Running the fan at 30% speed during a print has lead to a dramatic decrease in ABS fumes and pretty much made them unnoticeable. I also run the fan at 100% speed at the end of a print to fully exhaust the print chamber. Adding foam tape to seal up any gaps between panels and the top-hat will also greatly increase the reduction of fumes.
-        "fan_generic exhaust_fan" = {
-          # Exhaust Fan
-          pin = "PA1";
-          max_power = 1.0;
-          shutdown_speed = 0;
-          kick_start_time = 0.5;
-        };
+        #"fan_generic exhaust_fan" = {
+        #  # Exhaust Fan
+        #  pin = "PA1";
+        #  max_power = 1.0;
+        #  shutdown_speed = 0;
+        #  kick_start_time = 0.5;
+        #};
 
         fan = {
           # Print Cooling Fan: FAN0 Connector
@@ -225,7 +225,7 @@ in
           kick_start_time = 0.5;
           ###depending on your fan, you may need to increase or reduce this value
           ###if your fan will not start
-          off_below = "0.4";
+          off_below = 0.13;
           cycle_time = 0.010;
         };
         idle_timeout.timeout = 1800;
