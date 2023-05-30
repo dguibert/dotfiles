@@ -23,7 +23,7 @@ in
     };
 
     ## https://wiki.archlinux.org/title/Pam_oath
-    services.openssh.settings.passwordAuthentication = lib.mkForce true;
+    services.openssh.settings.PasswordAuthentication = lib.mkForce true;
     services.openssh.extraConfig = ''
       ChallengeResponseAuthentication yes
     '';
