@@ -19,7 +19,7 @@ in
           # Run klipper-genconf to generate this
           configFile = ./server-3Dprinting/config;
           # Serial port connected to the microcontroller
-          serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+          serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
         };
       };
       settings = {
