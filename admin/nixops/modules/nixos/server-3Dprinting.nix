@@ -164,7 +164,7 @@ in
           tx_pin = "PA2";
           uart_address = 3;
           interpolate = false;
-          run_current = 0.35;
+          run_current = 0.7;
           sense_resistor = 0.110;
           stealthchop_threshold = 0; # Set to 0 for spreadcycle, avoid using stealthchop on extruder
         };
