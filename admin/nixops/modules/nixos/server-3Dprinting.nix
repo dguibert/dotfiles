@@ -36,7 +36,7 @@ in
           max_z_accel = 45;
           square_corner_velocity = 6.0;
         };
-        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
         mcu.restart_method = "command";
 
         # https://docs.fluidd.xyz/configuration/initial_setup
