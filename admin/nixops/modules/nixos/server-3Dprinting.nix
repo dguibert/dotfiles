@@ -66,13 +66,13 @@ in
         };
         "tmc2209 stepper_x" = {
           uart_pin = "PA3";
-          #tx_pin = "PA2";
+          tx_pin = "PA2";
           uart_address = 0;
           interpolate = false;
-          run_current = 0.7;
+          run_current = 0.85;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
-          diag_pin = "^PB4"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          diag_pin = "^PB4";
           driver_SGTHRS = 120;
         };
         stepper_y = {
@@ -93,13 +93,13 @@ in
         };
         "tmc2209 stepper_y" = {
           uart_pin = "PA3";
-          #tx_pin = "PA2";
+          tx_pin = "PA2";
           uart_address = 2;
           interpolate = false;
-          run_current = 0.7;
+          run_current = 0.85;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
-          diag_pin = "^PC8"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          diag_pin = "^PC8";
           driver_SGTHRS = 120;
         };
         stepper_z = {
@@ -113,14 +113,14 @@ in
           endstop_pin = "^PB1";
           position_endstop = 120;
           position_max = 120;
-          position_min = 0;
+          position_min = -1.5;
           homing_speed = 20; # max 100
           second_homing_speed = 3.0; # max 100
           homing_retract_dist = 3.0;
         };
         "tmc2209 stepper_z" = {
           uart_pin = "PA3";
-          #tx_pin = "PA2";
+          tx_pin = "PA2";
           uart_address = 1;
           interpolate = false;
           run_current = 0.3; # For FYSETC 42HSC1404B-200N8
@@ -136,7 +136,7 @@ in
           #rotation_distance = 21.54087;
           rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
-          microsteps = 128;
+          microsteps = 32;
           nozzle_diameter = 0.400;
           filament_diameter = 1.750;
           heater_pin = "PC6";
@@ -161,10 +161,10 @@ in
         };
         "tmc2209 extruder" = {
           uart_pin = "PA3";
-          #tx_pin = "PA2";
+          tx_pin = "PA2";
           uart_address = 3;
           interpolate = false;
-          run_current = 0.7;
+          run_current = 0.35;
           sense_resistor = 0.110;
           stealthchop_threshold = 0; # Set to 0 for spreadcycle, avoid using stealthchop on extruder
         };
@@ -344,8 +344,6 @@ in
              # Parameters
              {% set BED_TEMP = params.BED|float %}
              {% set EXTRUDER_TEMP = params.EXTRUDER|float %}
-             # Use absolute coordinates
-             G90
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
              SET_GCODE_OFFSET Z=+.010
@@ -353,6 +351,8 @@ in
              M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
              # Home the printer
              G28
+             # Use absolute coordinates
+             G90
              M190 S{BED_TEMP}            ; set and wait for bed to reach temp
              M109 S{EXTRUDER_TEMP}       ; set and wait for hot end to reach temp
 
@@ -365,7 +365,7 @@ in
              G92 E0.0             ; reset extruder
              G1 Z2.0              ; move nozzle to prevent scratch
              ### Move the nozzle near the bed
-             ##G1 Z5 F3000
+             G1 Z20 F3000
              ### Move the nozzle very close to the bed
              ##G1 Z0.15 F300
         ";
@@ -470,14 +470,9 @@ in
         ";
 
         "gcode_macro _HOME_Z".gcode =
-          "    {% set th = printer.toolhead %}
-             {% set RUN_CURRENT_Z = printer.configfile.settings['tmc2209 stepper_z'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={HOME_CURRENT}
-             G90
+          "    G90
              G28 Z
              G1 Z30
-             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={RUN_CURRENT_Z}
         ";
         ##
         ###[include v0_display.cfg]
