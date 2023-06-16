@@ -18,7 +18,8 @@
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
 
-  inputs.disko.url = github:nix-community/disko;
+  #inputs.disko.url = github:nix-community/disko;
+  inputs.disko.url = github:dguibert/disko/dg/partition-index;
   inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.terranix = { url = "github:mrVanDalo/terranix"; flake = false; };
@@ -52,6 +53,7 @@
   inputs.chemacs.url = "github:plexus/chemacs2";
   inputs.chemacs.flake = false;
 
+  inputs.flake-parts.follows = "nixpkgs/flake-parts";
   inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";

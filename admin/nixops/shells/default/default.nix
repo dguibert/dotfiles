@@ -37,6 +37,8 @@
           yubikey-manager
           pcsclite
           opensc
+
+          nix-output-monitor
         ];
         nativeBuildInputs = [
           sops-import-keys-hook

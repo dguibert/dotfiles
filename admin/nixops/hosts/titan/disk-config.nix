@@ -35,7 +35,6 @@ let
             {
               # ESP
               index = 1;
-              type = "partition";
               name = "EFI system partition"; #-t1:EF00
               fs-type = "fat32";
               start = "1M";
@@ -56,7 +55,6 @@ let
             {
               # SWAP
               index = 4;
-              type = "partition";
               name = "swap"; #-t4:8200
               fs-type = "linux-swap";
               start = "${toString INST_PARTSIZE_ESP}GiB";
@@ -70,7 +68,6 @@ let
             {
               # RPOOL
               index = 3;
-              type = "partition";
               name = "zfs"; #-t3:BF00
               start = "${toString (INST_PARTSIZE_ESP+INST_PARTSIZE_SWAP)}GiB";
               end = "100%";
@@ -85,7 +82,7 @@ let
     };
 
   ds_mount = mountpoint: {
-    zfs_type = "filesystem";
+    type = "zfs_fs";
     inherit mountpoint;
     options.mountpoint = "legacy";
     mountOptions = [
@@ -105,7 +102,6 @@ in
         format = "gpt";
         partitions = [
           {
-            type = "partition";
             name = "zfs";
             start = "128MiB";
             end = "100%";
@@ -186,11 +182,11 @@ in
 
       datasets = {
         backup2 = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           options.mountpoint = "none";
         };
         "backup2/ria" = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/backup2/ria";
           options.mountpoint = "legacy";
           mountOptions = [

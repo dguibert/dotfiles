@@ -19,7 +19,7 @@ in
           # Run klipper-genconf to generate this
           configFile = ./server-3Dprinting/config;
           # Serial port connected to the microcontroller
-          serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+          serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
         };
       };
       settings = {
@@ -36,7 +36,7 @@ in
           max_z_accel = 45;
           square_corner_velocity = 6.0;
         };
-        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_0E004A000851383531393138-if00";
+        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
         mcu.restart_method = "command";
 
         # https://docs.fluidd.xyz/configuration/initial_setup
@@ -72,7 +72,7 @@ in
           run_current = 0.85;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
-          diag_pin = "^PB4"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          diag_pin = "^PB4";
           driver_SGTHRS = 120;
         };
         stepper_y = {
@@ -99,7 +99,7 @@ in
           run_current = 0.85;
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
-          diag_pin = "^PC8"; # YOU NEED TO JUMP THIS DIAG PIN ON YOUR BOARD FOR SENSORLESS HOMING TO WORK
+          diag_pin = "^PC8";
           driver_SGTHRS = 120;
         };
         stepper_z = {
@@ -113,7 +113,7 @@ in
           endstop_pin = "^PB1";
           position_endstop = 120;
           position_max = 120;
-          position_min = 0;
+          position_min = -1.5;
           homing_speed = 20; # max 100
           second_homing_speed = 3.0; # max 100
           homing_retract_dist = 3.0;
@@ -123,7 +123,7 @@ in
           tx_pin = "PA2";
           uart_address = 1;
           interpolate = false;
-          run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
+          run_current = 0.3; # For FYSETC 42HSC1404B-200N8
           sense_resistor = 0.110;
           stealthchop_threshold = 0;
         };
@@ -136,7 +136,7 @@ in
           #rotation_distance = 21.54087;
           rotation_distance = 22.251425904873;
           gear_ratio = "50:10"; # For Mini Afterburner
-          microsteps = 16;
+          microsteps = 32;
           nozzle_diameter = 0.400;
           filament_diameter = 1.750;
           heater_pin = "PC6";
@@ -163,11 +163,10 @@ in
           uart_pin = "PA3";
           tx_pin = "PA2";
           uart_address = 3;
-          interpolate = true;
-          run_current = 0.37; # For V0.1 spec NEMA17 w/ integrated lead screw
-          hold_current = 0.35;
+          interpolate = false;
+          run_current = 0.7;
           sense_resistor = 0.110;
-          stealthchop_threshold = 500;
+          stealthchop_threshold = 0; # Set to 0 for spreadcycle, avoid using stealthchop on extruder
         };
         heater_bed = {
           heater_pin = "PC7";
@@ -205,6 +204,21 @@ in
           ###fan_speed: 1.0                         # You can't PWM the delta fan unless using blue wire
         };
 
+        # SET_FAN_SPEED fan=exhaust_fan SPEED="number between 0 and 1"
+        #  For example, to put the fan speed at 30% use,
+        #
+        #  SET_FAN_SPEED fan=exhaust_fan SPEED=0.3
+        #
+        #  Running the fan at 30% speed during a print has lead to a dramatic decrease in ABS fumes and pretty much made them unnoticeable. I also run the fan at 100% speed at the end of a print to fully exhaust the print chamber. Adding foam tape to seal up any gaps between panels and the top-hat will also greatly increase the reduction of fumes.
+        "fan_generic exhaust_fan" = {
+          # Exhaust Fan
+          pin = "PA1";
+          max_power = 1.0;
+          shutdown_speed = 0;
+          kick_start_time = 0.5;
+          off_below = 0.4;
+        };
+
         fan = {
           # Print Cooling Fan: FAN0 Connector
           pin = "PA14";
@@ -212,7 +226,7 @@ in
           kick_start_time = 0.5;
           ###depending on your fan, you may need to increase or reduce this value
           ###if your fan will not start
-          #off_below="0";.13
+          #off_below = "0.4";
           cycle_time = 0.010;
         };
         idle_timeout.timeout = 1800;
@@ -327,12 +341,33 @@ in
         ###   Use PRINT_START for the slicer starting script - please customize for your slicer of choice
         # https://github.com/Klipper3d/klipper/blob/master/config/sample-macros.cfg
         "gcode_macro PRINT_START".gcode = "
-             G28                            ; home all axes
-             G90                            ; absolute positioning
+             # Parameters
+             {% set BED_TEMP = params.BED|float %}
+             {% set EXTRUDER_TEMP = params.EXTRUDER|float %}
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=0.0
-             G1 Z20 F3000                   ; move nozzle away from bed
+             SET_GCODE_OFFSET Z=+.010
+             M140 S{BED_TEMP}       ; set for bed to reach temp
+             M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
+             # Home the printer
+             G28
+             # Use absolute coordinates
+             G90
+             M190 S{BED_TEMP}            ; set and wait for bed to reach temp
+             M109 S{EXTRUDER_TEMP}       ; set and wait for hot end to reach temp
+
+             G0 Y5 X5             ;
+             G1 Z0.2 F500.0       ; move bed to nozzle
+             G92 E0.0             ; reset extruder
+             G1 E4.0 F500.0       ; pre-purge prime LENGTH SHOULD MATCH YOUR PRINT_END RETRACT
+             G1 Z2 E10.0 F500.0     ;
+             G1 Z5 E20.0 F500.0     ;
+             G92 E0.0             ; reset extruder
+             G1 Z2.0              ; move nozzle to prevent scratch
+             ### Move the nozzle near the bed
+             G1 Z20 F3000
+             ### Move the nozzle very close to the bed
+             ##G1 Z0.15 F300
         ";
         ###   Use PRINT_END for the slicer ending script - please customize for your slicer of choice
         "gcode_macro PRINT_END".gcode =
@@ -435,14 +470,9 @@ in
         ";
 
         "gcode_macro _HOME_Z".gcode =
-          "    {% set th = printer.toolhead %}
-             {% set RUN_CURRENT_Z = printer.configfile.settings['tmc2209 stepper_z'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={HOME_CURRENT}
-             G90
+          "    G90
              G28 Z
              G1 Z30
-             SET_TMC_CURRENT STEPPER=stepper_z CURRENT={RUN_CURRENT_Z}
         ";
         ##
         ###[include v0_display.cfg]
@@ -463,7 +493,57 @@ in
              # Pins EXP3_4, EXP3_8, EXP3_6 are also MISO, MOSI, SCK of bus \"spi2\"
         ";
 
+        # https://www.klipper3d.org/Exclude_Object.html
+        exclude_object = { };
+        # https://github.com/Klipper3d/klipper/blob/master/config/sample-macros.cfg
+        "gcode_macro M486".gcode =
+          "      # Parameters known to M486 are as follows:
+               #   [C<flag>] Cancel the current object
+               #   [P<index>] Cancel the object with the given index
+               #   [S<index>] Set the index of the current object.
+               #       If the object with the given index has been canceled, this will cause
+               #       the firmware to skip to the next object. The value -1 is used to
+               #       indicate something that isn’t an object and shouldn’t be skipped.
+               #   [T<count>] Reset the state and set the number of objects
+               #   [U<index>] Un-cancel the object with the given index. This command will be
+               #       ignored if the object has already been skipped
+
+               {% if 'exclude_object' not in printer %}
+                 {action_raise_error(\"[exclude_object] is not enabled\")}
+               {% endif %}
+
+               {% if 'T' in params %}
+                 EXCLUDE_OBJECT RESET=1
+
+                 {% for i in range(params.T | int) %}
+                   EXCLUDE_OBJECT_DEFINE NAME={i}
+                 {% endfor %}
+               {% endif %}
+
+               {% if 'C' in params %}
+                 EXCLUDE_OBJECT CURRENT=1
+               {% endif %}
+
+               {% if 'P' in params %}
+                 EXCLUDE_OBJECT NAME={params.P}
+               {% endif %}
+
+               {% if 'S' in params %}
+                 {% if params.S == '-1' %}
+                   {% if printer.exclude_object.current_object %}
+                     EXCLUDE_OBJECT_END NAME={printer.exclude_object.current_object}
+                   {% endif %}
+                 {% else %}
+                   EXCLUDE_OBJECT_START NAME={params.S}
+                 {% endif %}
+               {% endif %}
+
+               {% if 'U' in params %}
+                 EXCLUDE_OBJECT RESET=1 NAME={params.U}
+               {% endif %}
+        ";
       };
+
     };
     services.moonraker = {
       user = "root";

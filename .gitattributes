@@ -1,6 +1,7 @@
 .gitattributes !filter !diff
 .ssh/** filter=git-crypt diff=git-crypt
-.davmail.properties filter=git-crypt diff=git-crypt*.bibtex   diff=bibtex
+.davmail.properties filter=git-crypt diff=git-crypt
+*.bibtex   diff=bibtex
 *.cpp      diff=cpp
 *.md       diff=markdown
 *.pl       diff=perl
