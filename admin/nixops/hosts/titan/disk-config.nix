@@ -34,7 +34,6 @@ let
           partitions = [
             {
               # ESP
-              index = 1;
               name = "EFI system partition"; #-t1:EF00
               fs-type = "fat32";
               start = "1M";
@@ -54,7 +53,6 @@ let
             }
             {
               # SWAP
-              index = 4;
               name = "swap"; #-t4:8200
               fs-type = "linux-swap";
               start = "${toString INST_PARTSIZE_ESP}GiB";
@@ -67,7 +65,6 @@ let
             }
             {
               # RPOOL
-              index = 3;
               name = "zfs"; #-t3:BF00
               start = "${toString (INST_PARTSIZE_ESP+INST_PARTSIZE_SWAP)}GiB";
               end = "100%";
