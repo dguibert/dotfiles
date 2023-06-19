@@ -18,8 +18,8 @@
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
 
-  #inputs.disko.url = github:nix-community/disko;
-  inputs.disko.url = github:dguibert/disko/dg/partition-index;
+  inputs.disko.url = github:nix-community/disko;
+  #inputs.disko.url = github:dguibert/disko;
   inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.terranix = { url = "github:mrVanDalo/terranix"; flake = false; };
