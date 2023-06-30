@@ -710,3 +710,6 @@ push = git push dguibert
 
 [code/disko]
 checkout = git clone 'https://github.com/nix-community/disko' 'disko'
+
+[code/nixos-anywhere]
+checkout = git clone 'https://github.com/numtide/nixos-anywhere' 'nixos-anywhere'
