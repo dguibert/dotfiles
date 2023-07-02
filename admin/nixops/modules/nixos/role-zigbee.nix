@@ -63,14 +63,14 @@ in
             "readwrite #"
           ];
           # nix shell nixpkgs#mosquitto --command mosquitto_passwd -c /tmp/password zigbee
-          password = "$7$101$hjkpxbnBRKvg9ZdL$wlF214j+mWx17ccKDapsnBzcfsZiDGkM9f/ugKOw7GAwYttG+mdtWVpkakB6mee0i7lJl102lnmu48BoVKpfmg==";
+          hashedPassword = "$7$101$hjkpxbnBRKvg9ZdL$wlF214j+mWx17ccKDapsnBzcfsZiDGkM9f/ugKOw7GAwYttG+mdtWVpkakB6mee0i7lJl102lnmu48BoVKpfmg==";
         };
         users.root = {
           acl = [
             "readwrite #"
           ];
           # nix shell nixpkgs#mosquitto --command mosquitto_passwd -c /tmp/password root
-          password = "$7$101$hjkpxbnBRKvg9ZdL$wlF214j+mWx17ccKDapsnBzcfsZiDGkM9f/ugKOw7GAwYttG+mdtWVpkakB6mee0i7lJl102lnmu48BoVKpfmg==";
+          hashedPassword = "$7$101$hjkpxbnBRKvg9ZdL$wlF214j+mWx17ccKDapsnBzcfsZiDGkM9f/ugKOw7GAwYttG+mdtWVpkakB6mee0i7lJl102lnmu48BoVKpfmg==";
         };
       }
     ];
