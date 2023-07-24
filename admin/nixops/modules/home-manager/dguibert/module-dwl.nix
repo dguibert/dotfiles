@@ -33,7 +33,7 @@ let
       export XDG_CURRENT_DESKTOP=wlroots
 
       # Start systemd user services for graphical sessions
-      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+      /run/current-system/systemd/bin/systemctl --user start hm-graphical-session.target
 
       #exec dwl -s "setsid -w $0 startup <&-" |& tee ~/dwl-session.log
       exec dwl -s "setsid -w $0 startup" |& tee ~/dwl-session.log
@@ -331,10 +331,21 @@ with lib; {
       };
     };
 
-    systemd.user.targets.tray = {
-      Unit = {
-        Description = "Home Manager System Tray";
-        Requires = [ "graphical-session-pre.target" ];
+    systemd.user.targets = {
+      # A basic graphical session target for Home Manager.
+      hm-graphical-session = {
+        Unit = {
+          Description = "Home Manager X session";
+          Requires = [ "graphical-session-pre.target" ];
+          BindsTo = [ "graphical-session.target" "tray.target" ];
+        };
+      };
+
+      tray = {
+        Unit = {
+          Description = "Home Manager System Tray";
+          Requires = [ "graphical-session-pre.target" ];
+        };
       };
     };
   };
