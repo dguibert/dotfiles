@@ -201,7 +201,7 @@ in
       pamixer
       xsel
       xclip
-      (conky.override { x11Support = false; })
+      #(conky.override { x11Support = false; }) # fails 20230721 conky-1.19.2
       gnuplot
       mkpasswd
       aria2
