@@ -4,7 +4,7 @@
     let
       inherit inputs;
       inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
-      deploy-rs = inputs.self.legacyPackages.${system}.deploy-rs.deploy-rs;
+      #deploy-rs = inputs.self.legacyPackages.${system}.deploy-rs.deploy-rs;
       pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
     in
     {
@@ -28,17 +28,17 @@
         buildInputs = with pkgs; [
           ssh-to-pgp
           ssh-to-age
-          deploy-rs
-          #nix-diff # Package ‘nix-diff-1.0.8’ in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
+          deploy-rs.deploy-rs
+          #nix-diff # Package nix-diff in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
-          jq
-          step-ca
-          step-cli
-          yubikey-manager
-          pcsclite
-          opensc
+          #jq
+          #step-ca
+          #step-cli
+          #yubikey-manager
+          #pcsclite
+          #opensc
 
-          nix-output-monitor
+          #nix-output-monitor
         ];
         nativeBuildInputs = [
           sops-import-keys-hook
@@ -53,13 +53,7 @@
           unset IN_NIX_SHELL NIX_REMOTE
           unset TMP TMPDIR
 
-          export XDG_CACHE_HOME=$HOME/.cache/${name}
           unset NIX_STORE NIX_DAEMON
-          NIX_PATH=
-          ${lib.concatMapStrings (f: ''
-            NIX_PATH+=:${toString f}=${toString inputs.${f}}
-          '') (builtins.attrNames inputs) }
-          export NIX_PATH
 
           export PASSWORD_STORE_DIR=$PWD/secrets
         '';

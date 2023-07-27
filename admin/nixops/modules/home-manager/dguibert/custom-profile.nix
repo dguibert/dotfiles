@@ -42,7 +42,7 @@ in
 
     home.profileDirectory = lib.mkForce "${config.home.homeDirectory}/.nix-profile${dash_suffix}";
 
-    home.sessionVariablesFileName = "hm${dash_suffix}-session-vars.sh";
+    home.sessionVariablesFileName = "hm${dash_suffix}session-vars.sh";
     home.sessionVariablesGuardVar = "__HM_${upper_suffix}SESS_VARS_SOURCED";
     home.pathName = "home-manager${dash_suffix_}path";
     home.gcLinkName = "current-home${dash_suffix}";

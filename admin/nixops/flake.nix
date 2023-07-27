@@ -27,7 +27,7 @@
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
   #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
   inputs.base16.url = "github:SenchoPens/base16.nix";
-  inputs.base16.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.base16.inputs.nixpkgs.follows = "nixpkgs";
   inputs.base16-schemes = { url = github:base16-project/base16-schemes; flake = false; };
   inputs.base16-tmux = { url = github:base16-project/base16-tmux; flake = false; };
   inputs.base16-vim = { url = github:base16-project/base16-vim; flake = false; };
@@ -67,7 +67,6 @@
   #  inputs.nixpkgs.follows = "nixpkgs";
   #  inputs.rust-overlay.follows = "rust-overlay";
   #};
-
 
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
@@ -163,16 +162,16 @@
 
               #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
               #};
-              #spartan = {
-              #  hostname = "spartan";
-              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              #  fastConnection = true;
-              #  autoRollback = false;
-              #  magicRollback = false;
+              spartan = {
+                hostname = "spartan";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              #};
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+              };
               #levante = {
               #  hostname = "levante";
               #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
