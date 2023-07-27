@@ -713,3 +713,9 @@ checkout = git clone 'https://github.com/nix-community/disko' 'disko'
 
 [code/nixos-anywhere]
 checkout = git clone 'https://github.com/numtide/nixos-anywhere' 'nixos-anywhere'
+
+[code/mpicpp]
+checkout = git clone 'https://github.com/sandialabs/mpicpp' 'mpicpp'
+
+[code/p3a]
+checkout = git clone 'https://github.com/sandialabs/p3a' 'p3a'
