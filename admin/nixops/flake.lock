@@ -108,11 +108,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1683644887,
-        "narHash": "sha256-Cc2Z1D4m7yMJFvh7hiwGuGCezRDPWfO9wHehPcKORU4=",
+        "lastModified": 1686747123,
+        "narHash": "sha256-XUQK9kwHpTeilHoad7L4LjMCCyY13Oq383CoFADecRE=",
         "owner": "dguibert",
         "repo": "deploy-rs",
-        "rev": "dbdade84d55ec108b3b0a8e7d31dd0ed9d59fa55",
+        "rev": "724463b5a94daa810abfc64a4f87faef4e00f984",
         "type": "github"
       },
       "original": {
