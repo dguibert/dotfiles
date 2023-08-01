@@ -132,7 +132,7 @@ rec {
   networking.dhcpcd.enable = false;
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce true;
-  systemd.network.wait-online.anyInterface = true;
+
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
     netdevConfig.Kind = "bond";
@@ -151,18 +151,22 @@ rec {
     name = "bond0";
     DHCP = "yes";
     networkConfig.BindCarrier = "eno1 eno2";
+    # make routing on this interface a dependency for network-online.target
+    linkConfig.RequiredForOnline = "routable";
   };
   systemd.network.networks."40-eno1" = {
     name = "eno1";
     DHCP = "no";
     networkConfig.Bond = "bond0";
     networkConfig.IPv6PrivacyExtensions = "kernel";
+    linkConfig.RequiredForOnline = "no";
   };
   systemd.network.networks."40-eno2" = {
     name = "eno2";
     DHCP = "no";
     networkConfig.Bond = "bond0";
     networkConfig.IPv6PrivacyExtensions = "kernel";
+    linkConfig.RequiredForOnline = "no";
   };
 
   # services.xserver.videoDrivers = [ "nvidia" ];
