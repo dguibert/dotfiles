@@ -157,6 +157,7 @@ in
         "local/nix--scratch-work-guibertd-nix" = ds_mount "/scratch/work/guibertd/nix";
         "local/nix--home-b-b381115-nix" = ds_mount "/home/b/b381115/nix";
         "local/nix--users-dguibert-nix" = ds_mount "/users/dguibert/nix";
+        "local/nix--scratch_na-users-bguibertd-nix" = ds_mount "/scratch_na/users/bguibertd/nix";
       };
     };
     zpoot_kdbimp = {
