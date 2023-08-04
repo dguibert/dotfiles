@@ -11,6 +11,7 @@
 
     home.file.".emacs.d".source = inputs.chemacs;
     home.file.".emacs.default/init.el".source = "${inputs.nixpkgs}/overlays/emacs.d/init.el";
+    home.file.".emacs.default/emacs.org".source = "${inputs.nixpkgs}/overlays/emacs.d/emacs.org";
     home.file.".emacs.default/site-lisp".source = "${inputs.nixpkgs}/overlays/emacs.d/site-lisp";
     home.file.".emacs-profiles.el".text = ''
       (("default" . ((user-emacs-directory . "~/.emacs.default")

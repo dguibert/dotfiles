@@ -2,13 +2,13 @@
 # vim: ft=sh :
 [DEFAULT]
 include =
-    if [ -e ~/.config/mr/library-loaders ]; then
-        # mr-config already checked out
-        . ~/.config/mr/library-loaders
-        include_lib_dirs $(dirname $(dirname $(type -P mr)))/share/mr
-        include_lib_dirs ~/.config/mr/lib.d
-        load_libraries ~/.config/mr/sh.d/*
-    fi
+	   if [ -e ~/.config/mr/library-loaders ]; then
+	       # mr-config already checked out
+	       . ~/.config/mr/library-loaders
+	       include_lib_dirs $(dirname $(dirname $(type -P mr)))/share/mr
+	       include_lib_dirs ~/.config/mr/lib.d
+	       load_libraries ~/.config/mr/sh.d/*
+	   fi
 git_test = test -e $MR_REPO/.git -a ! -e $MR_REPO/.git/annex
 git_gc = git gc "$@"
 git_allupdate = git remote update --prune
@@ -87,7 +87,7 @@ git_annex_move2 = git annex find $2 --json | jq -r ' select( .success == true ) 
 order = 1
 checkout = mgit clone https://github.com/dguibert/dotfiles.git
 fixups = git_add_remote origin https://github.com/dguibert/dotfiles.git
-         git_rm_remote public_git
+	        git_rm_remote public_git
 push =
 	       mgit dotfiles push
 
@@ -162,11 +162,11 @@ fixups = git_add_remotes "
 	          spack https://github.com/spack/spack
 	          dguibert git@github.com:dguibert/spack.git
 	          flatironinstitute https://github.com/flatironinstitute/spack
-            gitlab https://castle.frec.bull.fr:24443/bguibertd/spack
+	           gitlab https://castle.frec.bull.fr:24443/bguibertd/spack
 	          "
-         git_rm_remote origin
+	        git_rm_remote origin
 push = git push -v dguibert
-       git push -v gitlab
+	      git push -v gitlab
 
 [code/training-gerrit]
 checkout = git clone 'https://gerrit.googlesource.com/training/gerrit' 'training-gerrit'
@@ -192,7 +192,7 @@ checkout = git clone 'https://github.com/felipec/git-reintegrate' 'git-reintegra
 checkout = git clone 'http://git.suckless.org/dwm' 'dwm'
 fixups = git_add_remote dguibert https://github.com/dguibert/dwm.git
 push = git push -v dguibert +pu
-      git push -v dguibert
+	     git push -v dguibert
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
@@ -279,7 +279,7 @@ checkout = git clone 'https://github.com/google/git-appraise-web' 'git-appraise-
 [code/nt2]
 checkout = git clone 'https://github.com/jtlap/nt2' 'nt2'
 fixups = git_add_remote picanumber https://github.com/picanumber/nt2
-         git_rm_remote public_git
+	        git_rm_remote public_git
 
 [code/cppcon-2015]
 checkout = git clone 'https://github.com/jfalcou/cppcon-2015' 'cppcon-2015'
@@ -672,8 +672,8 @@ checkout = git clone 'https://github.com/Mic92/sops-nix' 'sops-nix'
 checkout = git clone 'https://github.com/dguibert/nixpack' 'nixpack'
 fixups = git_add_remotes "
 	       flatironinstitute  https://github.com/flatironinstitute/nixpack
-         genji REMOTE:software-cepp-spack/nixpack
-         spartan REMOTE:software-cepp-spack/nixpack
+	        genji REMOTE:software-cepp-spack/nixpack
+	        spartan REMOTE:software-cepp-spack/nixpack
 	        "
 push = git push -v origin +pu
 	      git push -v origin
@@ -697,8 +697,8 @@ fixups = git_add_remotes "
 	 "
 update = git remote update
 push = git push dguibert +pu
-       git push dguibert +pu-next
-       git push dguibert
+	      git push dguibert +pu-next
+	      git push dguibert
 
 [code/somebar]
 checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'
@@ -707,3 +707,15 @@ checkout = git clone 'https://git.sr.ht/~raphi/somebar' 'somebar'
 checkout = git clone 'https://github.com/nix-community/emacs-overlay' 'emacs-overlay'
 push = git push dguibert
 
+
+[code/disko]
+checkout = git clone 'https://github.com/nix-community/disko' 'disko'
+
+[code/nixos-anywhere]
+checkout = git clone 'https://github.com/numtide/nixos-anywhere' 'nixos-anywhere'
+
+[code/mpicpp]
+checkout = git clone 'https://github.com/sandialabs/mpicpp' 'mpicpp'
+
+[code/p3a]
+checkout = git clone 'https://github.com/sandialabs/p3a' 'p3a'

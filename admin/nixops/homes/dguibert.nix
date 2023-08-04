@@ -40,7 +40,6 @@ in
 
   modules.homes."dguibert@t580" = [
     ../modules/home-manager/dguibert.nix
-    inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
       wayland.windowManager.hyprland.enable = true;
       wayland.windowManager.hyprland.package = pkgs.hyprland;
@@ -54,7 +53,6 @@ in
 
   modules.homes."dguibert@titan" = [
     ../modules/home-manager/dguibert.nix
-    inputs.hyprland.homeManagerModules.default
     ({ config, pkgs, ... }: {
       #wayland.windowManager.hyprland.enable = true;
       centralMailHost.enable = true;

@@ -9,5 +9,11 @@ final: prev: with final; {
       zfs set mountpoint=legacy bt580/nixos
       zfs set mountpoint=legacy rt580/tmp
     '';
+
+  conky_nox11 = (conky.override { x11Support = false; });
+
+  nixos-option = prev.nixos-option.override {
+    nix = prev.nixStable;
+  };
 }
 

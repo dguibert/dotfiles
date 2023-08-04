@@ -63,7 +63,6 @@ rec {
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
-  systemd.network.wait-online.anyInterface = true;
 
   systemd.network.netdevs."40-bond0" = {
     netdevConfig.Name = "bond0";
@@ -78,6 +77,8 @@ rec {
       DHCP = "yes";
       networkConfig.BindCarrier = "end0 wlan0";
       linkConfig.MACAddress = "DC:A6:32:67:DD:9F";
+      # make routing on this interface a dependency for network-online.target
+      linkConfig.RequiredForOnline = "routable";
     };
   } // listToAttrs (flip map [ "end0" "wlan0" ] (bi:
     nameValuePair "40-${bi}" {
@@ -86,6 +87,7 @@ rec {
       networkConfig.Bond = "bond0";
       networkConfig.IPv6PrivacyExtensions = "kernel";
       linkConfig.MACAddress = "DC:A6:32:67:DD:9F";
+      linkConfig.RequiredForOnline = "no";
     }));
   networking.supplicant.wlan0 = {
     configFile.path = "/persist/etc/wpa_supplicant.conf";
