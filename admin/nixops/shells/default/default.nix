@@ -28,7 +28,7 @@
         buildInputs = with pkgs; [
           ssh-to-pgp
           ssh-to-age
-          deploy-rs.deploy-rs
+          deploy-rs
           #nix-diff # Package nix-diff in /nix/store/1bzvzc4q4dr11h1zxrspmkw54s7jpip8-source/pkgs/development/haskell-modules/hackage-packages.nix:174705 is marked as broken, refusing to evaluate.
 
           #jq
