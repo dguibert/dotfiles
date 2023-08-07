@@ -17,7 +17,7 @@
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   #inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=host/spartan";
-  inputs.nixpkgs.url = "github:dguibert/nur-packages/5d9cd61c9a8e2dc4736c7120a69ba8892a2ddf29";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=pu";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
