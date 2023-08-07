@@ -16,8 +16,8 @@
   inputs.sops-nix.url = "github:Mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  #inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=host/spartan";
-  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=pu";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages?ref=host/spartan";
+  #inputs.nixpkgs.url = "github:dguibert/nur-packages?ref=pu";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
