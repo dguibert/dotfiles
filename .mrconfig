@@ -719,3 +719,6 @@ checkout = git clone 'https://github.com/sandialabs/mpicpp' 'mpicpp'
 
 [code/p3a]
 checkout = git clone 'https://github.com/sandialabs/p3a' 'p3a'
+
+[code/dream2nix]
+checkout = git clone 'https://github.com/nix-community/dream2nix' 'dream2nix'
