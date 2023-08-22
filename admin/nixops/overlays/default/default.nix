@@ -12,8 +12,8 @@ final: prev: with final; {
 
   conky_nox11 = (conky.override { x11Support = false; });
 
-  nixos-option = prev.nixos-option.override {
-    nix = prev.nixStable;
-  };
+  #nixos-option = prev.nixos-option.override {
+  #  nix = prev.nixStable;
+  #};
 }
 
