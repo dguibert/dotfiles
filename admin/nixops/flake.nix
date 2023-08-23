@@ -67,8 +67,9 @@
   #  inputs.nixpkgs.follows = "nixpkgs";
   #  inputs.rust-overlay.follows = "rust-overlay";
   #};
-
-
+  inputs.nix-ld.url = "github:Mic92/nix-ld";
+  # this line assume that you also have nixpkgs as an input
+  inputs.nix-ld.inputs.nixpkgs.follows = "nixpkgs";
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
