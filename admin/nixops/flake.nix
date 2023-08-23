@@ -71,6 +71,9 @@
   # this line assume that you also have nixpkgs as an input
   inputs.nix-ld.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.envfs.url = "github:Mic92/envfs";
+  inputs.envfs.inputs.nixpkgs.follows = "nixpkgs";
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, flake-parts, nixpkgs, ... }@inputs:
