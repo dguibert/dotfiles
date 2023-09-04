@@ -618,11 +618,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1693589326,
-        "narHash": "sha256-HHJf3hhLWrm7e/ne/O9488KzdhkRBvB4Cd2+bwrGL7s=",
+        "lastModified": 1693819379,
+        "narHash": "sha256-1ixrMLwQal6s7/ZyFJfDgUgKtWkQV01vtSkiYB8UXwU=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "20d3bee8f387c390ae5cc8cdbdc4539e4dbea9bb",
+        "rev": "9a38bf527a59d3d6d4d0dfc3c2401d140df153cb",
         "type": "github"
       },
       "original": {
