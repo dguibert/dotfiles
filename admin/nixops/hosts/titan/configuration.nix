@@ -171,15 +171,23 @@ rec {
     linkConfig.RequiredForOnline = "no";
   };
 
-  # services.xserver.videoDrivers = [ "nvidia" ];
-  #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-  ## [   13.576513] NVRM: The NVIDIA Quadro FX 550 GPU installed in this system is
-  ##                NVRM:  supported through the NVIDIA 304.xx Legacy drivers. Please
-  ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
-  ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
-  ##                NVRM:  this GPU.  Continuing probe...
-  hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = lib.mkIf config.services.xserver.enable [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
+  specialisation.nvidia = {
+    inheritParentConfig = true;
+    configuration = {
+      services.xserver.videoDrivers = [ "nvidia" ];
+      hardware.nvidia = {
+        # Modesetting is required.
+        modesetting.enable = true;
+
+        # Enable the Nvidia settings menu,
+        # accessible via `nvidia-settings`.
+        nvidiaSettings = true;
+
+        # Optionally, you may need to select the appropriate driver version for your specific GPU.
+        #package = config.boot.kernelPackages.nvidiaPackages.stable;
+      };
+    };
+  };
   #nixpkgs.config.xorg.abiCompat = "1.18";
 
   # https://nixos.org/nixos/manual/index.html#sec-container-networking
