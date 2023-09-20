@@ -174,6 +174,7 @@ rec {
   specialisation.nvidia = {
     inheritParentConfig = true;
     configuration = {
+      # https://nixos.wiki/wiki/Nvidia
       services.xserver.videoDrivers = [ "nvidia" ];
       hardware.nvidia = {
         # Modesetting is required.
@@ -185,6 +186,7 @@ rec {
 
         # Optionally, you may need to select the appropriate driver version for your specific GPU.
         #package = config.boot.kernelPackages.nvidiaPackages.stable;
+        forceFullCompositionPipeline = true;
       };
     };
   };
