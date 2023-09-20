@@ -196,6 +196,7 @@ push = git push -v dguibert +pu
 
 [code/ZeroTierOne]
 checkout = git clone 'https://github.com/zerotier/ZeroTierOne' 'ZeroTierOne'
+deleted = true
 
 [code/singularity]
 checkout = git clone 'https://github.com/gmkurtzer/singularity' 'singularity'
