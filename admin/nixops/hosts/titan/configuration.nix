@@ -262,8 +262,6 @@ rec {
       daily = 30;
       monthly = 12;
     };
-    datasets."st4000dm004-1/backup/icybox1".use_template = [ "backup" ];
-    datasets."st4000dm004-1/backup/icybox1".recursive = true;
     datasets."st4000dm004-1/backup/rpool_vanif0".use_template = [ "backup" ];
     datasets."st4000dm004-1/backup/rpool_vanif0".recursive = true;
 
