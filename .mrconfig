@@ -242,7 +242,7 @@ checkout = git clone 'https://github.com/ingydotnet/git-subrepo' 'git-subrepo'
 fixups = git_rm_remote public_git
 
 [$HOME/work]
-lib = MR_NAME=Documents
+lib = MR_NAME=work
 checkout = git init $MR_REPO
 	          cd $MR_REPO; git annex init
 commit = git add --verbose --all && git annex sync
