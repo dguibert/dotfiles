@@ -140,6 +140,27 @@ git_rm_remotes () {
     done
 }
 
+git_clean_remotes () {
+    local remote
+    read_localhost_nickname
+    set -x
+    # Needs to be exported to while-read subshell
+    export LOCALHOST_NICKNAME="$localhost_nickname"
+    echo "$*" | while read remote; do
+        if [ -z "$remote" ]; then
+            # presumably got a blank line
+            continue
+        fi
+
+    	existing_url=$( git config "remote.$remote.url" || echo "" )
+    	if [ -z "$existing_url" ]; then
+		git remote remove $remote || true
+		git remote remove $remote-storage || true
+	fi
+    done
+    set +x
+}
+
 # git_ignore_remotes REMOTES
 #
 # REMOTES is a multi-line string with one remote per line.

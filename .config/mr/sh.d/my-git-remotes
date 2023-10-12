@@ -18,6 +18,7 @@ datalad_add_new_ria () {
 }
 
 datalad_add_ria () {
+	set -x
     local remote="$1"
     local url="$2"
     local datalad_id=$(git config -f .datalad/config datalad.dataset.id | sed "s:^\(...\):\1/:")
@@ -39,6 +40,7 @@ datalad_add_ria () {
     fi
 
     datalad_add_new_ria "$remote" "$url"
+	set +x
 }
 
 # datalad_add_sibling_rias REMOTES
@@ -290,6 +292,7 @@ work_remotes () {
       vbox-57nvj72
       spartan
       genji
+      ria-titan
     "
 
     git_add_remotes "
@@ -310,7 +313,7 @@ work_remotes () {
       if ! test -d .git/annex; then
           git annex numcopies 3
           # create git repo inside ria without ORA
-          datalad_add_ria  ria-titan              ssh://titan/home/dguibert/ria-store/$datalad_id
+          # remove 20231003 datalad_add_ria  ria-titan              ssh://titan/home/dguibert/ria-store/$datalad_id
           datalad_add_ria  ria-spartan            ssh://spartan/home_nfs/bguibertd/ria-store/$datalad_id
           datalad_add_ria  ria-spartan-lustre_na  ssh://spartan/scratch_na/users/bguibertd/ria-store/$datalad_id
           datalad_add_ria  ria-genji              ssh://genji/home_nfs/bguibertd/ria-store/$datalad_id
@@ -321,9 +324,15 @@ work_remotes () {
           #
           #git_annex_wanted genji present
           #git_annex_wanted spartan present
+          git_clean_remotes "
+            ria-genji
+            ria-genji-lustre_ddn7k
+            ria-spartan
+            ria-spartan-lustre_na
+          "
 
           # add datalad RIAs
-          datalad_add_ria  ria-titan              ssh://titan/home/dguibert/ria-store
+          # remove 20231003 datalad_add_ria  ria-titan              ssh://titan/home/dguibert/ria-store
           datalad_add_ria  ria-spartan            ssh://spartan/home_nfs/bguibertd/ria-store
           datalad_add_ria  ria-spartan-lustre_na  ssh://spartan/scratch_na/users/bguibertd/ria-store
           datalad_add_ria  ria-genji              ssh://genji/home_nfs/bguibertd/ria-store
@@ -335,14 +344,13 @@ work_remotes () {
             ria-genji-lustre_ddn7k
             ria-spartan
             ria-spartan-lustre_na
-            ria-titan
         "
           git_annex_groups ria-genji-lustre_ddn7k-storage ria_t site_genji
           #git_annex_groups ria-genji-lustre_na-storage   ria_t site_genji
           git_annex_groups ria-genji-storage home_t ria_t site_genji
           git_annex_groups ria-spartan-lustre_na-storage ria_t site_spartan
           git_annex_groups ria-spartan-storage home_t ria_t site_spartan
-          git_annex_groups ria-titan-storage unwanted
+          # remove 20230323 git_annex_groups ria-titan-storage unwanted
 
           # get 3 copies of RIA, 2 per site and no more copies when reaching 2 offlines
           git_annex_wanted ria-genji-lustre_ddn7k-storage "not (copies=offline_t:2 or (copies=site_genji:2 and copies=ria_t:3))"
@@ -350,7 +358,7 @@ work_remotes () {
           git_annex_wanted ria-genji-storage present
           git_annex_wanted ria-spartan-lustre_na-storage  "not (copies=offline_t:2 or (copies=site_spartan:2 and copies=ria_t:3))"
           git_annex_wanted ria-spartan-storage present
-          git_annex_wanted ria-titan-storage standard
+          # remove 20230323 git_annex_wanted ria-titan-storage standard
           if test -d /backup2/ria; then
               datalad_add_ria backup2 file:///backup2/ria
               git_annex_groups backup2-storage offline_t
