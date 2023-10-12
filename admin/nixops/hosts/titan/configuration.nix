@@ -99,7 +99,6 @@ rec {
   #boot.loader.grub.efiSupport = true;
   #boot.loader.grub.device = "nodev";
   console.earlySetup = true;
-  console.useXkbConfig = true;
 
   networking.hostId = "8425e349";
   networking.hostName = "titan";

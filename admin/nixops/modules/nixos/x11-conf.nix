@@ -4,8 +4,8 @@
   config = lib.mkIf config.x11-conf.enable {
     # Enable the X11 windowing system.
     services.xserver.enable = true;
-    services.xserver.layout = "fr";
-    services.xserver.xkbOptions = "eurosign:e";
+    services.xserver.xkb.layout = "fr";
+    services.xserver.xkb.options = "eurosign:e";
 
     #services.xserver.videoDrivers = [ "intel" "displaylink" ]; # error: Package ‘evdi-1.4.1+git2017-06-12’ in /home/dguibert/code/nixpkgs/pkgs/os-specific/linux/evdi/default.nix:26 is marked as broken, refusing to evaluate.
     hardware.opengl.driSupport32Bit = true;
