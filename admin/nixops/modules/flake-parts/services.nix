@@ -54,36 +54,36 @@ let
           mode tcp
           server socks 127.0.0.1:${toString config.services.shadowsocks.port}
 
-        frontend ssl_t
-          mode tcp
-          log global
-          option tcplog
-          bind 192.168.1.14:4443
-          tcp-request inspect-delay 3s
-          tcp-request content accept if { req.ssl_hello_type 1 }
+        #frontend ssl_t
+        #  mode tcp
+        #  log global
+        #  option tcplog
+        #  bind 192.168.1.14:4443
+        #  tcp-request inspect-delay 3s
+        #  tcp-request content accept if { req.ssl_hello_type 1 }
 
-          acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
+        #  acl    ssh_payload        payload(0,7)    -m bin 5353482d322e30
 
-          use_backend openssh_t          if ssh_payload
-          use_backend openssh_t          if !{ req.ssl_hello_type 1 } { req.len 0 }
-          use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
+        #  use_backend openssh_t          if ssh_payload
+        #  use_backend openssh_t          if !{ req.ssl_hello_type 1 } { req.len 0 }
+        #  use_backend shadowsocks        if !{ req.ssl_hello_type 1 } !{ req.len 0 }
 
-        backend openssh_t
-          mode tcp
-          source 0.0.0.0 usesrc clientip
-          server openssh {config.systemd.network.networks."01-lo-ssh".networkConfig.Address}:44322
+        #backend openssh_t
+        #  mode tcp
+        #  source 0.0.0.0 usesrc clientip
+        #  server openssh {config.systemd.network.networks."01-lo-ssh".networkConfig.Address}:44322
       '';
       # Enable the OpenSSH daemon.
       services.openssh.enable = true;
       services.openssh.listenAddresses = [
         { addr = "127.0.0.1"; port = 44322; }
-        { addr = config.systemd.network.networks."01-lo-ssh".networkConfig.Address; port = 44322; }
+        #{ addr = config.systemd.network.networks."01-lo-ssh".networkConfig.Address; port = 44322; }
       ];
-      systemd.network.networks."01-lo-ssh" = {
-        name = "lo";
-        networkConfig.Address = "172.16.0.22";
-        linkConfig.RequiredForOnline = "yes";
-      };
+      #systemd.network.networks."01-lo-ssh" = {
+      #  name = "lo";
+      #  networkConfig.Address = "172.16.0.22";
+      #  linkConfig.RequiredForOnline = "yes";
+      #};
 
       #echo -n "ss://"`echo -n chacha20-ietf-poly1305:$(sops --extract '["shadowsocks"]' -d hosts/rpi31/secrets/secrets.yaml)@$(curl -4 ifconfig.io):443 | base64` | qrencode -t UTF8
       sops.secrets.shadowsocks.sopsFile = ../../hosts/rpi41/secrets/secrets.yaml;
