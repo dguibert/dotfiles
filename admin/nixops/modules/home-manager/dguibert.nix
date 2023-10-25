@@ -223,7 +223,6 @@ in
       python3Packages.woob
 
       mpv
-      python3Packages.subliminal
       python3
 
       baobab
