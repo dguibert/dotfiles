@@ -19,7 +19,7 @@
     nix.settings.keep-outputs = true; # Nice for developers
     nix.settings.keep-derivations = true; # Idem
     #extra-sandbox-paths = /opt/intel/licenses=/home/dguibert/nur-packages/secrets?
-    nix.settings.experimental-features = "nix-command flakes ca-derivations recursive-nix";
+    nix.settings.experimental-features = "nix-command flakes ca-derivations recursive-nix impure-derivations";
     #plugin-files = ${(pkgs.nix-plugins.override { nix = config.nix.package; }).overrideAttrs (o: {
     #      buildInputs = o.buildInputs ++ [ pkgs.boehmgc pkgs.nlohmann_json ];
     #      patches = (o.patches or []) ++ [
