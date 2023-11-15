@@ -61,6 +61,7 @@ rec {
   nix.settings.max-jobs = 4;
 
   networking.useNetworkd = lib.mkForce false;
+  networking.useDHCP = false;
   systemd.network.enable = lib.mkForce true;
   networking.dhcpcd.enable = false;
 

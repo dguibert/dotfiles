@@ -132,6 +132,7 @@ rec {
 
   networking.dhcpcd.enable = false;
   networking.useNetworkd = lib.mkForce false;
+  networking.useDHCP = false;
   systemd.network.enable = lib.mkForce true;
 
   systemd.network.netdevs."40-bond0" = {
