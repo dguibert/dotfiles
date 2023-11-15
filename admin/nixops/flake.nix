@@ -36,7 +36,7 @@
 
   inputs.nxsession.url = "github:dguibert/nxsession";
   inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
-  inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
+  inputs.nxsession.inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
@@ -57,7 +57,7 @@
   inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-  inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+  inputs.pre-commit-hooks.inputs.flake-utils.follows = "nixpkgs/flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.hyprland.url = "github:hyprwm/Hyprland";
@@ -73,6 +73,10 @@
 
   inputs.envfs.url = "github:Mic92/envfs";
   inputs.envfs.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
+  inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixos-wsl.inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
