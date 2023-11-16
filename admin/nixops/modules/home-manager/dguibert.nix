@@ -166,7 +166,7 @@ in
       mr
       mercurial
       #previousPkgs_pu.gitAndTools.git-annex
-      youtube-dl
+      yt-dlp
       gitAndTools.git-annex
       gitAndTools.git-annex-remote-rclone
       (pkgs.writeScriptBin "git-annex-diff-wrapper" ''
