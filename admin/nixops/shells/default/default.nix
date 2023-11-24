@@ -7,7 +7,7 @@
       sops-import-keys-hook = pkgs.sops-import-keys-hook;
       ssh-to-pgp = pkgs.ssh-to-pgp;
       deploy-rs = pkgs.deploy-rs.deploy-rs;
-      pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
+      pre-commit-check-shellHook = ""; # this tries to build p11-kit without overrides: inputs.self.checks.${system}.pre-commit-check.shellHook;
     in
     {
       devShells.default = pkgs.mkShell rec {
