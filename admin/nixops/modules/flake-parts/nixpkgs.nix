@@ -6,6 +6,7 @@ let
       overlays = inputs.nixpkgs.legacyPackages.${system}.overlays
         ++ [
         inputs.deploy-rs.overlay
+        inputs.sops-nix.overlays.default
         inputs.nxsession.overlay
         #inputs.nixpkgs-wayland.overlay
         inputs.hyprland.overlays.default

@@ -3,7 +3,9 @@
   perSystem = { config, self', inputs', pkgs, system, ... }:
     let
       inherit inputs;
-      inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
+      #inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
+      sops-import-keys-hook = pkgs.sops-import-keys-hook;
+      ssh-to-pgp = pkgs.ssh-to-pgp;
       deploy-rs = pkgs.deploy-rs.deploy-rs;
       pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
     in
