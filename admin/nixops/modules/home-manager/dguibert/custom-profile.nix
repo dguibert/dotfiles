@@ -31,7 +31,7 @@ in
         rm -rf ${config.home.profileDirectory}
         ln -sf ${config.home.sessionVariables.NIX_PROFILE} ${config.home.profileDirectory}
         export HOME_MANAGER_BACKUP_EXT=bak
-        nix-env --set-flag priority 80 nix || true
+        #nix-env --set-flag priority 79 nix || true
         set +x
       '';
     # [[ -f ~/.profile.$(uname -m) ]] && . ~/.profile.$(uname -m)
