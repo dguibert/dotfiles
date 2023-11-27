@@ -51,7 +51,7 @@
           test -e .git || export GIT_DIR=$HOME/.mgit/dotfiles/.git
           rm -f ~/.pre-commit-config.yaml
           ${pre-commit-check-shellHook}
-          ln -s ~/.pre-commit-config.yaml .
+          ln -sf ~/.pre-commit-config.yaml .
 
           unset NIX_INDENT_MAKE
           unset IN_NIX_SHELL NIX_REMOTE
