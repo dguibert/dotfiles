@@ -603,6 +603,22 @@
         "type": "github"
       }
     },
+    "libgit2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697646580,
+        "narHash": "sha256-oX4Z3S9WtJlwvj0uH9HlYcWv+x1hqp8mhXl7HsLu2f0=",
+        "owner": "libgit2",
+        "repo": "libgit2",
+        "rev": "45fd9ed7ae1a9b74b957ef4f337bc3c8b3df01b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "libgit2",
+        "repo": "libgit2",
+        "type": "github"
+      }
+    },
     "lowdown-src": {
       "flake": false,
       "locked": {
@@ -655,6 +671,7 @@
     "nix": {
       "inputs": {
         "flake-compat": "flake-compat_3",
+        "libgit2": "libgit2",
         "lowdown-src": "lowdown-src",
         "nixpkgs": [
           "nixpkgs",
@@ -663,11 +680,11 @@
         "nixpkgs-regression": "nixpkgs-regression"
       },
       "locked": {
-        "lastModified": 1692264617,
-        "narHash": "sha256-ZOf28XhU8Fvir3biY58zmIaShiUP/s4GwB4ruuQkMlc=",
+        "lastModified": 1701241745,
+        "narHash": "sha256-RkKd15wHcEGx+/L8KLSBH8tYS2cweCdf55OCzty7VCY=",
         "owner": "dguibert",
         "repo": "nix",
-        "rev": "fa563827bdc7f1c939173b1036fb121e43f947c7",
+        "rev": "9b9a55128004a2c99b5bf6b1945c8ba617a65c0a",
         "type": "github"
       },
       "original": {
@@ -737,11 +754,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1701119469,
-        "narHash": "sha256-6QE3dGxzTCP1JQPAsLFVNer7oJOliIvbchtt4/HCkZg=",
+        "lastModified": 1701242890,
+        "narHash": "sha256-B6OvT5rZIXQn2S+hYpFYKyLKZ7fLJz6ichb5qzP7bSU=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "5644e804c351ed44b23f4fb3b32422b753b0be87",
+        "rev": "f71fe2df43de060c8b8c8fdcbcb63116c1eb7464",
         "type": "github"
       },
       "original": {
