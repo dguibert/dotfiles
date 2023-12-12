@@ -335,6 +335,7 @@ work_remotes () {
           # remove 20231003 datalad_add_ria  ria-titan              ssh://titan/home/dguibert/ria-store
           datalad_add_ria  ria-spartan            ssh://spartan/home_nfs/bguibertd/ria-store
           datalad_add_ria  ria-spartan-lustre_na  ssh://spartan/scratch_na/users/bguibertd/ria-store
+          datalad_add_ria  ria-spartan-lustre_lscoe  ssh://spartan/scratch_lustre_lscoe/users/bguibertd/ria-store
           datalad_add_ria  ria-genji              ssh://genji/home_nfs/bguibertd/ria-store
           datalad_add_ria  ria-genji-lustre_ddn7k ssh://genji/scratch_lustre_DDN7k/bguibertd/ria-store
           # 20230323: hangs
@@ -345,18 +346,20 @@ work_remotes () {
             ria-spartan
             ria-spartan-lustre_na
         "
-          git_annex_groups ria-genji-lustre_ddn7k-storage ria_t site_genji
+          git_annex_groups ria-genji-lustre_ddn7k-storage unwanted # ria_t site_genji
           #git_annex_groups ria-genji-lustre_na-storage   ria_t site_genji
           git_annex_groups ria-genji-storage home_t ria_t site_genji
           git_annex_groups ria-spartan-lustre_na-storage ria_t site_spartan
+          git_annex_groups ria-spartan-lustre_lscoe-storage ria_t site_spartan
           git_annex_groups ria-spartan-storage home_t ria_t site_spartan
           # remove 20230323 git_annex_groups ria-titan-storage unwanted
 
           # get 3 copies of RIA, 2 per site and no more copies when reaching 2 offlines
-          git_annex_wanted ria-genji-lustre_ddn7k-storage "not (copies=offline_t:2 or (copies=site_genji:2 and copies=ria_t:3))"
+          git_annex_wanted ria-genji-lustre_ddn7k-storage standard #"not (copies=offline_t:2 or (copies=site_genji:2 and copies=ria_t:3))"
           #git_annex_wanted ria-genji-lustre_na-storage   "not (copies=offline_t:2 or (copies=site_genji:2 and copies=ria_t:3))"
           git_annex_wanted ria-genji-storage present
-          git_annex_wanted ria-spartan-lustre_na-storage  "not (copies=offline_t:2 or (copies=site_spartan:2 and copies=ria_t:3))"
+          git_annex_wanted ria-spartan-lustre_na-storage     "not (copies=offline_t:2 or (copies=site_spartan:2 and copies=ria_t:3))"
+          git_annex_wanted ria-spartan-lustre_lscoe-storage  "not (copies=offline_t:2 or (copies=site_spartan:2 and copies=ria_t:3))"
           git_annex_wanted ria-spartan-storage present
           # remove 20230323 git_annex_wanted ria-titan-storage standard
           if test -d /backup2/ria; then
