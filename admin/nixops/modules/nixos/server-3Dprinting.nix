@@ -11,7 +11,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.klipper = {
+    services.klipper = rec {
       enable = true;
       firmwares = {
         mcu = {
@@ -20,6 +20,13 @@ in
           configFile = ./server-3Dprinting/config;
           # Serial port connected to the microcontroller
           serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
+        };
+        "mcu display" = {
+          enable = true;
+          # Run klipper-genconf to generate this
+          configFile = ./server-3Dprinting/display.config;
+          # Serial port connected to the microcontroller
+          serial = "/dev/serial/by-id/usb-Klipper_stm32f042x6_05000B000543303848373220-if00";
         };
       };
       settings = {
@@ -36,12 +43,38 @@ in
           max_z_accel = 45;
           square_corner_velocity = 6.0;
         };
-        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
+        mcu.serial = firmwares.mcu.serial;
         mcu.restart_method = "command";
 
         # https://docs.fluidd.xyz/configuration/initial_setup
         virtual_sdcard.path = "/gcodes";
         display_status = { };
+        #####################################################################
+        #   V0 Display
+        #####################################################################
+        # https://github.com/VoronDesign/Voron-0/blob/Voron0.2r1/Firmware/fysetc-cheetah-v2.0.cfg
+        "mcu display".serial = firmwares."mcu display".serial;
+        "mcu display".restart_method = "command";
+
+        display = {
+          lcd_type = "sh1106";
+          i2c_mcu = "display";
+          i2c_bus = "i2c1a";
+          # Set the direction of the encoder wheel
+          #   Standard: Right (clockwise) scrolls down or increases values. Left (counter-clockwise scrolls up or decreases values.
+          encoder_pins = "^display:PA3, ^display:PA4";
+          #   Reversed: Right (clockwise) scrolls up or decreases values. Left (counter-clockwise scrolls down or increases values.
+          #encoder_pins: ^display:PA4, ^display:PA3
+          click_pin = "^!display:PA1";
+          kill_pin = "^!display:PA5";
+          x_offset = 2;
+          #   Use X offset to shift the display towards the right. Value can be 0 to 3
+          vcomh = 31;
+          #   Set the Vcomh value on SSD1306/SH1106 displays. This value is
+          #   associated with a "smearing" effect on some OLED displays. The
+          #   value may range from 0 to 63. Default is 0.
+          #   Adjust this value if you get some vertical stripes on your display. (31 seems to be a good value)
+        };
         pause_resume = { };
         ## fysetc-cheetah-v2.0i
         # https://github.com/VoronDesign/Voron-0/blob/Voron0.2/Firmware/fysetc-cheetah-v2.0.cfg
@@ -429,9 +462,9 @@ in
           "    # Always use consistent run_current on A/B steppers during sensorless homing
              {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
              {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
-             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT    }
+             {% set HOME_CURRENT_RATIO = 0.7 %} # by default we are dropping the motor current during homing. you can adjust this value if you are having trouble with skipping while homing
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_Y}
 
              # Home
              G28 X
@@ -451,9 +484,9 @@ in
           "     # Set current for sensorless homing
              {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
              {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
-             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT}
+             {% set HOME_CURRENT_RATIO = 0.7 %} # by default we are dropping the motor current during homing. you can adjust this value if you are having trouble with skipping while homing
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_Y}
 
              # Home
              G28 Y
