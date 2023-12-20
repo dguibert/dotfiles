@@ -388,6 +388,8 @@ in
              G90
              M190 S{BED_TEMP}            ; set and wait for bed to reach temp
              M109 S{EXTRUDER_TEMP}       ; set and wait for hot end to reach temp
+             ; start exhaust fan
+             SET_FAN_SPEED FAN=exhaust_fan SPEED=0.5
 
              G0 Y5 X5             ;
              G1 Z0.2 F500.0       ; move bed to nozzle
@@ -443,6 +445,10 @@ in
               M107                           ; turn off fan
               G90                            ; absolute positioning
               G0 X60 Y{max_y-10} F3600          ; park nozzle at rear
+              ; runs the exhaust fan for 3 minutes on full speed
+              SET_FAN_SPEED FAN=exhaust_fan SPEED=1.0
+              G4 S180
+              SET_FAN_SPEED FAN=exhaust_fan SPEED=0.0
         '';
 
         "gcode_macro LOAD_FILAMENT".gcode =
