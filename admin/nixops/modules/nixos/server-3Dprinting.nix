@@ -611,7 +611,8 @@ in
       };
     };
     networking.firewall.allowedTCPPorts = [ 80 ];
-    services.fluidd.enable = true;
+    #services.fluidd.enable = true;
+    services.mainsail.enable = true;
     security.polkit.enable = true;
     ##services.fluidd.nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
     ### Increase max upload size for uploading .gcode files from PrusaSlicer
