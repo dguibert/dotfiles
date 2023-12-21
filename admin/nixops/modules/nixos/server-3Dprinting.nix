@@ -447,7 +447,7 @@ in
               G0 X60 Y{max_y-10} F3600          ; park nozzle at rear
               ; runs the exhaust fan for 3 minutes on full speed
               SET_FAN_SPEED FAN=exhaust_fan SPEED=1.0
-              G4 S180
+              G4 P180000 ; wait 3 minutes (milliseconds)
               SET_FAN_SPEED FAN=exhaust_fan SPEED=0.0
         '';
 
