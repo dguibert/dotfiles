@@ -63,36 +63,55 @@ in
     # https://www.sweharris.org/post/2016-10-30-ssh-certs/
     # http://www.lorier.net/docs/ssh-ca
     # https://linux-audit.com/granting-temporary-access-to-servers-using-signed-ssh-keys/
-    # rpi31
-    networking.wireguard.interfaces = listToAttrs (flip map peerNames
+    environment.systemPackages = [ pkgs.wireguard-tools ];
+    systemd.network.netdevs = listToAttrs (flip map peerNames
+      (n:
+        let
+          peer = builtins.getAttr n cfg.peers;
+        in
+        nameValuePair "50-${n}" {
+          netdevConfig.Kind = "wireguard";
+          netdevConfig.Name = "${n}";
+          netdevConfig.MTUBytes = "1300";
+
+          wireguardConfig.PrivateKeyFile = cfg.privateKeyFile;
+          wireguardConfig.ListenPort = peer.listenPort;
+
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = peer.publicKey;
+                AllowedIPs = [
+                  "0.0.0.0/0"
+                  #"ff02::/16"
+                  "::/0"
+                  # The Babel protocol uses IPv6 link-local unicast and multicast addresses
+                  "fe80::/64"
+                  "ff02::1:6/128"
+                ];
+                Endpoint = mkIf (peer ? endpoint) peer.endpoint;
+                PersistentKeepalive = peer.persistentKeepalive or 0;
+              };
+            }
+          ];
+        }));
+    systemd.network.networks = listToAttrs (flip map peerNames
       (n:
         let
           peer = builtins.getAttr n cfg.peers;
         in
         nameValuePair "${n}" {
-          ips = [
+          matchConfig.Name = "${n}";
+          address = [
             cfg.peers."${config.networking.hostName}".ipv4Address
             # Assign an IPv6 link local address on the tunnel so multicast works
             cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
           ];
-          listenPort = peer.listenPort;
-          allowedIPsAsRoutes = false;
-          privateKeyFile = cfg.privateKeyFile;
-          peers = [
-            {
-              allowedIPs = [
-                "0.0.0.0/0"
-                #"ff02::/16"
-                "::/0"
-                # The Babel protocol uses IPv6 link-local unicast and multicast addresses
-                "fe80::/64"
-                "ff02::1:6/128"
-              ];
-              publicKey = peer.publicKey;
-              endpoint = mkIf (peer ? endpoint) peer.endpoint;
-              persistentKeepalive = mkIf (peer ? persistentKeepalive) peer.persistentKeepalive;
-            }
-          ];
+          DHCP = "no";
+          networkConfig = {
+            IPMasquerade = "ipv4";
+            IPForward = true;
+          };
         }));
 
     services.babeld.enable = true;

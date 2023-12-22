@@ -12,6 +12,7 @@
   systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
   virtualisation.virtualbox.host.enable = true;
+  systemd.network.wait-online.ignoredInterfaces = [ "vboxnet0" ];
 
   #services.hydra-dev = {
   #  enable = true;

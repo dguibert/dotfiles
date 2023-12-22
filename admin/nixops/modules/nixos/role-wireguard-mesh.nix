@@ -123,6 +123,7 @@ in
     };
 
     sops.secrets."wireguard_key"          .path = "/persist/etc/wireguard_key";
+    sops.secrets."wireguard_key"          .owner = "systemd-network";
     networking.wireguard-mesh.privateKeyFile = "${config.sops.secrets."wireguard_key".path}";
 
     networking.firewall.allowedUDPPorts = [
