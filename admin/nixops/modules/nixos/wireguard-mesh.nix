@@ -108,10 +108,10 @@ in
             cfg.peers."${config.networking.hostName}".ipv6Addresses.${n}
           ];
           DHCP = "no";
-          networkConfig = {
-            IPMasquerade = "ipv4";
-            IPForward = true;
-          };
+          #networkConfig = {
+          #  #IPMasquerade = "ipv4";
+          #  IPForward = true;
+          #};
         }));
 
     services.babeld.enable = true;
