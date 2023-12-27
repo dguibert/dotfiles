@@ -37,8 +37,8 @@ in
   modules.homes."dguibert@t580" = [
     ../modules/home-manager/dguibert.nix
     ({ config, pkgs, ... }: {
-      wayland.windowManager.hyprland.enable = true;
-      wayland.windowManager.hyprland.package = pkgs.hyprland;
+      #wayland.windowManager.hyprland.enable = true;
+      #wayland.windowManager.hyprland.package = pkgs.hyprland;
       withGui.enable = true;
       withEmacs.enable = true;
       home.username = "dguibert";
