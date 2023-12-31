@@ -77,6 +77,8 @@
   inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
   inputs.nixos-wsl.inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
+  inputs.impermanence.url = "github:nix-community/impermanence";
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, flake-parts, nixpkgs, ... }@inputs:
