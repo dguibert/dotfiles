@@ -72,11 +72,11 @@ rec {
   #rsync -aHAXS --delete --one-file-system / /mnt/
 
   boot.kernelParams = [
-    "console=console"
+    "console=tty0"
     "console=ttyS1,115200n8"
     "loglevel=6"
     #"resume=/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"
-    "resume=/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part4"
+    "resume=/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part2"
     #"add_efi_memmap"
     #"acpi_osi="
     # pmd_set_huge: Cannot satisfy [mem 0xf8000000-0xf8200000] with a huge-page mapping due to MTRR override
