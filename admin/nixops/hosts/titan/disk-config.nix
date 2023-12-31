@@ -146,6 +146,7 @@ in
         "local/nix" = ds_mount "/nix";
         "safe/home/root" = ds_mount "/root";
         "safe/home/dguibert" = ds_mount "/home/dguibert";
+        "safe/home/dguibert/persist" = ds_mount "/home/dguibert/persist";
         "safe/home/dguibert/Videos" = ds_mount "/home/dguibert/Videos";
         "safe/home/dguibert/notmuch" = ds_mount "/home/dguibert/Maildir/.notmuch";
         "safe/persist" = ds_mount "/persist";

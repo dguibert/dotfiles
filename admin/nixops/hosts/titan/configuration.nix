@@ -45,12 +45,26 @@ rec {
 
   boot.initrd.postDeviceCommands = ''
     # https://grahamc.com/blog/erase-your-darlings
-    #zfs rollback -r rpool_vanif0/local/root@blank
+    zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
   fileSystems."/tmp".neededForBoot = true;
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
+  # https://github.com/nix-community/impermanence
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [
+      "/var/log"
+      "/var/lib/jellyfin"
+      "/var/lib/nixos"
+      "/var/lib/step-ca"
+      "/var/lib/systemd/coredump"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
 
   #fileSystems."/tmp" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot = true; };
   # to build robotnix more thant 100G are needed

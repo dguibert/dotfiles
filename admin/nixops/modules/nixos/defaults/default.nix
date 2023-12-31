@@ -3,6 +3,7 @@
     inputs.nixpkgs.inputs.nixpkgs.nixosModules.notDetected
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
+    inputs.impermanence.nixosModules.impermanence
 
     ../distributed-build-conf.nix
     ({ config, ... }: { distributed-build-conf.enable = true; })
