@@ -158,7 +158,6 @@ in
           '';
         }))
       ]))
-      gitAndTools.git-credential-password-store
 
       perlPackages.GitAutofixup
 
