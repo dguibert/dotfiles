@@ -60,7 +60,7 @@ rec {
       "/var/log"
       "/var/lib/jellyfin"
       "/var/lib/nixos"
-      "/var/lib/step-ca"
+      #"/var/lib/step-ca"
       "/var/lib/systemd/coredump"
     ];
     files = [
