@@ -24,6 +24,7 @@ in
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    inputs.impermanence.nixosModules.home-manager.impermanence
     ({ ... }: {
       sops.age.sshKeyPaths = [ "/home/dguibert/.ssh/id_ed25519" ];
       sops.defaultSopsFile = ./dguibert/secrets.yaml;

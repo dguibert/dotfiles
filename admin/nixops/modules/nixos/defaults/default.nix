@@ -4,6 +4,7 @@
     inputs.sops-nix.nixosModules.sops
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
+    ({ ... }: { programs.fuse.userAllowOther = true; })
 
     ../distributed-build-conf.nix
     ({ config, ... }: { distributed-build-conf.enable = true; })

@@ -59,6 +59,44 @@ in
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
     })
+    ({ ... }: {
+      home.persistence."/home/dguibert/persist" = {
+        directories = [
+          "3D_printing"
+          "admin"
+          "android"
+          "bin"
+          "code"
+          "Documents"
+          "Downloads"
+          ".gnupg"
+          ".local/share/direnv"
+          ".local/share/woob"
+          "logs"
+          ".mgit"
+          "Music"
+          "nur-packages"
+          "Pictures"
+          ".ssh"
+          "templates"
+          "VirtualBox VMs"
+          "work"
+          #{
+          #  directory = ".local/share/Steam";
+          #  method = "symlink";
+          #}
+        ];
+        # while https://github.com/NixOS/nix/issues/9579
+        files = [
+          #".screenrc"
+          #"passphrase"
+          #"README.md"
+          #"Makefile"
+          #"ssh_askpass.sh"
+        ];
+        allowOther = true;
+      };
+    })
   ];
 
 }
