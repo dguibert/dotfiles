@@ -9,7 +9,7 @@
 
   networking.firewall.checkReversePath = false;
 
-  systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
+  #systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nix/nix-daemon.secrets.env";
 
   virtualisation.virtualbox.host.enable = true;
   systemd.network.wait-online.ignoredInterfaces = [ "vboxnet0" ];
@@ -36,12 +36,10 @@
     localhost x86_64-linux,i686-linux - 16 1 kvm,nixos-test,big-parallel,benchmark,recursive-nix
   '';
   nix.extraOptions = ''
-    secret-key-files = /etc/nix/cache-priv-key.pem
+    secret-key-files = ${config.sops.secrets."cache-priv-key.pem".path}
   '';
   sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.secrets."cache-priv-key.pem" = {
-    path = "/etc/nix/cache-priv-key.pem";
-  };
+  sops.secrets."cache-priv-key.pem" = { };
   #services.postgresql = {
   #  package = pkgs.postgresql_9_6;
   #  dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";

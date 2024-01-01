@@ -45,6 +45,7 @@ rec {
 
   boot.initrd.postDeviceCommands = ''
     # https://grahamc.com/blog/erase-your-darlings
+    zpool import rpool_vanif0
     zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
@@ -54,6 +55,7 @@ rec {
   # https://github.com/nix-community/impermanence
   environment.persistence."/persist" = {
     hideMounts = true;
+    enableDebugging = true;
     directories = [
       "/var/log"
       "/var/lib/jellyfin"
@@ -163,6 +165,7 @@ rec {
     bondConfig.Mode = "802.3ad";
     #bondConfig.PrimarySlave="eno1";
   };
+  systemd.network.config.dhcpV4Config.DUIDType = "vendor";
   systemd.network.networks."40-bond0" = {
     name = "bond0";
     DHCP = "yes";
