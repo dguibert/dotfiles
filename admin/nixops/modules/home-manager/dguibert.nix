@@ -81,6 +81,7 @@ in
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
     home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
+    home.file.".editorconfig".source = ./dguibert/editorconfig;
 
     # http://ubuntuforums.org/showthread.php?t=1150822
     ## Save and reload the history after each command finishes
