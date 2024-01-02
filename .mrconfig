@@ -251,7 +251,7 @@ fullupdate = git annex sync --content
 fixups = auto_work_remotes
 
 [code/slock]
-checkout = git clone 'git://git.suckless.org/slock' 'slock'
+deleted = true
 
 [code/git-crypt]
 checkout = git clone 'https://github.com/AGWA/git-crypt' 'git-crypt'
@@ -422,7 +422,7 @@ push = git push -v dguibert +pu
 	      git push -v dguibert
 
 [code/ssf]
-checkout = git clone 'https://github.com/securesocketfunneling/ssf' 'ssf'
+deleted = true
 
 [code/reframe]
 checkout = git clone 'https://github.com/eth-cscs/reframe' 'reframe'
@@ -468,7 +468,7 @@ checkout = git clone 'https://github.com/xtruder/kubenix-modules' 'kubenix-modul
 checkout = git clone 'https://github.com/NixOS/nixos-org-configurations' 'nixos-org-configurations'
 
 [code/nix-deploy]
-checkout = git clone 'https://github.com/awakesecurity/nix-deploy' 'nix-deploy'
+deleted = true
 
 [$HOME/Documents]
 lib = MR_NAME=Documents
@@ -571,7 +571,7 @@ checkout = git clone 'https://github.com/LLNL/caliper-examples' 'caliper-example
 checkout = git clone 'https://github.com/NVIDIA/hpc-container-maker' 'hpc-container-maker'
 
 [code/yaner]
-checkout = git clone 'https://github.com/thelegy/yaner/' 'yaner'
+deleted = true
 
 [code/hydra]
 checkout = git clone 'https://github.com/nixos/hydra' 'hydra'
@@ -629,10 +629,10 @@ checkout = git clone 'https://github.com/bup/bup' 'bup'
 checkout = git clone 'https://github.com/ngi-nix/project-template' 'nix-project-template'
 
 [code/lustre-release]
-checkout = git clone 'git://git.whamcloud.com/fs/lustre-release.git' 'lustre-release'
+deleted = true
 
 [code/serokell-deploy]
-checkout = git clone 'https://github.com/serokell/deploy' 'serokell-deploy'
+deleted = true
 
 [code/nixus]
 checkout = git clone 'https://github.com/Infinisil/nixus' 'nixus'
