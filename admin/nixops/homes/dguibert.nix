@@ -11,7 +11,8 @@ in
 
     (genHomeManagerConfiguration "x86_64-linux" "bguibertd@spartan")
     (genHomeManagerConfiguration "x86_64-linux" "bguibertd@spartan-x86_64")
-    (genHomeManagerConfiguration "aarch64-linux" "bguibertd@spartan-aarch64")
+    #(genHomeManagerConfiguration "aarch64-linux" "bguibertd@spartan-aarch64")
+    (genHomeManagerConfiguration "x86_64-linux" "bguibertd@spartan-aarch64")
   ];
 
   modules.homes."dguibert@rpi31" = [
@@ -137,8 +138,9 @@ in
     })
   ];
 
+  modules.homes."bguibertd@spartan-aarch64-cross-system" = "aarch64-multiplatform";
   modules.homes."bguibertd@spartan-aarch64" = [
-    ({ config, pkgs, ... }: {
+    ({ config, pkgs, lib, ... }: {
       imports = [
         ../modules/home-manager/dguibert.nix
         ../modules/home-manager/dguibert/custom-profile.nix

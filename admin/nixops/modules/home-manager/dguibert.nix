@@ -111,16 +111,12 @@ in
 
       rsync
 
-      gitAndTools.git-remote-gcrypt
-      gitAndTools.git-crypt
-
       gnumake
       #nix-repl
       pstree
 
       screen
       #teamviewer
-      tig
       lsof
       #haskellPackages.nix-deploy
       htop
@@ -157,6 +153,10 @@ in
         }))
       ]))
       gitAndTools.git-credential-password-store
+
+      gitAndTools.git-remote-gcrypt
+      gitAndTools.git-crypt
+      tig
 
       perlPackages.GitAutofixup
 

@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs.git.enable = true;
-  programs.git.package = pkgs.gitFull;
+  programs.git.package = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then pkgs.gitFull else pkgs.gitMinimal;
   programs.git.userName = "David Guibert";
   programs.git.userEmail = "david.guibert@gmail.com";
   programs.git.aliases.files = "ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard";
@@ -39,10 +39,10 @@
   programs.git.iniContent.notes.rewrite.rebase = true;
   programs.git.iniContent.notes.rewriteRefs = "refs/notes/commits";
 
-  home.packages = with pkgs; [
-    gitAndTools.git-remote-gcrypt
-    gitAndTools.git-crypt
-  ];
+  #home.packages = with pkgs; [
+  #  gitAndTools.git-remote-gcrypt
+  #  (gitAndTools.git-crypt.override { git = config.programs.git.package; })
+  #];
 
 
 }
