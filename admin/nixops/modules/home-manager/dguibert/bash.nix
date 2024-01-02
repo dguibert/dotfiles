@@ -1,6 +1,7 @@
 { lib, config, pkgs, inputs, ... }:
 {
   options.withBash.enable = (lib.mkEnableOption "Enable bash config") // { default = true; };
+  options.withBash.history-merge = (lib.mkEnableOption "Enable bash history merging") // { default = true; };
 
   config = lib.mkIf config.withBash.enable {
     programs.bash.enable = true;
@@ -34,7 +35,6 @@
     programs.bash.initExtra = ''
       # pruge previously defined PROMPT_COMMAND
       export PROMPT_COMMAND=
-
       export HISTCONTROL
       export HISTFILESIZE
       export HISTIGNORE
@@ -57,8 +57,12 @@
       export PROMPT_COMMAND="update_history''${PROMPT_COMMAND:+;$PROMPT_COMMAND }"
       fi
 
+      '' +
+      (if config.withBash.history-merge then ''
       # merge session history into main history file on bash exit
       merge_session_history () {
+      command -v awk &>/dev/null || exit 0
+      command -v tac &>/dev/null || exit 0
       if [ -e ''${HISTFILE}.$$ ]; then
           # fix wrong history files
           awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE ''${HISTFILE}.$$ | \
@@ -75,6 +79,8 @@
 
       if [ -n "$orphaned_files" ]; then
       echo Merging orphaned history files:
+      command -v awk &>/dev/null || exit 0
+      command -v tac &>/dev/null || exit 0
       for f in $orphaned_files; do
           echo "  `basename $f`"
           awk '/^#[0-9]/ { next } /^[0-9]+ / { gsub("^[0-9]+ +", "") } { print }' $HISTFILE $f | \
@@ -84,6 +90,7 @@
       tac $HISTFILE | awk '!seen[$0]++' | tac | ${pkgs.moreutils}/bin/sponge $HISTFILE
       echo "done."
       fi
+      '' else "") + ''
       # https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html#index-TERM_002c-environment-variable-1
       test "$TERM" != "dumb" || return
 
@@ -103,6 +110,25 @@
       #        printf '\e]7;file://%s%s\a' "$HOSTNAME" "$(_urlencode "$PWD")"
       #}
       #PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
+      # https://gist.github.com/petersenna/442f5f2ab97af65f24c0
+      BACK_FILE=''${HISTFILE_BACK:-~/.bash_history_backup}
+      save_history() {
+      if [ ! -f $BACK_FILE ];then touch -d "2 hours ago" $BACK_FILE;fi
+      if test $(find $BACK_FILE -mmin +5); then
+              #HIST_SIZE=$(cat $HIST_FILE|wc -l)
+              HIST_SIZE=$(history|wc -l)
+              BACK_SIZE=$(cat $BACK_FILE|wc -l)
+              GROWTH=$(($HIST_SIZE - $BACK_SIZE))
+
+              if [ $GROWTH -lt 0 ];then
+                      echo Looks like your bash history has problems...
+                      echo You can restore with cp $BACK_FILE $HISTFILE
+              else
+                      cp $HISTFILE $BACK_FILE
+              fi
+      fi
+      }
+      PROMPT_COMMAND=''${PROMPT_COMMAND:+$PROMPT_COMMAND; }save_history
 
       # Provide a nice prompt.
       PS1=""

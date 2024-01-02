@@ -127,11 +127,9 @@ in
       bc
       unzip
 
-      sshfs-fuse
-
-      moreutils
       jq
     ] ++ optionals config.withGui.enable [
+      moreutils
       pandoc
 
       (pass.withExtensions (extensions: with extensions; [

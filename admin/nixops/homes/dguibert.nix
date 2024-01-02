@@ -85,6 +85,24 @@ in
       # don't use full bash config
       withBash.enable = false;
       programs.bash.enable = true;
+      programs.bash.historySize = -1; # no truncation
+      programs.bash.historyFile = "$HOME/.bash_history";
+      programs.bash.historyFileSize = -1; # no truncation
+      programs.bash.historyControl = [ "erasedups" "ignoredups" "ignorespace" ];
+      programs.bash.historyIgnore = [
+      "ls"
+      "cd"
+      "clear"
+      "[bf]g"
+      " *"
+      "cd -"
+      "history"
+      "history -*"
+      "pwd"
+      "exit"
+      "date"
+      ];
+
       programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
         # support for x86_64/aarch64
         # include .bashrc if it exists
@@ -131,6 +149,8 @@ in
         git-annex
         git-nomad
         mr
+        
+        tig
       ];
 
       home.sessionVariables.NIX_SSL_CERT_FILE="/etc/pki/tls/certs/ca-bundle.crt";
@@ -150,6 +170,8 @@ in
       withCustomProfile.enable = true;
       withCustomProfile.suffix = "aarch64";
       withEmacs.enable = false;
+      withBash.history-merge = false;
+      services.gpg-agent.enable = lib.mkForce false;
 
       home.username = "bguibertd";
       home.homeDirectory = "/home_nfs/bguibertd";
