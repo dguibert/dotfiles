@@ -221,6 +221,12 @@ let
     })
   ];
 
+  microvm = [
+    ({ config, lib, pkgs, inputs, ... }: {
+      role.microvm.enable = true;
+    })
+  ];
+
 in
 {
   modules.hosts.rpi31 = [ ]
@@ -244,5 +250,6 @@ in
     #++ role-mopidy
     ++ desktop
     ++ platypush
+    ++ microvm
   ;
 }

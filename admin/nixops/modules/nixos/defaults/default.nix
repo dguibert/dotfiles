@@ -18,6 +18,7 @@
     ../role-otp-authentication.nix
     ({ config, ... }: { role-otp-authentication.enable = true; })
     ../role-zigbee.nix
+    ../role-microvm.nix
 
     #../../modules/services.nix
 
