@@ -43,6 +43,8 @@ in
         networkConfig.Bridge = "microvm";
       };
     };
+    # Allow DHCP server
+    networking.firewall.allowedUDPPorts = [ 67 ];
 
     # provide Internet access with NAT
     networking.nat = {

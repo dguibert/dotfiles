@@ -15,11 +15,16 @@
         {
           networking.hostName = "my-microvm";
           microvm.hypervisor = "qemu";
-          microvm.shares = [{
-            tag = "ro-store";
-            source = "/nix/store";
-            mountPoint = "/nix/.ro-store";
-          }];
+          microvm.shares = [
+            # It is highly recommended to share the host's nix-store
+            # with the VMs to prevent building huge images.
+            {
+              tag = "ro-store";
+              source = "/nix/store";
+              mountPoint = "/nix/.ro-store";
+              proto = "virtiofs";
+            }
+          ];
 
         }
       ];
