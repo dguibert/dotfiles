@@ -723,3 +723,9 @@ checkout = git clone 'https://github.com/sandialabs/p3a' 'p3a'
 
 [code/dream2nix]
 checkout = git clone 'https://github.com/nix-community/dream2nix' 'dream2nix'
+
+[code/skyflake]
+checkout = git clone 'https://github.com/astro/skyflake' 'skyflake'
+
+[code/microvm.nix]
+checkout = git clone 'https://github.com/astro/microvm.nix' 'microvm.nix'
