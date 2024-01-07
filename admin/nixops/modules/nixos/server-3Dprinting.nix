@@ -300,6 +300,20 @@ in
           screw3 = "115,115";
           screw3_name = "back right";
         };
+
+        "filament_switch_sensor filament_sensor" = {
+          switch_pin = "PB5";
+          ## https://docs.vorondesign.com/community/electronics/120decibell/filament_runout_sensor.html
+          ## There is no current standard for the process for how to handle parking / changing filament / resuming printing, so that is not documented here
+          #runout_gcode:
+          #    PARK_MACRO
+          #    M117 Out of Filament
+          #insert_gcode:
+          #    M117 Resuming
+          #    RESUME_MACRO
+          #event_delay: 3.0
+          #pause_delay: 0.5
+        };
         #######################################################################
         ###	Macros
         #######################################################################
