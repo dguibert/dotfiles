@@ -19,7 +19,7 @@ let
       (builtins.trace "use dummy        ./homes/dguibert/home-sec.nix (${toString loaded})"
         ({ ... }: { }));
 
-  davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
+  davmail_ = pkgs.davmail.override { jre = pkgs.openjdk17.override { enableJavaFX = true; openjfx = pkgs.openjfx17.override { withWebKit = true; }; }; preferZulu = false; };
 in
 {
   imports = [
