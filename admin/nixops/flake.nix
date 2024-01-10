@@ -79,6 +79,9 @@
 
   inputs.impermanence.url = "github:nix-community/impermanence";
 
+  inputs.microvm.url = "github:astro/microvm.nix";
+  inputs.microvm.inputs.nixpkgs.follows = "nixpkgs";
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, flake-parts, nixpkgs, ... }@inputs:
