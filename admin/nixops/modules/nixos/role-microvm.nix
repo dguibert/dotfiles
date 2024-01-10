@@ -11,9 +11,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    imports = [
-      inputs.microvm.nixosModules.host
-    ];
     # https://astro.github.io/microvm.nix/advanced-network.html
     networking.useNetworkd = true;
     systemd.network.enable = true;

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, utils, ... }:
+{ config, pkgs, lib, utils, inputs, ... }:
 
 with utils;
 let
@@ -25,6 +25,7 @@ rec {
   imports = [
     ({ ... }: { services.udisks2.enable = true; })
     #../../modules/wayland-nvidia.nix
+    inputs.microvm.nixosModules.host
   ];
   disko.devices = import ./disk-config.nix {
     inherit lib;

@@ -30,6 +30,8 @@ in
           "adm"
           "systemd-journal"
         ] ++ lib.optionals (config.users.groups ? cdrom) [
+          "kvm"
+        ] ++ lib.optionals (config.users.groups ? cdrom) [
           "cdrom"
         ] ++ lib.optionals (config.users.groups ? pulse) [
           "pulse"
