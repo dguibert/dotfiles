@@ -61,6 +61,8 @@
 
   inputs.hyprland.url = "github:hyprwm/Hyprland";
   inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
+  inputs.split-monitor-workspaces.inputs.hyprland.follows = "hyprland"; # <- make sure this line is present for the plugin to work as intended
   #inputs.eww = {
   #  url = "github:elkowar/eww";
   #  inputs.nixpkgs.follows = "nixpkgs";
