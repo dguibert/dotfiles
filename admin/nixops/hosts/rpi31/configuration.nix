@@ -12,14 +12,19 @@ rec {
   ];
   #sdImage.bootSize = 512;
 
-  # NixOS wants to enable GRUB by default
-  boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   #boot.loader.generic-extlinux-compatible.enable = true;
   #boot.loader.generic-extlinux-compatible.configurationLimit = 10;
   #boot.loader.raspberryPi.uboot.enable = true;
   #boot.loader.raspberryPi.enable = true;
   #boot.loader.raspberryPi.version = 3;
+  # These two parameters are the important ones to get the
+  # camera working. These will be appended to /boot/config.txt.
+  boot.loader.raspberryPi.firmwareConfig = ''
+    start_x=1
+    gpu_mem=256
+  '';
+  boot.kernelModules = [ "bcm2835-v4l2" ];
 
   # !!! If your board is a Raspberry Pi 1, select this:
   #boot.kernelPackages = pkgs.linuxPackages_rpi;

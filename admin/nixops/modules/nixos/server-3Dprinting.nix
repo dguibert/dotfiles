@@ -1,4 +1,4 @@
-{ config, lib, inputs, outputs, ... }:
+{ config, lib, pkgs, inputs, outputs, ... }:
 
 let
   cfg = config.server-3Dprinting;
@@ -628,18 +628,19 @@ in
     #services.fluidd.enable = true;
     services.mainsail.enable = true;
     security.polkit.enable = true;
-    ##services.fluidd.nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
+    services.mainsail.nginx.locations."/stream".proxyPass = "http://127.0.0.1:8080/stream";
+    services.mainsail.nginx.locations."/snapshot".proxyPass = "http://127.0.0.1:8080/snapshot";
     ### Increase max upload size for uploading .gcode files from PrusaSlicer
     services.nginx.clientMaxBodySize = "1000m";
 
-    ##systemd.services.ustreamer = {
-    ##  wantedBy = [ "multi-user.target" ];
-    ##  description = "uStreamer for video0";
-    ##  serviceConfig = {
-    ##    Type = "simple";
-    ##    ExecStart = ''${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30'';
-    ##  };
-    ##};
+    systemd.services.ustreamer = {
+      wantedBy = [ "multi-user.target" ];
+      description = "uStreamer for video0";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = ''${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30'';
+      };
+    };
   };
 
 }
