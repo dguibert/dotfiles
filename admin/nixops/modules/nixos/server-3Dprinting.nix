@@ -393,7 +393,7 @@ in
              {% set EXTRUDER_TEMP = params.EXTRUDER|float %}
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=+.010
+             SET_GCODE_OFFSET Z=+.0
              M140 S{BED_TEMP}       ; set for bed to reach temp
              M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
              # Home the printer
