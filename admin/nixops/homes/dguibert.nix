@@ -59,14 +59,6 @@ in
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
 
-      wayland.windowManager.hyprland = {
-        enable = true;
-        package = pkgs.hyprland;
-        plugins = [
-          inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
-        ];
-        extraConfig = builtins.readFile ../modules/home-manager/dguibert/hyprland.conf;
-      };
     })
   ];
 

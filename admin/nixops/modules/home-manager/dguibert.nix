@@ -61,6 +61,7 @@ in
     ./dguibert/gpg.nix
     ./dguibert/htop.nix
     ./dguibert/module-dwl.nix
+    ./dguibert/module-hyprland.nix
     ./dguibert/nix.nix
     ./dguibert/ssh.nix
     ./dguibert/with-gui.nix

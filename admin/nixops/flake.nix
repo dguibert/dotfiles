@@ -59,10 +59,18 @@
   inputs.pre-commit-hooks.inputs.flake-utils.follows = "nixpkgs/flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  inputs.hyprland.url = "github:hyprwm/Hyprland";
+  #inputs.hyprland.url = "github:hyprwm/Hyprland";
+  inputs.hyprland.url = "github:dguibert/Hyprland";
   inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
   inputs.split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
   inputs.split-monitor-workspaces.inputs.hyprland.follows = "hyprland"; # <- make sure this line is present for the plugin to work as intended
+
+  inputs.hyprland-contrib = {
+    url = "github:hyprwm/contrib";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+
   #inputs.eww = {
   #  url = "github:elkowar/eww";
   #  inputs.nixpkgs.follows = "nixpkgs";
