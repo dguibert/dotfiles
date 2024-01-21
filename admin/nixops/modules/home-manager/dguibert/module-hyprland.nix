@@ -138,6 +138,7 @@ with lib; {
       }
     '';
 
+    xdg.configFile."waybar/style.css".source = ./waybar-style.css;
     xdg.configFile."waybar/config".text =
       let
         default_conf = mon: {
