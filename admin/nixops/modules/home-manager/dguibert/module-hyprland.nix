@@ -1,25 +1,5 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-
-  # https://git.sr.ht/~raphi/dotfiles/tree/nixos/item/.local/lib/pulseaudio-watch
-
-  wlr-toggle = pkgs.writeShellScriptBin "wlr-toggle" ''
-    #!/bin/sh
-
-    ''${VERBOSE:-true} && set -x
-    arg=''${1:-}
-    export PATH=''${PATH+$PATH:}${pkgs.wlr-randr}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin
-    command -v wlr-randr
-
-    outputs=$(wlr-randr | awk '$1 ~ /^[A-Za-z-]+-[1-9]/ { print $1; } { next; } ')
-    for output in $outputs; do
-      options+=" --output $output --''${arg:-on}"
-    done
-    wlr-randr $options
-  '';
-
-in
 with lib; {
 
   config = lib.mkIf config.withGui.enable {
@@ -86,23 +66,16 @@ with lib; {
       };
     };
 
-    systemd.user.services.swayidle = {
-      Unit = {
-        Description = "Idle display configuration";
-        PartOf = [ "hyprland-session.target" ];
-        #ConditionHost = "t580";
-      };
-      Install = {
-        #WantedBy = [ "graphical-session.target" ];
-        WantedBy = lib.mkForce [ "hyprland-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.swayidle}/bin/swayidle -d -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f -c 000000' timeout 360 '${wlr-toggle}/bin/wlr-toggle off' resume '${wlr-toggle}/bin/wlr-toggle on' before-sleep '${pkgs.swaylock}/bin/swaylock -f -c 000000'";
-        RestartSec = 5;
-        Restart = "always";
-      };
-    };
+    services.swayidle.enable = true;
+    services.swayidle.systemdTarget = "hyprland-session.target";
+    services.swayidle.timeouts = [
+      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
+      { timeout = 360; command = "hyprctl dispatch dpms off"; }
+    ];
+    services.swayidle.events = [
+      { event = "resume"; command = "hyprctl dispatch dpms on"; }
+      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
+    ];
 
     systemd.user.services.kanshi = {
       Unit = {
