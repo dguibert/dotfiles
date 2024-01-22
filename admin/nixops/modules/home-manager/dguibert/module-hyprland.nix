@@ -70,10 +70,10 @@ with lib; {
     services.swayidle.systemdTarget = "hyprland-session.target";
     services.swayidle.timeouts = [
       { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
-      { timeout = 360; command = "hyprctl dispatch dpms off"; }
+      { timeout = 360; command = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl dispatch dpms off"; }
     ];
     services.swayidle.events = [
-      { event = "resume"; command = "hyprctl dispatch dpms on"; }
+      { event = "after-resume"; command = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl dispatch dpms on"; }
       { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
     ];
 
