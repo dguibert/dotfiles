@@ -145,6 +145,7 @@ let
       virtualisation.docker.enable = true;
       virtualisation.docker.enableOnBoot = false; #start by socket activation
       virtualisation.docker.storageDriver = "zfs";
+      services.dockerRegistry.enable = true;
 
       programs.singularity.enable = true;
     })
