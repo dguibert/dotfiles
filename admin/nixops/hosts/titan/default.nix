@@ -13,7 +13,7 @@
     # to not collide with the nixpkgs version.
     { programs.nix-ld.dev.enable = true; }
 
-    #inputs.envfs.nixosModules.envfs
+    inputs.envfs.nixosModules.envfs
   ];
 
   config.flake.nixosConfigurations = withSystem "x86_64-linux" ({ system, ... }: {

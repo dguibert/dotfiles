@@ -221,14 +221,15 @@
         "flake-parts": "flake-parts",
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1699312878,
-        "narHash": "sha256-YSIe1ahI5KL6suB8g1YtgHBGzMBYuOi51yVXqBmJNcw=",
+        "lastModified": 1704757366,
+        "narHash": "sha256-0jgkqJkx9+C2WO4GXTizrAa9nVEWqhFru2Zjf5TNPvg=",
         "owner": "Mic92",
         "repo": "envfs",
-        "rev": "90971edb4839c084039180af0dcaaa43aa4e5770",
+        "rev": "2c4a85dd313618199593cc266c63dc2e44e06322",
         "type": "github"
       },
       "original": {
@@ -325,11 +326,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1673362319,
-        "narHash": "sha256-Pjp45Vnj7S/b3BRpZEVfdu8sqqA6nvVjvYu59okhOyI=",
+        "lastModified": 1698882062,
+        "narHash": "sha256-HkhafUayIqxXyHH1X8d9RDl1M2CkFgZLjKD3MzabiEo=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "82c16f1682cf50c01cb0280b38a1eed202b3fe9f",
+        "rev": "8c9fa2545007b49a5db5f650ae91f227672c3877",
         "type": "github"
       },
       "original": {
@@ -1264,6 +1265,27 @@
       "original": {
         "owner": "mrVanDalo",
         "repo": "terranix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "envfs",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1699786194,
+        "narHash": "sha256-3h3EH1FXQkIeAuzaWB+nK0XK54uSD46pp+dMD3gAcB4=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "e82f32aa7f06bbbd56d7b12186d555223dc399d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
         "type": "github"
       }
     },
