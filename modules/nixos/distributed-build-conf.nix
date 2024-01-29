@@ -6,7 +6,7 @@
     users.extraUsers.nixBuild = {
       name = "nixBuild";
       useDefaultShell = true;
-      openssh.authorizedKeys.keyFiles = [ ../../id_buildfarm.pub ];
+      openssh.authorizedKeys.keyFiles = [ config.sops.secrets."id_buildfarm.pub".path ];
       isSystemUser = true;
     };
     users.users.nixBuild.group = "nixBuild";

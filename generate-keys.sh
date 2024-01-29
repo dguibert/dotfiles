@@ -104,13 +104,6 @@ for key in ${@:-${keys[@]}}; do
                     wg genkey > $keyfile
                     cat $keyfile | wg pubkey | tee hosts/$host/wg_key.pub
                     ;;
-                ssh_host_rsa_key)
-                    ssh $host "sudo cat /persist/etc/ssh/ssh_host_rsa_key" > $keyfile
-                    #ssh-keygen -t $type $ssh_options -f $f -N "" -C ""
-                    ;;
-                ssh_host_rsa_key.pub)
-                    ssh-keygen -y -f <(sops --extract '["ssh_host_rsa_key"]' -d $sops_file) > $keyfile
-                    ;;
                 ssh_host_ed25519_key)
                     ssh-keygen -t ed25519 $ssh_options -f $keyfile -N "" -C ""
                     ;;
@@ -150,6 +143,9 @@ for key in ${@:-${keys[@]}}; do
                     rm -f $keyfile
                     ssh-keygen -t ed25519 $ssh_options -f $keyfile -N "" -C ""
                     ssh-keygen -y -f $keyfile # generate pub
+                    ;;
+                id_buildfarm.pub)
+                    ssh-keygen -y -f <(sops --extract '["id_buildfarm"]' -d $sops_file) > $keyfile
                     ;;
                 cache-priv-key.pem)
                     echo "WARNING: no update for key '$key'"
