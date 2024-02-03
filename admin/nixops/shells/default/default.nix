@@ -19,10 +19,6 @@
         #];
         # Also single files can be imported.
         sopsPGPKeys = [
-          "./keys/hosts/titan.asc"
-          "./keys/hosts/rpi41.asc"
-          "./keys/hosts/rpi31.asc"
-          "./keys/hosts/t580.asc"
           "./keys/users/dguibert.asc"
         ];
         buildInputs = with pkgs; [
