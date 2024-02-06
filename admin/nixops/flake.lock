@@ -852,11 +852,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1707213806,
-        "narHash": "sha256-c8jgqGN/lV7pkLhYgFmDlCPt36lWZpqmZPHR3cFFnj8=",
+        "lastModified": 1707214236,
+        "narHash": "sha256-Z6xzWrsJoKh5ruHoqo3eqmb05nhnCyvLzMxLkFFAXBg=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "1d1371e6456d2726e8b2b075e425fe78270fd982",
+        "rev": "c44dbc859244de4857ab764bb21f977ce52e0e19",
         "type": "github"
       },
       "original": {
@@ -981,11 +981,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1707160322,
-        "narHash": "sha256-dkNHZ39JBHm9R4HiMKRbiPx5nsgs0578anCdSOd8vds=",
+        "lastModified": 1707214153,
+        "narHash": "sha256-ERmTLuzBKCunqk2ZadDOqF+i1U4tq2I8SZ1HXrOq6y0=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "d2f03becff5dc7016cdceec4bba095e3b24374c2",
+        "rev": "0b969d2c24c032a2d655cecc224d69929be96ad1",
         "type": "github"
       },
       "original": {
