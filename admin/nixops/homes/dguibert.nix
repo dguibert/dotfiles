@@ -53,6 +53,7 @@ in
       #wayland.windowManager.hyprland.enable = true;
       centralMailHost.enable = true;
       withGui.enable = true;
+      hyprland.nvidia.enable = true;
       withEmacs.enable = true;
       withZellij.enable = true;
       home.username = "dguibert";

@@ -1,6 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
-
+let
+  cfg = config.hyprland;
+in
 with lib; {
+  options.hyprland.nvidia.enable = lib.mkEnableOption "Hyprland with NVidia GPU";
 
   config = lib.mkIf config.withGui.enable {
     programs.bash.bashrcExtra = ''
@@ -212,6 +215,18 @@ with lib; {
       plugins = [
         inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
       ];
+      settings = {
+        env = lib.mkIf cfg.nvidia.enable [
+          "LIBVA_DRIVER_NAME,nvidia"
+          "GBM_BACKEND,nvidia-drm"
+          "__GLX_VENDOR_LIBRARY_NAME,nvidia" # to be removed if problems with discord or screen sharing with zoom
+          "WLR_NO_HARDWARE_CURSORS,1"
+        ];
+        bind = [
+          ", Print, exec, grimblast copy area"
+          #",Print,exec,grim -g "$(slurp)" -t png - | wl-copy -t image/png"
+        ];
+      };
       extraConfig = builtins.readFile ./hyprland.conf;
       systemd = {
         variables = [ "--all" ];
