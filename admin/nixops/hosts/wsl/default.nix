@@ -26,6 +26,10 @@
         sopsDecrypt_ = pkgs.sopsDecrypt_;
       };
 
+      i18n = {
+        supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+      };
+
       home-manager.users.dguibert = {
         imports = [
           ({ config, pkgs, ... }: {
