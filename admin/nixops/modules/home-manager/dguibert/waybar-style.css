@@ -95,18 +95,22 @@ window#waybar.empty {
 }
 
 #workspaces button.empty {
+  padding: 0 0.25em;
   color: @text;
+  background-color: #323232;
 }
 
 #workspaces button.persistent {
+  padding: 0 0.25em;
   color: @text;
+  background-color: #323232;
 }
 
 #workspaces button.active {
   color: #285577;
 }
 #workspaces button.urgent {
-  background-color: @red;
+  background-color: #ff0000;
   border-radius: 1em;
   color: @text;
 }
