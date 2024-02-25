@@ -38,12 +38,12 @@
   #nixpkgs.overlays = inputs.self.legacyPackages.${pkgs.system}.overlays;
   ### TODO understand why it's necessary instead of default pkgs.nix (nix build: OK, nixops: KO)
   nix.package = inputs.nix.packages."${config.nixpkgs.localSystem.system}".default;
-  nix.registry = lib.mapAttrs
+  nix.registry = lib.mkForce (lib.mapAttrs
     (id: flake: {
       inherit flake;
       from = { inherit id; type = "indirect"; };
     })
-    inputs;
+    inputs);
   nix.settings.system-features = [ "recursive-nix" ] ++ # default
     [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
     lib.optionals (config.nixpkgs ? localSystem && config.nixpkgs.localSystem ? system) [
