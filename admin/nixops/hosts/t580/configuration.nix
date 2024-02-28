@@ -8,6 +8,10 @@ rec {
       ({ ... }: { services.udisks2.enable = true; })
       ../../modules/nixos/defaults
     ];
+  disko.devices = import ./disk-config.nix {
+    inherit lib;
+  };
+
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;

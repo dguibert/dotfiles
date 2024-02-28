@@ -41,6 +41,7 @@ in
       #wayland.windowManager.hyprland.package = pkgs.hyprland;
       withGui.enable = true;
       withEmacs.enable = true;
+      #withVSCode.enable = true;
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";

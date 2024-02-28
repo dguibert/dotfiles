@@ -66,6 +66,7 @@ in
     ./dguibert/ssh.nix
     ./dguibert/with-gui.nix
     ./dguibert/zellij.nix
+    ./dguibert/vscode.nix
   ];
 
   options = { };
