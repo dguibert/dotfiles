@@ -14,13 +14,13 @@
     security.pam.services.swaylock = { };
     hardware.opengl.enable = lib.mkDefault true;
     hardware.opengl.driSupport32Bit = true;
-    fonts.enableDefaultFonts = lib.mkDefault true;
+    fonts.enableDefaultPackages = lib.mkDefault true;
     fonts.fontDir.enable = true;
     fonts.enableGhostscriptFonts = true;
     fonts.fontconfig.enable = true;
     fonts.fontconfig.antialias = true;
     fonts.fontconfig.hinting.enable = true;
-    fonts.fonts = with pkgs ; [
+    fonts.packages = with pkgs ; [
       terminus_font
       powerline-fonts
       nerdfonts
@@ -47,7 +47,7 @@
           xdg-desktop-portal-wlr
           xdg-desktop-portal-gtk
         ];
-        gtkUsePortal = true;
+        config.common.default = "*";
       };
     };
 

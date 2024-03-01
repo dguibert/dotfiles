@@ -2,7 +2,6 @@
 {
   services.gpg-agent.pinentryFlavor =
     if config.withGui.enable
-    #then "gnome3" # No Gcr System Prompter available : Gnome Key Ring prompter tool ?
     then "gtk2"
     else "curses";
 

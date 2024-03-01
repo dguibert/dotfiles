@@ -19,11 +19,12 @@ let
       (builtins.trace "use dummy        ./homes/dguibert/home-sec.nix (${toString loaded})"
         ({ ... }: { }));
 
-  davmail_ = pkgs.davmail.override { jre = pkgs.oraclejre; };
+  davmail_ = pkgs.davmail.override { jre = pkgs.openjdk.override { enableJavaFX = true; openjfx = pkgs.openjfx.override { withWebKit = true; }; }; preferZulu = false; };
 in
 {
   imports = [
     inputs.sops-nix.homeManagerModules.sops
+    inputs.impermanence.nixosModules.home-manager.impermanence
     ({ ... }: {
       sops.age.sshKeyPaths = [ "/home/dguibert/.ssh/id_ed25519" ];
       sops.defaultSopsFile = ./dguibert/secrets.yaml;
@@ -60,10 +61,12 @@ in
     ./dguibert/gpg.nix
     ./dguibert/htop.nix
     ./dguibert/module-dwl.nix
+    ./dguibert/module-hyprland.nix
     ./dguibert/nix.nix
     ./dguibert/ssh.nix
     ./dguibert/with-gui.nix
     ./dguibert/zellij.nix
+    ./dguibert/vscode.nix
   ];
 
   options = { };
@@ -80,6 +83,7 @@ in
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
     home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
+    home.file.".editorconfig".source = ./dguibert/editorconfig;
 
     # http://ubuntuforums.org/showthread.php?t=1150822
     ## Save and reload the history after each command finishes
@@ -156,7 +160,6 @@ in
           '';
         }))
       ]))
-      gitAndTools.git-credential-password-store
 
       perlPackages.GitAutofixup
 
@@ -166,7 +169,7 @@ in
       mr
       mercurial
       #previousPkgs_pu.gitAndTools.git-annex
-      youtube-dl
+      yt-dlp
       gitAndTools.git-annex
       gitAndTools.git-annex-remote-rclone
       (pkgs.writeScriptBin "git-annex-diff-wrapper" ''
@@ -223,7 +226,6 @@ in
       python3Packages.woob
 
       mpv
-      python3Packages.subliminal
       python3
 
       baobab

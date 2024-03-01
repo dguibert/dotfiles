@@ -69,8 +69,9 @@ let
 
 in
 with lib; {
+  options.withDwl.enable = (lib.mkEnableOption "Enable Dwl config") // { default = false; };
 
-  config = lib.mkIf config.withGui.enable {
+  config = lib.mkIf (config.withGui.enable && config.withDwl.enable) {
     programs.bash.bashrcExtra = ''
       if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v dwl-session >/dev/null ; then
       exec dwl-session

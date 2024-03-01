@@ -1,4 +1,4 @@
-{ config, lib, inputs, outputs, ... }:
+{ config, lib, pkgs, inputs, outputs, ... }:
 
 let
   cfg = config.server-3Dprinting;
@@ -11,7 +11,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.klipper = {
+    services.klipper = rec {
       enable = true;
       firmwares = {
         mcu = {
@@ -20,6 +20,13 @@ in
           configFile = ./server-3Dprinting/config;
           # Serial port connected to the microcontroller
           serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
+        };
+        "mcu display" = {
+          enable = true;
+          # Run klipper-genconf to generate this
+          configFile = ./server-3Dprinting/display.config;
+          # Serial port connected to the microcontroller
+          serial = "/dev/serial/by-id/usb-Klipper_stm32f042x6_05000B000543303848373220-if00";
         };
       };
       settings = {
@@ -36,12 +43,38 @@ in
           max_z_accel = 45;
           square_corner_velocity = 6.0;
         };
-        mcu.serial = "/dev/serial/by-id/usb-Klipper_stm32f401xc_2E0028000851383531393138-if00";
+        mcu.serial = firmwares.mcu.serial;
         mcu.restart_method = "command";
 
         # https://docs.fluidd.xyz/configuration/initial_setup
         virtual_sdcard.path = "/gcodes";
         display_status = { };
+        #####################################################################
+        #   V0 Display
+        #####################################################################
+        # https://github.com/VoronDesign/Voron-0/blob/Voron0.2r1/Firmware/fysetc-cheetah-v2.0.cfg
+        "mcu display".serial = firmwares."mcu display".serial;
+        "mcu display".restart_method = "command";
+
+        display = {
+          lcd_type = "sh1106";
+          i2c_mcu = "display";
+          i2c_bus = "i2c1a";
+          # Set the direction of the encoder wheel
+          #   Standard: Right (clockwise) scrolls down or increases values. Left (counter-clockwise scrolls up or decreases values.
+          encoder_pins = "^display:PA3, ^display:PA4";
+          #   Reversed: Right (clockwise) scrolls up or decreases values. Left (counter-clockwise scrolls down or increases values.
+          #encoder_pins: ^display:PA4, ^display:PA3
+          click_pin = "^!display:PA1";
+          kill_pin = "^!display:PA5";
+          x_offset = 2;
+          #   Use X offset to shift the display towards the right. Value can be 0 to 3
+          vcomh = 31;
+          #   Set the Vcomh value on SSD1306/SH1106 displays. This value is
+          #   associated with a "smearing" effect on some OLED displays. The
+          #   value may range from 0 to 63. Default is 0.
+          #   Adjust this value if you get some vertical stripes on your display. (31 seems to be a good value)
+        };
         pause_resume = { };
         ## fysetc-cheetah-v2.0i
         # https://github.com/VoronDesign/Voron-0/blob/Voron0.2/Firmware/fysetc-cheetah-v2.0.cfg
@@ -134,7 +167,7 @@ in
           full_steps_per_rotation = 200; # 1.8 degree motor
           # See calibrating rotation_distance on extruders doc
           #rotation_distance = 21.54087;
-          rotation_distance = 22.251425904873;
+          rotation_distance = "22.251425904873";
           gear_ratio = "50:10"; # For Mini Afterburner
           microsteps = 32;
           nozzle_diameter = 0.400;
@@ -267,6 +300,20 @@ in
           screw3 = "115,115";
           screw3_name = "back right";
         };
+
+        "filament_switch_sensor filament_sensor" = {
+          switch_pin = "PB5";
+          ## https://docs.vorondesign.com/community/electronics/120decibell/filament_runout_sensor.html
+          ## There is no current standard for the process for how to handle parking / changing filament / resuming printing, so that is not documented here
+          #runout_gcode:
+          #    PARK_MACRO
+          #    M117 Out of Filament
+          #insert_gcode:
+          #    M117 Resuming
+          #    RESUME_MACRO
+          #event_delay: 3.0
+          #pause_delay: 0.5
+        };
         #######################################################################
         ###	Macros
         #######################################################################
@@ -346,7 +393,7 @@ in
              {% set EXTRUDER_TEMP = params.EXTRUDER|float %}
              # Reset the G-Code Z offset (adjust Z offset if needed)
              # https://www.klipper3d.org/Bed_Level.html
-             SET_GCODE_OFFSET Z=+.010
+             SET_GCODE_OFFSET Z=+.0
              M140 S{BED_TEMP}       ; set for bed to reach temp
              M104 S{EXTRUDER_TEMP}  ; set for hot end to reach temp
              # Home the printer
@@ -355,6 +402,8 @@ in
              G90
              M190 S{BED_TEMP}            ; set and wait for bed to reach temp
              M109 S{EXTRUDER_TEMP}       ; set and wait for hot end to reach temp
+             ; start exhaust fan
+             SET_FAN_SPEED FAN=exhaust_fan SPEED=0.5
 
              G0 Y5 X5             ;
              G1 Z0.2 F500.0       ; move bed to nozzle
@@ -410,6 +459,10 @@ in
               M107                           ; turn off fan
               G90                            ; absolute positioning
               G0 X60 Y{max_y-10} F3600          ; park nozzle at rear
+              ; runs the exhaust fan for 3 minutes on full speed
+              SET_FAN_SPEED FAN=exhaust_fan SPEED=1.0
+              G4 P180000 ; wait 3 minutes (milliseconds)
+              SET_FAN_SPEED FAN=exhaust_fan SPEED=0.0
         '';
 
         "gcode_macro LOAD_FILAMENT".gcode =
@@ -429,9 +482,9 @@ in
           "    # Always use consistent run_current on A/B steppers during sensorless homing
              {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
              {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
-             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT    }
+             {% set HOME_CURRENT_RATIO = 0.7 %} # by default we are dropping the motor current during homing. you can adjust this value if you are having trouble with skipping while homing
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_Y}
 
              # Home
              G28 X
@@ -451,9 +504,9 @@ in
           "     # Set current for sensorless homing
              {% set RUN_CURRENT_X = printer.configfile.settings['tmc2209 stepper_x'].run_current|float %}
              {% set RUN_CURRENT_Y = printer.configfile.settings['tmc2209 stepper_y'].run_current|float %}
-             {% set HOME_CURRENT = 0.7 %}
-             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT}
-             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT}
+             {% set HOME_CURRENT_RATIO = 0.7 %} # by default we are dropping the motor current during homing. you can adjust this value if you are having trouble with skipping while homing
+             SET_TMC_CURRENT STEPPER=stepper_x CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_X}
+             SET_TMC_CURRENT STEPPER=stepper_y CURRENT={HOME_CURRENT_RATIO * RUN_CURRENT_Y}
 
              # Home
              G28 Y
@@ -550,6 +603,7 @@ in
       enable = true;
       address = "0.0.0.0";
       settings = {
+        file_manager.enable_object_processing = true;
         octoprint_compat = { };
         history = { };
         authorization = {
@@ -571,20 +625,22 @@ in
       };
     };
     networking.firewall.allowedTCPPorts = [ 80 ];
-    services.fluidd.enable = true;
+    #services.fluidd.enable = true;
+    services.mainsail.enable = true;
     security.polkit.enable = true;
-    ##services.fluidd.nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
+    services.mainsail.nginx.locations."/stream".proxyPass = "http://127.0.0.1:8080/stream";
+    services.mainsail.nginx.locations."/snapshot".proxyPass = "http://127.0.0.1:8080/snapshot";
     ### Increase max upload size for uploading .gcode files from PrusaSlicer
     services.nginx.clientMaxBodySize = "1000m";
 
-    ##systemd.services.ustreamer = {
-    ##  wantedBy = [ "multi-user.target" ];
-    ##  description = "uStreamer for video0";
-    ##  serviceConfig = {
-    ##    Type = "simple";
-    ##    ExecStart = ''${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30'';
-    ##  };
-    ##};
+    systemd.services.ustreamer = {
+      wantedBy = [ "multi-user.target" ];
+      description = "uStreamer for video0";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = ''${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30'';
+      };
+    };
   };
 
 }

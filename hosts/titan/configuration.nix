@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, utils, ... }:
+{ config, pkgs, lib, utils, inputs, ... }:
 
 with utils;
 let
@@ -25,6 +25,7 @@ rec {
   imports = [
     ({ ... }: { services.udisks2.enable = true; })
     #../../modules/wayland-nvidia.nix
+    inputs.microvm.nixosModules.host
   ];
   disko.devices = import ./disk-config.nix {
     inherit lib;
@@ -45,12 +46,28 @@ rec {
 
   boot.initrd.postDeviceCommands = ''
     # https://grahamc.com/blog/erase-your-darlings
-    #zfs rollback -r rpool_vanif0/local/root@blank
+    zpool import rpool_vanif0
+    zfs rollback -r rpool_vanif0/local/root@blank
   '';
 
   fileSystems."/tmp".neededForBoot = true;
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
+  # https://github.com/nix-community/impermanence
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    enableDebugging = true;
+    directories = [
+      "/var/log"
+      "/var/lib/jellyfin"
+      "/var/lib/nixos"
+      #"/var/lib/step-ca"
+      "/var/lib/systemd/coredump"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
 
   #fileSystems."/tmp" = { device = "tmpfs"; fsType = "tmpfs"; options = [ "defaults" "noatime" "mode=1777" "size=140G" ]; neededForBoot = true; };
   # to build robotnix more thant 100G are needed
@@ -72,17 +89,19 @@ rec {
   #rsync -aHAXS --delete --one-file-system / /mnt/
 
   boot.kernelParams = [
-    "console=console"
+    "console=tty0"
     "console=ttyS1,115200n8"
     "loglevel=6"
     #"resume=/dev/disk/by-id/nvme-CT1000P1SSD8_2014E299CA2B-part1"
-    "resume=/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part4"
+    "resume=/dev/disk/by-id/nvme-CT1000P2SSD8_2143E5DDD965-part2"
     #"add_efi_memmap"
     #"acpi_osi="
     # pmd_set_huge: Cannot satisfy [mem 0xf8000000-0xf8200000] with a huge-page mapping due to MTRR override
     #https://lwn.net/Articles/635357/
     "nohugeiomap"
     "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+
   ];
   boot.zfs.devNodes = "/dev/disk/by-id";
 
@@ -99,7 +118,6 @@ rec {
   #boot.loader.grub.efiSupport = true;
   #boot.loader.grub.device = "nodev";
   console.earlySetup = true;
-  console.useXkbConfig = true;
 
   networking.hostId = "8425e349";
   networking.hostName = "titan";
@@ -133,6 +151,7 @@ rec {
 
   networking.dhcpcd.enable = false;
   networking.useNetworkd = lib.mkForce false;
+  networking.useDHCP = false;
   systemd.network.enable = lib.mkForce true;
 
   systemd.network.netdevs."40-bond0" = {
@@ -149,6 +168,7 @@ rec {
     bondConfig.Mode = "802.3ad";
     #bondConfig.PrimarySlave="eno1";
   };
+  systemd.network.config.dhcpV4Config.DUIDType = "vendor";
   systemd.network.networks."40-bond0" = {
     name = "bond0";
     DHCP = "yes";
@@ -171,15 +191,28 @@ rec {
     linkConfig.RequiredForOnline = "no";
   };
 
-  # services.xserver.videoDrivers = [ "nvidia" ];
-  #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-  ## [   13.576513] NVRM: The NVIDIA Quadro FX 550 GPU installed in this system is
-  ##                NVRM:  supported through the NVIDIA 304.xx Legacy drivers. Please
-  ##                NVRM:  visit http://www.nvidia.com/object/unix.html for more
-  ##                NVRM:  information.  The 340.104 NVIDIA driver will ignore
-  ##                NVRM:  this GPU.  Continuing probe...
-  hardware.nvidia.modesetting.enable = true;
-  services.xserver.videoDrivers = lib.mkIf config.services.xserver.enable [ "nvidia" /*"nouveau"*/ /*"nvidiaLegacy304"*/ /*"displaylink"*/ ];
+  #specialisation.nvidia = {
+  #  inheritParentConfig = true;
+  #  configuration = {
+  # https://nixos.wiki/wiki/Nvidia
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    # Modesetting is required.
+    modesetting.enable = true;
+
+    # Enable the Nvidia settings menu,
+    # accessible via `nvidia-settings`.
+    nvidiaSettings = true;
+
+    powerManagement.enable = true;
+    open = false;
+
+    # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    #package = config.boot.kernelPackages.nvidiaPackages.stable;
+    forceFullCompositionPipeline = true;
+  };
+  #  };
+  #};
   #nixpkgs.config.xorg.abiCompat = "1.18";
 
   # https://nixos.org/nixos/manual/index.html#sec-container-networking
@@ -252,8 +285,6 @@ rec {
       daily = 30;
       monthly = 12;
     };
-    datasets."st4000dm004-1/backup/icybox1".use_template = [ "backup" ];
-    datasets."st4000dm004-1/backup/icybox1".recursive = true;
     datasets."st4000dm004-1/backup/rpool_vanif0".use_template = [ "backup" ];
     datasets."st4000dm004-1/backup/rpool_vanif0".recursive = true;
 

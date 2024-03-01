@@ -20,7 +20,9 @@
   programs.git.iniContent.rerere.autoupdate = true;
   programs.git.iniContent.rebase.autosquash = true;
   programs.git.iniContent.credential.helper = [
-    "password-store"
+    # https://github.com/languitar/pass-git-helper
+    # maybe neetd to define ~/.config/pass-git-helper/git-pass-mapping.ini
+    "!type pass-git-helper >/dev/null && pass-git-helper $@"
     "store"
     "cache --timeout 86400"
   ];
@@ -42,6 +44,7 @@
   home.packages = with pkgs; [
     gitAndTools.git-remote-gcrypt
     gitAndTools.git-crypt
+    gitAndTools.pass-git-helper
   ];
 
 

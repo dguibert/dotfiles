@@ -16,8 +16,13 @@ in
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemu = {
       #ovmf.package = pkgs.OVMF.override { secureBoot=true; tpmSupport=true; };
+      package = pkgs.qemu_kvm;
+      ovmf.enable = true;
       ovmf.packages = [ pkgs.OVMFFull.fd ];
       swtpm.enable = true;
+      verbatimConfig = ''
+        memory_backing_dir = "/dev/shm"
+      '';
     };
     # https://github.com/NixOS/nixpkgs/issues/75878
     systemd.services.libvirtd.environment.EBTABLES_PATH = "${pkgs.ebtables}/bin/ebtables-legacy";

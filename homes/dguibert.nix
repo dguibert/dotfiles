@@ -37,10 +37,11 @@ in
   modules.homes."dguibert@t580" = [
     ../modules/home-manager/dguibert.nix
     ({ config, pkgs, ... }: {
-      wayland.windowManager.hyprland.enable = true;
-      wayland.windowManager.hyprland.package = pkgs.hyprland;
+      #wayland.windowManager.hyprland.enable = true;
+      #wayland.windowManager.hyprland.package = pkgs.hyprland;
       withGui.enable = true;
       withEmacs.enable = true;
+      #withVSCode.enable = true;
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
@@ -53,11 +54,13 @@ in
       #wayland.windowManager.hyprland.enable = true;
       centralMailHost.enable = true;
       withGui.enable = true;
+      hyprland.nvidia.enable = true;
       withEmacs.enable = true;
       withZellij.enable = true;
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
+
     })
   ];
 

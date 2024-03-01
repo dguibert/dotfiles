@@ -36,7 +36,7 @@
 
   inputs.nxsession.url = "github:dguibert/nxsession";
   inputs.nxsession.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
-  inputs.nxsession.inputs.flake-utils.follows = "flake-utils";
+  inputs.nxsession.inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   # For accessing `deploy-rs`'s utility Nix functions
   inputs.deploy-rs.url = "github:dguibert/deploy-rs/pu";
@@ -47,8 +47,7 @@
   #inputs.nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-wayland.inputs.master.follows = "master";
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
-  inputs.emacs-overlay.url = "github:dguibert/emacs-overlay";
-  inputs.emacs-overlay.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
+  inputs.emacs-overlay.follows = "nixpkgs/emacs-overlay";
 
   inputs.chemacs.url = "github:plexus/chemacs2";
   inputs.chemacs.flake = false;
@@ -57,18 +56,41 @@
   inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-  inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+  inputs.pre-commit-hooks.inputs.flake-utils.follows = "nixpkgs/flake-utils";
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  inputs.hyprland.url = "github:hyprwm/Hyprland";
+  #inputs.hyprland.url = "github:hyprwm/Hyprland";
+  inputs.hyprland.url = "github:dguibert/Hyprland";
   inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
+  inputs.split-monitor-workspaces.inputs.hyprland.follows = "hyprland"; # <- make sure this line is present for the plugin to work as intended
+
+  inputs.hyprland-contrib = {
+    url = "github:hyprwm/contrib";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+
   #inputs.eww = {
   #  url = "github:elkowar/eww";
   #  inputs.nixpkgs.follows = "nixpkgs";
   #  inputs.rust-overlay.follows = "rust-overlay";
   #};
+  inputs.nix-ld.url = "github:Mic92/nix-ld";
+  # this line assume that you also have nixpkgs as an input
+  inputs.nix-ld.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.envfs.url = "github:Mic92/envfs";
+  inputs.envfs.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
+  inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixos-wsl.inputs.flake-utils.follows = "nixpkgs/flake-utils";
+
+  inputs.impermanence.url = "github:nix-community/impermanence";
+
+  inputs.microvm.url = "github:astro/microvm.nix";
+  inputs.microvm.inputs.nixpkgs.follows = "nixpkgs";
 
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 

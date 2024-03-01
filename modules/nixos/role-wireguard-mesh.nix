@@ -38,20 +38,20 @@ in
         endpoint = "192.168.1.13:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
-      orsine = {
-        ipv4Address = "10.147.27.128/32";
-        ipv6Addresses = {
-          rpi31 = "fe80::216:3eff:fe49:54c6/64";
-          titan = "fe80::216:3eff:fe5d:c3c0/64";
-          t580 = "fe80::216:3eff:fe21:0caa/64";
-          rpi41 = "fe80::216:3eff:fe0d:c822/64";
-          rpi01 = "fe80::216:3eff:fe70:6d0c/64";
-          #asus-laptop = "fe80::216:3eff:fe5a:d172/64";
-        };
-        listenPort = 501;
-        publicKey = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
-        endpoint = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
-      };
+      #orsine = {
+      #  ipv4Address = "10.147.27.128/32";
+      #  ipv6Addresses = {
+      #    rpi31 = "fe80::216:3eff:fe49:54c6/64";
+      #    titan = "fe80::216:3eff:fe5d:c3c0/64";
+      #    t580 = "fe80::216:3eff:fe21:0caa/64";
+      #    rpi41 = "fe80::216:3eff:fe0d:c822/64";
+      #    rpi01 = "fe80::216:3eff:fe70:6d0c/64";
+      #    #asus-laptop = "fe80::216:3eff:fe5a:d172/64";
+      #  };
+      #  listenPort = 501;
+      #  publicKey = "Z8yyrih3/vINo6XlEi4dC5i3wJCKjmmJM9aBr4kfZ1k=";
+      #  endpoint = "192.168.1.32:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
+      #};
       titan = {
         ipv4Address = "10.147.27.24/32";
         ipv6Addresses = {
@@ -95,19 +95,19 @@ in
         endpoint = "82.64.121.168:${toString config.networking.wireguard-mesh.peers."${config.networking.hostName}".listenPort}";
         persistentKeepalive = 25;
       };
-      rpi01 = {
-        ipv4Address = "10.147.27.10/32";
-        ipv6Addresses = {
-          rpi31 = "fe80::216:3eff:fe7f:91bf/64";
-          orsine = "fe80::216:3eff:fe13:3d58/64";
-          titan = "fe80::216:3eff:fe68:c921/64";
-          t580 = "fe80::216:3eff:fe6f:5221/64";
-          rpi41 = "fe80::216:3eff:fe72:4bea/64";
-          #asus-laptop = "fe80::216:3eff:fe04:fd86/64";
-        };
-        listenPort = 506;
-        publicKey = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
-      };
+      #rpi01 = {
+      #  ipv4Address = "10.147.27.10/32";
+      #  ipv6Addresses = {
+      #    rpi31 = "fe80::216:3eff:fe7f:91bf/64";
+      #    orsine = "fe80::216:3eff:fe13:3d58/64";
+      #    titan = "fe80::216:3eff:fe68:c921/64";
+      #    t580 = "fe80::216:3eff:fe6f:5221/64";
+      #    rpi41 = "fe80::216:3eff:fe72:4bea/64";
+      #    #asus-laptop = "fe80::216:3eff:fe04:fd86/64";
+      #  };
+      #  listenPort = 506;
+      #  publicKey = "v4TlLNu3KiBYu732QYJFkQs/wCbbNW38iShE+qqLV0s=";
+      #};
       #asus-laptop = {
       #  ipv4Address = "10.147.27.154/32";
       #  ipv6Addresses = {
@@ -123,17 +123,18 @@ in
     };
 
     sops.secrets."wireguard_key"          .path = "/persist/etc/wireguard_key";
+    sops.secrets."wireguard_key"          .owner = "systemd-network";
     networking.wireguard-mesh.privateKeyFile = "${config.sops.secrets."wireguard_key".path}";
 
     networking.firewall.allowedUDPPorts = [
       500
-      501
+      #501
       502
       503
       504
       505
       506
-      507
+      #507
       6696 /* babeld */
     ];
 

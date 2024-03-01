@@ -40,8 +40,6 @@
 
     fonts.fontconfig.enable = lib.mkForce true;
 
-    services.udiskie.enable = true;
-
     xresources.properties = with config.scheme.withHashtag; {
       "*visualBell" = false;
       "*urgentOnBell" = true;
