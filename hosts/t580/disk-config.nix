@@ -24,7 +24,7 @@ let
             "EFI system partition" = {
               priority = 0;
               label = "boot";
-              device = "/dev/disk/by-id/${disk}p1";
+              device = "/dev/nvme0n1p1";
               # ESP
               type = "EF00";
               start = "2048";
