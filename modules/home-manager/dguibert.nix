@@ -38,7 +38,7 @@ in
     # import the base16.nix module
     inputs.base16.nixosModule
     # set system's scheme to nord by setting `config.scheme`
-    { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
+    { scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml"; }
 
     ./report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })

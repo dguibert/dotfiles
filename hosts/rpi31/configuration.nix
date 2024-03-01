@@ -44,7 +44,6 @@ rec {
   boot.postBootCommands = ''
     ${pkgs.nettools}/bin/mii-tool -v -R eth0
   '';
-  #boot.zfs.enableUnstable = true;
   networking.hostId = "8425e349";
   networking.hostName = "rpi31";
 

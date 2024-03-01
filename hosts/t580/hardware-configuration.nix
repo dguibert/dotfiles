@@ -39,7 +39,7 @@
   #boot.kernelPackages = pkgs.linuxPackages_testing;
   # *** ZFS Version: zfs-2.0.4-1
   # *** Compatible Kernels: 3.10 - 5.11
-  boot.zfs.enableUnstable = false;
+  #boot.zfs.package = pkgs.zfs_unstable;
   boot.zfs.allowHibernation = true;
   boot.zfs.forceImportRoot = false;
 

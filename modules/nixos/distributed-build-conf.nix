@@ -3,10 +3,14 @@
 {
   options.distributed-build-conf.enable = lib.mkEnableOption "distributed build";
   config = lib.mkIf config.distributed-build-conf.enable {
+    #sops.secrets."id_buildfarm.pub".sopsFile = ../../secrets/defaults.yaml;
     users.extraUsers.nixBuild = {
       name = "nixBuild";
       useDefaultShell = true;
-      openssh.authorizedKeys.keyFiles = [ config.sops.secrets."id_buildfarm.pub".path ];
+      #openssh.authorizedKeys.keyFiles = [ "${config.sops.secrets."id_buildfarm.pub".path}" ];
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIHV7fF2Ne3Frd+EQlyKgI5XRfq33WfacGLtUSXU+Yrg nixBuild"
+      ];
       isSystemUser = true;
     };
     users.users.nixBuild.group = "nixBuild";

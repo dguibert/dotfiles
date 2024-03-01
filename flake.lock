@@ -18,34 +18,18 @@
         "type": "github"
       }
     },
-    "base16-schemes": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1702718998,
-        "narHash": "sha256-VTczZi1C4WSzejpTFbneMonAdarRLtDnFehVxWs6ad0=",
-        "owner": "base16-project",
-        "repo": "base16-schemes",
-        "rev": "2b6f2d0677216ddda50c9cabd6ee70fae4665f81",
-        "type": "github"
-      },
-      "original": {
-        "owner": "base16-project",
-        "repo": "base16-schemes",
-        "type": "github"
-      }
-    },
     "base16-shell": {
       "flake": false,
       "locked": {
         "lastModified": 1708218516,
         "narHash": "sha256-d5llHMl6qczxFodhjfBAkrJVYsurRVf1X1Ks5wFYxd8=",
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-shell",
         "rev": "bcd9960803c39eb7af30a2db80b57ebd74073bd5",
         "type": "github"
       },
       "original": {
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-shell",
         "type": "github"
       }
@@ -55,13 +39,13 @@
       "locked": {
         "lastModified": 1708217109,
         "narHash": "sha256-w+yFqh/4vFuDz/9YNpCH/f4DrlwKbA+ZbKvRcbSRnSg=",
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-tmux",
         "rev": "0d3ddbcbb52fa4fae649571a61d12d80910f4697",
         "type": "github"
       },
       "original": {
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-tmux",
         "type": "github"
       }
@@ -71,13 +55,13 @@
       "locked": {
         "lastModified": 1709140173,
         "narHash": "sha256-vf2ukcTtWnW9+UishL00d64QcJSuJLCfEWwPLxzuQPg=",
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-vim",
         "rev": "257d0d2aa78a41f5297620ce55268b8ab173c8d2",
         "type": "github"
       },
       "original": {
-        "owner": "base16-project",
+        "owner": "tinted-theming",
         "repo": "base16-vim",
         "type": "github"
       }
@@ -1098,7 +1082,6 @@
     "root": {
       "inputs": {
         "base16": "base16",
-        "base16-schemes": "base16-schemes",
         "base16-shell": "base16-shell",
         "base16-tmux": "base16-tmux",
         "base16-vim": "base16-vim",
@@ -1137,7 +1120,8 @@
         "pre-commit-hooks": "pre-commit-hooks_2",
         "sops-nix": "sops-nix",
         "split-monitor-workspaces": "split-monitor-workspaces",
-        "terranix": "terranix"
+        "terranix": "terranix",
+        "tt-schemes": "tt-schemes"
       }
     },
     "sops-nix": {
@@ -1325,6 +1309,22 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "tt-schemes": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1707678373,
+        "narHash": "sha256-1s6L7vkHKC+eFhDnvFTl1aAjKnTE407MWmMS6gvVg74=",
+        "owner": "tinted-theming",
+        "repo": "schemes",
+        "rev": "ae4ce8b0d1f9b247d3add88a23aec3d833ae76d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "schemes",
         "type": "github"
       }
     },
