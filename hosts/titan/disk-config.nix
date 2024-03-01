@@ -29,16 +29,14 @@ let
       value = {
         device = "/dev/disk/by-id/${disk}";
         content = {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            {
+          type = "gpt";
+          partitions = {
+            "EFI system partition" = {
+              priority = 0;
               # ESP
-              name = "EFI system partition"; #-t1:EF00
-              fs-type = "fat32";
+              type = "EF00";
               start = "1M";
               end = "${toString INST_PARTSIZE_ESP}GiB";
-              flags = [ "boot" "esp" ];
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -50,20 +48,19 @@ let
                   "X-mount.mkdir"
                 ];
               };
-            }
-            {
-              # SWAP
-              name = "swap"; #-t4:8200
-              fs-type = "linux-swap";
+            };
+            swap = {
+              priority = 1;
+              type = "8200";
               start = "${toString INST_PARTSIZE_ESP}GiB";
               end = "${toString (INST_PARTSIZE_ESP+INST_PARTSIZE_SWAP)}GiB";
-              flags = [ "swap" ];
               content = {
                 type = "swap";
-                randomEncryption = true;
+                #randomEncryption = true;
               };
-            }
-            {
+            };
+            zfs = {
+              priority = 6;
               # RPOOL
               name = "zfs"; #-t3:BF00
               start = "${toString (INST_PARTSIZE_ESP+INST_PARTSIZE_SWAP)}GiB";
@@ -72,8 +69,8 @@ let
                 type = "zfs";
                 pool = "rpool_vanif0";
               };
-            }
-          ];
+            };
+          };
         };
       };
     };
@@ -95,19 +92,15 @@ in
       device = "/dev/disk/by-id/ata-ST4000DM004-2CV104_ZTT5JV3S";
       type = "disk";
       content = {
-        type = "table";
-        format = "gpt";
-        partitions = [
-          {
-            name = "zfs";
-            start = "128MiB";
-            end = "100%";
-            content = {
-              type = "zfs";
-              pool = "zpoot_kdbimp";
-            };
-          }
-        ];
+        type = "gpt";
+        partitions.zfs = {
+          start = "128MiB";
+          end = "100%";
+          content = {
+            type = "zfs";
+            pool = "zpoot_kdbimp";
+          };
+        };
       };
     };
   };

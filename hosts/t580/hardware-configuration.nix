@@ -22,12 +22,10 @@
     "i915.modeset=1"
     "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
   ];
-  swapDevices = [{ label = "nvme-swap"; }];
 
   #fileSystems."/tmp".neededForBoot = true;
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-  fileSystems."/boot" = { device = "/dev/disk/by-uuid/FE98-E8BD"; fsType = "vfat"; };
 
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter ''

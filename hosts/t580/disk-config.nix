@@ -19,82 +19,81 @@ let
       value = {
         device = "/dev/disk/by-id/${disk}";
         content = {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            {
+          type = "gpt";
+          partitions = {
+            "EFI system partition" = {
+              priority = 0;
+              label = "boot";
+              device = "/dev/disk/by-id/${disk}p1";
               # ESP
-              name = "\"EFI system partition\""; #-t1:EF00
-              #fs-type = "fat32";
+              type = "EF00";
               start = "2048";
               end = "534527";
-              flags = [ "boot" "esp" ];
-              #content = {
-              #  type = "filesystem";
-              #  format = "vfat";
-              #  mountpoint = "/boot/efi${id}";
-              #  mountOptions = [
-              #    "x-systemd.idle-timeout=1min"
-              #    "x-systemd.automount"
-              #    "noauto"
-              #    "X-mount.mkdir"
-              #  ];
-              #};
-            }
-            {
-              name = "Microsoft reserved";
-              #type = "0C01";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = [
+                  "x-systemd.idle-timeout=1min"
+                  "x-systemd.automount"
+                  "noauto"
+                  "X-mount.mkdir"
+                ];
+              };
+            };
+            "Microsoft reserved" = {
+              priority = 1;
+              type = "0C01";
               start = "534528";
               end = "567295";
-            }
-            {
-              name = "Basic data partition";
-              #type = "0700";
+            };
+            "Basic data partition" = {
+              priority = 2;
+              type = "0700";
               start = "567296";
               end = "242136937";
-            }
-            {
-              name = "";
-              #type = "2700";
+            };
+            hidden1 = {
+              priority = 3;
+              type = "2700";
               start = "242137088";
               end = "243337215";
-            }
-            {
-              name = "";
-              #type = "2700";
+            };
+            hidden2 = {
+              priority = 4;
+              type = "2700";
               start = "243339264";
               end = "244404223";
-            }
-            {
-              # SWAP
-              name = "swap"; #-t4:8200
-              fs-type = "linux-swap";
+            };
+            swap = {
+              label = "nvme-swap";
+              priority = 5;
+              type = "8200";
               start = "244404224";
               end = "277958655";
-              flags = [ "swap" ];
               content = {
                 type = "swap";
                 randomEncryption = true;
               };
-            }
-            {
+            };
+            zfs = {
+              priority = 6;
               # RPOOL
-              name = "zfs"; #-t3:BF00
-              #type = "A504";
+              type = "A504";
               start = "277958656";
               end = "498069503";
               content = {
                 type = "zfs";
                 pool = "rpool_rt580";
               };
-            }
-            {
-              name = "Basic data partition";
-              #type = "2700";
+            };
+            "Basic data partition2" = {
+              priority = 7;
+              type = "2700";
               start = "498069504";
               end = "500117503";
-            }
-          ];
+            };
+          };
         };
       };
     };
