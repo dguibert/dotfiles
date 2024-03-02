@@ -24,7 +24,7 @@ let
             "EFI system partition" = {
               priority = 0;
               label = "boot";
-              device = "/dev/nvme0n1p1";
+              device = "/dev/disk/by-id/${disk}-part1";
               # ESP
               type = "EF00";
               start = "2048";
@@ -67,6 +67,7 @@ let
             };
             swap = {
               label = "nvme-swap";
+              device = "/dev/disk/by-id/${disk}-part6";
               priority = 5;
               type = "8200";
               start = "244404224";
