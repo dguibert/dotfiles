@@ -209,6 +209,10 @@ with lib; {
       };
     };
 
+    systemd.user.targets.hyprland-session.Unit = {
+      Wants = [ "tray.target" ];
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
