@@ -35,9 +35,9 @@ in
       #home.file.".netrc".source = config.sops.secrets.netrc.path;
     })
     # import the base16.nix module
-    inputs.base16.nixosModule
+    #inputs.base16.nixosModule
     # set system's scheme to nord by setting `config.scheme`
-    { scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
+    #{ scheme = "${inputs.base16-schemes}/solarized-dark.yaml"; }
 
     ./report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
@@ -79,7 +79,7 @@ in
     #nixpkgs.overlays = inputs.nixpkgs.legacyPackages.${pkgs.system}.overlays;
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
-    home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
+    #home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
 
     # http://ubuntuforums.org/showthread.php?t=1150822
     ## Save and reload the history after each command finishes

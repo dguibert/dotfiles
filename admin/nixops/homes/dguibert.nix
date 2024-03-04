@@ -49,6 +49,9 @@ in
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
+
+      programs.direnv.enable = true;
+      programs.direnv.nix-direnv.enable = true;
     })
   ];
 
@@ -63,6 +66,9 @@ in
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
+
+      programs.direnv.enable = true;
+      programs.direnv.nix-direnv.enable = true;
     })
   ];
 
@@ -155,6 +161,9 @@ in
 
       home.sessionVariables.NIX_SSL_CERT_FILE="/etc/pki/tls/certs/ca-bundle.crt";
       home.sessionVariables.TMP = "/dev/shm";
+
+      programs.direnv.enable = true;
+      programs.direnv.nix-direnv.enable = true;
     })
   ];
 
@@ -181,6 +190,7 @@ in
         "${pkgs.nix}/bin"
       ];
 
+      home.activationPackageSet = pkgs.buildPackages;
       home.packages = with pkgs; [
         bashInteractive
       ];

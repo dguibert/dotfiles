@@ -157,7 +157,7 @@
       esac
 
       eval "$(${pkgs.coreutils}/bin/dircolors)"
-      source ${config.scheme inputs.base16-shell}
+      ${if config ? scheme then "source ${config.scheme inputs.base16-shell}" else ""}
 
       export TODOTXT_DEFAULT_ACTION=ls
       alias t='todo.sh'
@@ -230,7 +230,5 @@
       $endif
     '';
 
-    programs.direnv.enable = true;
-    programs.direnv.nix-direnv.enable = true;
   };
 }

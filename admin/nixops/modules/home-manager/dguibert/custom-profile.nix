@@ -20,14 +20,14 @@ in
     programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
       export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
       export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
-      export PATH=$NIX_PROFILE/bin:$PATH:${pkgs.nix}/bin
+      export PATH=$PATH:$NIX_PROFILE/bin:${config.home.activationPackageSet.nix}/bin
     '';
     home.activation.setNixVariables = lib.hm.dag.entryBefore [ "writeBoundary" "checkLinkTargets" "checkFilesChanges" ]
       ''
         set -x
         export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
         export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
-        export PATH=${pkgs.nix}/bin:$PATH
+        export PATH=$PATH:${config.home.activationPackageSet.nix}/bin
         rm -rf ${config.home.profileDirectory}
         ln -sf ${config.home.sessionVariables.NIX_PROFILE} ${config.home.profileDirectory}
         export HOME_MANAGER_BACKUP_EXT=bak

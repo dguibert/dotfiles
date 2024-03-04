@@ -458,12 +458,13 @@
         ]
       },
       "locked": {
-        "lastModified": 1700936834,
-        "narHash": "sha256-Asmk/mb6kdKP4IaQnQEFlvJcPKkl620OSCiFbucvySY=",
-        "owner": "dguibert",
-        "repo": "home-manager",
-        "rev": "04d03a99ef22d63e6c6c16f505d7e999e0acb1a6",
-        "type": "github"
+        "lastModified": 1705582775,
+        "narHash": "sha256-h0LHgnhGf1UgIDt2lwj6llAHTUsCrtZISWvW0eUEn5k=",
+        "ref": "refs/heads/pu",
+        "rev": "de732bf24bc98165658309a6b69fcddc0177c98d",
+        "revCount": 3273,
+        "type": "git",
+        "url": "file:///home_nfs/bguibertd/code/home-manager"
       },
       "original": {
         "owner": "dguibert",
