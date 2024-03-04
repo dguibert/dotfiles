@@ -644,23 +644,6 @@
         "type": "github"
       }
     },
-    "lowdown-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1633514407,
-        "narHash": "sha256-Dw32tiMjdK9t3ETl5fzGrutQTzh2rufgZV4A/BbxuD4=",
-        "owner": "kristapsdz",
-        "repo": "lowdown",
-        "rev": "d2c2b44ff6c27b936ec27358a2653caaef8f73b8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kristapsdz",
-        "repo": "lowdown",
-        "rev": "d2c2b44ff6c27b936ec27358a2653caaef8f73b8",
-        "type": "github"
-      }
-    },
     "mako-src": {
       "flake": false,
       "locked": {
@@ -741,28 +724,6 @@
         "type": "github"
       }
     },
-    "nix-custom-store": {
-      "inputs": {
-        "nix": [
-          "nixpkgs",
-          "nix"
-        ],
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1707468223,
-        "narHash": "sha256-CXuqeabAWbIVd0uTubPWhEhoT2HHrrJPtXhx73M8/rM=",
-        "owner": "dguibert",
-        "repo": "nix-custom-store",
-        "rev": "03226761a0a29a3e2843ab438d79180048b8bbe7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dguibert",
-        "repo": "nix-custom-store",
-        "type": "github"
-      }
-    },
     "nix-filter": {
       "locked": {
         "lastModified": 1693833173,
@@ -831,24 +792,23 @@
         "emacs-src": "emacs-src",
         "flake-parts": "flake-parts_2",
         "flake-utils": "flake-utils_3",
-        "lowdown-src": "lowdown-src",
         "mako-src": "mako-src",
         "nix": "nix",
-        "nix-custom-store": "nix-custom-store",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "pre-commit-hooks": "pre-commit-hooks",
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1709315048,
-        "narHash": "sha256-OkGMju5H64ldg1RURerD/F4AdLQRMWXSZDW0sTBsEFQ=",
+        "lastModified": 1700729564,
+        "narHash": "sha256-RXQ5FZK/+GL/eYQgWZ03f4KBKxJdAGFADSK4es3uzuU=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "51b1fb23a8b5735ff09dc73881deeac4d421b8c6",
+        "rev": "dad74ff6a79991f1e4dd2f4c4d8292cc2563ce0b",
         "type": "github"
       },
       "original": {
         "owner": "dguibert",
+        "ref": "host/spartan",
         "repo": "nur-packages",
         "type": "github"
       }
@@ -952,22 +912,6 @@
       }
     },
     "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1704100000,
-        "narHash": "sha256-A5LRVMBmu9FV/f4dhGKX5GBjnoQpXSFM1fTAupuoVqE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "d43ca16558b597d0b2f32e5629da69a7837eb2af",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
       "locked": {
         "lastModified": 1709314039,
         "narHash": "sha256-vvMEbiH0DWW9ZqQgC7RiTYe5Es86pzyLZVhlr9mZ3WM=",

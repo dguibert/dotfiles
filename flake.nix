@@ -16,7 +16,8 @@
   inputs.sops-nix.url = "github:Mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
-  inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
+  inputs.nixpkgs.url = "github:dguibert/nur-packages?ref=host/spartan";
+  #inputs.nixpkgs.url = "github:dguibert/nur-packages?ref=pu";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
@@ -185,16 +186,16 @@
 
               #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
               #};
-              #spartan = {
-              #  hostname = "spartan";
-              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              #  fastConnection = true;
-              #  autoRollback = false;
-              #  magicRollback = false;
+              spartan = {
+                hostname = "spartan";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              #};
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+              };
               #levante = {
               #  hostname = "levante";
               #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
