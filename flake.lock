@@ -763,6 +763,31 @@
         "type": "github"
       }
     },
+    "nix-custom-store_2": {
+      "inputs": {
+        "nix": [
+          "nixpkgs_with_stdenv",
+          "nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs_with_stdenv",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709585842,
+        "narHash": "sha256-Q2Kyg46hS7UfVm7ewVQB/KN/47TW8NDBjqCARRgNh44=",
+        "owner": "dguibert",
+        "repo": "nix-custom-store",
+        "rev": "445c4e2a863e4a4e81a45bdbbc5374892281875a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dguibert",
+        "repo": "nix-custom-store",
+        "type": "github"
+      }
+    },
     "nix-filter": {
       "locked": {
         "lastModified": 1693833173,
@@ -983,6 +1008,27 @@
         "type": "github"
       }
     },
+    "nixpkgs_with_stdenv": {
+      "inputs": {
+        "nix": [
+          "nix"
+        ],
+        "nix-custom-store": "nix-custom-store_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-8sSjvMYKBhYqGN89aSbTSNerorylXkMJ2xeEeL8XA9A=",
+        "path": "nixpkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "nixpkgs",
+        "type": "path"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1709581523,
@@ -1115,6 +1161,7 @@
         "nix-ld": "nix-ld",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
+        "nixpkgs_with_stdenv": "nixpkgs_with_stdenv",
         "nur": "nur",
         "nxsession": "nxsession",
         "pre-commit-hooks": "pre-commit-hooks_2",
