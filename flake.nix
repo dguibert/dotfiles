@@ -17,9 +17,9 @@
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages";
-  inputs.nix-custom-store.url = "github:dguibert/nix-custom-store?dir=hosts/spartan";
-  inputs.nix-custom-store.inputs.nix.follows = "nixpkgs/nix";
-  inputs.nix-custom-store.inputs.nixpkgs.follows = "nixpkgs";
+  #inputs.nix-custom-store.url = "github:dguibert/nix-custom-store?dir=hosts/spartan";
+  #inputs.nix-custom-store.inputs.nix-custom-store.inputs.nix.follows = "nixpkgs/nix";
+  #inputs.nix-custom-store.inputs.nix-custom-store.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
