@@ -4,3 +4,4 @@ result
 .deploy-gc
 tags
 online-ca-orsin
+.pre-commit-config.yaml

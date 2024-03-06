@@ -17,9 +17,9 @@
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages";
-  #inputs.nix-custom-store.url = "github:dguibert/nix-custom-store?dir=hosts/spartan";
-  #inputs.nix-custom-store.inputs.nix-custom-store.inputs.nix.follows = "nixpkgs/nix";
-  #inputs.nix-custom-store.inputs.nix-custom-store.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixpkgs_with_stdenv.url = "path:nixpkgs";
+  inputs.nixpkgs_with_stdenv.inputs.nix.follows = "nix";
+  inputs.nixpkgs_with_stdenv.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
@@ -240,7 +240,6 @@
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-        legacyPackages = pkgs;
         # This is highly advised, and will prevent many possible mistakes
         checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
         ;
