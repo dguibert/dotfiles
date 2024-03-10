@@ -114,7 +114,7 @@ rec {
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.timeout = 10;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.efiSysMountPoint = "/boot/efi1";
   #boot.loader.grub.efiSupport = true;
   #boot.loader.grub.device = "nodev";
   console.earlySetup = true;
