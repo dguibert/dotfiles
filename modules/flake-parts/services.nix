@@ -13,6 +13,7 @@ let
     server-3Dprinting = [ "rpi31" ];
     zigbee = [ "rpi41" ];
     platypush = [ "titan" "rpi41" ];
+    rkvm = [ "titan" "rpi41" ];
   };
 
   haproxy = [
@@ -228,6 +229,35 @@ let
     })
   ];
 
+  rkvm = [
+    ({ config, lib, pkgs, inputs, ... }: {
+      sops.secrets.rkvm-certificate.sopsFile = ../../secrets/defaults.yaml;
+      sops.secrets.rkvm-key.sopsFile = ../../secrets/defaults.yaml;
+      sops.secrets.rkvm-password.sopsFile = ../../secrets/defaults.yaml;
+      networking.firewall.interfaces."bond0".allowedTCPPorts = lib.mkIf (config.networking.hostName == "titan") [
+        5258
+      ];
+      services.rkvm.server = lib.mkIf (config.networking.hostName == "titan") {
+        enable = true;
+        settings = {
+          listen = "192.168.1.24:5258";
+          switch-keys = [ "middle" "left-ctrl" ];
+          certificate = config.sops.secrets.rkvm-certificate.path;
+          key = config.sops.secrets.rkvm-key.path;
+          password = config.sops.secrets.rkvm-password.key;
+        };
+      };
+      services.rkvm.client = lib.mkIf (config.networking.hostName != "titan") {
+        enable = true;
+        settings = {
+          server = "192.168.1.24:5258";
+          certificate = config.sops.secrets.rkvm-certificate.path;
+          password = config.sops.secrets.rkvm-password.key;
+        };
+      };
+    })
+  ];
+
 in
 {
   modules.hosts.rpi31 = [ ]
@@ -236,6 +266,7 @@ in
   modules.hosts.rpi41 = [ ]
     ++ haproxy
     ++ zigbee
+    ++ rkvm
   ;
   modules.hosts.t580 = [ ]
     ++ adb
@@ -252,5 +283,6 @@ in
     ++ desktop
     ++ platypush
     ++ microvm
+    ++ rkvm
   ;
 }
