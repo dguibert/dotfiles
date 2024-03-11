@@ -33,6 +33,7 @@ let
           partitions = {
             "EFI system partition" = {
               priority = 0;
+              device = "/dev/disk/by-id/${disk}-part1";
               # ESP
               type = "EF00";
               start = "1M";
