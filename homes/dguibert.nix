@@ -27,7 +27,7 @@ in
       imports = [
         ../modules/home-manager/dguibert.nix
       ];
-      withGui.enable = false;
+      withGui.enable = true;
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
