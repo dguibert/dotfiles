@@ -7,8 +7,8 @@ with lib; {
 
   config = lib.mkIf config.withGui.enable {
     programs.bash.bashrcExtra = ''
-      if [[ -z $WAYLAND_DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && command -v hyprland >/dev/null ; then
-      exec hyprland
+      if [[ -z $WAYLAND_DISPLAY ]] && [[ "$XDG_VTNR" -eq 1 ]] && command -v Hyprland >/dev/null ; then
+      dbus-run-session Hyprland
       fi
     '';
 
