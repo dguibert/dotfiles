@@ -136,7 +136,7 @@ rec {
   boot.extraModulePackages = [ pkgs.linuxPackages.perf ];
   # *** ZFS Version: zfs-2.0.4-1
   # *** Compatible Kernels: 3.10 - 5.11
-  boot.zfs.enableUnstable = false;
+  #boot.zfs.enableUnstable = false;
   boot.zfs.allowHibernation = true;
   boot.zfs.forceImportRoot = false;
 
