@@ -92,6 +92,8 @@
   inputs.microvm.url = "github:astro/microvm.nix";
   inputs.microvm.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
+
   nixConfig.extra-experimental-features = [ "nix-command" "flakes" ];
 
   outputs = { self, flake-parts, nixpkgs, ... }@inputs:

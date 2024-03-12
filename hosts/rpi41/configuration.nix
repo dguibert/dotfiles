@@ -8,14 +8,20 @@ with lib;
 rec {
   imports = [
     (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    (import "${inputs.nixos-hardware}/raspberry-pi/4/default.nix")
     ../../modules/nixos/defaults
   ];
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
+  hardware.raspberry-pi."4".audio.enable = true;
+
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   #sdImage.bootSize = 511;
 
   networking.hostName = "rpi41";
 
-  boot.kernelPackages = pkgs.linuxPackages_5_10;
+  #boot.kernelPackages = pkgs.linuxPackages_5_10;
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "uas" "usb_storage" ];
   boot.loader.raspberryPi.firmwareConfig = "dtparam=sd_poll_once=on";
   #fileSystems."/".options = [ "defaults" "discard" ];
@@ -56,7 +62,11 @@ rec {
   # !!! Adding a swap file is optional, but strongly recommended!
   #swapDevices = [ { device = "/swapfile"; size = 1024; } ];
 
-  environment.systemPackages = [ pkgs.vim ];
+  environment.systemPackages = [
+    pkgs.vim
+    pkgs.libraspberrypi
+    pkgs.raspberrypi-eeprom
+  ];
 
   nix.settings.max-jobs = 4;
 
@@ -101,11 +111,11 @@ rec {
   };
 
 
-  environment.noXlibs = false; #https://github.com/NixOS/nixpkgs/issues/102137
-  programs.ssh.setXAuthLocation = false;
-  security.pam.services.su.forwardXAuth = lib.mkForce false;
+  #environment.noXlibs = false; #https://github.com/NixOS/nixpkgs/issues/102137
+  #programs.ssh.setXAuthLocation = false;
+  #security.pam.services.su.forwardXAuth = lib.mkForce false;
 
-  fonts.fontconfig.enable = false;
+  #fonts.fontconfig.enable = false;
 
   services.getty.autologinUser = lib.mkIf (config.users.dguibert.enable) "dguibert";
 }
