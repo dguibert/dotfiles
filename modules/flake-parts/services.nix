@@ -258,6 +258,44 @@ let
     })
   ];
 
+  prometheus-server = [
+    ({ config, lib, pkgs, inputs, ... }: {
+      services.grafana = {
+        enable = true;
+        domain = "grafana.rpi41";
+        port = 2342;
+        addr = "127.0.0.1";
+      };
+      services.prometheus = {
+        enable = true;
+        port = 9001;
+
+        scrapeConfigs = [
+          {
+            job_name = "rpi41";
+            static_configs = [{
+              targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
+            }];
+          }
+        ];
+
+      };
+    })
+  ];
+
+  prometheus-client = [
+    ({ config, lib, pkgs, inputs, ... }: {
+      services.prometheus = {
+        exporters = {
+          node = {
+            enable = true;
+            enabledCollectors = [ "systemd" ];
+            port = 9002;
+          };
+        };
+      };
+    })
+  ];
 in
 {
   modules.hosts.rpi31 = [ ]
@@ -274,6 +312,8 @@ in
       hardware.opengl.driSupport32Bit = lib.mkForce false; # Option driSupport32Bit only makes sense on a 64-bit system.
     })
   ]
+    ++ prometheus-server
+    ++ prometheus-client
   ;
   modules.hosts.t580 = [ ]
     ++ adb
