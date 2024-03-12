@@ -7,7 +7,17 @@ with lib;
 
 rec {
   imports = [
-    (import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    #(import "${inputs.nixpkgs.inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+    #sdImage.compressImage = false;
+    ({ ... }: {
+      fileSystems = {
+        "/" = {
+          device = "/dev/disk/by-label/NIXOS_SD";
+          fsType = "ext4";
+          options = [ "noatime" ];
+        };
+      };
+    })
     (import "${inputs.nixos-hardware}/raspberry-pi/4/default.nix")
     ../../modules/nixos/defaults
   ];
@@ -27,10 +37,11 @@ rec {
   #fileSystems."/".options = [ "defaults" "discard" ];
   services.fstrim.enable = true;
 
+  boot.loader.grub.enable = false;
+  boot.loader.generic-extlinux-compatible.enable = true;
   ##boot.loader.generic-extlinux-compatible.enable = true;
   boot.loader.generic-extlinux-compatible.configurationLimit = 10;
 
-  sdImage.compressImage = false;
   documentation.nixos.enable = false;
 
   hardware.opengl = {

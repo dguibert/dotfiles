@@ -37,7 +37,6 @@
     ];
 
     programs.dconf.enable = lib.mkDefault true;
-    programs.xwayland.enable = lib.mkDefault true;
 
     xdg = {
       portal = {
