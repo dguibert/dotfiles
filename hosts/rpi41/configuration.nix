@@ -12,9 +12,9 @@ rec {
     ../../modules/nixos/defaults
   ];
   hardware.raspberry-pi."4".fkms-3d.enable = true;
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-  hardware.raspberry-pi."4".audio.enable = true;
+  #sound.enable = true;
+  #hardware.pulseaudio.enable = true;
+  #hardware.raspberry-pi."4".audio.enable = true;
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   #sdImage.bootSize = 511;
