@@ -41,7 +41,7 @@
       #})
       (lib.mkIf (config.networking.hostName != "rpi41") {
         hostName = "rpi41";
-        maxJobs = 4;
+        maxJobs = 1;
         #speedFactor = 2;
         sshKey = "/etc/nix/id_buildfarm";
         sshUser = "nixBuild";
