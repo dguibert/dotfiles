@@ -49,7 +49,7 @@ rec {
     setLdLibraryPath = true;
     package = pkgs.mesa.drivers;
   };
-  programs.gnupg.agent.pinentryFlavor = lib.mkForce "curses";
+  programs.gnupg.agent.pinentryPackage = lib.mkForce pkgs.pinentry-curses;
 
   # !!! This is only for ARMv6 / ARMv7. Don't enable this on AArch64, cache.nixos.org works there.
   #nix.binaryCaches = lib.mkForce [ "http://nixos-arm.dezgeg.me/channel" ];

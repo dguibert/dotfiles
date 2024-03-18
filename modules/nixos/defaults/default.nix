@@ -64,7 +64,7 @@
   # Set your time zone.
   time.timeZone = "Europe/Paris";
 
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
+  programs.gnupg.agent.pinentryPackage = pkgs.pinentry-gtk2;
 
   role.wireguard-mesh.enable = true;
   # System wide: echo "@cert-authority * $(cat /etc/ssh/ca.pub)" >>/etc/ssh/ssh_known_hosts
