@@ -29,7 +29,7 @@
 
   # https://grahamc.com/blog/erase-your-darlings
   boot.initrd.postDeviceCommands = lib.mkAfter ''
-    zfs rollback -r rt580/local/root@blank
+    zfs rollback -r rpool_rt580/local/root@blank
   '';
 
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
@@ -45,7 +45,7 @@
   services.zfs.autoScrub.interval = "monthly";
   services.zfs.trim.enable = true;
   # https://grahamc.com/blog/nixos-on-zfs
-  # rt580/
+  # rpool_rt580/
   # ├── local
   # │   ├── nix
   # │   └── root
@@ -74,10 +74,10 @@
 
       autosnap = true;
     };
-    datasets."rt580/safe".use_template = [ "user" ];
-    datasets."rt580/safe".recursive = true;
-    datasets."rt580/local/root".use_template = [ "root" ];
-    datasets."rt580/local/root".recursive = true;
+    datasets."rpool_rt580/safe".use_template = [ "user" ];
+    datasets."rpool_rt580/safe".recursive = true;
+    datasets."rpool_rt580/local/root".use_template = [ "root" ];
+    datasets."rpool_rt580/local/root".recursive = true;
 
     extraArgs = [ "--verbose" ];
   };
