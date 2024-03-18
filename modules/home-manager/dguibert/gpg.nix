@@ -1,9 +1,9 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 {
-  services.gpg-agent.pinentryFlavor =
+  services.gpg-agent.pinentryPackage =
     if config.withGui.enable
-    then "gtk2"
-    else "curses";
+    then pkgs.pinentry-gtk2
+    else pkgs.pinentry-curses;
 
   services.gpg-agent.enable = true;
   services.gpg-agent.enableSshSupport = true;
