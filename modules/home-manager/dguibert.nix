@@ -37,8 +37,13 @@ in
     })
     # import the base16.nix module
     inputs.base16.nixosModule
-    # set system's scheme to nord by setting `config.scheme`
-    { scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml"; }
+    # set system's scheme by setting `config.scheme`
+    {
+      scheme = {
+        yaml = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
+        use-ifd = "always"; # to suppress errors, set to "always"
+      };
+    }
 
     ./report-changes.nix
     ({ ... }: { home.report-changes.enable = true; })
@@ -82,7 +87,7 @@ in
     #nixpkgs.overlays = inputs.nixpkgs.legacyPackages.${pkgs.system}.overlays;
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
-    home.file.".vim/base16.vim".source = config.scheme inputs.base16-vim;
+    home.file.".vim/base16.vim".source = config.scheme { templateRepo = inputs.base16-vim; use-ifd = "always"; };
     home.file.".editorconfig".source = ./dguibert/editorconfig;
 
     # http://ubuntuforums.org/showthread.php?t=1150822
@@ -100,6 +105,7 @@ in
     home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
 
     home.packages = with pkgs; [
+      config.scheme.check # https://github.com/SenchoPens/base16.nix/tree/main#%EF%B8%8F-troubleshooting
       (vim_configurable.override {
         guiSupport = "no";
         libX11 = null;

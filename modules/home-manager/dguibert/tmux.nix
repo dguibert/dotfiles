@@ -22,7 +22,7 @@
     #}
   ];
   programs.tmux.extraConfig = ''
-    source-file ${config.scheme inputs.base16-tmux}
+    source-file ${config.scheme { templateRepo=inputs.base16-tmux; use-ifd="always"; }}
 
     set -g prefix C-a
     # ============================================= #
