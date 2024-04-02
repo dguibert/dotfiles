@@ -79,7 +79,8 @@ rec {
     pkgs.raspberrypi-eeprom
   ];
 
-  nix.settings.max-jobs = 4;
+  nix.settings.max-jobs = 1;
+  nix.settings.cores = 2;
 
   networking.useNetworkd = lib.mkForce false;
   networking.useDHCP = false;
