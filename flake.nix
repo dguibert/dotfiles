@@ -31,7 +31,7 @@
   inputs.tt-schemes = { url = "github:tinted-theming/schemes"; flake = false; };
   inputs.base16-tmux = { url = github:tinted-theming/base16-tmux; flake = false; };
   inputs.base16-vim = { url = github:tinted-theming/base16-vim; flake = false; };
-  inputs.base16-shell = { url = github:tinted-theming/base16-shell; flake = false; };
+  inputs.base16-shell = { url = github:tinted-theming/tinted-shell; flake = false; };
   inputs.gitignore = { url = "github:hercules-ci/gitignore"; flake = false; };
 
   inputs.nxsession.url = "github:dguibert/nxsession";

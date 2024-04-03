@@ -24,13 +24,13 @@
         "lastModified": 1711847483,
         "narHash": "sha256-O0kEQhYklb3AFyOuJ5wFVunrt6LdEoOmDRhwm0Br79k=",
         "owner": "tinted-theming",
-        "repo": "base16-shell",
+        "repo": "tinted-shell",
         "rev": "0fb0dd4086237870e2ada579391d5011343729e5",
         "type": "github"
       },
       "original": {
         "owner": "tinted-theming",
-        "repo": "base16-shell",
+        "repo": "tinted-shell",
         "type": "github"
       }
     },
