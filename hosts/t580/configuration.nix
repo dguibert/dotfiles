@@ -32,6 +32,8 @@ rec {
   sops.defaultSopsFile = ./secrets/secrets.yaml;
 
   services.fwupd.enable = true;
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   #networking.wireless.userControlled.enable = true;
   #environment.etc."wpa_supplicant.conf".source = "/persist/etc/wpa_supplicant.conf";
