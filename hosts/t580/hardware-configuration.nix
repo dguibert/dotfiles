@@ -94,6 +94,31 @@
     lib.mkIf config.services.tlp.enable (lib.mkForce null);
 
   services.tlp.enable = lib.mkDefault true;
+  services.tlp.settings = {
+    #https://linrunner.de/tlp/support/optimizing.html
+
+    TLP_DEFAULT_MODE = "BAT";
+    # Extend battery runtime
+    ## Change CPU energy/performance policy to balance_power (default is balance_performance):
+    #CPU_ENERGY_PERF_POLICY_ON_AC="balance_performance";
+    CPU_ENERGY_PERF_POLICY_ON_AC = "balance_power";
+
+    ## Change CPU energy/performance policy to power (default is balance_power):
+    CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+
+    ## Disable turbo boost:
+    CPU_BOOST_ON_AC = 1;
+    CPU_BOOST_ON_BAT = 0;
+
+    CPU_HWP_DYN_BOOST_ON_AC = 1;
+    CPU_HWP_DYN_BOOST_ON_BAT = 0;
+
+    # Reduce power consumption / fan noise on AC power
+    ## Enable runtime power management:
+    RUNTIME_PM_ON_AC = "auto";
+    RUNTIME_PM_ON_BAT = "auto";
+
+  };
 
   services.udev.extraRules = ''
     # Suspend the system when battery level drops to 5% or lower
