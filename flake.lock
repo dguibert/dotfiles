@@ -951,11 +951,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1712263514,
-        "narHash": "sha256-PzTGWR/b53vcILBwVDsurh5c1G4S+CBakwuUD22EFTw=",
+        "lastModified": 1712347905,
+        "narHash": "sha256-qQNbFxNtQUshwMNEltZs5Uox11LAKYAzvCfhyxmsP34=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "9359c27cb4220e58d6e7f62b556eef7583fa60e8",
+        "rev": "29282c1ddbd1c1392fde59b367d3f5a58a155b61",
         "type": "github"
       },
       "original": {
