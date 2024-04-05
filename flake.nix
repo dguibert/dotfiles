@@ -26,12 +26,11 @@
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
   #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
-  inputs.base16.url = "github:SenchoPens/base16.nix";
-  #inputs.base16.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs.stylix.url = "github:danth/stylix";
+  inputs.stylix.inputs.nixpkgs.follows = "nixpkgs";
   inputs.tt-schemes = { url = "github:tinted-theming/schemes"; flake = false; };
-  inputs.base16-tmux = { url = github:tinted-theming/base16-tmux; flake = false; };
-  inputs.base16-vim = { url = github:tinted-theming/base16-vim; flake = false; };
-  inputs.base16-shell = { url = github:tinted-theming/tinted-shell; flake = false; };
+
   inputs.gitignore = { url = "github:hercules-ci/gitignore"; flake = false; };
 
   inputs.nxsession.url = "github:dguibert/nxsession";
