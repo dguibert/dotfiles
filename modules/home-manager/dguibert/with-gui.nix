@@ -40,7 +40,7 @@
 
     fonts.fontconfig.enable = lib.mkForce true;
 
-    xresources.properties = with config.scheme.withHashtag; {
+    xresources.properties = {
       "*visualBell" = false;
       "*urgentOnBell" = true;
       "*font" = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1";
@@ -61,35 +61,6 @@
       "URxvt.termName" = "xterm-256color";
       "st.termname" = "st-256color";
       "st.termName" = "st-256color";
-      # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
-      # use 'shell' template to set these if necessary
-      "*foreground" = base05;
-      "*cursorColor" = base05;
-
-      "*color0" = base00;
-      "*color1" = base08;
-      "*color2" = base0B;
-      "*color3" = base0A;
-      "*color4" = base0D;
-      "*color5" = base0E;
-      "*color6" = base0C;
-      "*color7" = base05;
-
-      "*color8" = base03;
-      "*color9" = base09;
-      "*color10" = base01;
-      "*color11" = base02;
-      "*color12" = base04;
-      "*color13" = base06;
-      "*color14" = base0F;
-      "*color15" = base07;
-
-      "*color16" = base09;
-      "*color17" = base0F;
-      "*color18" = base01;
-      "*color19" = base02;
-      "*color20" = base04;
-      "*color21" = base06;
     };
     programs.autorandr.enable = true;
     programs.autorandr.profiles.titan-bureau = {
@@ -154,10 +125,6 @@
         };
       };
     };
-
-    #home.file."base16-c_header.h".source =
-    #  config.lib.base16.base16template "c_header";
-
 
   };
 }
