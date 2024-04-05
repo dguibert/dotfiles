@@ -43,22 +43,9 @@
     xresources.properties = {
       "*visualBell" = false;
       "*urgentOnBell" = true;
-      "*font" = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1";
       "*saveLines" = 50000;
-      "Rxvt.scrollBar" = false;
-      "Rxvt.scrollTtyOutput" = false;
-      "Rxvt.scrollTtyKeypress" = true;
-      "Rxvt.scrollWithBuffer" = false;
-      "Rxvt.jumpScroll" = true;
       "*loginShell" = true;
 
-      "URxvt.searchable-scrollback" = "CM-s";
-      "URxvt.utf8" = true;
-
-      "URxvt.transparent" = false;
-      "URxvt.depth" = 32;
-      "URxvt.intensityStyles" = false;
-      "URxvt.termName" = "xterm-256color";
       "st.termname" = "st-256color";
       "st.termName" = "st-256color";
     };
