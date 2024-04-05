@@ -1,4 +1,5 @@
 keys:
+  # nix run nixpkgs#ssh-to-age -- -i ~/.ssh/id_ed25519.pub
   - &dguibert 3198EB02EB0EEC85FE5BF6AC4E6EE5C219FDD513
   - &dguibert_titan_age age1gthhn69gtgn8gsvv58xqu9vxfnczl68kktm64638xfv5j3qm4grqeuw0h4
   - &dguibert_t580_age age1zpv9vp6rkcttpg8yk5qk8yjh4kxh6pj9d3uvzfekglth6mfc0drqekue6r
