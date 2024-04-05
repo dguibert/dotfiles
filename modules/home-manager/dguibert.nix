@@ -44,6 +44,8 @@ in
         sha256 = "sha256-DF4VzvqWtZONt62BfinrlEfmsO7x79tzYA8vpROQA14=";
       };
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
+      stylix.fonts.sizes.applications = 11;
+      stylix.fonts.sizes.terminal = 11;
       #  use-ifd = "always"; # to suppress errors, set to "always"
       #};
     }
