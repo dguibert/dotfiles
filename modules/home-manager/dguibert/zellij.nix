@@ -34,7 +34,5 @@
         };
       };
     };
-
-    programs.zellij.enableBashIntegration = true;
   };
 }
