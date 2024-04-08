@@ -10,7 +10,7 @@
     home.sessionVariables.VISUAL = "emacsclient -s server -c -a emacs"; # $VISUAL opens in GUI mode
 
     programs.emacs.enable = true;
-    programs.emacs.extraConfig = builtins.readFile "${inputs.nixpkgs}/overlays/emacs.d/init.el";
+    home.file.".emacs.d/init.el".source = "${inputs.nixpkgs}/overlays/emacs.d/init.el";
     home.file.".emacs.d/emacs.org".source = "${inputs.nixpkgs}/overlays/emacs.d/emacs.org";
     home.file.".emacs.d/site-lisp".source = "${inputs.nixpkgs}/overlays/emacs.d/site-lisp";
 
