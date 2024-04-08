@@ -147,22 +147,6 @@
         "type": "github"
       }
     },
-    "chemacs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1674216959,
-        "narHash": "sha256-/WtacZPr45lurS0hv+W8UGzsXY3RujkU5oGGGqjqG0Q=",
-        "owner": "plexus",
-        "repo": "chemacs2",
-        "rev": "c2d700b784c793cc82131ef86323801b8d6e67bb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "plexus",
-        "repo": "chemacs2",
-        "type": "github"
-      }
-    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -1192,7 +1176,6 @@
     },
     "root": {
       "inputs": {
-        "chemacs": "chemacs",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "emacs-overlay": [

@@ -9,21 +9,11 @@
     home.sessionVariables.EDITOR = "emacsclient -s server -t"; # $EDITOR opens in terminal
     home.sessionVariables.VISUAL = "emacsclient -s server -c -a emacs"; # $VISUAL opens in GUI mode
 
-    home.file.".emacs.d".source = inputs.chemacs;
-    home.file.".emacs.default/init.el".source = "${inputs.nixpkgs}/overlays/emacs.d/init.el";
-    home.file.".emacs.default/emacs.org".source = "${inputs.nixpkgs}/overlays/emacs.d/emacs.org";
-    home.file.".emacs.default/site-lisp".source = "${inputs.nixpkgs}/overlays/emacs.d/site-lisp";
-    home.file.".emacs-profiles.el".text = ''
-      (("default" . ((user-emacs-directory . "~/.emacs.default")
-                  (server-name . "server")
-                  ))
-      ("dev"     . ((user-emacs-directory . "~/nur-packages/overlays/emacs.d")
-                  (server-name . "dev")
-                  ))
-      )
-    '';
     programs.emacs.enable = true;
-    # config = lib.mkIf config.withGui.enable {
+    programs.emacs.extraConfig = builtins.readFile "${inputs.nixpkgs}/overlays/emacs.d/init.el";
+    home.file.".emacs.d/emacs.org".source = "${inputs.nixpkgs}/overlays/emacs.d/emacs.org";
+    home.file.".emacs.d/site-lisp".source = "${inputs.nixpkgs}/overlays/emacs.d/site-lisp";
+
     programs.emacs.package = pkgs.my-emacs;
     services.emacs.enable = true;
     services.emacs.socketActivation.enable = true;

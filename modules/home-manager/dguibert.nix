@@ -48,6 +48,8 @@ in
       stylix.fonts.sizes.terminal = 11;
       programs.emacs.extraConfig = ''
         (setq base16-theme-256-color-source 'base16-shell)
+        ; reload theme
+        (load-theme 'base16-stylix t)
       '';
       #  use-ifd = "always"; # to suppress errors, set to "always"
       #};
