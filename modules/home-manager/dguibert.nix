@@ -46,6 +46,9 @@ in
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
       stylix.fonts.sizes.applications = 11;
       stylix.fonts.sizes.terminal = 11;
+      programs.emacs.extraConfig = ''
+        (setq base16-theme-256-color-source 'base16-shell)
+      '';
       #  use-ifd = "always"; # to suppress errors, set to "always"
       #};
     }
