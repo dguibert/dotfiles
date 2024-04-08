@@ -49,9 +49,6 @@
   #inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.emacs-overlay.follows = "nixpkgs/emacs-overlay";
 
-  inputs.chemacs.url = "github:plexus/chemacs2";
-  inputs.chemacs.flake = false;
-
   inputs.flake-parts.follows = "nixpkgs/flake-parts";
   inputs.flake-utils.follows = "nixpkgs/flake-utils";
 
