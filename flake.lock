@@ -1313,11 +1313,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1712608987,
-        "narHash": "sha256-3s3Mo5hQtbZnaXqvVhLNUSFfGZwNm7Fllvlw+/v+Fb4=",
+        "lastModified": 1712609301,
+        "narHash": "sha256-aZfA4Y1GGhnjb2GoY7Q4X0JbgCfDh1XeU5o1g+rVu4o=",
         "owner": "dguibert",
         "repo": "stylix",
-        "rev": "695d6583223aab6de93775ad473fd71779d3dff7",
+        "rev": "a899e9ea83d4183837b2741af14dbbe3f3849586",
         "type": "github"
       },
       "original": {
