@@ -27,7 +27,7 @@
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
   #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
 
-  inputs.stylix.url = "github:dguibert/stylix/pu";
+  inputs.stylix.url = "github:danth/stylix";
   inputs.stylix.inputs.nixpkgs.follows = "nixpkgs";
   inputs.stylix.inputs.home-manager.follows = "home-manager";
   inputs.tt-schemes = { url = "github:tinted-theming/schemes"; flake = false; };

@@ -935,11 +935,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1712654351,
-        "narHash": "sha256-hEyITkVeqLQqfzZpr0xVSzzdZtoU1TfL3j08peKGErc=",
+        "lastModified": 1712692380,
+        "narHash": "sha256-L8W+byg3IUXD7bN3W25pDI0tfmL2yrzjd+D2nCYElFs=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "c8ff055b0c651d581f8f3dedbbc723da91e80a0c",
+        "rev": "b426450bc9f6f3aab3f9ebb0523d6bf3c980e288",
         "type": "github"
       },
       "original": {
@@ -1313,16 +1313,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1712609301,
-        "narHash": "sha256-aZfA4Y1GGhnjb2GoY7Q4X0JbgCfDh1XeU5o1g+rVu4o=",
-        "owner": "dguibert",
+        "lastModified": 1712154372,
+        "narHash": "sha256-2HFQm/gpmxtMokn6pInHlTlU7mBONLb3Y1aN8SlY0tc=",
+        "owner": "danth",
         "repo": "stylix",
-        "rev": "a899e9ea83d4183837b2741af14dbbe3f3849586",
+        "rev": "f9b9bc7c8e69942cd2583a3309f86fc5260f1275",
         "type": "github"
       },
       "original": {
-        "owner": "dguibert",
-        "ref": "pu",
+        "owner": "danth",
         "repo": "stylix",
         "type": "github"
       }

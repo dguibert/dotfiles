@@ -46,8 +46,7 @@ in
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
       stylix.fonts.sizes.applications = 11;
       stylix.fonts.sizes.terminal = 11;
-      #  use-ifd = "always"; # to suppress errors, set to "always"
-      #};
+      stylix.targets.emacs.enable = false; # use base16-theme -> solarized_dark instead
     }
 
     ./report-changes.nix
