@@ -17,6 +17,9 @@
     programs.emacs.package = pkgs.my-emacs;
     services.emacs.enable = true;
     services.emacs.socketActivation.enable = true;
+    systemd.user.services.emacs.Service.Environment = [
+      "COLORTERM=truecolor"
+    ];
     home.packages = with pkgs; [
       # my-emacs # 20211026 installed via programs.emacs.package
       my-texlive
