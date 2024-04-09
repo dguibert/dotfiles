@@ -935,11 +935,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1712519339,
-        "narHash": "sha256-gzYmMdNO7RvOZOnzZU2+5tV2STSQlHPkRljTvDuLgKc=",
+        "lastModified": 1712654351,
+        "narHash": "sha256-hEyITkVeqLQqfzZpr0xVSzzdZtoU1TfL3j08peKGErc=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "ec675bb3d69596a1092a1838254333d55ae9ecbd",
+        "rev": "c8ff055b0c651d581f8f3dedbbc723da91e80a0c",
         "type": "github"
       },
       "original": {
