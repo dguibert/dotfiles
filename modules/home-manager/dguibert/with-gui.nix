@@ -40,7 +40,7 @@
 
     fonts.fontconfig.enable = lib.mkForce true;
 
-    xresources.properties = with config.scheme.withHashtag; {
+    xresources.properties = with config.lib.stylix.colors.withHashtag; {
       "*visualBell" = false;
       "*urgentOnBell" = true;
       "*font" = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1";

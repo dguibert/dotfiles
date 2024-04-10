@@ -26,6 +26,13 @@
   #inputs."nixos-18.03".url   = "github:nixos/nixpkgs-channels/nixos-18.03";
   #inputs."nixos-18.09".url   = "github:nixos/nixpkgs-channels/nixos-18.09";
   #inputs."nixos-19.03".url   = "github:nixos/nixpkgs-channels/nixos-19.03";
+  inputs.stylix.url = "github:danth/stylix";
+  inputs.stylix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.stylix.inputs.home-manager.follows = "home-manager";
+  inputs.stylix.inputs.base16.follows = "base16";
+  inputs.stylix.inputs.base16-tmux.follows = "base16-tmux";
+  inputs.stylix.inputs.base16-vim.follows = "base16-vim";
+
   inputs.base16.url = "github:SenchoPens/base16.nix";
   #inputs.base16.inputs.nixpkgs.follows = "nixpkgs";
   inputs.tt-schemes = { url = "github:tinted-theming/schemes"; flake = false; };

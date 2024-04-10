@@ -40,7 +40,6 @@ with lib; {
       main = {
         term = "xterm";
 
-        font = "Fira Code:size=11";
         dpi-aware = "no";
       };
       scrollback = {
