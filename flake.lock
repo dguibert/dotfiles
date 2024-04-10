@@ -821,11 +821,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1712694149,
-        "narHash": "sha256-lCux7Y0Nsev9mRC2hSOPLB6sHtA7CXW7P2JVhkGPeZk=",
+        "lastModified": 1712779289,
+        "narHash": "sha256-V46LgZQHoL7z9cgo+G6YgDSThG7LID8QW+uWnruG3Kg=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "725a823cb39bea1914cba80db725ec3375906f1f",
+        "rev": "e73f466da3f10442c054b35a4ad48535fc03e965",
         "type": "github"
       },
       "original": {
