@@ -131,10 +131,6 @@
       esac
 
       eval "$(${pkgs.coreutils}/bin/dircolors)"
-      source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always";
-                               target = "base16";
-                             }}
-
       export TODOTXT_DEFAULT_ACTION=ls
       alias t='todo.sh'
 

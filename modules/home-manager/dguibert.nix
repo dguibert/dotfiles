@@ -46,7 +46,6 @@ in
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
       stylix.fonts.sizes.applications = 11;
       stylix.fonts.sizes.terminal = 11;
-      #stylix.targets.emacs.enable = false; # use base16-theme -> solarized_dark instead
 
       programs.bash.initExtra = ''
         source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
