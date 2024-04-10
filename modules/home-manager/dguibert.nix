@@ -46,11 +46,9 @@ in
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
       stylix.fonts.sizes.applications = 11;
       stylix.fonts.sizes.terminal = 11;
-      stylix.targets.emacs.enable = false; # use base16-theme -> solarized_dark instead
+      #stylix.targets.emacs.enable = false; # use base16-theme -> solarized_dark instead
       stylix.targets.xresources.enable = false;
       xresources.properties = with config.lib.stylix.colors.withHashtag; {
-        # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
-        # use 'shell' template to set these if necessary
         "*foreground" = base05;
         "*cursorColor" = base05;
 
@@ -64,14 +62,16 @@ in
         "*color7" = base05;
 
         "*color8" = base03;
-        "*color9" = base09;
-        "*color10" = base01;
-        "*color11" = base02;
-        "*color12" = base04;
-        "*color13" = base06;
-        "*color14" = base0F;
+        "*color9" = base08;
+        "*color10" = base0B;
+        "*color11" = base01;
+        "*color12" = base0D;
+        "*color13" = base0E;
+        "*color14" = base0C;
         "*color15" = base07;
 
+        # Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
+        # use 'shell' template to set these if necessary
         "*color16" = base09;
         "*color17" = base0F;
         "*color18" = base01;
