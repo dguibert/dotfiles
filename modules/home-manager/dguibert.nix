@@ -47,6 +47,10 @@ in
       stylix.fonts.sizes.applications = 11;
       stylix.fonts.sizes.terminal = 11;
       #stylix.targets.emacs.enable = false; # use base16-theme -> solarized_dark instead
+
+      programs.bash.initExtra = ''
+        source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
+      '';
       stylix.targets.xresources.enable = false;
       xresources.properties = with config.lib.stylix.colors.withHashtag; {
         "*foreground" = base05;

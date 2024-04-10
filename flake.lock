@@ -115,6 +115,22 @@
         "type": "github"
       }
     },
+    "base16-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1712452296,
+        "narHash": "sha256-osl88q22KIUrkEZ1mzSCnLzznUT/6GDClajNWKT0OvM=",
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
+        "rev": "e9a7bd60a660c1686ab01c81aa6ec10de225c72b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
+        "type": "github"
+      }
+    },
     "base16-tmux": {
       "flake": false,
       "locked": {
@@ -1176,6 +1192,7 @@
     },
     "root": {
       "inputs": {
+        "base16-shell": "base16-shell",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "emacs-overlay": [
