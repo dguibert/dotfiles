@@ -118,6 +118,8 @@ in
 
   config = {
     programs.home-manager.enable = true;
+    programs.vim.enable = true;
+    programs.vim.extraConfig = builtins.readFile ./dguibert/vimrc;
 
     nixpkgs.config = {
       # https://nixos.wiki/wiki/Chromium
@@ -143,19 +145,6 @@ in
     home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
 
     home.packages = with pkgs; [
-      (vim_configurable.override {
-        guiSupport = "no";
-        libX11 = null;
-        libXext = null;
-        libSM = null;
-        libXpm = null;
-        libXt = null;
-        libXaw = null;
-        libXau = null;
-        libXmu = null;
-        libICE = null;
-      })
-
       rsync
 
       gitAndTools.git-remote-gcrypt
