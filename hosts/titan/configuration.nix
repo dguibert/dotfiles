@@ -191,9 +191,12 @@ rec {
     linkConfig.RequiredForOnline = "no";
   };
 
-  #specialisation.nvidia = {
-  #  inheritParentConfig = true;
-  #  configuration = {
+  specialisation.stage1 = {
+    inheritParentConfig = true;
+    configuration = {
+      boot.initrd.systemd.enable = true;
+    };
+  };
   # https://nixos.wiki/wiki/Nvidia
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
