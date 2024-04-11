@@ -44,7 +44,7 @@ rec {
     options zfs zfs_txg_timeout=15
   '';
 
-  boot.initrd.postDeviceCommands = ''
+  boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
     # https://grahamc.com/blog/erase-your-darlings
     zpool import rpool_vanif0
     zfs rollback -r rpool_vanif0/local/root@blank
