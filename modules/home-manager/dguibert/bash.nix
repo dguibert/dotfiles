@@ -131,7 +131,6 @@
       esac
 
       eval "$(${pkgs.coreutils}/bin/dircolors)"
-
       export TODOTXT_DEFAULT_ACTION=ls
       alias t='todo.sh'
 

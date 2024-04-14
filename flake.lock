@@ -115,14 +115,30 @@
         "type": "github"
       }
     },
+    "base16-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1712452296,
+        "narHash": "sha256-osl88q22KIUrkEZ1mzSCnLzznUT/6GDClajNWKT0OvM=",
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
+        "rev": "e9a7bd60a660c1686ab01c81aa6ec10de225c72b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
+        "type": "github"
+      }
+    },
     "base16-tmux": {
       "flake": false,
       "locked": {
-        "lastModified": 1696725902,
-        "narHash": "sha256-wDPg5elZPcQpu7Df0lI5O8Jv4A3T6jUQIVg63KDU+3Q=",
+        "lastModified": 1712450882,
+        "narHash": "sha256-adikbyiK2TdKrqVyaiW9qiQzO5kG5CxwzF4cPVNEd2Y=",
         "owner": "tinted-theming",
         "repo": "base16-tmux",
-        "rev": "c02050bebb60dbb20cb433cd4d8ce668ecc11ba7",
+        "rev": "b322151042538b7ee2d49000560ecefdd0fb1de9",
         "type": "github"
       },
       "original": {
@@ -134,15 +150,15 @@
     "base16-vim": {
       "flake": false,
       "locked": {
-        "lastModified": 1663659192,
-        "narHash": "sha256-uJvaYYDMXvoo0fhBZUhN8WBXeJ87SRgof6GEK2efFT0=",
-        "owner": "chriskempson",
+        "lastModified": 1711993519,
+        "narHash": "sha256-IZgHXpjXGVYlnWMeu2mpJFglmqRvuMkvMFIkHsYKL+U=",
+        "owner": "tinted-theming",
         "repo": "base16-vim",
-        "rev": "3be3cd82cd31acfcab9a41bad853d9c68d30478d",
+        "rev": "a77b5592d996f7b1066bceb45eb57c79b5ddbd78",
         "type": "github"
       },
       "original": {
-        "owner": "chriskempson",
+        "owner": "tinted-theming",
         "repo": "base16-vim",
         "type": "github"
       }
@@ -576,11 +592,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1712165863,
-        "narHash": "sha256-NbxoHVV3MXWqb11TTi5QAdZyRPjWItVCHB942kkg+gQ=",
+        "lastModified": 1712778210,
+        "narHash": "sha256-yhm0iAlcRAkfrb5TWOPjYqPJMRpmHhk2j5AGnFZbpHI=",
         "owner": "dguibert",
         "repo": "home-manager",
-        "rev": "1fe38bcb29de15b57ae1589bef3b3243cb44da26",
+        "rev": "d2e18ee4f2ff8d8410beb8708506d11a4f6de937",
         "type": "github"
       },
       "original": {
@@ -935,11 +951,11 @@
         "st-src": "st-src"
       },
       "locked": {
-        "lastModified": 1712694149,
-        "narHash": "sha256-lCux7Y0Nsev9mRC2hSOPLB6sHtA7CXW7P2JVhkGPeZk=",
+        "lastModified": 1712816652,
+        "narHash": "sha256-Bb4ONqmXt8JbZ90JCNHbXDA7eGgpKEvcRzFPxgvjxIQ=",
         "owner": "dguibert",
         "repo": "nur-packages",
-        "rev": "725a823cb39bea1914cba80db725ec3375906f1f",
+        "rev": "8a17e87ebc65660672cafd99ff608d39c6e3a450",
         "type": "github"
       },
       "original": {
@@ -1064,11 +1080,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1712694053,
-        "narHash": "sha256-+gfiiWjppemLBH1MKz6CGvVp64fbhEZOXKmx039IlfU=",
+        "lastModified": 1712816586,
+        "narHash": "sha256-1PAHWZ7xU+GmkX5uOIr0+DiM2tk+JXEV6VGH4J1G5qs=",
         "owner": "dguibert",
         "repo": "nixpkgs",
-        "rev": "1aaf67549cf77da25cfcb77d68bf84f93b21ea16",
+        "rev": "a5db814a4bf831bfaeeeca61d8e9bf6922f9186c",
         "type": "github"
       },
       "original": {
@@ -1176,6 +1192,10 @@
     },
     "root": {
       "inputs": {
+        "base16": "base16",
+        "base16-shell": "base16-shell",
+        "base16-tmux": "base16-tmux",
+        "base16-vim": "base16-vim",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "emacs-overlay": [
@@ -1294,15 +1314,21 @@
     },
     "stylix": {
       "inputs": {
-        "base16": "base16",
+        "base16": [
+          "base16"
+        ],
         "base16-alacritty": "base16-alacritty",
         "base16-alacritty-yaml": "base16-alacritty-yaml",
         "base16-fish": "base16-fish",
         "base16-foot": "base16-foot",
         "base16-helix": "base16-helix",
         "base16-kitty": "base16-kitty",
-        "base16-tmux": "base16-tmux",
-        "base16-vim": "base16-vim",
+        "base16-tmux": [
+          "base16-tmux"
+        ],
+        "base16-vim": [
+          "base16-vim"
+        ],
         "flake-compat": "flake-compat_6",
         "gnome-shell": "gnome-shell",
         "home-manager": [
@@ -1313,11 +1339,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1712154372,
-        "narHash": "sha256-2HFQm/gpmxtMokn6pInHlTlU7mBONLb3Y1aN8SlY0tc=",
+        "lastModified": 1712765163,
+        "narHash": "sha256-lFNTiwp8rkLrjatLP/J2YfzoXKInPaHVRtQxDUitgeE=",
         "owner": "danth",
         "repo": "stylix",
-        "rev": "f9b9bc7c8e69942cd2583a3309f86fc5260f1275",
+        "rev": "c630a7d3ee4530e6a0e20ddf45ad813fc8b6da1b",
         "type": "github"
       },
       "original": {
