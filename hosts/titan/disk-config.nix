@@ -52,6 +52,7 @@ let
             };
             swap = {
               priority = 1;
+              device = "/dev/disk/by-id/${disk}-part2";
               type = "8200";
               start = "${toString INST_PARTSIZE_ESP}GiB";
               end = "${toString (INST_PARTSIZE_ESP+INST_PARTSIZE_SWAP)}GiB";
