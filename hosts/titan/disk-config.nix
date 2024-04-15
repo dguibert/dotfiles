@@ -22,7 +22,8 @@ let
   define_disk = n: disks:
     let
       disk = lib.elemAt disks n;
-      id = if n == 0 then "" else toString (n + 1);
+      #id = if n == 0 then "" else toString (n + 1);
+      id = toString (n + 1);
     in
     {
       name = disk;
