@@ -191,16 +191,16 @@
 
               #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
               #};
-              #spartan = {
-              #  hostname = "spartan";
-              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              #  fastConnection = true;
-              #  autoRollback = false;
-              #  magicRollback = false;
+              spartan = {
+                hostname = "spartan";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              #};
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+              };
               #levante = {
               #  hostname = "levante";
               #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
@@ -243,7 +243,6 @@
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-        legacyPackages = pkgs;
         # This is highly advised, and will prevent many possible mistakes
         checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
         ;
