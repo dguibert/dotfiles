@@ -1,0 +1,16 @@
+{
+  "config": {
+    "on-rhel8": false,
+    "nixpkgs_with_custom_stdenv": false,
+    "on-nixos": true,
+    "custom-openmpi": {
+      "enable": true
+    }
+  },
+  "mirrors": {
+    "buildcache": {
+      "url": "/tmp/nixpack-buildcache",
+      "signed": false
+    }
+  }
+}

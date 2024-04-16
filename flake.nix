@@ -17,6 +17,9 @@
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
+  inputs.nixpkgs_with_stdenv.url = "path:nixpkgs";
+  inputs.nixpkgs_with_stdenv.inputs.nix.follows = "nix";
+  inputs.nixpkgs_with_stdenv.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
@@ -178,7 +181,7 @@
                   ./activate
                 '';
                 sshUser = user;
-                profilePath = "${self.homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
+                profilePath = "${builtins.dirOf builtins.storeDir}/var/nix/profiles/per-user/${user}/${profile}";
               };
             in
             {

@@ -29,8 +29,6 @@
       lib = nixpkgs.lib;
 
       overlays.default = final: prev: {
-        nixStore = builtins.trace "nixStore=/custom-nix" "/custom-nix";
-
         nss_sss = prev.callPackage ./pkgs/sssd/nss-client.nix { };
 
         coreutils = dontCheck prev.coreutils;

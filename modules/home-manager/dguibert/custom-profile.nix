@@ -15,8 +15,8 @@ in
   };
 
   config = lib.mkIf config.withCustomProfile.enable {
-    home.sessionVariables.NIX_STATE_DIR = "${pkgs.nixStore}/var/nix";
-    home.sessionVariables.NIX_PROFILE = "${pkgs.nixStore}/var/nix/profiles/per-user/${config.home.username}/profile${dash_suffix}";
+    home.sessionVariables.NIX_STATE_DIR = "${builtins.dirOf builtins.storeDir}/var/nix";
+    home.sessionVariables.NIX_PROFILE = "${builtins.dirOf builtins.storeDir}/var/nix/profiles/per-user/${config.home.username}/profile${dash_suffix}";
     programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
       export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
       export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
