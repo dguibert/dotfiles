@@ -1124,6 +1124,26 @@
         "type": "github"
       }
     },
+    "nixpkgs_with_stdenv": {
+      "inputs": {
+        "nix": [
+          "nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-Klr2i94efiVHs8rfEcBoKdzCdL02tH1jHNKEdGXrcK0=",
+        "path": "nixpkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "nixpkgs",
+        "type": "path"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1713113175,
@@ -1256,6 +1276,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
+        "nixpkgs_with_stdenv": "nixpkgs_with_stdenv",
         "nur": "nur",
         "nxsession": "nxsession",
         "pre-commit-hooks": "pre-commit-hooks_2",
