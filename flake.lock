@@ -1126,16 +1126,13 @@
     },
     "nixpkgs_with_stdenv": {
       "inputs": {
-        "nix": [
-          "nix"
-        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-Klr2i94efiVHs8rfEcBoKdzCdL02tH1jHNKEdGXrcK0=",
+        "narHash": "sha256-5ive/mQZ5QaoYDw7yObQfDPJK2imFAWeg6x47dqokiU=",
         "path": "nixpkgs",
         "type": "path"
       },

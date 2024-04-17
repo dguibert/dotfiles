@@ -13,5 +13,5 @@ in
     default = { };
   };
 
-  config.user_config = user_config;
+  config.user_config = builtins.trace user_config user_config;
 }

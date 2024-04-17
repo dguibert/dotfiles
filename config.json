@@ -1,5 +1,3 @@
 {
-  "config": {
-    "nixpkgs_with_custom_stdenv": true
-  }
+  "nixpkgs_with_custom_stdenv": true
 }
