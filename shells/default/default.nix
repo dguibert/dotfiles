@@ -6,10 +6,27 @@
       inherit (inputs.sops-nix.packages.${system}) sops-import-keys-hook ssh-to-pgp;
       deploy-rs = pkgs.deploy-rs.deploy-rs;
       pre-commit-check-shellHook = inputs.self.checks.${system}.pre-commit-check.shellHook;
+
+      isNixStore = builtins.storeDir == "/nix/store";
+      name =
+        if isNixStore
+        then "deploy"
+        else "deploy-${builtins.replaceStrings [ "/" ] [ "-" ] (builtins.dirOf builtins.storeDir)}";
+      NIX_CONF_DIR =
+        let
+          nixConfOrig = builtins.readFile "/etc/nix/nix.conf";
+          nixConf = pkgs.writeTextDir "opt/nix.conf" ''
+            ${nixConfOrig}
+            store = local?store=${builtins.storeDir}&state=${builtins.dirOf builtins.storeDir}/state&log=${builtins.dirOf builtins.storeDir}/log'
+            secret-key-files =
+          '';
+        in
+        "${nixConf}/opt";
+
     in
     {
       devShells.default = pkgs.mkShell rec {
-        name = "deploy";
+        inherit name;
         ENVRC = name;
 
         # imports all files ending in .asc/.gpg and sets $SOPS_PGP_FP.
@@ -34,6 +51,7 @@
           pcsclite
           opensc
 
+          nix
           nix-output-monitor
         ];
         nativeBuildInputs = [
@@ -48,9 +66,13 @@
           unset IN_NIX_SHELL NIX_REMOTE
           unset TMP TMPDIR
 
-          export XDG_CACHE_HOME=$HOME/.cache/${name}
           unset NIX_STORE NIX_DAEMON
           export PASSWORD_STORE_DIR=$PWD/secrets
+
+          ${if !isNixStore then ''
+          export XDG_CACHE_HOME=$HOME/.cache/${name}
+          export NIX_CONF_DIR=${NIX_CONF_DIR}
+          '' else ""}
         '';
 
       };
