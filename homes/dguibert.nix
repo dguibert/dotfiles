@@ -194,7 +194,7 @@ in
         "${pkgs.nix}/bin"
       ];
 
-      home.activationPackageSet = pkgs.buildPackages;
+      _module.args.activationPkgs = pkgs.buildPackages;
       home.packages = with pkgs; [
         bashInteractive
       ];
