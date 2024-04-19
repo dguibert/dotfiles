@@ -185,6 +185,7 @@ in
       withEmacs.enable = false;
       withBash.history-merge = false;
       services.gpg-agent.enable = lib.mkForce false;
+      withStylixTheme.enable = false; # -fromYAML- fails
 
       home.username = "bguibertd";
       home.homeDirectory = "/home_nfs/bguibertd";

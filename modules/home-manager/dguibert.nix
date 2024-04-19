@@ -44,15 +44,23 @@ in
         sha256 = "sha256-DF4VzvqWtZONt62BfinrlEfmsO7x79tzYA8vpROQA14=";
       };
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
-      stylix.fonts.sizes.applications = 11;
-      stylix.fonts.sizes.terminal = 11;
+    })
+    ({ config, lib, pkgs, ... }: {
+      options.withStylixTheme.enable = mkEnableOption "Stylix Theming";
 
-      programs.bash.initExtra = ''
-        source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
-      '';
-      stylix.targets.xresources.enable = false;
-      stylix.targets.vim.enable = false;
-      stylix.targets.emacs.enable = false;
+      config = {
+        stylix.fonts.sizes.applications = 11;
+        stylix.fonts.sizes.terminal = 11;
+
+      } // (lib.mkIf config.withStylixTheme.enable {
+        programs.bash.initExtra = ''
+          source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
+        '';
+        stylix.targets.xresources.enable = false;
+        stylix.targets.vim.enable = false;
+        home.file.".vim/base16.vim".source = config.lib.stylix.colors { templateRepo = inputs.base16-vim; use-ifd = "always"; };
+        stylix.targets.emacs.enable = false;
+      });
     })
 
     ./report-changes.nix
@@ -97,7 +105,6 @@ in
     #nixpkgs.overlays = inputs.nixpkgs.legacyPackages.${pkgs.system}.overlays;
 
     #home.file.".vim/base16.vim".source = ./base16.vim;
-    home.file.".vim/base16.vim".source = config.lib.stylix.colors { templateRepo = inputs.base16-vim; use-ifd = "always"; };
     home.file.".editorconfig".source = ./dguibert/editorconfig;
 
     # http://ubuntuforums.org/showthread.php?t=1150822
