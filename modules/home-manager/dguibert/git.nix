@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
   programs.git.enable = true;
-  programs.git.package = pkgs.gitFull;
+  programs.git.package = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then pkgs.gitFull else pkgs.gitMinimal;
   programs.git.userName = "David Guibert";
   programs.git.userEmail = "david.guibert@gmail.com";
   programs.git.aliases.files = "ls-files -v --deleted --modified --others --directory --no-empty-directory --exclude-standard";
