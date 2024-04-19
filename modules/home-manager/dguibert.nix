@@ -130,16 +130,12 @@ in
 
       rsync
 
-      gitAndTools.git-remote-gcrypt
-      gitAndTools.git-crypt
-
       gnumake
       #nix-repl
       pstree
 
       screen
       #teamviewer
-      tig
       lsof
       #haskellPackages.nix-deploy
       htop
@@ -150,11 +146,9 @@ in
       bc
       unzip
 
-      sshfs-fuse
-
-      moreutils
       jq
     ] ++ optionals config.withGui.enable [
+      moreutils
       pandoc
 
       (pass.withExtensions (extensions: with extensions; [
@@ -175,6 +169,11 @@ in
           '';
         }))
       ]))
+      gitAndTools.git-credential-password-store
+
+      gitAndTools.git-remote-gcrypt
+      gitAndTools.git-crypt
+      tig
 
       perlPackages.GitAutofixup
 

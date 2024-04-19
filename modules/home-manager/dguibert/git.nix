@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs.git.enable = true;
   programs.git.package = pkgs.gitFull;
@@ -41,11 +41,10 @@
   programs.git.iniContent.notes.rewrite.rebase = true;
   programs.git.iniContent.notes.rewriteRefs = "refs/notes/commits";
 
-  home.packages = with pkgs; [
-    gitAndTools.git-remote-gcrypt
-    gitAndTools.git-crypt
-    gitAndTools.pass-git-helper
-  ];
+  #home.packages = with pkgs; [
+  #  gitAndTools.git-remote-gcrypt
+  #  (gitAndTools.git-crypt.override { git = config.programs.git.package; })
+  #];
 
 
 }

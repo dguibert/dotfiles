@@ -203,6 +203,7 @@
 
                 profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
                 profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+                profiles.bguibertd-aarch64 = genProfile "bguibertd" "bguibertd@spartan-aarch64" "hm-aarch64";
               };
               #levante = {
               #  hostname = "levante";
