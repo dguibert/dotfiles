@@ -16,7 +16,9 @@
   inputs.sops-nix.url = "github:Mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
+  inputs.upstream_nixpkgs.url = "github:dguibert/nixpkgs/pu";
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
+  inputs.nixpkgs.inputs.nixpkgs.follows = "upstream_nixpkgs";
   inputs.nixpkgs_with_stdenv.url = "path:nixpkgs";
   inputs.nixpkgs_with_stdenv.inputs.nix.follows = "nix";
   inputs.nixpkgs_with_stdenv.inputs.nixpkgs.follows = "nixpkgs";

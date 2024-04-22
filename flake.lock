@@ -953,7 +953,9 @@
         "flake-utils": "flake-utils_3",
         "mako-src": "mako-src",
         "nix": "nix",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": [
+          "upstream_nixpkgs"
+        ],
         "pre-commit-hooks": "pre-commit-hooks",
         "st-src": "st-src"
       },
@@ -1065,22 +1067,6 @@
       "original": {
         "owner": "NixOS",
         "ref": "release-23.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1713600947,
-        "narHash": "sha256-tC7e7kobVpuFcywUpL4+ssL3ZE1nEMwX1bfKl7wpZUk=",
-        "owner": "dguibert",
-        "repo": "nixpkgs",
-        "rev": "7250cb7aafa248700e9481da9f7d8747eccfc8f0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dguibert",
-        "ref": "pu",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1242,7 +1228,8 @@
         "split-monitor-workspaces": "split-monitor-workspaces",
         "stylix": "stylix",
         "terranix": "terranix",
-        "tt-schemes": "tt-schemes"
+        "tt-schemes": "tt-schemes",
+        "upstream_nixpkgs": "upstream_nixpkgs"
       }
     },
     "sops-nix": {
@@ -1486,6 +1473,22 @@
       "original": {
         "owner": "tinted-theming",
         "repo": "schemes",
+        "type": "github"
+      }
+    },
+    "upstream_nixpkgs": {
+      "locked": {
+        "lastModified": 1713767061,
+        "narHash": "sha256-1/+7xR7x0eXQvIGOopHj6+AvNDuE8sNUJL4CFIzcq5U=",
+        "owner": "dguibert",
+        "repo": "nixpkgs",
+        "rev": "da855fc7f489abe9673ff799d70a0e2157b1f108",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dguibert",
+        "ref": "pu",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
