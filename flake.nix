@@ -16,7 +16,12 @@
   inputs.sops-nix.url = "github:Mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
+  inputs.upstream_nixpkgs.url = "github:dguibert/nixpkgs/pu";
   inputs.nixpkgs.url = "github:dguibert/nur-packages?refs=master";
+  inputs.nixpkgs.inputs.nixpkgs.follows = "upstream_nixpkgs";
+  inputs.nixpkgs_with_stdenv.url = "path:nixpkgs";
+  inputs.nixpkgs_with_stdenv.inputs.nix.follows = "nix";
+  inputs.nixpkgs_with_stdenv.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.disko.url = github:nix-community/disko;
   #inputs.disko.url = github:dguibert/disko;
@@ -178,7 +183,7 @@
                   ./activate
                 '';
                 sshUser = user;
-                profilePath = "${self.homeConfigurations."${name}".pkgs.nixStore}/var/nix/profiles/per-user/${user}/${profile}";
+                profilePath = "${builtins.dirOf builtins.storeDir}/var/nix/profiles/per-user/${user}/${profile}";
               };
             in
             {
@@ -191,16 +196,17 @@
 
               #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@genji" "hm-x86_64";
               #};
-              #spartan = {
-              #  hostname = "spartan";
-              #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
-              #  fastConnection = true;
-              #  autoRollback = false;
-              #  magicRollback = false;
+              spartan = {
+                hostname = "spartan";
+                sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
+                fastConnection = true;
+                autoRollback = false;
+                magicRollback = false;
 
-              #  profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
-              #  profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
-              #};
+                profiles.bguibertd = genProfile "bguibertd" "bguibertd@spartan" "hm";
+                profiles.bguibertd-x86_64 = genProfile "bguibertd" "bguibertd@spartan-x86_64" "hm-x86_64";
+                profiles.bguibertd-aarch64 = genProfile "bguibertd" "bguibertd@spartan-aarch64" "hm-aarch64";
+              };
               #levante = {
               #  hostname = "levante";
               #  sshOpts = [ "-o" "ControlMaster=no" ]; # https://github.com/serokell/deploy-rs/issues/106
@@ -243,7 +249,6 @@
       ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-        legacyPackages = pkgs;
         # This is highly advised, and will prevent many possible mistakes
         checks = (self.legacyPackages.${system}.deploy-rs.lib.deployChecks inputs.self.deploy)
         ;

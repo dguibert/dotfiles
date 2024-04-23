@@ -1,6 +1,7 @@
 { lib, config, pkgs, inputs, ... }:
 {
   options.withBash.enable = (lib.mkEnableOption "Enable bash config") // { default = true; };
+  options.withBash.history-merge = (lib.mkEnableOption "Enable bash history merging") // { default = true; };
 
   config = lib.mkIf config.withBash.enable {
     programs.bash.enable = true;
@@ -202,7 +203,5 @@
       $endif
     '';
 
-    programs.direnv.enable = true;
-    programs.direnv.nix-direnv.enable = true;
   };
 }

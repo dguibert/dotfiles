@@ -1,0 +1,3 @@
+{
+  "nixpkgs_with_custom_stdenv": false
+}

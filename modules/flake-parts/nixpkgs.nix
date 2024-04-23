@@ -1,22 +1,28 @@
-{ inputs, perSystem, ... }:
+{ self, config, pkgs, lib, inputs, perSystem, system, ... }:
 let
-  nixpkgsFor = system:
-    import inputs.nixpkgs.inputs.nixpkgs {
-      inherit system;
-      overlays = inputs.nixpkgs.legacyPackages.${system}.overlays
-        ++ [
-        inputs.deploy-rs.overlay
-        inputs.nxsession.overlay
-        #inputs.nixpkgs-wayland.overlay
-        inputs.hyprland.overlays.default
-        (final: prev: import ../../overlays/default final prev)
-      ];
-      config = { allowUnfree = true; } // inputs.nixpkgs.legacyPackages.${system}.config;
-      #config.contentAddressedByDefault = true;
-    };
+  config' = config;
+  overlays = [
+    self.overlays.default
+    inputs.deploy-rs.overlay
+    inputs.nxsession.overlay
+    #inputs.nixpkgs-wayland.overlay
+    inputs.hyprland.overlays.default
+  ];
+
+  packages = config:
+    if config'.user_config.nixpkgs_with_custom_stdenv or false
+    then
+    # packages with overriden stdenv
+      system: builtins.trace "use of nixpkgs_with_custom_stdenv" inputs.nixpkgs_with_stdenv.legacyPackages.${system}.appendOverlays overlays
+    else
+      system: inputs.nixpkgs.legacyPackages.${system}.appendOverlays overlays
+  ;
 in
 {
-  perSystem = { config, self', inputs', pkgs, system, ... }: {
-    _module.args.pkgs = nixpkgsFor system;
+  config._module.args.pkgs = packages config system;
+
+  config.perSystem = { config, self', inputs', pkgs, system, ... }: {
+    _module.args.pkgs = packages config system;
+    legacyPackages = packages config system;
   };
 }

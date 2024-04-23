@@ -1,4 +1,4 @@
-{ lib, config, pkgs, inputs, ... }:
+{ lib, config, pkgs, activationPkgs, inputs, ... }:
 let
   name = config.withCustomProfile.suffix;
   dot_suffix = if name != "" then ".${name}" else "";
@@ -15,19 +15,19 @@ in
   };
 
   config = lib.mkIf config.withCustomProfile.enable {
-    home.sessionVariables.NIX_STATE_DIR = "${pkgs.nixStore}/var/nix";
-    home.sessionVariables.NIX_PROFILE = "${pkgs.nixStore}/var/nix/profiles/per-user/${config.home.username}/profile${dash_suffix}";
+    home.sessionVariables.NIX_STATE_DIR = "${builtins.dirOf builtins.storeDir}/var/nix";
+    home.sessionVariables.NIX_PROFILE = "${builtins.dirOf builtins.storeDir}/var/nix/profiles/per-user/${config.home.username}/profile${dash_suffix}";
     programs.bash.bashrcExtra = /*(homes.withoutX11 args).programs.bash.initExtra +*/ ''
       export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
       export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
-      export PATH=$NIX_PROFILE/bin:$PATH:${pkgs.nix}/bin
+      export PATH=$NIX_PROFILE/bin:${activationPkgs.nix}/bin:$PATH
     '';
     home.activation.setNixVariables = lib.hm.dag.entryBefore [ "writeBoundary" "checkLinkTargets" "checkFilesChanges" ]
       ''
         set -x
         export NIX_STATE_DIR=${config.home.sessionVariables.NIX_STATE_DIR}
         export NIX_PROFILE=${config.home.sessionVariables.NIX_PROFILE}
-        export PATH=${pkgs.nix}/bin:$PATH
+        export PATH=${activationPkgs.nix}/bin:$PATH
         rm -rf ${config.home.profileDirectory}
         ln -sf ${config.home.sessionVariables.NIX_PROFILE} ${config.home.profileDirectory}
         export HOME_MANAGER_BACKUP_EXT=bak
@@ -42,7 +42,7 @@ in
 
     home.profileDirectory = lib.mkForce "${config.home.homeDirectory}/.nix-profile${dash_suffix}";
 
-    home.sessionVariablesFileName = "hm${dash_suffix}-session-vars.sh";
+    home.sessionVariablesFileName = "hm${dash_suffix}session-vars.sh";
     home.sessionVariablesGuardVar = "__HM_${upper_suffix}SESS_VARS_SOURCED";
     home.pathName = "home-manager${dash_suffix_}path";
     home.gcLinkName = "current-home${dash_suffix}";
