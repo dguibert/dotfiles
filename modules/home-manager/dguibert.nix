@@ -46,20 +46,21 @@ in
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
     })
     ({ config, lib, pkgs, ... }: {
-      options.withStylixTheme.enable = mkEnableOption "Stylix Theming";
+      options.withStylixTheme.enable = mkEnableOption "Stylix Theming" // { default = true; };
 
       config = {
         stylix.fonts.sizes.applications = 11;
         stylix.fonts.sizes.terminal = 11;
 
+        stylix.targets.xresources.enable = false;
+        stylix.targets.vim.enable = false;
+        stylix.targets.emacs.enable = false;
+
       } // (lib.mkIf config.withStylixTheme.enable {
         programs.bash.initExtra = ''
           source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
         '';
-        stylix.targets.xresources.enable = false;
-        stylix.targets.vim.enable = false;
         home.file.".vim/base16.vim".source = config.lib.stylix.colors { templateRepo = inputs.base16-vim; use-ifd = "always"; };
-        stylix.targets.emacs.enable = false;
       });
     })
 
