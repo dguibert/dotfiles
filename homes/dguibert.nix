@@ -161,6 +161,8 @@ in
 
         tig
         python3
+
+        nxsession
       ];
 
       home.sessionVariables.NIX_SSL_CERT_FILE = "/etc/pki/tls/certs/ca-bundle.crt";
