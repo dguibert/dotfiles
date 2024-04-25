@@ -40,7 +40,7 @@
 
     fonts.fontconfig.enable = lib.mkForce true;
 
-    xresources.properties = with config.lib.stylix.colors.withHashtag; {
+    xresources.properties = {
       "*visualBell" = false;
       "*urgentOnBell" = true;
       "*saveLines" = 50000;

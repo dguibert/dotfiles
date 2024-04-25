@@ -44,24 +44,26 @@ in
         sha256 = "sha256-DF4VzvqWtZONt62BfinrlEfmsO7x79tzYA8vpROQA14=";
       };
       stylix.base16Scheme = "${inputs.tt-schemes}/base16/solarized-dark.yaml";
+      stylix.fonts.sizes.applications = 11;
+      stylix.fonts.sizes.terminal = 11;
+
+      stylix.targets.xresources.enable = true;
+      stylix.targets.vim.enable = false;
+      stylix.targets.emacs.enable = false;
     })
     ({ config, lib, pkgs, ... }: {
       options.withStylixTheme.enable = mkEnableOption "Stylix Theming" // { default = true; };
 
-      config = {
-        stylix.fonts.sizes.applications = 11;
-        stylix.fonts.sizes.terminal = 11;
-
-        stylix.targets.xresources.enable = false;
-        stylix.targets.vim.enable = false;
-        stylix.targets.emacs.enable = false;
-
-      } // (lib.mkIf config.withStylixTheme.enable {
+      config = lib.mkIf config.withStylixTheme.enable {
         programs.bash.initExtra = ''
           source ${config.lib.stylix.colors { templateRepo=inputs.base16-shell; use-ifd="always"; target = "base16"; }}
         '';
         home.file.".vim/base16.vim".source = config.lib.stylix.colors { templateRepo = inputs.base16-vim; use-ifd = "always"; };
-      });
+
+        xresources.properties = with config.lib.stylix.colors.withHashtag; {
+          "*.faceSize" = config.stylix.fonts.sizes.terminal;
+        };
+      };
     })
 
     ./report-changes.nix
