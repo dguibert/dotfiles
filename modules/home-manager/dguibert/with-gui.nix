@@ -20,6 +20,13 @@
     #];
 
     programs.google-chrome.enable = true;
+    # https://github.com/NixOS/nixpkgs/issues/306010
+    programs.google-chrome.package = (pkgs.google-chrome.override {
+      commandLineArgs = [
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform=wayland"
+      ];
+    });
 
     programs.zathura.enable = true;
     programs.zathura.extraConfig = ''
