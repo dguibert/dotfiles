@@ -24,6 +24,9 @@ in
       home.username = "dguibert";
       home.homeDirectory = "/home/dguibert";
       home.stateVersion = "22.11";
+
+      # rpi31 don't have programs.dconf.enable = true => activation error
+      dconf.enable = false;
     })
   ];
 
