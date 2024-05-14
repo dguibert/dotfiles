@@ -21,7 +21,6 @@ with lib; {
       wlr-randr
       xwayland # for legacy apps
       mako # notification daemon
-      kanshi # autorandr
       brightnessctl
 
       gnome3.adwaita-icon-theme # Icons for gnome packages that sometimes use them but don't depend on them
@@ -78,40 +77,6 @@ with lib; {
       { event = "after-resume"; command = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl dispatch dpms on"; }
       { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
     ];
-
-    systemd.user.services.kanshi = {
-      Unit = {
-        Description = "Kanshi dynamic display configuration";
-        PartOf = [ "hyprland-session.target" ];
-      };
-      Install = {
-        WantedBy = [ "hyprland-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.kanshi}/bin/kanshi";
-        RestartSec = 5;
-        Restart = "always";
-      };
-    };
-
-    xdg.configFile."kanshi/config".text = ''
-      profile {
-        output HDMI-A-1 enable mode 1920x1200 position 0,0
-        output DVI-D-1 enable mode 1920x1200 position 1920,0
-      }
-      profile {
-        output eDP-1 enable mode 1920x1080 position 0,0
-      }
-      profile {
-        output "Lenovo Group Limited LEN T24d-10 V5GG2005" enable mode 1920x1080 position 0,0
-        output eDP-1 enable mode 1920x1080 position 1920,0
-      }
-      profile {
-        output "Philips Consumer Electronics Company PHL 241B7QG 0x000004CC" enable mode 1920x1080 position 0,0
-        output eDP-1 enable mode 1920x1080 position 1920,0
-      }
-    '';
 
     xdg.configFile."waybar/style.css".source = ./waybar-style.css;
     xdg.configFile."waybar/config".text =
