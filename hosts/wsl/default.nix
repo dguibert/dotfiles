@@ -12,7 +12,7 @@
       wsl.defaultUser = "dguibert";
       wsl.startMenuLaunchers = true;
 
-      programs.bash.loginShellInit = "nixos-wsl-welcome";
+      #programs.bash.loginShellInit = "nixos-wsl-welcome";
     })
     ../../modules/nixos/nix-conf.nix
     inputs.home-manager.nixosModules.home-manager
