@@ -69,7 +69,8 @@
   inputs.pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs/nixpkgs";
 
   #inputs.hyprland.url = "github:hyprwm/Hyprland";
-  inputs.hyprland.url = "git+https://github.com/dguibert/Hyprland?submodules=1";
+  #inputs.hyprland.url = "git+https://github.com/dguibert/Hyprland?submodules=1";
+  inputs.hyprland.url = "git+https://github.com/dguibert/Hyprland?ref=refs/heads/v0.40.0&submodules=1";
   inputs.hyprland.inputs.nixpkgs.follows = "nixpkgs";
   inputs.split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
   inputs.split-monitor-workspaces.inputs.hyprland.follows = "hyprland"; # <- make sure this line is present for the plugin to work as intended
