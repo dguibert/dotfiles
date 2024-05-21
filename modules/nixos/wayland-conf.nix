@@ -10,6 +10,7 @@
         "https://nixpkgs-wayland.cachix.org"
       ];
     };
+    services.seatd.enable = true;
     security.polkit.enable = true;
     security.pam.services.swaylock = { };
     hardware.opengl.enable = lib.mkDefault true;
