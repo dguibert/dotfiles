@@ -729,3 +729,6 @@ checkout = git clone 'https://github.com/astro/skyflake' 'skyflake'
 
 [code/microvm.nix]
 checkout = git clone 'https://github.com/astro/microvm.nix' 'microvm.nix'
+
+[code/stylix]
+checkout = git clone 'https://github.com/danth/stylix' 'stylix'
